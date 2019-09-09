@@ -8,105 +8,51 @@ import Row from 'react-bootstrap/lib/Row';
 import moment from 'moment';
 import first from 'lodash/first';
 import last from 'lodash/last';
-import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
-import debounce from 'lodash/debounce';
 
-import constants from '../../../constants/AppConstants';
 import { addNotification } from '../../../actions/notificationsActions';
 import {
-  cancelReservationEdit,
-  clearTimeSlots,
   openConfirmReservationModal,
-  selectReservationSlot,
-  toggleTimeSlot,
 } from '../../../actions/uiActions';
-import ReservationCancelModal from '../../../shared/modals/reservation-cancel/ReservationCancelModalContainer';
-import ReservationInfoModal from '../../../shared/modals/reservation-info/ReservationInfoModalContainer';
-import ReservationSuccessModal from '../../../shared/modals/reservation-success/ReservationSuccessModalContainer';
-import ReservationConfirmation from '../../../shared/reservation-confirmation/ReservationConfirmationContainer';
+// import ReservationCancelModal from '../../../shared/modals/reservation-cancel/ReservationCancelModalContainer';
+// import ReservationInfoModal from '../../../shared/modals/reservation-info/ReservationInfoModalContainer';
+// import ReservationSuccessModal from '../../../shared/modals/reservation-success/ReservationSuccessModalContainer';
+// import ReservationConfirmation from '../../../shared/reservation-confirmation/ReservationConfirmationContainer';
 import recurringReservations from '../../../state/recurringReservations';
 import injectT from '../../../i18n/injectT';
-import { hasMaxReservations, reservingIsRestricted } from '../../../utils/resourceUtils';
+import { reservingIsRestricted } from '../../../utils/resourceUtils';
 import reservationCalendarSelector from './reservationCalendarSelector';
 import ReservingRestrictedText from './ReservingRestrictedText';
-import TimeSlots from './time-slots/TimeSlots';
-import apiClient from '../../../../src/common/api/client';
-import { getReservationPrice, getEditReservationUrl, combine } from '../../../utils/reservationUtils';
+import TimePickerCalendar from '../../../../src/common/calendar/TimePickerCalendar';
+// import apiClient from '../../../../src/common/api/client';
 
 export class UnconnectedReservationCalendarContainer extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     date: PropTypes.string.isRequired,
-    isAdmin: PropTypes.bool.isRequired,
-    isEditing: PropTypes.bool.isRequired,
-    isFetchingResource: PropTypes.bool.isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-    isStaff: PropTypes.bool.isRequired,
-    // eslint-disable-next-line react/no-unused-prop-types
-    location: PropTypes.shape({
-      search: PropTypes.string.isRequired,
-    }).isRequired,
-    params: PropTypes.shape({
-      // eslint-disable-line react/no-unused-prop-types
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-    history: PropTypes.object.isRequired,
     resource: PropTypes.object.isRequired,
-    selected: PropTypes.array.isRequired,
+    reservation: PropTypes.object.isRequired,
     t: PropTypes.func.isRequired,
-    time: PropTypes.string,
-    timeSlots: PropTypes.array.isRequired,
+    onDateChange: PropTypes.func.isRequired,
   };
 
   state = {
     reservationPrice: '',
   }
 
-  componentDidUpdate(prevProps) {
-    const {
-      resource: currentResource,
-      selected: currentSelected,
-    } = this.props;
-    const {
-      resource: prevResource,
-      selected: prevSelected,
-    } = prevProps;
-    if (currentResource !== prevResource || currentSelected !== prevSelected) {
-      this.calculateReservationPrice();
-    }
-  }
+  // calculateReservationPrice = () => {
+  //   const { resource: { products } } = this.props;
 
-  calculateReservationPrice = () => {
-    const { resource: { products }, selected } = this.props;
-    const begin = get(selected, '[0].begin');
-    const end = get(selected, '[1].end');
-    getReservationPrice(apiClient, begin, end, products)
-      .then(reservationPrice => this.setState({ reservationPrice }))
-      .catch(() => this.setState({ reservationPrice: '' }));
-  };
-
-  getSelectedDateSlots = (timeSlots, selected) => {
-    if (timeSlots && selected.length) {
-      const firstSelected = first(selected);
-      const selectedDate = moment(firstSelected.begin).format(constants.DATE_FORMAT);
-      const dateSlot = timeSlots.find((slot) => {
-        if (slot && slot.length) {
-          const slotDate = moment(slot[0].start).format(constants.DATE_FORMAT);
-          return selectedDate === slotDate;
-        }
-        return false;
-      });
-      return dateSlot || [];
-    }
-    return [];
-  };
+  //   getReservationPrice(apiClient, begin, end, products)
+  //     .then(reservationPrice => this.setState({ reservationPrice }))
+  //     .catch(() => this.setState({ reservationPrice: '' }));
+  // };
 
   getSelectedTimeText = (selected) => {
     const { reservationPrice } = this.state;
     const { t } = this.props;
 
-    if (!selected.length) {
+    if (!selected) {
       return '';
     }
     const orderedSelected = orderBy(selected, 'begin');
@@ -146,68 +92,39 @@ export class UnconnectedReservationCalendarContainer extends Component {
 
   handleReserveClick = () => {
     const {
-      actions, isAdmin, resource, selected, t, history
+      actions
     } = this.props;
-    if (!isAdmin && hasMaxReservations(resource)) {
-      actions.addNotification({
-        message: t('TimeSlots.maxReservationsPerUser'),
-        type: 'error',
-        timeOut: 10000,
-      });
-    } else {
-      const orderedSelected = orderBy(selected, 'begin');
-      const { end } = last(orderedSelected);
-      const reservation = Object.assign({}, first(orderedSelected), { end });
-      const nextUrl = getEditReservationUrl(reservation);
 
-      const baseTime = combine(selected)[0];
+    const { selected } = this.state;
 
-      actions.changeRecurringBaseTime(baseTime);
-      history.push(nextUrl);
-    }
+    // const nextUrl = getEditReservationUrl(reservation);
+
+
+    actions.changeRecurringBaseTime({ begin: selected.start, end: selected.end });
+    // history.push(nextUrl);
   };
 
   render() {
     const {
-      actions,
       date,
-      isAdmin,
-      isEditing,
-      isFetchingResource,
-      isLoggedIn,
-      isStaff,
-      params,
       resource,
-      selected,
       t,
-      time,
-      timeSlots,
+      onDateChange,
+      reservation
     } = this.props;
 
-    const isOpen = Boolean(timeSlots.length);
-    const showTimeSlots = isOpen && !reservingIsRestricted(resource, date);
-    const selectedDateSlots = this.getSelectedDateSlots(timeSlots, selected);
+    const { selected } = this.state;
+
     return (
       <div className="reservation-calendar">
-        {showTimeSlots && (
-          <TimeSlots
-            addNotification={debounce(actions.addNotification, 100)}
-            // TODO: Im a h@ck, remove me
-            isAdmin={isAdmin}
-            isEditing={isEditing}
-            isFetching={isFetchingResource}
-            isLoggedIn={isLoggedIn}
-            isStaff={isStaff}
-            onClear={actions.clearTimeSlots}
-            onClick={actions.toggleTimeSlot}
-            resource={resource}
-            selected={selected}
-            selectedDate={date}
-            slots={timeSlots}
-            time={time}
-          />
-        )}
-        {showTimeSlots && selected.length > 0 && (
+        <TimePickerCalendar
+          date={date}
+          defaultSelected={{ start: reservation.start, end: reservation.end }}
+          onDateChange={onDateChange}
+          onTimeChange={selectedTime => this.setState({ selected: selectedTime })}
+          resource={resource}
+        />
+        {selected && (
           <Row className="reservation-calendar-reserve-info">
             <Col xs={8}>
               <strong>
@@ -227,22 +144,19 @@ export class UnconnectedReservationCalendarContainer extends Component {
             </Col>
           </Row>
         )}
-        {!isOpen && <p className="info-text closed-text">{t('TimeSlots.closedMessage')}</p>}
-        {isOpen && reservingIsRestricted(resource, date) && (
+        {reservingIsRestricted(resource, date) && (
           <ReservingRestrictedText
             reservableBefore={resource.reservableBefore}
             reservableDaysInAdvance={resource.reservableDaysInAdvance}
           />
         )}
-        <ReservationCancelModal />
+        {/* <ReservationCancelModal />
         <ReservationInfoModal />
         <ReservationSuccessModal />
         <ReservationConfirmation
-          params={params}
           selectedReservations={selected}
           showTimeControls
-          timeSlots={selectedDateSlots}
-        />
+        /> */}
       </div>
     );
   }
@@ -253,12 +167,8 @@ UnconnectedReservationCalendarContainer = injectT(UnconnectedReservationCalendar
 function mapDispatchToProps(dispatch) {
   const actionCreators = {
     addNotification,
-    cancelReservationEdit,
-    clearTimeSlots,
     changeRecurringBaseTime: recurringReservations.changeBaseTime,
     openConfirmReservationModal,
-    selectReservationSlot,
-    toggleTimeSlot,
   };
 
   return { actions: bindActionCreators(actionCreators, dispatch) };

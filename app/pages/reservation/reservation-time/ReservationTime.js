@@ -19,7 +19,8 @@ class ReservationTime extends Component {
     resource: PropTypes.object.isRequired,
     reservation: PropTypes.object.isRequired,
     t: PropTypes.func.isRequired,
-    locale: PropTypes.string.isRequired
+    locale: PropTypes.string.isRequired,
+    handleDateChange: PropTypes.func.isRequired
   };
 
   render() {
@@ -43,7 +44,11 @@ class ReservationTime extends Component {
               resourceId={resource.id}
               selectedDate={date}
             />
-            <ReservationCalendar />
+            <ReservationCalendar
+              onDateChange={handleDateChange}
+              reservation={reservation}
+              resource={resource}
+            />
           </Col>
           <Col md={5} sm={12}>
             <Well className="app-ReservationDetails">
