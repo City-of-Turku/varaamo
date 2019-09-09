@@ -38,7 +38,7 @@ export default () => (
         componentName="MyReservations"
         path="/my-reservations"
       />
-      <PrivateRoute component={ReservationPage} componentName="Reservation" path="/reservation" />
+      <PrivateRoute component={ReservationPage} componentName="Reservation" path="/reservation/:reservationId" />
       <PrivateRoute
         component={ReservationPaymentReturnPage}
         componentName="ReservationPaymentReturn"

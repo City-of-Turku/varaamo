@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/lib/Row';
 import Well from 'react-bootstrap/lib/Well';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
+import get from 'lodash/get';
 
 import injectT from '../../../i18n/injectT';
 import ReservationCalendar from '../../resource/reservation-calendar/ReservationCalendarContainer';
@@ -16,9 +17,9 @@ class ReservationTime extends Component {
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
     resource: PropTypes.object.isRequired,
-    selectedReservation: PropTypes.object.isRequired,
+    reservation: PropTypes.object.isRequired,
     t: PropTypes.func.isRequired,
-    unit: PropTypes.object.isRequired,
+    locale: PropTypes.string.isRequired
   };
 
   render() {
@@ -26,18 +27,19 @@ class ReservationTime extends Component {
       onCancel,
       onConfirm,
       resource,
-      selectedReservation,
+      reservation,
       t,
-      unit,
+      handleDateChange,
+      locale
     } = this.props;
-    const date = moment(selectedReservation.begin).format('YYYY-MM-DD');
+    const date = moment(reservation.begin).format('YYYY-MM-DD');
 
     return (
       <div className="app-ReservationTime">
         <Row>
           <Col md={7} sm={12}>
             <ResourceCalendar
-              onDateChange={this.handleDateChange}
+              onDateChange={handleDateChange}
               resourceId={resource.id}
               selectedDate={date}
             />
@@ -51,9 +53,9 @@ class ReservationTime extends Component {
                   {t('common.resourceLabel')}
                 </Col>
                 <Col className="app-ReservationDetails__value" md={8}>
-                  {resource.name}
+                  {get(resource, `name.${locale}`)}
                   <br />
-                  {unit.name}
+                  {get(resource, `unit.name.${locale}`)}
                 </Col>
               </Row>
             </Well>
@@ -63,7 +65,7 @@ class ReservationTime extends Component {
           <Button bsStyle="warning" onClick={onCancel}>
             {t('ReservationInformationForm.cancelEdit')}
           </Button>
-          <Button bsStyle="primary" disabled={isEmpty(selectedReservation)} onClick={onConfirm}>
+          <Button bsStyle="primary" disabled={isEmpty(reservation)} onClick={onConfirm}>
             {t('common.continue')}
           </Button>
         </div>

@@ -21,6 +21,7 @@ import ReservationTime from './reservation-time/ReservationTime';
 import reservationPageSelector from './reservationPageSelector';
 import recurringReservationsConnector from '../../state/recurringReservations';
 import { getResourceById } from '../../../src/domain/resource/utils';
+import { getReservationById } from '../../../src/domain/reservation/utils';
 
 class UnconnectedReservationPage extends Component {
   constructor(props) {
@@ -39,9 +40,9 @@ class UnconnectedReservationPage extends Component {
 
     if (!params.reservationId) {
       history.replace('/my-reservations');
+    } else {
+      this.fetchReservation();
     }
-
-    this.fetchReservation();
   }
 
   handleBack = () => {
@@ -75,12 +76,10 @@ class UnconnectedReservationPage extends Component {
     // later
   };
 
-  fetchResource = async () => {
+  fetchResource = async (resourceId) => {
     const {
       date
     } = this.props;
-
-    const { reservation } = this.state;
 
     const start = moment(date)
       .subtract(2, 'M')
@@ -93,7 +92,7 @@ class UnconnectedReservationPage extends Component {
 
     let response;
     try {
-      response = await getResourceById(reservation.resource, { start, end });
+      response = await getResourceById(resourceId, { start, end });
 
       this.setState({
         resource: response.data
@@ -102,6 +101,23 @@ class UnconnectedReservationPage extends Component {
       // TODO: make error notification
     }
   }
+
+  fetchReservation = async () => {
+    const { match: { params } } = this.props;
+
+    let response;
+    try {
+      response = await getReservationById(params.reservationId);
+
+      this.setState({
+        reservation: response.data
+      });
+
+      this.fetchResource(response.data.resource);
+    } catch (error) {
+      // handle error
+    }
+  };
 
   // renderRecurringReservations = () => {
   //   const {
@@ -173,6 +189,8 @@ class UnconnectedReservationPage extends Component {
                     handleDateChange={this.handleDateChange}
                     onCancel={this.handleCancel}
                     onConfirm={this.handleConfirmTime}
+                    reservation={reservation}
+                    resource={resource}
                   />
                 )}
                 {view === 'information' && (
