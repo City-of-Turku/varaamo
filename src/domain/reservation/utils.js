@@ -47,6 +47,26 @@ export const getCurrentReservation = (reservations) => {
 };
 
 /**
+ * Generate reservation edit URL from reservation data.
+ *
+ * @param {*} reservation
+ * @returns {string} Reservation URL
+ */
+export const getEditReservationUrl = (reservation) => {
+  const {
+    begin, end, id, resource
+  } = reservation;
+  const date = moment(begin).format('YYYY-MM-DD');
+  const beginStr = moment(begin).format('HH:mm');
+  const endStr = moment(end).format('HH:mm');
+
+  return `/reservation?begin=${beginStr}&date=${date}&end=${endStr}&id=${id || ''}&resource=${resource.id}`;
+};
+
+
+// HTTP utils
+
+/**
  * Edit existing reservation API helper
  * @param {Object} reservation Original reservation data
  * @param {Object} fields Edit fields object
@@ -67,18 +87,11 @@ export const cancelReservation = (reservation) => {
 };
 
 /**
- * Generate reservation edit URL from reservation data.
+ * Get reservation detail
  *
- * @param {*} reservation
- * @returns {string} Reservation URL
+ * @param {Object} reservationId Filters
+ * @returns {Promise}
  */
-export const getEditReservationUrl = (reservation) => {
-  const {
-    begin, end, id, resource
-  } = reservation;
-  const date = moment(begin).format('YYYY-MM-DD');
-  const beginStr = moment(begin).format('HH:mm');
-  const endStr = moment(end).format('HH:mm');
-
-  return `/reservation?begin=${beginStr}&date=${date}&end=${endStr}&id=${id || ''}&resource=${resource.id}`;
+export const getReservationById = (reservationId) => {
+  return client.get(`reservation/${reservationId}`);
 };
