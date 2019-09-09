@@ -13,36 +13,23 @@ import ResourceCalendar from '../../../shared/resource-calendar/ResourceCalendar
 
 class ReservationTime extends Component {
   static propTypes = {
-    location: PropTypes.object.isRequired,
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
-    match: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
     resource: PropTypes.object.isRequired,
     selectedReservation: PropTypes.object.isRequired,
     t: PropTypes.func.isRequired,
     unit: PropTypes.object.isRequired,
   };
 
-  handleDateChange = (newDate) => {
-    const { resource, history } = this.props;
-    const day = newDate.toISOString().substring(0, 10);
-    history.replace(`/reservation?date=${day}&resource=${resource.id}`);
-  };
-
   render() {
     const {
-      location,
       onCancel,
       onConfirm,
-      history,
-      match,
       resource,
       selectedReservation,
       t,
       unit,
     } = this.props;
-    const { params } = match;
     const date = moment(selectedReservation.begin).format('YYYY-MM-DD');
 
     return (
@@ -54,11 +41,7 @@ class ReservationTime extends Component {
               resourceId={resource.id}
               selectedDate={date}
             />
-            <ReservationCalendar
-              history={history}
-              location={location}
-              params={{ ...params, id: resource.id }}
-            />
+            <ReservationCalendar />
           </Col>
           <Col md={5} sm={12}>
             <Well className="app-ReservationDetails">

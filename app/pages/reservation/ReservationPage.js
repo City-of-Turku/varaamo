@@ -113,6 +113,12 @@ class UnconnectedReservationPage extends Component {
     window.scrollTo(0, 0);
   };
 
+  handleDateChange = (newDate) => {
+    const { history } = this.props;
+    const day = newDate.toISOString().substring(0, 10);
+    history.replace(`/reservation?date=${day}`);
+  };
+
   createPaymentReturnUrl = () => {
     const { protocol, hostname } = window.location;
     const port = window.location.port ? `:${window.location.port}` : '';
@@ -234,7 +240,6 @@ class UnconnectedReservationPage extends Component {
       t,
       unit,
       user,
-      history,
     } = this.props;
     const { view } = this.state;
 
@@ -256,7 +261,6 @@ class UnconnectedReservationPage extends Component {
     const title = t(
       `ReservationPage.${isEditing || isEdited ? 'editReservationTitle' : 'newReservationTitle'}`
     );
-    const params = queryString.parse(location.search);
 
     return (
       <div className="app-ReservationPage">
@@ -274,15 +278,9 @@ class UnconnectedReservationPage extends Component {
                 />
                 {view === 'time' && isEditing && (
                   <ReservationTime
-                    history={history}
-                    location={location}
-                    match={match}
+                    handleDateChange={this.handleDateChange}
                     onCancel={this.handleCancel}
                     onConfirm={this.handleConfirmTime}
-                    params={params}
-                    resource={resource}
-                    selectedReservation={reservationToEdit}
-                    unit={unit}
                   />
                 )}
                 {view === 'information' && selectedTime && (
