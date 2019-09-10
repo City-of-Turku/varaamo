@@ -10,7 +10,7 @@ import { changeAdminReservationFilters } from '../../actions/uiActions';
 import { fetchUnits } from '../../actions/unitActions';
 import ReservationInfoModal from '../../shared/modals/reservation-info/ReservationInfoModalContainer';
 import PageWrapper from '../PageWrapper';
-import ReservationCancelModal from '../../shared/modals/reservation-cancel/ReservationCancelModalContainer';
+import ReservationCancelModal from '../../shared/modals/reservation-cancel/ReservationCancelModal';
 import injectT from '../../i18n/injectT';
 import userReservationsPageSelector from './userReservationsPageSelector';
 import AdminReservationFilters from './reservation-filters/AdminReservationFilters';

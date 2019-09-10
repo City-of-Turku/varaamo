@@ -24,6 +24,7 @@ import { reservingIsRestricted } from '../../../utils/resourceUtils';
 import reservationCalendarSelector from './reservationCalendarSelector';
 import ReservingRestrictedText from './ReservingRestrictedText';
 import TimePickerCalendar from '../../../../src/common/calendar/TimePickerCalendar';
+import ReservationCancelModal from '../../../shared/modals/reservation-cancel/ReservationCancelModal';
 // import apiClient from '../../../../src/common/api/client';
 
 export class UnconnectedReservationCalendarContainer extends Component {
@@ -150,7 +151,8 @@ export class UnconnectedReservationCalendarContainer extends Component {
             reservableDaysInAdvance={resource.reservableDaysInAdvance}
           />
         )}
-        {/* <ReservationCancelModal />
+        <ReservationCancelModal />
+        {/*
         <ReservationInfoModal />
         <ReservationSuccessModal />
         <ReservationConfirmation

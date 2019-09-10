@@ -7,9 +7,7 @@ import CompactReservationList from '../../../compact-reservation-list/CompactRes
 import Reservation from '../../../../utils/fixtures/Reservation';
 import Resource from '../../../../utils/fixtures/Resource';
 import { shallowWithIntl } from '../../../../utils/testUtils';
-import {
-  UnconnectedReservationCancelModalContainer as ReservationCancelModalContainer,
-} from '../ReservationCancelModalContainer';
+import ReservationCancelModalContainer from '../ReservationCancelModal';
 
 describe('shared/modals/reservation-cancel/ReservationCancelModalContainer', () => {
   const resource = Resource.build();
