@@ -25,6 +25,7 @@ import reservationCalendarSelector from './reservationCalendarSelector';
 import ReservingRestrictedText from './ReservingRestrictedText';
 import TimePickerCalendar from '../../../../src/common/calendar/TimePickerCalendar';
 import ReservationCancelModal from '../../../shared/modals/reservation-cancel/ReservationCancelModal';
+import ReservationInfoModal from '../../../shared/modals/reservation-info/ReservationInfoModal';
 // import apiClient from '../../../../src/common/api/client';
 
 export class UnconnectedReservationCalendarContainer extends Component {
@@ -152,8 +153,8 @@ export class UnconnectedReservationCalendarContainer extends Component {
           />
         )}
         <ReservationCancelModal />
-        {/*
         <ReservationInfoModal />
+        {/*
         <ReservationSuccessModal />
         <ReservationConfirmation
           selectedReservations={selected}
