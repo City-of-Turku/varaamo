@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import get from 'lodash/get';
+import camelCase from 'lodash/camelCase';
 import { FormattedHTMLMessage } from 'react-intl';
 import Button from 'react-bootstrap/lib/Button';
 import Col from 'react-bootstrap/lib/Col';
@@ -10,9 +12,7 @@ import { Link } from 'react-router-dom';
 import constants from '../../../constants/AppConstants';
 import injectT from '../../../i18n/injectT';
 import ReservationDate from '../../../shared/reservation-date/ReservationDate';
-import { hasProducts } from '../../../utils/resourceUtils';
-import { getReservationPrice, getReservationPricePerPeriod } from '../../../utils/reservationUtils';
-import apiClient from '../../../../src/common/api/client';
+import { reservationMetadataFields } from '../../../../src/domain/reservation/constants';
 
 class ReservationConfirmation extends Component {
   static propTypes = {
@@ -23,36 +23,45 @@ class ReservationConfirmation extends Component {
     user: PropTypes.object.isRequired,
   };
 
-  state = {
-    reservationPrice: null,
-  }
+  // componentDidMount() {
+  //   const { reservation, resource } = this.props;
+  //   if (hasProducts(resource)) {
+  //     getReservationPrice(apiClient, reservation.begin, reservation.end, resource.products)
+  //       .then(reservationPrice => this.setState({ reservationPrice }));
+  //   }
+  // }
 
-  componentDidMount() {
-    const { reservation, resource } = this.props;
-    if (hasProducts(resource)) {
-      getReservationPrice(apiClient, reservation.begin, reservation.end, resource.products)
-        .then(reservationPrice => this.setState({ reservationPrice }));
-    }
-  }
+  renderMetaDataFields() {
+    const { reservation } = this.state;
+    const { t } = this.props;
 
-  renderField(field, label, value) {
     return (
-      <Row className="app-ReservationConfirmation__field" key={`reservation-confirmation-field-${field}`}>
-        <Col md={4} xs={6}>
-          <span className="app-ReservationDetails__name">{label}</span>
-        </Col>
-        <Col md={8} xs={6}>
-          <span className="app-ReservationDetails__value">{value}</span>
-        </Col>
-      </Row>
+      reservationMetadataFields.map((field) => {
+        const value = get(reservation, field);
+
+        return value ? (
+          <Row
+            className="app-ReservationConfirmation__field"
+            key={`reservation-confirmation-field-${field}`}
+          >
+            <Col xs={6}>
+              <b>{t(`${camelCase(field)}Label`)}</b>
+            </Col>
+            <Col className="app-ReservationConfirmation__field-value" xs={6}>
+              {value}
+            </Col>
+          </Row>
+        ) : '';
+      })
     );
   }
+
 
   render() {
     const {
       isEdited, reservation, resource, t, user
     } = this.props;
-    const { reservationPrice } = this.state;
+
     const refUrl = window.location.href;
     const href = `${constants.FEEDBACK_URL}?ref=${refUrl}`;
     let email = '';
@@ -109,121 +118,7 @@ class ReservationConfirmation extends Component {
         <Col md={6} xs={12}>
           <div className="app-ReservationDetails">
             <h2 className="app-ReservationPage__title">{t('ReservationConfirmation.reservationDetailsTitle')}</h2>
-            {reservationPrice
-              && this.renderField(
-                'pricePerPeriod',
-                t('common.priceLabel'),
-                getReservationPricePerPeriod(resource)
-              )}
-            {reservationPrice
-              && this.renderField(
-                'reservationPrice',
-                t('common.totalPriceLabel'),
-                `${reservationPrice}€`
-              )}
-            {reservation.reserverName
-              && this.renderField(
-                'reserverName',
-                t('common.reserverNameLabel'),
-                reservation.reserverName
-              )}
-            {reservation.reserverId
-              && this.renderField('reserverId', t('common.reserverIdLabel'), reservation.reserverId)}
-            {reservation.reserverPhoneNumber
-              && this.renderField(
-                'reserverPhoneNumber',
-                t('common.reserverPhoneNumberLabel'),
-                reservation.reserverPhoneNumber
-              )}
-            {reservation.reserverEmailAddress
-              && this.renderField(
-                'reserverEmailAddress',
-                t('common.reserverEmailAddressLabel'),
-                reservation.reserverEmailAddress
-              )}
-            {reservation.eventSubject
-              && this.renderField(
-                'eventSubject',
-                t('common.eventSubjectLabel'),
-                reservation.eventSubject
-              )}
-            {reservation.eventDescription
-              && this.renderField(
-                'eventDescription',
-                t('common.eventDescriptionLabel'),
-                reservation.eventDescription
-              )}
-            {reservation.numberOfParticipants
-              && this.renderField(
-                'numberOfParticipants',
-                t('common.numberOfParticipantsLabel'),
-                reservation.numberOfParticipants
-              )}
-            {reservation.comments
-              && this.renderField('comments', t('common.commentsLabel'), reservation.comments)}
-            {reservation.reserverAddressStreet
-              && this.renderField(
-                'reserverAddressStreet',
-                t('common.addressStreetLabel'),
-                reservation.reserverAddressStreet
-              )}
-            {reservation.reserverAddressZip
-              && this.renderField(
-                'reserverAddressZip',
-                t('common.addressZipLabel'),
-                reservation.reserverAddressZip
-              )}
-            {reservation.reserverAddressCity
-              && this.renderField(
-                'reserverAddressCity',
-                t('common.addressCityLabel'),
-                reservation.reserverAddressCity
-              )}
-            {reservation.billingAddressStreet && (
-              <Col xs={12}>{t('common.billingAddressLabel')}</Col>
-            )}
-            {reservation.billingFirstName
-              && this.renderField(
-                'billingFirstName',
-                t('common.billingFirstNameLabel'),
-                reservation.billingFirstName
-              )}
-            {reservation.billingLastName
-              && this.renderField(
-                'billingLastName',
-                t('common.billingLastNameLabel'),
-                reservation.billingLastName
-              )}
-            {reservation.billingPhoneNumber
-              && this.renderField(
-                'billingPhoneNumber',
-                t('common.billingPhoneNumberLabel'),
-                reservation.billingPhoneNumber
-              )}
-            {reservation.billingEmailAddress
-              && this.renderField(
-                'billingEmailAddress',
-                t('common.billingEmailAddressLabel'),
-                reservation.billingEmailAddress
-              )}
-            {reservation.billingAddressStreet
-              && this.renderField(
-                'billingAddressStreet',
-                t('common.addressStreetLabel'),
-                reservation.billingAddressStreet
-              )}
-            {reservation.billingAddressZip
-              && this.renderField(
-                'billingAddressZip',
-                t('common.addressZipLabel'),
-                reservation.billingAddressZip
-              )}
-            {reservation.billingAddressCity
-              && this.renderField(
-                'billingAddressCity',
-                t('common.addressCityLabel'),
-                reservation.billingAddressCity
-              )}
+            {this.renderMetaDataFields()}
           </div>
         </Col>
       </Row>
