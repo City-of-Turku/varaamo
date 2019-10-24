@@ -1,6 +1,13 @@
 .reservation-success-modal {
   .modal-title {
-    margin-bottom: 10px;
+    margin-top: 60px !important;
+    margin-bottom: 5px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    @media (max-width: $screen-xs-min) {
+      margin-bottom: 20px !important;
+    }
   }
   &__content {
     background-color: $white;

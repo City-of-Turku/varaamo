@@ -33,7 +33,10 @@
     display: block;
     text-align: center;
     width: 150px;
-    top: 100px;
+    top: 95px;
+    @media (max-width: $screen-xs-min) {
+      top: 125px;
+    }
   }
 
   &__day-of-week{
@@ -41,8 +44,14 @@
     display: block;
     text-align: center;
     width: 150px;
-    top: 180px;
-    margin-top: 8px;
+    top: 175px;
+    margin-top: 5px;
+    @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+      top: 170px;
+    }
+    @media (max-width: $screen-xs-min) {
+      top: 200px;
+    }
   }
   &__icon {
     height: 20px;

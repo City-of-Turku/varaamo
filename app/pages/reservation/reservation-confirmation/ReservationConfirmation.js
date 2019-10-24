@@ -60,7 +60,7 @@ class ReservationConfirmation extends Component {
 
     return (
       <Row className="app-ReservationConfirmation">
-        <Col md={6} xs={12}>
+        <Col lg={6} md={12} xs={12}>
           <Well>
             <h2 className="app-ReservationPage__header">
               {t(`ReservationConfirmation.reservation${isEdited ? 'Edited' : 'Created'}Title`)}
@@ -96,7 +96,7 @@ class ReservationConfirmation extends Component {
             </p>
           </Well>
         </Col>
-        <Col md={6} xs={12}>
+        <Col lg={6} md={12} xs={12}>
           <Well>
             <h2 id="reservationDetails">{t('ReservationConfirmation.reservationDetailsTitle')}</h2>
             {reservation.reserverName
