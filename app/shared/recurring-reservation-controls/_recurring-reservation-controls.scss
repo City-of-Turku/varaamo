@@ -1,9 +1,28 @@
 .recurring-reservation-controls {
+  .app-Select {
+    &__control {
+      margin-bottom: 10px;
+      height: 40px;
+      &:focus-within {
+        border: 3px solid $black;
+      }
+    }
+  }
   .Select-control {
     margin-bottom: $form-group-margin-bottom;
+  }
+  .react-numeric-input {
+    margin-top: 4px;
   }
   label {
     white-space: nowrap;
     overflow: hidden;
+  }
+  .date-picker {
+    border: 2px solid $black;
+    padding: 5px 10px;
+  }
+  .date-picker-overlay {
+    border: 2px solid $black;
   }
 }
