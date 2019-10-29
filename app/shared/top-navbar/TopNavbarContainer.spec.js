@@ -5,8 +5,11 @@ describe('shared/top-navbar/TopNavbarContainer', () => {
     function getState(locale = 'fi', user = {}) {
       return {
         auth: {
-          userId: user.id,
-          token: 'mock-token',
+          user: {
+            profile: {
+              sub: user.id,
+            },
+          },
         },
         data: {
           users: { [user.id]: user },

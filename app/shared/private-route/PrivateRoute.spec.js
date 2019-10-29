@@ -10,6 +10,7 @@ import {
   mapStateToProps,
   mapDispatchToProps,
 } from './PrivateRoute';
+import userManager from 'utils/userManager';
 
 describe('shared/private-route/PrivateRoute', () => {
   describe('UnconnectedPrivateRoute', () => {
@@ -24,7 +25,7 @@ describe('shared/private-route/PrivateRoute', () => {
       scrollToMock.reset();
       redirectMock.reset();
       simple.mock(window, 'scrollTo', scrollToMock);
-      simple.mock(window.location, 'replace', redirectMock);
+      simple.mock(userManager, 'signinRedirect', redirectMock);
     });
 
     const getWrapper = (componentName, userId) => {
@@ -65,17 +66,25 @@ describe('shared/private-route/PrivateRoute', () => {
       expect(updateRoute.callCount).toBe(1);
     });
 
-    test('does not calls window.location.replace if the userId is defined', () => {
+    test('does not call userManager.signinRedirect if the userId is defined', () => {
       const wrapper = getWrapper('AdminPage', '1234');
       wrapper.instance().renderOrRedirect();
 
       expect(redirectMock.callCount).toBe(0);
     });
+
+    test('calls userManager.signinRedirect if the userId is not defined', () => {
+      const wrapper = getWrapper('AdminPage', null);
+      wrapper.instance().renderOrRedirect();
+
+      expect(redirectMock.callCount).toBe(1);
+    });
   });
 
   describe('mapStateToProps', () => {
     test('returns an object with userId property', () => {
-      expect(mapStateToProps({})).toHaveProperty('userId');
+      const auth = { user: null };
+      expect(mapStateToProps({ auth })).toHaveProperty('userId');
     });
   });
 

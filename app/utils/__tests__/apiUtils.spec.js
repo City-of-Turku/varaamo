@@ -165,10 +165,12 @@ describe('Utils: apiUtils', () => {
       describe('when user is logged in', () => {
         const state = {
           auth: {
-            token: 'mock-token',
+            user: {
+              id_token: 'mock-token',
+            },
           },
         };
-        const authorizationHeader = { Authorization: 'JWT mock-token' };
+        const authorizationHeader = { Authorization: 'Bearer mock-token' };
 
         describe('if no additional headers are specified', () => {
           test('returns the required headers and Authorization header', () => {

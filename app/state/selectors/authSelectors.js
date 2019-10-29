@@ -2,13 +2,18 @@ import forIn from 'lodash/forIn';
 import includes from 'lodash/includes';
 import { createSelector } from 'reselect';
 
-const userIdSelector = state => state.auth.userId;
+const authUserSelector = state => state.auth.user;
 const usersSelector = state => state.data.users;
 
 const currentUserSelector = createSelector(
-  userIdSelector,
+  authUserSelector,
   usersSelector,
-  (userId, users) => users[userId] || {}
+  (userId, users) => {
+    if (userId) {
+      return users[userId.profile.sub] || {};
+    }
+    return {};
+  }
 );
 
 const isAdminSelector = createSelector(
@@ -17,7 +22,7 @@ const isAdminSelector = createSelector(
 );
 
 function isLoggedInSelector(state) {
-  return Boolean(state.auth.userId && state.auth.token);
+  return Boolean(state.auth.user);
 }
 
 const staffUnitsSelector = createSelector(

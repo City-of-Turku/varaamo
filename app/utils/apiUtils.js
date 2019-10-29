@@ -46,7 +46,7 @@ function getErrorTypeDescriptor(type, options = {}) {
 function getHeadersCreator(headers) {
   return (state) => {
     const authorizationHeaders = {};
-    if (state.auth.token) {
+    if (state.auth.user) {
       // UNCOMMENT ME
       // authorizationHeaders.Authorization = `JWT ${state.auth.token}`;
 
@@ -54,7 +54,7 @@ function getHeadersCreator(headers) {
       if (SETTINGS.TEMP_BYPASS) {
         authorizationHeaders.Authorization = `Basic ${state.auth.token}`;
       } else {
-        authorizationHeaders.Authorization = `JWT ${state.auth.token}`;
+        authorizationHeaders.Authorization = `Bearer ${state.auth.user.id_token}`; // access_token or id_token?
       }
       // TEMP BYPASS
     }

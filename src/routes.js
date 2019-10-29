@@ -12,6 +12,8 @@ import ReservationPage from '../app/pages/reservation';
 import ResourcePage from '../app/pages/resource';
 import SearchPage from '../app/pages/search';
 import UserReservationsPage from '../app/pages/user-reservations';
+import LoginCallback from '../app/pages/auth/LoginCallback';
+import LogoutCallback from '../app/pages/auth/LogoutCallback';
 
 export default () => (
   <AppContainer>
@@ -20,6 +22,9 @@ export default () => (
       <Route component={SearchPage} componentName="Search" path="/search" />
       <Route component={AboutPage} componentName="About" path="/about" />
       <Route component={ResourcePage} componentName="Resource" path="/resources/:id" />
+
+      <Route component={LoginCallback} componentName="LoginCallback" path="/callback" />
+      <Route component={LogoutCallback} componentName="LogoutCallback" path="/logout/callback" />
 
       <PrivateRoute
         component={AdminResourcesPage}

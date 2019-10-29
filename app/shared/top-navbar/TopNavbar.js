@@ -18,6 +18,7 @@ import FontChanger from './accessibility/TopNavbarFontContainer';
 import ContrastChanger from './accessibility/TopNavbarContrastContainer';
 import { injectT } from 'i18n';
 import LoginForm from './temp/LoginForm';
+import userManager from 'utils/userManager';
 
 class TopNavbar extends Component {
   static propTypes = {
@@ -38,6 +39,7 @@ class TopNavbar extends Component {
     };
 
     this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.toggleMobileNavbar = this.toggleMobileNavbar.bind(this);
   }
 
@@ -56,6 +58,14 @@ class TopNavbar extends Component {
     this.setState(prevState => ({ expanded: !prevState.expanded }));
   }
 
+  handleLogoutClick() {
+    console.log('logging out.....');
+
+    if (!SETTINGS.TEMP_BYPASS) {
+      userManager.signoutRedirect();
+    }
+  }
+
   handleLoginClick() {
     /* UNCOMMENT ME
       const next = encodeURIComponent(window.location.href);
@@ -68,8 +78,7 @@ class TopNavbar extends Component {
         tempShowForm: !prevState.tempShowForm
       }));
     } else {
-      const next = encodeURIComponent(window.location.href);
-      window.location.assign(`${window.location.origin}/login?next=${next}`);
+      userManager.signinRedirect();
     }
     // TEMP BYPASS
   }
@@ -175,7 +184,7 @@ class TopNavbar extends Component {
                 noCaret
                 title={userName}
               >
-                <MenuItem eventKey="logout" href={`/logout?next=${window.location.origin}`}>
+                <MenuItem eventKey="logout" onClick={this.handleLogoutClick}>
                   {t('Navbar.logout')}
                 </MenuItem>
               </NavDropdown>
@@ -191,10 +200,8 @@ class TopNavbar extends Component {
                   <li className="app-TopNavbar__mobile username">
                     <Navbar.Text>{userName}</Navbar.Text>
                   </li>
-
-                  <NavItem className="app-TopNavbar__mobile logout" href={`/logout?next=${window.location.origin}`} id="mobile_logout">
-
-                    <Button type="button">
+                  <NavItem className="app-TopNavbar__mobile logout" id="mobile_logout">
+                    <Button onClick={this.handleLogoutClick} type="button">
                       {t('Navbar.logout')}
                     </Button>
 

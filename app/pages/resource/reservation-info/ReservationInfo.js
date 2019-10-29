@@ -15,6 +15,7 @@ function renderLoginText(isLoggedIn, resource) {
     return null;
   }
   const next = encodeURIComponent(window.location.href);
+  // TODO: update to redux-oidc way....
   return (
     <p className="login-text">
       <FormattedHTMLMessage id="ReservationInfo.loginMessage" values={{ next }} />

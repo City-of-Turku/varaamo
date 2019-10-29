@@ -176,11 +176,10 @@ describe('shared/top-navbar/TopNavbar', () => {
       expect(userNavDropDown.at(0).prop('title')).toBe(props.userName);
     });
 
-    test('renders a logout link', () => {
-      const logoutHref = `/logout?next=${window.location.origin}`;
+    test('renders a logout link/button', () => {
       const logoutLink = getLoggedInNotAdminWrapper()
         .find(MenuItem)
-        .filter({ href: logoutHref });
+        .filter({ eventKey: 'logout' });
       expect(logoutLink).toHaveLength(1);
     });
 
@@ -207,11 +206,10 @@ describe('shared/top-navbar/TopNavbar', () => {
       expect(loginLink.at(0).prop('onClick')).toBe(wrapper.instance().handleLoginClick);
     });
 
-    test('does not render a logout link', () => {
-      const logoutHref = `/logout?next=${window.location.origin}`;
+    test('does not render a logout link/button', () => {
       const logoutLink = getNotLoggedInWrapper()
         .find(NavItem)
-        .filter({ href: logoutHref });
+        .filter({ eventKey: 'logout' });
       expect(logoutLink).toHaveLength(0);
     });
   });

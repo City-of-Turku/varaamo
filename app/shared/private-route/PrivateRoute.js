@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 
 import { updateRoute } from 'actions/routeActions';
 import userIdSelector from 'state/selectors/userIdSelector';
+import userManager from 'utils/userManager';
 
 export class UnconnectedPrivateRoute extends Component {
   constructor(props) {
@@ -29,7 +30,7 @@ export class UnconnectedPrivateRoute extends Component {
     if (userId) {
       return <RouteComponent {...routerProps} />;
     }
-    return window.location.replace(`${window.location.origin}/login`);
+    return userManager.signinRedirect();
   }
 
   render() {
