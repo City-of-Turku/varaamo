@@ -106,5 +106,15 @@ describe('pages/resource/reservation-info/ReservationInfo', () => {
       const loginText = getWrapper({ isLoggedIn: false, resource }).find('.login-text');
       expect(loginText).toHaveLength(1);
     });
+
+    test('contains login Button when login text is rendered', () => {
+      const resource = {
+        reservable: true,
+      };
+      const loginButton = getWrapper({ isLoggedIn: false, resource }).find('.login-button');
+      expect(loginButton).toHaveLength(1);
+      expect(loginButton.prop('bsStyle')).toBe('link');
+      expect(loginButton.prop('onClick')).toBeDefined();
+    });
   });
 });

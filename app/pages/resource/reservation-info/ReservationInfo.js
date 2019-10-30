@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FormattedHTMLMessage } from 'react-intl';
+import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import iconUser from 'hel-icons/dist/shapes/user-o.svg';
 
@@ -9,16 +9,35 @@ import iconClock from 'assets/icons/clock-o.svg';
 import WrappedText from 'shared/wrapped-text';
 import { getMaxPeriodText } from 'utils/resourceUtils';
 import { injectT } from 'i18n';
+import userManager from 'utils/userManager';
 
-function renderLoginText(isLoggedIn, resource) {
+function handleLoginClick() {
+  userManager.signinRedirect();
+}
+
+function renderLoginText(isLoggedIn, resource, t) {
   if (isLoggedIn || !resource.reservable) {
     return null;
   }
-  const next = encodeURIComponent(window.location.href);
-  // TODO: update to redux-oidc way....
+
+  // fetch login text and split it with given separator
+  const message = t('ReservationInfo.loginMessage');
+  const messageParts = message.split('<a>');
+
+  // if message has three parts e.g. "start of message <a>link text<a> end of message"
+  if (messageParts.length === 3) {
+    return (
+      <p className="login-text">
+        {messageParts[0]}
+        <Button bsStyle="link" className="login-button" onClick={handleLoginClick}>{messageParts[1]}</Button>
+        {messageParts[2]}
+      </p>
+    );
+  }
+  // else create a button of the whole message
   return (
     <p className="login-text">
-      <FormattedHTMLMessage id="ReservationInfo.loginMessage" values={{ next }} />
+      <Button bsStyle="link" className="login-button" onClick={handleLoginClick}>{message}</Button>
     </p>
   );
 }
@@ -78,7 +97,7 @@ function ReservationInfo({ isLoggedIn, resource, t }) {
       {renderEarliestResDay(resource.reservableMinDaysInAdvance, t)}
       {renderMaxPeriodText(resource, t)}
       {renderMaxReservationsPerUserText(resource.maxReservationsPerUser, t)}
-      {renderLoginText(isLoggedIn, resource)}
+      {renderLoginText(isLoggedIn, resource, t)}
     </div>
   );
 }
