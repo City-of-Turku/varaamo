@@ -70,7 +70,6 @@ module.exports = merge(common, {
         SHOW_TEST_SITE_MESSAGE: Boolean(process.env.SHOW_TEST_SITE_MESSAGE),
         TRACKING: Boolean(process.env.PIWIK_SITE_ID),
         CUSTOM_MUNICIPALITY_OPTIONS: process.env.CUSTOM_MUNICIPALITY_OPTIONS,
-        TEMP_BYPASS: process.env.TEMP_BYPASS,
         CLIENT_ID: JSON.stringify(process.env.CLIENT_ID),
         OPENID_AUDIENCE: JSON.stringify(process.env.OPENID_AUDIENCE),
       },

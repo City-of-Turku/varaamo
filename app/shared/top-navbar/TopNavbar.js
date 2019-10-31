@@ -17,7 +17,6 @@ import MobileNavbar from 'shared/top-navbar/mobile/MobileNavbar';
 import FontChanger from './accessibility/TopNavbarFontContainer';
 import ContrastChanger from './accessibility/TopNavbarContrastContainer';
 import { injectT } from 'i18n';
-import LoginForm from './temp/LoginForm';
 import userManager from 'utils/userManager';
 
 class TopNavbar extends Component {
@@ -35,7 +34,6 @@ class TopNavbar extends Component {
     this.state = {
       expanded: false,
       expandMobileNavbar: false,
-      tempShowForm: false,
     };
 
     this.handleLoginClick = this.handleLoginClick.bind(this);
@@ -59,28 +57,11 @@ class TopNavbar extends Component {
   }
 
   handleLogoutClick() {
-    console.log('logging out.....');
-
-    if (!SETTINGS.TEMP_BYPASS) {
-      userManager.signoutRedirect();
-    }
+    userManager.signoutRedirect();
   }
 
   handleLoginClick() {
-    /* UNCOMMENT ME
-      const next = encodeURIComponent(window.location.href);
-      window.location.assign(`${window.location.origin}/login?next=${next}`);
-    */
-
-    // TEMP BYPASS
-    if (SETTINGS.TEMP_BYPASS) {
-      this.setState(prevState => ({
-        tempShowForm: !prevState.tempShowForm
-      }));
-    } else {
-      userManager.signinRedirect();
-    }
-    // TEMP BYPASS
+    userManager.signinRedirect();
   }
 
   toggleMobileNavbar() {
@@ -213,9 +194,6 @@ class TopNavbar extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-
-        {this.state.tempShowForm
-          && <LoginForm hideForm={() => this.setState({ tempShowForm: false })} />}
       </div>
     );
   }

@@ -15,20 +15,20 @@ class UnconnectedLogoutCallback extends React.Component {
   }
 
   logoutSuccessful() {
-    console.log('logout successful');
+    // TODO: route to the page where user was before logging out..?
+    // this.props.history.push(user.state.redirectUrl);
     this.props.history.push('/');
   }
 
-  logoutUnsuccessful(error) {
-    console.log(`logout unsuccessful... ${error}`);
+  logoutUnsuccessful() {
     this.props.history.push('/');
   }
 
   render() {
     return (
       <SignoutCallbackComponent
-        errorCallback={this.logoutUnsuccessful}
-        successCallback={this.logoutSuccessful}
+        errorCallback={error => this.logoutUnsuccessful(error)}
+        successCallback={user => this.logoutSuccessful(user)}
         userManager={userManager}
       >
         <Loader />
