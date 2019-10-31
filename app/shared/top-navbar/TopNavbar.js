@@ -61,7 +61,11 @@ class TopNavbar extends Component {
   }
 
   handleLoginClick() {
-    userManager.signinRedirect();
+    userManager.signinRedirect({
+      data: {
+        redirectUrl: window.location.pathname
+      }
+    });
   }
 
   toggleMobileNavbar() {

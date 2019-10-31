@@ -14,10 +14,12 @@ class UnconnectedLoginCallback extends React.Component {
     this.loginUnsuccessful = this.loginUnsuccessful.bind(this);
   }
 
-  loginSuccessful() {
-    // TODO: route to the page where user was before logging in..?
-    // this.props.history.push(user.state.redirectUrl);
-    this.props.history.push('/');
+  loginSuccessful(user) {
+    if (user.state) {
+      this.props.history.push(user.state.redirectUrl);
+    } else {
+      this.props.history.push('/');
+    }
   }
 
   loginUnsuccessful() {

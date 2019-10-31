@@ -33,13 +33,25 @@ describe('pages/LoginCallback', () => {
   });
 
   describe('loginSuccessful', () => {
-    test('calls browserHistory push with correct path', () => {
-      const instance = getWrapper().instance();
-      const historyMock = simple.mock(history, 'push');
-      instance.loginSuccessful();
+    describe('calls browserHistory push with correct path', () => {
+      test('when user.state.redirectUrl is defined', () => {
+        const instance = getWrapper().instance();
+        const historyMock = simple.mock(history, 'push');
+        const user = { state: { redirectUrl: '/about' } };
+        instance.loginSuccessful(user);
 
-      expect(historyMock.callCount).toBe(1);
-      expect(historyMock.lastCall.args).toEqual(['/']);
+        expect(historyMock.callCount).toBe(1);
+        expect(historyMock.lastCall.args).toEqual([user.state.redirectUrl]);
+      });
+      test('when user.state.redirectUrl is not defined', () => {
+        const instance = getWrapper().instance();
+        const historyMock = simple.mock(history, 'push');
+        const user = { state: undefined };
+        instance.loginSuccessful(user);
+
+        expect(historyMock.callCount).toBe(1);
+        expect(historyMock.lastCall.args).toEqual(['/']);
+      });
     });
   });
 

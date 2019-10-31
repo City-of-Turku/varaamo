@@ -12,7 +12,11 @@ import { injectT } from 'i18n';
 import userManager from 'utils/userManager';
 
 function handleLoginClick() {
-  userManager.signinRedirect();
+  userManager.signinRedirect({
+    data: {
+      redirectUrl: window.location.pathname
+    }
+  });
 }
 
 function renderLoginText(isLoggedIn, resource, t) {
