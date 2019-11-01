@@ -23,6 +23,7 @@ class TopNavbar extends Component {
   static propTypes = {
     changeLocale: PropTypes.func.isRequired,
     currentLanguage: PropTypes.string.isRequired,
+    idToken: PropTypes.string.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
     userName: PropTypes.string.isRequired,
@@ -57,7 +58,9 @@ class TopNavbar extends Component {
   }
 
   handleLogoutClick() {
-    userManager.signoutRedirect();
+    // passing id token hint skips logout confirm on tunnistamo's side
+    userManager.signoutRedirect({ id_token_hint: this.props.idToken });
+    userManager.removeUser();
   }
 
   handleLoginClick() {
@@ -152,33 +155,33 @@ class TopNavbar extends Component {
                 {currentLanguage === 'fi'
                   ? (<MenuItem active aria-label="Suomi" eventKey="fi">FI</MenuItem>)
                   : (<MenuItem aria-label="Suomi" eventKey="fi">FI</MenuItem>)
-                    }
+                }
                 {currentLanguage === 'sv'
                   ? (<MenuItem active aria-label="Svenska" eventKey="sv">SV</MenuItem>)
                   : (<MenuItem aria-label="Svenska" eventKey="sv">SV</MenuItem>)
-                    }
+                }
 
               </NavDropdown>
 
               {isLoggedIn && (
-              <NavDropdown
-                aria-label="Logout"
-                className="app-TopNavbar__name"
-                eventKey="lang"
-                id="user-nav-dropdown"
-                noCaret
-                title={userName}
-              >
-                <MenuItem eventKey="logout" onClick={this.handleLogoutClick}>
-                  {t('Navbar.logout')}
-                </MenuItem>
-              </NavDropdown>
+                <NavDropdown
+                  aria-label="Logout"
+                  className="app-TopNavbar__name"
+                  eventKey="lang"
+                  id="user-nav-dropdown"
+                  noCaret
+                  title={userName}
+                >
+                  <MenuItem eventKey="logout" onClick={this.handleLogoutClick}>
+                    {t('Navbar.logout')}
+                  </MenuItem>
+                </NavDropdown>
               )}
 
               {!isLoggedIn && (
-              <NavItem className="login-button" id="app-TopNavbar__login" onClick={this.handleLoginClick}>
-                {t('Navbar.login')}
-              </NavItem>
+                <NavItem className="login-button" id="app-TopNavbar__login" onClick={this.handleLoginClick}>
+                  {t('Navbar.login')}
+                </NavItem>
               )}
               {isLoggedIn && (
                 <Fragment>

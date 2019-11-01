@@ -1,13 +1,23 @@
 import User from 'utils/fixtures/User';
 import { getState } from 'utils/testUtils';
 import {
+  authUserSelector,
   currentUserSelector,
   isAdminSelector,
+  isLoadingUserSelector,
   isLoggedInSelector,
   staffUnitsSelector,
 } from './authSelectors';
 
 describe('state/selectors/authSelectors', () => {
+  describe('authUserSelector', () => {
+    test('returns user', () => {
+      const user = { profile: {} };
+      const state = getState({ auth: { user } });
+      expect(authUserSelector(state)).toEqual(user);
+    });
+  });
+
   describe('currentUserSelector', () => {
     function getSelected(extraState) {
       const state = getState(extraState);
@@ -80,6 +90,14 @@ describe('state/selectors/authSelectors', () => {
     test('returns true if user.isStaff is true', () => {
       const user = { id: 'u-1', isStaff: true };
       expect(getSelected(user)).toBe(true);
+    });
+  });
+
+  describe('isLoadingUserSelector', () => {
+    test('returns bool isLoadingUser', () => {
+      const isLoadingUser = true;
+      const state = getState({ auth: { isLoadingUser } });
+      expect(isLoadingUserSelector(state)).toEqual(isLoadingUser);
     });
   });
 

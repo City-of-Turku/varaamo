@@ -3,7 +3,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import { clearSearchResults } from 'actions/searchActions';
-import { currentUserSelector, isLoggedInSelector } from 'state/selectors/authSelectors';
+import { authUserSelector, currentUserSelector, isLoggedInSelector } from 'state/selectors/authSelectors';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 import { contrastSelector } from 'state/selectors/accessibilitySelectors';
 import { changeLocale } from 'i18n';
@@ -22,6 +22,16 @@ const userNameSelector = createSelector(
   }
 );
 
+const userIdTokenSelector = createSelector(
+  authUserSelector,
+  (user) => {
+    if (user) {
+      return user.id_token;
+    }
+    return '';
+  }
+);
+
 const contrastOptionsSelector = state => contrastSelector(state);
 
 export const selector = createStructuredSelector({
@@ -29,6 +39,7 @@ export const selector = createStructuredSelector({
   currentLanguage: currentLanguageSelector,
   userName: userNameSelector,
   contrast: contrastOptionsSelector,
+  idToken: userIdTokenSelector,
 });
 
 const actions = {

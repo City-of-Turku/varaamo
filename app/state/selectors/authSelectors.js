@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 
 const authUserSelector = state => state.auth.user;
 const usersSelector = state => state.data.users;
+const isLoadingUserSelector = state => state.auth.isLoadingUser;
 
 const currentUserSelector = createSelector(
   authUserSelector,
@@ -50,9 +51,11 @@ function createIsStaffSelector(resourceSelector) {
 }
 
 export {
+  authUserSelector,
   createIsStaffSelector,
   currentUserSelector,
   isAdminSelector,
+  isLoadingUserSelector,
   isLoggedInSelector,
   staffUnitsSelector,
 };

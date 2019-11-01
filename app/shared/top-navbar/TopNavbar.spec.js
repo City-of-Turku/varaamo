@@ -13,6 +13,7 @@ describe('shared/top-navbar/TopNavbar', () => {
       changeLocale: () => null,
       toggleMobileNavbar: () => null,
       currentLanguage: 'fi',
+      idToken: 'some-token',
       isLoggedIn: false,
       userName: 'Luke Skywalker',
     };

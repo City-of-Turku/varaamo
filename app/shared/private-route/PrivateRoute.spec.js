@@ -28,21 +28,28 @@ describe('shared/private-route/PrivateRoute', () => {
       simple.mock(userManager, 'signinRedirect', redirectMock);
     });
 
-    const getWrapper = (componentName, userId) => {
+    const getWrapper = (componentName, userId, isLoadingUser = false) => {
       const props = {
         actions: { updateRoute },
         location: {},
         componentName,
         component,
+        isLoadingUser,
         userId,
       };
       return shallow(<PrivateRoute {...props} />);
     };
 
-    test('renders Route from react-router-dom', () => {
-      const wrapper = getWrapper('AdminPage', '1234');
+    test('renders Route from react-router-dom if isLoadingUser is false', () => {
+      const wrapper = getWrapper('AdminPage', '1234', false);
 
       expect(wrapper.is(Route)).toBe(true);
+    });
+
+    test('does not render Route from react-router-dom if isLoadingUser is true', () => {
+      const wrapper = getWrapper('AdminPage', '1234', true);
+
+      expect(wrapper.is(Route)).toBe(false);
     });
 
     test('calls updateRoute when the component did mount', () => {
@@ -86,12 +93,16 @@ describe('shared/private-route/PrivateRoute', () => {
       const auth = { user: null };
       expect(mapStateToProps({ auth })).toHaveProperty('userId');
     });
+    test('returns an object with userId property', () => {
+      const auth = { user: null };
+      expect(mapStateToProps({ auth })).toHaveProperty('isLoadingUser');
+    });
   });
 
   describe('mapDispatchToProps', () => {
     beforeEach(() => {
       simple.mock(redux, 'bindActionCreators');
-      simple.mock(routeActions, 'updateRoute').returnWith(() => {});
+      simple.mock(routeActions, 'updateRoute').returnWith(() => { });
     });
 
     afterEach(() => {
