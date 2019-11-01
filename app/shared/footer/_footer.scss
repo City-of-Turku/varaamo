@@ -21,7 +21,8 @@ footer {
     }
   }
 
-  .feedback-link {
+  .feedback-link,
+  .accessibility-info-link {
     color: $white;
   }
 
@@ -46,7 +47,8 @@ footer {
       filter: brightness(0);
     }
 
-    .feedback-link {
+    .feedback-link,
+    .accessibility-info-link {
       color: blue;
     }
     a, a:hover {

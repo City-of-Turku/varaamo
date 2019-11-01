@@ -184,17 +184,31 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
     });
 
     describe('form fields', () => {
-      const fieldName = 'reserverName';
+      const reserverNameField = 'reserverName';
+      const eventSubjectField = 'eventSubject';
 
-      test('renders header title', () => {
-        const fields = [fieldName];
+      test('renders Reservation Information Form title', () => {
+        const fields = [reserverNameField];
         const header = getWrapper({ fields }).find('.reservationers-Info');
         expect(header).toHaveLength(1);
         expect(header.text()).toBe('ReservationInformationForm.reserverInformationTitle');
       });
 
+      test('renders Reservation Information Form when field is selected', () => {
+        const fields = [eventSubjectField];
+        const header = getWrapper({ fields }).find('.ReservationInformationForm');
+        expect(header).toHaveLength(1);
+        expect(header.text()).toBe('ReservationInformationForm.eventInformationTitle');
+      });
+
+      test('Does not render Reservation Information Form if not field selected', () => {
+        const fields = [];
+        const header = getWrapper({ fields }).find('.ReservationInformationForm');
+        expect(header).toHaveLength(0);
+      });
+
       test('renders a field if it is included in props.fields', () => {
-        const fields = [fieldName];
+        const fields = [reserverNameField];
         const input = getWrapper({ fields }).find(Field);
         expect(input.length).toBe(1);
       });
@@ -208,8 +222,8 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
       describe('required fields', () => {
         test('displays an asterisk beside a required field label', () => {
           const props = {
-            fields: [fieldName],
-            requiredFields: [fieldName],
+            fields: [reserverNameField],
+            requiredFields: [reserverNameField],
           };
           const input = getWrapper(props).find(Field);
           expect(input.props().label).toContain('*');
@@ -217,7 +231,7 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
 
         test('does not display an asterisk beside a non required field label', () => {
           const props = {
-            fields: [fieldName],
+            fields: [reserverNameField],
             requiredFields: [],
           };
           const input = getWrapper(props).find(Field);
@@ -228,10 +242,10 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           const staffEventSelected = true;
 
           test('shows an asterisk beside REQUIRED_STAFF_EVENT_FIELDS', () => {
-            const fields = [fieldName];
+            const fields = [reserverNameField];
             const props = {
               fields,
-              requiredFields: [fieldName],
+              requiredFields: [reserverNameField],
               staffEventSelected,
             };
             const input = getWrapper(props).find(Field);

@@ -97,14 +97,13 @@ class UnconnectedSearchPage extends Component {
     return (
       <div className="app-SearchPage">
         <SearchControls location={location} params={match.params} />
-        {!isFetchingSearchResults && (
-          <MapToggle
-            contrast={contrast}
-            mapVisible={showMap}
-            onClick={actions.toggleMap}
-            resultCount={resultCount}
-          />
-        )}
+        <MapToggle
+          contrast={contrast}
+          hideToggleButtons={!isFetchingSearchResults}
+          mapVisible={showMap}
+          onClick={actions.toggleMap}
+          resultCount={resultCount}
+        />
 
         <PageWrapper className="app-SearchPage__wrapper" title={t('SearchPage.title')} transparent>
           <h2 className="app-SearchPage__header visually-hidden">{t('SearchResults.label')}</h2>
@@ -124,16 +123,16 @@ class UnconnectedSearchPage extends Component {
             )}
 
             {(searchDone || isFetchingSearchResults) && (
-              <SearchResults
-                history={history}
-                isFetching={isFetchingSearchResults}
-                location={location}
-                ref="searchResults"
-                resultCount={resultCount}
-                searchResultIds={searchResultIds}
-                selectedUnitId={selectedUnitId}
-                showMap={showMap}
-              />
+            <SearchResults
+              history={history}
+              isFetching={isFetchingSearchResults}
+              location={location}
+              ref="searchResults"
+              resultCount={resultCount}
+              searchResultIds={searchResultIds}
+              selectedUnitId={selectedUnitId}
+              showMap={showMap}
+            />
             )}
           </div>
         </PageWrapper>

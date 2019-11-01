@@ -2,6 +2,7 @@ import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import { shallowWithIntl } from 'utils/testUtils';
 import FooterContent from './FooterContent';
@@ -21,6 +22,13 @@ describe('shared/footer/FooterContent', () => {
     test('contains turku img', () => {
       const image = content.find('img');
       expect(image.length).toBe(1);
+    });
+
+    test('contains Link to Saavutettavuusseloste', () => {
+      const seloste = getWrapper().find(Link);
+      expect(seloste).toHaveLength(1);
+      expect(seloste.prop('className')).toBe('accessibility-info-link');
+      expect(seloste.prop('to')).toBe('/accessibility-info');
     });
 
     describe('contains feedback link with correct props', () => {

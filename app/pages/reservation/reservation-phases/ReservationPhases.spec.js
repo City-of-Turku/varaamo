@@ -14,6 +14,12 @@ describe('pages/reservation/reservation-phases/ReservationPhases', () => {
     return shallowWithIntl(<ReservationPhases {...defaultProps} {...extraProps} />);
   }
 
+  test('checks aria-hidden is true', () => {
+    const hidden = getWrapper().find('.app-ReservationPage__phases');
+    expect(hidden).toHaveLength(1);
+    expect(hidden.prop('aria-hidden')).toBe('true');
+  });
+
   describe('when currentPhase is information', () => {
     test('renders two phases with correct props when isEditing false', () => {
       const phases = getWrapper({

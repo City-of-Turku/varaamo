@@ -144,6 +144,13 @@ class ReservationConfirmation extends Component {
                 t('common.yes'),
                 reservation.requireAssistance
               )}
+            {reservation.requireWorkstation
+              && this.renderField(
+                'requireWorkstation',
+                t('common.requireWorkstationLabel'),
+                t('common.yes'),
+                reservation.requireWorkstation
+              )}
             {reservation.comments
               && this.renderField('comments', t('common.commentsLabel'), reservation.comments)}
             {reservation.reserverAddressStreet

@@ -19,15 +19,25 @@ export class UnconnectedSort extends Component {
   }
 
   render() {
+    const sortValue = this.props.sortValue;
+    const getSortOptions = this.getSortOptions();
+    const option = getSortOptions.find(options => options.value === sortValue);
+
+    const label = !option ? this.props.t('SortBy.premise.label') : option.label;
     return (
-      <SelectControl
-        id="app-Sort"
-        isLoading={false}
-        label={this.props.t('SortBy.label')}
-        onChange={({ value }) => this.props.onChange(value)}
-        options={this.getSortOptions()}
-        value={this.props.sortValue}
-      />
+      <div>
+        <div className="visually-hidden Sorting_Accessability" role="status">
+          {this.props.t('SortBy.sortingStyle') + label}
+        </div>
+        <SelectControl
+          id="app-Sort"
+          isLoading={false}
+          label={this.props.t('SortBy.label')}
+          onChange={({ value }) => this.props.onChange(value)}
+          options={this.getSortOptions()}
+          value={this.props.sortValue}
+        />
+      </div>
     );
   }
 }

@@ -173,7 +173,6 @@ class UnconnectedReservationInformationForm extends Component {
                 'checkbox',
                 t('ReservationForm.staffEventLabel'),
                 {},
-                t('ReservationForm.staffEventHelp'),
               )}
             </Well>
           )}
@@ -260,7 +259,13 @@ class UnconnectedReservationInformationForm extends Component {
               { autoComplete: 'address-level2' },
             )
           }
-          <h3>{t('ReservationInformationForm.eventInformationTitle')}</h3>
+          {(includes(this.props.fields, 'eventSubject')
+          || includes(this.props.fields, 'eventDescription')
+          || includes(this.props.fields, 'numberofParticipants')
+          || includes(this.props.fields, 'requireAssistance')
+          || includes(this.props.fields, 'comments'))
+          && <h3 className="ReservationInformationForm">{t('ReservationInformationForm.eventInformationTitle')}</h3>
+        }
           {this.renderField(
             'eventSubject',
             'eventSubject',
@@ -268,7 +273,6 @@ class UnconnectedReservationInformationForm extends Component {
             t('common.eventSubjectLabel'),
             {},
             null,
-            t('ReservationForm.eventSubjectInfo'),
           )}
           {this.renderField(
             'eventDescription',
@@ -289,6 +293,16 @@ class UnconnectedReservationInformationForm extends Component {
             'requireAssistance',
             'checkbox',
             t('common.requireAssistanceLabel'),
+            {},
+            null,
+            null,
+            true
+          )}
+          {this.renderField(
+            'requireWorkstation',
+            'requireWorkstation',
+            'checkbox',
+            t('common.requireWorkstationLabel'),
             {},
             null,
             null,

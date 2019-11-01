@@ -19,7 +19,7 @@ function ReservationPhases({ currentPhase, isEditing, t }) {
   const activeIndex = indexOf(phases, currentPhase);
 
   return (
-    <div className="app-ReservationPage__phases row">
+    <div aria-hidden="true" className="app-ReservationPage__phases row">
       {phases.map((phase, index) => (
         <ReservationPhase
           cols={12 / phases.length}
