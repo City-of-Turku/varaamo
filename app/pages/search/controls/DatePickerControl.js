@@ -109,7 +109,7 @@ class DatePickerControl extends React.Component {
                 value={localDate}
               />
               <InputGroup.Button>
-                <Button className="app-DatePickerControl__button" onClick={this.handleDateButtonClick}>
+                <Button aria-hidden="true" className="app-DatePickerControl__button" onClick={this.handleDateButtonClick} tabIndex="-1">
                   <img alt={t('DatePickerControl.button.imageAlt')} className="app-DatePickerControl__icon" src={iconCalendar} />
                 </Button>
               </InputGroup.Button>

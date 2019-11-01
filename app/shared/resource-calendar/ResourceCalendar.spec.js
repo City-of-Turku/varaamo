@@ -90,6 +90,8 @@ describe('shared/resource-calendar/ResourceCalendar', () => {
     const datePickerButton = wrapper.find(Button);
     expect(datePickerButton.length).toBe(1);
     expect(datePickerButton.prop('onClick')).toBe(wrapper.instance().handleDateButtonClick);
+    expect(datePickerButton.prop('tabIndex')).toBe('-1');
+    expect(datePickerButton.prop('aria-hidden')).toBe('true');
   });
 
   test('renders datepicker button img with correct props', () => {

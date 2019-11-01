@@ -96,6 +96,8 @@ describe('pages/search/controls/DatePickerControl', () => {
     const button = wrapper.find(Button);
     expect(button).toHaveLength(1);
     expect(button.prop('onClick')).toBe(wrapper.instance().handleDateButtonClick);
+    expect(button.prop('tabIndex')).toBe('-1');
+    expect(button.prop('aria-hidden')).toBe('true');
   });
 
   test('renders Button img with correct props', () => {
