@@ -10,9 +10,19 @@ $selectMenuPaddingTop: -2px;
 $selectDropdownAfterMarginTop: 4px;
 $selectDropdownPaddingRight: 4px;
 
-.app-Select {
+.app-Select { // Made dropdown button transparent and added focus and borders
   display: flex;
   flex: 1;
+  background-color: transparent;
+  border: 2px solid $black;
+  &:focus-within {
+    @include add-focus(3px);
+  }
+
+  &--is-disabled {
+    background-color: $silver;
+    color: $dark-gray;
+  }
 
   .app-Select__control {
     border: $selectBorderWidth solid $input-border;
@@ -150,6 +160,19 @@ $selectDropdownPaddingRight: 4px;
   display: flex;
   flex: 1;
   height: 100%;
+  padding-top: 15px;
+
+  #purpose, #unit, #people, #app-Sort { // Fixed dropdown button size
+    @media (min-width: $screen-lg-min) {
+      width: 410px;
+    }
+    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+      width: 295px;
+    }
+    @media (max-width: $screen-xs-max) {
+      width: 95%;
+    }
+  }
 
   .form-group {
     margin: 0 !important;
@@ -157,5 +180,21 @@ $selectDropdownPaddingRight: 4px;
     flex-direction: column;
     flex: 1;
   }
+  .app-SelectControl__clear-button{
+    display: none;
+    &.is-visible {
+      display: contents;
+    }
+    img { // Fixed position of the clear-button
+      width: 24px;
+      position: absolute;
+      bottom: 2px;
+      right: -10px;
+      @media (max-width: $screen-xs-min) {
+        right: 5px;
+      }
+    }
+  }
+
 }
 

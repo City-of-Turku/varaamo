@@ -6,6 +6,8 @@ import { bindActionCreators } from 'redux';
 
 import { updateRoute } from 'actions/routeActions';
 import userIdSelector from 'state/selectors/userIdSelector';
+import userManager from 'utils/userManager';
+import { isLoadingUserSelector } from 'state/selectors/authSelectors';
 
 export class UnconnectedPrivateRoute extends Component {
   constructor(props) {
@@ -29,11 +31,14 @@ export class UnconnectedPrivateRoute extends Component {
     if (userId) {
       return <RouteComponent {...routerProps} />;
     }
-    return window.location.replace(`${window.location.origin}/login`);
+    return userManager.signinRedirect();
   }
 
   render() {
-    const { component, ...rest } = this.props; // eslint-disable-line no-unused-vars
+    const { component, isLoadingUser, ...rest } = this.props; // eslint-disable-line no-unused-vars
+    if (isLoadingUser) {
+      return <div />;
+    }
 
     return <Route {...rest} render={this.renderOrRedirect} />;
   }
@@ -42,6 +47,7 @@ export class UnconnectedPrivateRoute extends Component {
 UnconnectedPrivateRoute.propTypes = {
   actions: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  isLoadingUser: PropTypes.bool.isRequired,
   userId: PropTypes.string,
   component: PropTypes.func.isRequired,
   componentName: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
@@ -49,6 +55,7 @@ UnconnectedPrivateRoute.propTypes = {
 
 export const mapStateToProps = state => ({
   userId: userIdSelector(state),
+  isLoadingUser: isLoadingUserSelector(state),
 });
 
 export const mapDispatchToProps = (dispatch, ownProps) => {

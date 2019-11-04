@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import React from 'react';
+import Button from 'react-bootstrap/lib/Button';
 
 import ResourceCardInfoCell from './ResourceCardInfoCell';
 import iconMap from 'assets/icons/map.svg';
@@ -9,7 +10,6 @@ describe('/shared/resource-card/info/ResourceCardInfoCell', () => {
     className: 'app-ResourceCard__info-cell',
     alt: 'foo',
     icon: 'bar',
-    onClick: () => {}
   };
 
   function getWrapper(props) {
@@ -22,9 +22,34 @@ describe('/shared/resource-card/info/ResourceCardInfoCell', () => {
     expect(wrapper).toBeDefined();
   });
 
-  test('contains correct title prop', () => {
-    const wrapper = getWrapper({ titleText: 'some title text' });
-    expect(wrapper.prop('title')).toBe('some title text');
+  describe('if onClick is defined', () => {
+    const onClick = () => { };
+    test('renders Button', () => {
+      const button = getWrapper({ onClick }).find(Button);
+      expect(button.length).toBe(1);
+    });
+
+    test('contains correct title prop', () => {
+      const wrapper = getWrapper({ onClick, titleText: 'some title text' });
+      expect(wrapper.prop('title')).toBe('some title text');
+    });
+
+    test('contain onClick handler', () => {
+      const mockFunc = jest.fn();
+      const wrapper = getWrapper({ onClick: mockFunc });
+
+      wrapper.simulate('click');
+      expect(mockFunc).toBeCalled();
+      expect(wrapper.prop('onClick')).toBeDefined();
+      expect(mockFunc.mock.calls.length).toBe(1);
+    });
+  });
+
+  describe('if onClick is not defined', () => {
+    test('renders div', () => {
+      const div = getWrapper().find('div');
+      expect(div.length).toBe(1);
+    });
   });
 
   test('contains default className, joined with passed className prop', () => {
@@ -32,16 +57,6 @@ describe('/shared/resource-card/info/ResourceCardInfoCell', () => {
     const classnames = wrapper.prop('className');
     expect(classnames).toContain(defaultProps.className);
     expect(classnames).toContain('foo');
-  });
-
-  test('contain onClick handler', () => {
-    const mockFunc = jest.fn();
-    const wrapper = getWrapper({ onClick: mockFunc });
-
-    wrapper.simulate('click');
-    expect(mockFunc).toBeCalled();
-    expect(wrapper.prop('onClick')).toBeDefined();
-    expect(mockFunc.mock.calls.length).toBe(1);
   });
 
   test('contains img with props', () => {

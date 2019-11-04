@@ -1,13 +1,23 @@
 import User from 'utils/fixtures/User';
 import { getState } from 'utils/testUtils';
 import {
+  authUserSelector,
   currentUserSelector,
   isAdminSelector,
+  isLoadingUserSelector,
   isLoggedInSelector,
   staffUnitsSelector,
 } from './authSelectors';
 
 describe('state/selectors/authSelectors', () => {
+  describe('authUserSelector', () => {
+    test('returns user', () => {
+      const user = { profile: {} };
+      const state = getState({ auth: { user } });
+      expect(authUserSelector(state)).toEqual(user);
+    });
+  });
+
   describe('currentUserSelector', () => {
     function getSelected(extraState) {
       const state = getState(extraState);
@@ -17,7 +27,13 @@ describe('state/selectors/authSelectors', () => {
     test('returns user corresponding to the auth.userId', () => {
       const user = User.build();
       const selected = getSelected({
-        auth: { userId: user.id },
+        auth: {
+          user: {
+            profile: {
+              sub: user.id
+            },
+          },
+        },
         'data.users': { [user.id]: user },
       });
       expect(selected).toEqual(user);
@@ -25,7 +41,13 @@ describe('state/selectors/authSelectors', () => {
 
     test('returns an empty object if logged in user data does not exist', () => {
       const selected = getSelected({
-        auth: { userId: 'u-999' },
+        auth: {
+          user: {
+            profile: {
+              sub: 'u-999'
+            },
+          },
+        },
       });
       expect(selected).toEqual({});
     });
@@ -33,7 +55,7 @@ describe('state/selectors/authSelectors', () => {
     test('returns an empty object if user is not logged in', () => {
       const user = User.build();
       const selected = getSelected({
-        auth: { userId: null },
+        auth: { user: null },
         'data.users': { [user.id]: user },
       });
       expect(selected).toEqual({});
@@ -43,7 +65,13 @@ describe('state/selectors/authSelectors', () => {
   describe('isAdminSelector', () => {
     function getSelected(user = {}) {
       const state = getState({
-        auth: { userId: user.id },
+        auth: {
+          user: {
+            profile: {
+              sub: user.id
+            }
+          }
+        },
         'data.users': { [user.id]: user },
       });
       return isAdminSelector(state);
@@ -65,22 +93,22 @@ describe('state/selectors/authSelectors', () => {
     });
   });
 
+  describe('isLoadingUserSelector', () => {
+    test('returns bool isLoadingUser', () => {
+      const isLoadingUser = true;
+      const state = getState({ auth: { isLoadingUser } });
+      expect(isLoadingUserSelector(state)).toEqual(isLoadingUser);
+    });
+  });
+
   describe('isLoggedInSelector', () => {
-    function getSelected({ token, userId }) {
-      const state = getState({ auth: { token, userId } });
+    function getSelected({ user }) {
+      const state = getState({ auth: { user } });
       return isLoggedInSelector(state);
     }
 
-    test('returns false if token is null', () => {
-      expect(getSelected({ token: null, userId: 'u-1' })).toBe(false);
-    });
-
-    test('returns false if userId is null', () => {
-      expect(getSelected({ token: 'mock-token', userId: null })).toBe(false);
-    });
-
-    test('returns true if both token and userId are defined', () => {
-      expect(getSelected({ token: 'mock-token', userId: 'u-1' })).toBe(true);
+    test('returns true if user is defined', () => {
+      expect(getSelected({ user: {} })).toBe(true);
     });
   });
 
@@ -88,8 +116,11 @@ describe('state/selectors/authSelectors', () => {
     function getSelected(user) {
       const state = {
         auth: {
-          userId: user.id,
-          token: 'mock-token',
+          user: {
+            profile: {
+              sub: user.id
+            },
+          },
         },
         data: {
           users: { [user.id]: user },

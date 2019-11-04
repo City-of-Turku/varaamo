@@ -17,12 +17,13 @@ import MobileNavbar from 'shared/top-navbar/mobile/MobileNavbar';
 import FontChanger from './accessibility/TopNavbarFontContainer';
 import ContrastChanger from './accessibility/TopNavbarContrastContainer';
 import { injectT } from 'i18n';
-import LoginForm from './temp/LoginForm';
+import userManager from 'utils/userManager';
 
 class TopNavbar extends Component {
   static propTypes = {
     changeLocale: PropTypes.func.isRequired,
     currentLanguage: PropTypes.string.isRequired,
+    idToken: PropTypes.string.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
     userName: PropTypes.string.isRequired,
@@ -34,10 +35,10 @@ class TopNavbar extends Component {
     this.state = {
       expanded: false,
       expandMobileNavbar: false,
-      tempShowForm: false,
     };
 
     this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.toggleMobileNavbar = this.toggleMobileNavbar.bind(this);
   }
 
@@ -56,22 +57,18 @@ class TopNavbar extends Component {
     this.setState(prevState => ({ expanded: !prevState.expanded }));
   }
 
-  handleLoginClick() {
-    /* UNCOMMENT ME
-      const next = encodeURIComponent(window.location.href);
-      window.location.assign(`${window.location.origin}/login?next=${next}`);
-    */
+  handleLogoutClick() {
+    // passing id token hint skips logout confirm on tunnistamo's side
+    userManager.signoutRedirect({ id_token_hint: this.props.idToken });
+    userManager.removeUser();
+  }
 
-    // TEMP BYPASS
-    if (SETTINGS.TEMP_BYPASS) {
-      this.setState(prevState => ({
-        tempShowForm: !prevState.tempShowForm
-      }));
-    } else {
-      const next = encodeURIComponent(window.location.href);
-      window.location.assign(`${window.location.origin}/login?next=${next}`);
-    }
-    // TEMP BYPASS
+  handleLoginClick() {
+    userManager.signinRedirect({
+      data: {
+        redirectUrl: window.location.pathname
+      }
+    });
   }
 
   toggleMobileNavbar() {
@@ -158,43 +155,41 @@ class TopNavbar extends Component {
                 {currentLanguage === 'fi'
                   ? (<MenuItem active aria-label="Suomi" eventKey="fi">FI</MenuItem>)
                   : (<MenuItem aria-label="Suomi" eventKey="fi">FI</MenuItem>)
-                    }
+                }
                 {currentLanguage === 'sv'
                   ? (<MenuItem active aria-label="Svenska" eventKey="sv">SV</MenuItem>)
                   : (<MenuItem aria-label="Svenska" eventKey="sv">SV</MenuItem>)
-                    }
+                }
 
               </NavDropdown>
 
               {isLoggedIn && (
-              <NavDropdown
-                aria-label="Logout"
-                className="app-TopNavbar__name"
-                eventKey="lang"
-                id="user-nav-dropdown"
-                noCaret
-                title={userName}
-              >
-                <MenuItem eventKey="logout" href={`/logout?next=${window.location.origin}`}>
-                  {t('Navbar.logout')}
-                </MenuItem>
-              </NavDropdown>
+                <NavDropdown
+                  aria-label="Logout"
+                  className="app-TopNavbar__name"
+                  eventKey="lang"
+                  id="user-nav-dropdown"
+                  noCaret
+                  title={userName}
+                >
+                  <MenuItem eventKey="logout" onClick={this.handleLogoutClick}>
+                    {t('Navbar.logout')}
+                  </MenuItem>
+                </NavDropdown>
               )}
 
               {!isLoggedIn && (
-              <NavItem className="login-button" id="app-TopNavbar__login" onClick={this.handleLoginClick}>
-                {t('Navbar.login')}
-              </NavItem>
+                <NavItem className="login-button" id="app-TopNavbar__login" onClick={this.handleLoginClick}>
+                  {t('Navbar.login')}
+                </NavItem>
               )}
               {isLoggedIn && (
                 <Fragment>
                   <li className="app-TopNavbar__mobile username">
                     <Navbar.Text>{userName}</Navbar.Text>
                   </li>
-
-                  <NavItem className="app-TopNavbar__mobile logout" href={`/logout?next=${window.location.origin}`} id="mobile_logout">
-
-                    <Button type="button">
+                  <NavItem className="app-TopNavbar__mobile logout" id="mobile_logout">
+                    <Button onClick={this.handleLogoutClick} type="button">
                       {t('Navbar.logout')}
                     </Button>
 
@@ -206,9 +201,6 @@ class TopNavbar extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-
-        {this.state.tempShowForm
-          && <LoginForm hideForm={() => this.setState({ tempShowForm: false })} />}
       </div>
     );
   }

@@ -18,6 +18,8 @@ const changeSearchFilters = createAction(types.UI.CHANGE_SEARCH_FILTERS);
 
 const clearReservations = createAction(types.UI.CLEAR_RESERVATIONS);
 
+const clearFavorites = createAction(types.UI.CLEAR_FAVORITES);
+
 const closeConfirmReservationModal = createAction(
   types.UI.CLOSE_MODAL,
   () => ModalTypes.RESERVATION_CONFIRM
@@ -112,6 +114,7 @@ export {
   changeAdminResourcesPageDate,
   changeSearchFilters,
   clearReservations,
+  clearFavorites,
   closeConfirmReservationModal,
   closeReservationCancelModal,
   closeReservationCommentModal,

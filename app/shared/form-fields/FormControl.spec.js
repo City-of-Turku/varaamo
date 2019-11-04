@@ -12,6 +12,7 @@ import FormControl from './FormControl';
 describe('shared/form-fields/FormControl', () => {
   const defaultProps = {
     controlProps: { someProp: 'some', otherProp: 'other' },
+    fieldName: 'email',
     id: 'email',
     label: 'Enter your email',
     labelErrorPrefix: 'Error: ',
@@ -107,6 +108,7 @@ describe('shared/form-fields/FormControl', () => {
     test('is rendered', () => {
       const rbFormControl = getWrapper().find(RBFormControl);
       expect(rbFormControl.length).toBe(1);
+      expect(rbFormControl.prop('name')).toEqual(defaultProps.fieldName);
     });
 
     describe('when input error has occurred', () => {

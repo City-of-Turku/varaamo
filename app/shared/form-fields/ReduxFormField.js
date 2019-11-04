@@ -6,34 +6,36 @@ import FormControl from './FormControl';
 import FormControlCheckbox from './FormControlCheckbox';
 
 function ReduxFormField({
-  controlProps = {}, help, info, input, label, labelErrorPrefix, meta, type, altCheckbox
+  controlProps = {}, fieldName, help, info, input, label, labelErrorPrefix, meta, type, altCheckbox
 }) {
   const showError = meta.error && meta.touched;
-  const props = {
+  const childProps = {
     controlProps: Object.assign({}, input, controlProps),
     help: showError ? meta.error : help,
     id: input.name,
     info,
     label,
     labelErrorPrefix,
+    fieldName: fieldName || input.name,
     type,
     validationState: showError ? 'error' : undefined,
   };
 
   if (type === 'checkbox') {
     if (altCheckbox) {
-      return <FormControlCheckbox {...props} />;
+      return <FormControlCheckbox {...childProps} />;
     }
 
-    return <Checkbox {...props} />;
+    return <Checkbox {...childProps} />;
   }
 
-  return <FormControl {...props} />;
+  return <FormControl {...childProps} />;
 }
 
 ReduxFormField.propTypes = {
   altCheckbox: PropTypes.bool,
   controlProps: PropTypes.object,
+  fieldName: PropTypes.string,
   help: PropTypes.string,
   info: PropTypes.string,
   input: PropTypes.object.isRequired,

@@ -1,0 +1,10 @@
+.accessibility-info-page {
+  max-width: 100%;
+
+}
+
+@media(max-width:$screen-400-min - 50) {
+  .accessibility-info-page {
+    font-size: 16px;
+  }
+}

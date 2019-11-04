@@ -70,6 +70,7 @@ describe('pages/search/SearchPage', () => {
       expect(mapToggle).toHaveLength(1);
       expect(mapToggle.props()).toEqual({
         mapVisible: defaultProps.showMap,
+        hideToggleButtons: !defaultProps.isFetchingSearchResults,
         onClick: defaultProps.actions.toggleMap,
         resultCount: defaultProps.resultCount,
         contrast: defaultProps.contrast

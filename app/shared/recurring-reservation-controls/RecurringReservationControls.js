@@ -10,6 +10,23 @@ import { injectT } from 'i18n';
 import DatePicker from 'shared/date-picker';
 import SelectControl from 'pages/search/controls/SelectControl';
 
+
+/**
+ * Handles converting untranslated option labels into translated labels.
+ * @param {Object[]} options, contains objects which have properties label and value
+ * @param {function} t
+ * @returns a new array of options with translated labels.
+ */
+function translateOptions(options, t) {
+  const translatedOptions = options.map(option => (
+    {
+      label: t(option.label),
+      value: option.value
+    }
+  ));
+  return translatedOptions;
+}
+
 function RecurringReservationControls({
   changeFrequency,
   changeLastTime,
@@ -39,7 +56,7 @@ function RecurringReservationControls({
               isClearable={false}
               name="recurrence-frequency-select"
               onChange={changeFrequency}
-              options={frequencyOptions}
+              options={translateOptions(frequencyOptions, t)}
               value={frequency}
             />
           </div>

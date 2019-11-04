@@ -146,6 +146,14 @@ $content-padding: 10px;
     }
   }
 
+  .login-button {
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: inherit;
+  }
+
   /* Full width page */
   @media (min-width: $screen-xs-max) {
     /* Fix for resource page */

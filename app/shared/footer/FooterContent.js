@@ -6,6 +6,7 @@ import { FormattedHTMLMessage } from 'react-intl';
 import Col from 'react-bootstrap/lib/Col';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
+import { Link } from 'react-router-dom';
 
 import { injectT } from 'i18n';
 import turkuLogoSrc from 'shared/logo/logo_footer.png';
@@ -38,6 +39,7 @@ class FooterContent extends React.Component {
             <p>
               <FormattedHTMLMessage id="Footer.turkuText" />
             </p>
+            <Link className="accessibility-info-link" to="/accessibility-info">{t('AccessibilityInfo.title')}</Link>
             <p role="presentation">
               <a className="feedback-link" href={currentLink} rel="noopener noreferrer" target="_blank">
                 {t('Footer.feedbackLink')}

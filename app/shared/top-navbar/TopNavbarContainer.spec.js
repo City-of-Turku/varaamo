@@ -5,8 +5,12 @@ describe('shared/top-navbar/TopNavbarContainer', () => {
     function getState(locale = 'fi', user = {}) {
       return {
         auth: {
-          userId: user.id,
-          token: 'mock-token',
+          user: {
+            profile: {
+              sub: user.id,
+            },
+            id_token: 'some-token',
+          },
         },
         data: {
           users: { [user.id]: user },
@@ -42,6 +46,11 @@ describe('shared/top-navbar/TopNavbarContainer', () => {
     test('returns isLoggedIn', () => {
       const selected = selector(getState());
       expect(selected.isLoggedIn).toBeDefined();
+    });
+
+    test('returns idToken', () => {
+      const selected = selector(getState());
+      expect(selected.idToken).toBeDefined();
     });
 
     describe('userName', () => {

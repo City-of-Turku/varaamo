@@ -13,41 +13,44 @@ MapToggle.propTypes = {
   onClick: PropTypes.func.isRequired,
   resultCount: PropTypes.number.isRequired,
   t: PropTypes.func.isRequired,
-  contrast: PropTypes.string
+  contrast: PropTypes.string,
+  hideToggleButtons: PropTypes.bool.isRequired,
 };
 
 function MapToggle({
-  mapVisible, onClick, resultCount, t, contrast
+  mapVisible, onClick, resultCount, t, contrast, hideToggleButtons
 }) {
   return (
-    <section className={`app-MapToggle ${contrast}`} role="presentation">
+    <section className={`app-MapToggle ${contrast}`}>
       <Grid>
         <Row>
           <Col sm={6}>
-            <div className="app-MapToggle__results-count" role="presentation">
+            <div className="app-MapToggle__results-count" role="status">
               {resultCount ? t('MapToggle.resultsText', { count: resultCount }) : t('MapToggle.noResultsText')}
             </div>
           </Col>
-          <Col sm={6}>
-            <div className="pull-right">
-              <Button
-                aria-selected={!mapVisible}
-                className={classNames('app-MapToggle__button-list', !mapVisible && 'active-tab')}
-                onClick={!mapVisible ? undefined : onClick}
-                role="tab"
-              >
-                {t('MapToggle.showList')}
-              </Button>
-              <Button
-                aria-selected={mapVisible}
-                className={classNames('app-MapToggle__button-map', mapVisible && 'active-tab')}
-                onClick={mapVisible ? undefined : onClick}
-                role="tab"
-              >
-                {t('MapToggle.showMap')}
-              </Button>
-            </div>
-          </Col>
+          {!hideToggleButtons && (
+            <Col sm={6}>
+              <div className="pull-right">
+                <Button
+                  aria-selected={!mapVisible}
+                  className={classNames('app-MapToggle__button-list', !mapVisible && 'active-tab')}
+                  onClick={!mapVisible ? undefined : onClick}
+                  role="tab"
+                >
+                  {t('MapToggle.showList')}
+                </Button>
+                <Button
+                  aria-selected={mapVisible}
+                  className={classNames('app-MapToggle__button-map', mapVisible && 'active-tab')}
+                  onClick={mapVisible ? undefined : onClick}
+                  role="tab"
+                >
+                  {t('MapToggle.showMap')}
+                </Button>
+              </div>
+            </Col>
+          )}
         </Row>
       </Grid>
     </section>

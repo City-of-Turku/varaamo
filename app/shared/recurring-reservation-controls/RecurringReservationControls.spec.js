@@ -13,7 +13,7 @@ function getWrapper(props) {
     changeNumberOfOccurrences: () => null,
     changeLastTime: () => null,
     frequency: 'days',
-    frequencyOptions: [{ label: '', value: '' }],
+    frequencyOptions: [{ label: 'RecurringReservationControls.frequencyNone', value: '' }],
     isVisible: true,
     lastTime: null,
     numberOfOccurrences: 1,
@@ -31,13 +31,13 @@ describe('shared/RecurringReservationControls/RecurringReservationControls', () 
     const props = {
       changeFrequency: () => null,
       frequency: 'days',
-      frequencyOptions: [{ label: '', value: '' }],
+      frequencyOptions: [{ label: 'RecurringReservationControls.frequencyNone', value: '' }],
       lastTime: '2017-04-09',
     };
     const select = getWrapper(props).find(SelectControl);
     expect(select).toHaveLength(1);
     expect(select.prop('onChange')).toBe(props.changeFrequency);
-    expect(select.prop('options')).toBe(props.frequencyOptions);
+    expect(select.prop('options')).toEqual(props.frequencyOptions);
     expect(select.prop('value')).toBe(props.frequency);
   });
 

@@ -169,6 +169,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       eventDescription: 'event description',
       numberOfParticipants: 12,
       requireAssistance: true,
+      requireWorkstation: true,
       comments: 'comments',
       reserverAddressStreet: 'reserver address street',
       reserverAddressZip: 'reserver address zip',
@@ -180,7 +181,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       user: User.build(),
     });
     const fields = getWrapper({ reservation }).find('.app-ReservationConfirmation__field');
-    expect(fields).toHaveLength(16);
+    expect(fields).toHaveLength(17);
   });
 
   describe('Button onClick', () => {

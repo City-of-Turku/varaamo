@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 
 import SelectControl from './controls/SelectControl';
 import { UnconnectedSort as Sort } from './Sort';
+import CONSTANTS from '../../constants/AppConstants';
 
 describe('pages/search/Sort', () => {
   const defaultProps = {
@@ -17,6 +18,21 @@ describe('pages/search/Sort', () => {
   }
 
   describe('pages/search/Sort', () => {
+    test('renders accessability sorting header', () => {
+      const wrapper = getWrapper();
+      const label = wrapper.find('.Sorting_Accessability');
+      expect(label).toHaveLength(1);
+      expect(label.text()).toBe('SortBy.sortingStyleSortBy.premise.label');
+      expect(label.prop('role')).toBe('status');
+    });
+
+    test('renders accessability sorting with different header', () => {
+      const sortValue = CONSTANTS.SORT_BY_OPTIONS.NAME.replace('lang', defaultProps.lang);
+      const wrapper = getWrapper({ sortValue });
+      const label = wrapper.find('.Sorting_Accessability');
+      expect(label.text()).toBe('SortBy.sortingStyleSortBy.name.label');
+    });
+
     test('renders SelectControl for sort with correct props', () => {
       const wrapper = getWrapper({});
       const selectControl = wrapper.find(SelectControl);
@@ -30,7 +46,7 @@ describe('pages/search/Sort', () => {
 
     test('get translated options base on language', () => {
       const wrapper = getWrapper({ lang: 'foo' });
-      const options = wrapper.prop('options');
+      const options = wrapper.find(SelectControl).prop('options');
 
       expect(options.length).toEqual(4);
       expect(options[0].value).toContain('foo');

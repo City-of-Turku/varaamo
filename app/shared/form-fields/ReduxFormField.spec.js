@@ -10,6 +10,7 @@ describe('shared/form-fields/ReduxFormField', () => {
   const defaultProps = {
     altCheckbox: false,
     controlProps: { someProp: 'some', otherProp: 'other' },
+    fieldName: 'email',
     input: { name: 'email' },
     label: 'Enter your email',
     labelErrorPrefix: 'Error: ',
@@ -94,6 +95,12 @@ describe('shared/form-fields/ReduxFormField', () => {
     test('id is the name', () => {
       const actualProps = getWrapper().find(FormControl).props();
       expect(actualProps.id).toBe(defaultProps.name);
+    });
+
+    test('fieldName is the fieldName given in props', () => {
+      const fieldName = 'some name';
+      const actualProps = getWrapper({ fieldName }).find(FormControl).props();
+      expect(actualProps.fieldName).toBe(fieldName);
     });
 
     test('info is the info given in props', () => {

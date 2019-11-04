@@ -29,6 +29,7 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
     reserverPhoneNumber: '1234567',
     resource: resource.id,
     requireAssistance: undefined,
+    requireWorkstation: undefined,
     reservationExtraQuestions: undefined,
   });
   const defaultProps = {
@@ -178,6 +179,22 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
             requireAssistance: undefined
           });
           expect(getData({ reservation: userReservation })).not.toContain('common.requireAssistanceLabel');
+        });
+      });
+
+      describe('requires workstation', () => {
+        test('is rendered if reservation supports it', () => {
+          const userReservation = Reservation.build({
+            requireWorkstation: false
+          });
+          expect(getData({ reservation: userReservation })).toContain('common.requireWorkstationLabel');
+        });
+
+        test('is not rendered if reservation doesnt support it', () => {
+          const userReservation = Reservation.build({
+            requireWorkstation: undefined
+          });
+          expect(getData({ reservation: userReservation })).not.toContain('common.requireWorkstationLabel');
         });
       });
 

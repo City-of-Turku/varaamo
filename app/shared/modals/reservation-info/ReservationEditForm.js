@@ -74,6 +74,7 @@ class UnconnectedReservationEditForm extends Component {
         component={ReduxFormField}
         controlProps={controlProps}
         label={t(`common.${propertyName}Label`)}
+        labelErrorPrefix={t('common.checkError')}
         name={propertyName}
         type={type}
       />
@@ -161,6 +162,8 @@ class UnconnectedReservationEditForm extends Component {
         {this.renderStaticInfoRow('accessCode')}
         {!(reservation.requireAssistance === undefined)
            && this.renderInfoRow(t('common.requireAssistanceLabel'), reservation.requireAssistance ? t('common.yes') : t('common.no'))}
+        {!(reservation.requireWorkstation === undefined)
+           && this.renderInfoRow(t('common.requireWorkstationLabel'), reservation.requireWorkstation ? t('common.yes') : t('common.no'))}
         {this.renderInfoRow(t('common.additionalInfo.label'), reservation.reservationExtraQuestions)}
         {isAdmin && !reservationIsEditable && this.renderStaticInfoRow('comments')}
         {isAdmin && reservationIsEditable && (

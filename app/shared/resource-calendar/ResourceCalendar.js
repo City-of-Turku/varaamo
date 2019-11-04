@@ -151,7 +151,7 @@ export class UnconnectedResourceCalendar extends Component {
                   value={this.state.textInputDate}
                 />
                 <InputGroup.Button>
-                  <Button className="app-ResourceCalendar__wrapper__button" onClick={this.handleDateButtonClick}>
+                  <Button aria-hidden="true" className="app-ResourceCalendar__wrapper__button" onClick={this.handleDateButtonClick} tabIndex="-1">
                     <img alt={t('ResourceCalendar.button.imageAlt')} className="app-ResourceCalendar__icon" src={iconCalendar} />
                   </Button>
                 </InputGroup.Button>

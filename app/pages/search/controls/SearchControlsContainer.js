@@ -131,7 +131,7 @@ class UnconnectedSearchControlsContainer extends Component {
   hasAdvancedFilters() {
     const { filters, position } = this.props;
     let hasFilters = Boolean(position);
-    ['freeOfCharge', 'end', 'distance', 'duration', 'purpose', 'start', 'unit', 'municipality'].forEach((key) => {
+    ['freeOfCharge', 'end', 'distance', 'duration', 'people', 'purpose', 'start', 'unit', 'municipality'].forEach((key) => {
       if (!isEmpty(filters[key])) {
         hasFilters = true;
       } else if (typeof filters[key] === 'boolean') {

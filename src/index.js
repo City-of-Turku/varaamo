@@ -4,6 +4,7 @@ import 'location-origin';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-intl-redux';
+import { OidcProvider, processSilentRenew } from 'redux-oidc';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore } from 'redux';
 import Immutable from 'seamless-immutable';
@@ -16,6 +17,7 @@ import configureStore from '../app/store/configureStore';
 import rootReducer from '../app/state/rootReducer';
 import getRoutes from './routes';
 import BrowserWarning from '../app/pages/browser-warning';
+import userManager from 'utils/userManager';
 
 const initialStoreState = createStore(rootReducer, {}).getState();
 const initialServerState = window.INITIAL_STATE;
@@ -26,13 +28,20 @@ const finalState = Immutable(initialStoreState).merge([initialServerState, initi
 const store = configureStore(finalState);
 const isIEBrowser = browserName === 'IE';
 
-// TODO: Support IE11 in the future.
-render(
-  isIEBrowser ? <BrowserWarning />
-    : (
-      <Provider store={store}>
-        <Router>{getRoutes()}</Router>
-      </Provider>
-    ),
-  document.getElementById('root')
-);
+// TODO: make sure silent renew works this way... needs a skeleton html page for it?
+if (window.location.pathname === '/silent-renew') {
+  processSilentRenew();
+} else {
+  // TODO: Support IE11 in the future.
+  render(
+    isIEBrowser ? <BrowserWarning />
+      : (
+        <Provider store={store}>
+          <OidcProvider store={store} userManager={userManager}>
+            <Router>{getRoutes()}</Router>
+          </OidcProvider>
+        </Provider>
+      ),
+    document.getElementById('root')
+  );
+}

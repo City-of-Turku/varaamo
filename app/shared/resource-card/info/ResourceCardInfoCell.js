@@ -6,19 +6,33 @@ import classNames from 'classnames';
 function ResourceCardInfoCell({
   className, alt, icon, onClick, children, titleText
 }) {
+  const cellImage = (
+    <img
+      alt={alt}
+      className="app-ResourceCard__info-cell__icon"
+      src={icon}
+    />
+  );
+
+  // if onclick is defined, render button, else render div
+  if (onClick) {
+    return (
+      <Button
+        className={classNames('app-ResourceCard__info-cell', className)}
+        onClick={onClick}
+        title={titleText}
+      >
+        {cellImage}
+        {children}
+      </Button>
+    );
+  }
+
   return (
-    <Button
-      className={classNames('app-ResourceCard__info-cell', className)}
-      onClick={onClick}
-      title={titleText}
-    >
-      <img
-        alt={alt}
-        className="app-ResourceCard__info-cell__icon"
-        src={icon}
-      />
+    <div className={classNames('app-ResourceCard__info-cell', className)}>
+      {cellImage}
       {children}
-    </Button>
+    </div>
   );
 }
 
