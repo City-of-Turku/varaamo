@@ -153,8 +153,6 @@ class ResourceCard extends Component {
               alt={t('ResourceCard.infoTitle.purpose')}
               className="info-cell-purpose"
               icon={iconHome}
-              onClick={this.handleSearchByType}
-              titleText={t('ResourceCard.infoTitle.purpose')}
             >
               <Fragment>
                 <span>
@@ -170,8 +168,6 @@ class ResourceCard extends Component {
               alt={t('ResourceCard.infoTitle.peopleCapacity')}
               className="info-cell-capacity"
               icon={iconUser}
-              onClick={this.handleSearchByPeopleCapacity}
-              titleText={t('ResourceCard.infoTitle.peopleCapacity')}
             >
               <Fragment>
                 <span className="app-ResourceCard__peopleCapacity">
@@ -188,7 +184,6 @@ class ResourceCard extends Component {
               alt={t('ResourceCard.infoTitle.price')}
               className="info-cell-price"
               icon={iconTicket}
-              titleText={t('ResourceCard.infoTitle.price')}
             >
               <Fragment>
                 <span className="app-ResourceCard__hourly-price">
@@ -204,7 +199,6 @@ class ResourceCard extends Component {
               alt={t('ResourceCard.infoTitle.address')}
               className="info-cell-address"
               icon={iconMap}
-              titleText={t('ResourceCard.infoTitle.address')}
             >
               <Fragment>
                 <span className="app-ResourceCard__street-address">
@@ -221,21 +215,19 @@ class ResourceCard extends Component {
 
           {resource.distance
             && (
-            <Col md={4} sm={4} xs={isLargerFontSizeUsed ? 12 : 6}>
-              <ResourceCardInfoCell
-                alt={t('ResourceCard.infoTitle.distance')}
-                className="info-cell-distance"
-                icon={iconMapMarker}
-                onClick={this.handleSearchByDistance}
-                titleText={t('ResourceCard.infoTitle.distance')}
-              >
-                <Fragment>
-                  <span className="app-ResourceCard__distance">
-                    {resource.distance ? this.renderDistance(resource.distance) : t('ResourceCard.unknown')}
-                  </span>
-                </Fragment>
-              </ResourceCardInfoCell>
-            </Col>
+              <Col md={4} sm={4} xs={isLargerFontSizeUsed ? 12 : 6}>
+                <ResourceCardInfoCell
+                  alt={t('ResourceCard.infoTitle.distance')}
+                  className="info-cell-distance"
+                  icon={iconMapMarker}
+                >
+                  <Fragment>
+                    <span className="app-ResourceCard__distance">
+                      {resource.distance ? this.renderDistance(resource.distance) : t('ResourceCard.unknown')}
+                    </span>
+                  </Fragment>
+                </ResourceCardInfoCell>
+              </Col>
             )}
 
           {isLoggedIn

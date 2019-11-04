@@ -121,8 +121,6 @@ describe('shared/resource-card/ResourceCard', () => {
         const info = getWrapper().find('.info-cell-purpose');
         expect(info.prop('alt')).toBe('ResourceCard.infoTitle.purpose');
         expect(info.prop('icon')).toBeDefined();
-        expect(info.prop('onClick')).toBeDefined();
-        expect(info.prop('titleText')).toBe('ResourceCard.infoTitle.purpose');
       });
     });
 
@@ -199,8 +197,6 @@ describe('shared/resource-card/ResourceCard', () => {
       expect(peopleCapacity).toHaveLength(1);
       expect(peopleCapacity.prop('alt')).toBe('ResourceCard.infoTitle.peopleCapacity');
       expect(peopleCapacity.prop('icon')).toBeDefined();
-      expect(peopleCapacity.prop('onClick')).toBeDefined();
-      expect(peopleCapacity.prop('titleText')).toBe('ResourceCard.infoTitle.peopleCapacity');
     });
 
     test('renders correct text', () => {
@@ -216,7 +212,6 @@ describe('shared/resource-card/ResourceCard', () => {
       expect(address).toHaveLength(1);
       expect(address.prop('alt')).toBe('ResourceCard.infoTitle.address');
       expect(address.prop('icon')).toBeDefined();
-      expect(address.prop('titleText')).toBe('ResourceCard.infoTitle.address');
     });
 
     test('renders the street address of the given unit in props', () => {
@@ -240,8 +235,6 @@ describe('shared/resource-card/ResourceCard', () => {
         expect(distance).toHaveLength(1);
         expect(distance.prop('alt')).toBe('ResourceCard.infoTitle.distance');
         expect(distance.prop('icon')).toBeDefined();
-        expect(distance.prop('onClick')).toBeDefined();
-        expect(distance.prop('titleText')).toBe('ResourceCard.infoTitle.distance');
       });
 
       test('renders correct text', () => {
@@ -276,7 +269,6 @@ describe('shared/resource-card/ResourceCard', () => {
       expect(price).toHaveLength(1);
       expect(price.prop('alt')).toBe('ResourceCard.infoTitle.price');
       expect(price.prop('icon')).toBeDefined();
-      expect(price.prop('titleText')).toBe('ResourceCard.infoTitle.price');
     });
 
     test('renders a hourly price', () => {

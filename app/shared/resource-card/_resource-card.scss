@@ -136,6 +136,7 @@ $cellHeight: 50%;
       flex-direction: column;
       width: 100%;
       align-items: center;
+      padding: 6px 12px;
       @include add-focus($width: 2px, $color: currentColor) {
       }
 
