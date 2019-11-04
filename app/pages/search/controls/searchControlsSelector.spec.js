@@ -82,12 +82,13 @@ describe('pages/search/controls/searchControlsSelector', () => {
       expect(getUnitOptions([])).toEqual([]);
     });
 
-    test('returns an option object for each unit', () => {
+    test('returns an option object for each unit that is not hidden', () => {
       const units = [
-        Unit.build(),
-        Unit.build(),
+        Unit.build({ hidden: false }),
+        Unit.build({ hidden: false }),
+        Unit.build({ hidden: true }),
       ];
-      expect(getUnitOptions(units)).toHaveLength(units.length);
+      expect(getUnitOptions(units)).toHaveLength(2);
     });
 
     describe('a returned option object', () => {
