@@ -65,7 +65,7 @@ class Html extends Component {
           <meta content="IE=edge" httpEquiv="X-UA-Compatible" />
           <meta content="width=device-width, initial-scale=1" name="viewport" />
           <meta content="Varaamo, Turku, Kirjasto, Pääkirjasto, Yliopisto, Palvelu, Pelitila, Soittohuone, Työpiste, 3D-tulostin, Stoori, Varauspalvelu, Kokoustila, Tulostus, Mikrofilmit, Musiikki, Askartelut" name="keywords" />
-          <meta content="Varaamo – Tilat ja laitteet varattavana. Varaamosta voit varata julkisia tiloja ja laitteita omaan käyttöösi. Varaamo on Turun kaupungin tilanvarauspalvelu." name="description" />
+          <meta content="Varaamo – Tilat ja laitteet varattavana. Varaamosta voit varata julkisia tiloja ja laitteita omaan käyttöösi. Varaamo on Turun kaupungin varauspalvelu." name="description" />
           <meta content="Digipoint" name="author" />
           <link href="https://overpass-30e2.kxcdn.com/overpass.css" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" />
