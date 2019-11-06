@@ -13,7 +13,6 @@ class Html extends Component {
     if (!piwikSiteId) {
       return null;
     }
-
     const scriptString = `
       var _paq = _paq || [];
       _paq.push(['trackPageView']);
