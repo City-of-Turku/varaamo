@@ -6,8 +6,8 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { withRouter } from 'react-router-dom';
-import CookieConsent from 'react-cookie-consent';
 
+import CookieBar from 'shared/cookiebar/CookieBar';
 import { fetchUser } from 'actions/userActions';
 import Favicon from 'shared/favicon';
 import Footer from 'shared/footer';
@@ -64,29 +64,7 @@ export class UnconnectedAppContainer extends Component {
           {this.props.children}
         </main>
         <Footer />
-        <CookieConsent
-          buttonClasses="cookie-accept-button"
-          buttonId="cookie-accept-button"
-          buttonText="Hyväksyn/Godkänn"
-          declineButtonClasses="cookie-decline-button"
-          declineButtonId="cookie-decline-button"
-          declineButtonText="Hylkää/Avvisa"
-          disableButtonStyles
-          enableDeclineButton
-          onDecline={() => { window.location.replace('http://www.turku.fi'); }}
-          setDeclineCookie={false}
-        >
-    Käytämme evästeitä parantaaksemme käyttökokemustasi.
-    Jatkamalla Varaamon käyttöä hyväksyt evästeiden käytön.
-          {' '}
-          <a href="http://www.turku.fi" style={{ color: 'white' }}>Linkki Evästekäytäntöön</a>
-          <br />
-          <br />
-    Vi använder cookies för att kunna ge dig en bättre upplevelse.
-    Genom att du fortsätter att använda Varaamo så accepterar du användingen av cookies.
-          {' '}
-          <a href="http://www.turku.fi" style={{ color: 'white' }}>Länk till Cookie Policy</a>
-        </CookieConsent>
+        <CookieBar />
       </div>
     );
   }
