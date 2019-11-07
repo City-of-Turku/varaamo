@@ -1,7 +1,6 @@
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import React from 'react';
-import moment from 'moment';
 
 import ReservationInfoModal from 'shared/modals/reservation-info';
 import DateSelector from './DateSelector';
@@ -37,11 +36,7 @@ export default class AvailabilityView extends React.Component {
 
   handleReservationSlotClick(slot) {
     if (this.state.selection) {
-      if (this.state.selection.begin === slot.end) {
-        this.handleSelectionCancel();
-      } else {
-        this.endSelection(slot);
-      }
+      this.endSelection(slot);
     } else {
       this.startSelection(slot);
     }
@@ -51,7 +46,7 @@ export default class AvailabilityView extends React.Component {
     const isSlotSelectable = (
       !this.state.selection || (
         this.state.selection.resourceId === slot.resourceId
-        && this.state.selection.begin < slot.end
+        && this.state.selection.begin < slot.begin
       )
     );
     if (isSlotSelectable) {
@@ -65,30 +60,6 @@ export default class AvailabilityView extends React.Component {
     }
   }
 
-  isUnderReservationMaxPeriod(slot) {
-    const startTime = moment(this.state.selection.begin);
-    const endTime = moment(slot.end);
-    const maxTime = moment(slot.maxPeriod, 'hh:mm:ss').format('HH:mm:ss');
-    const maxTimeDuration = moment.duration(maxTime).asHours();
-    const durationTime = moment.duration((endTime.diff(startTime))).asHours();
-
-    const isUnder = durationTime <= maxTimeDuration;
-
-    return isUnder;
-  }
-
-  isOverReservationMinPeriod(slot) {
-    const startTime = moment(this.state.selection.begin);
-    const endTime = moment(slot.end);
-    const minTime = moment(slot.minPeriod, 'hh:mm:ss').format('HH:mm:ss');
-    const minTimeDuration = moment.duration(minTime).asHours();
-    const durationTime = moment.duration((endTime.diff(startTime))).asHours();
-
-    const isOver = durationTime >= minTimeDuration;
-
-    return isOver;
-  }
-
   handleSelectionCancel() {
     if (this.state.selection) {
       this.setState({ hoverSelection: null, selection: null });
@@ -96,33 +67,22 @@ export default class AvailabilityView extends React.Component {
   }
 
   endSelection(slot) {
-    if (!this.props.isAdmin) {
-      const isValid = (
-        this.state.selection.resourceId === slot.resourceId
-        && this.state.selection.begin <= slot.begin
-        && this.isOverReservationMinPeriod(slot)
-        && this.isUnderReservationMaxPeriod(slot)
-      );
-      if (!isValid) {
-        return;
-      }
-    } else {
-      const isValid = (
-        this.state.selection.resourceId === slot.resourceId
-        && this.state.selection.begin <= slot.begin
-      );
-      if (!isValid) {
-        return;
-      }
+    const isValid = (
+      this.state.selection.resourceId === slot.resourceId
+      && this.state.selection.begin <= slot.begin
+    );
+    if (!isValid) {
+      return;
     }
-
     const selection = { ...this.state.selection, end: slot.end };
     if (this.props.onSelect) this.props.onSelect(selection);
     this.setState({ selection: null });
   }
 
   startSelection(slot) {
-    this.setState({ selection: slot });
+    if (this.props.isAdmin) {
+      this.setState({ selection: slot });
+    }
   }
 
   render() {
@@ -142,7 +102,6 @@ export default class AvailabilityView extends React.Component {
           <TimelineGroups
             date={this.props.date}
             groups={this.props.groups}
-            isAdmin={this.props.isAdmin}
             onReservationSlotClick={this.handleReservationSlotClick}
             onReservationSlotMouseEnter={this.handleReservationSlotMouseEnter}
             onReservationSlotMouseLeave={this.handleReservationSlotMouseLeave}

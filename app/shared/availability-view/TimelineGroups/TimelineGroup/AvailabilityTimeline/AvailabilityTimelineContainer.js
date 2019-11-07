@@ -10,7 +10,6 @@ import utils from '../utils';
 
 export function selector() {
   function dateSelector(state, props) { return props.date; }
-  function isAdminSelector(state, props) { return props.isAdmin; }
   function resourceIdSelector(state, props) { return props.id; }
   function resourcesSelector(state) { return state.data.resources; }
   function nonHoverSelectionSelector(state, props) {
@@ -34,25 +33,12 @@ export function selector() {
       'begin'
     )
   );
-
-  const slotSizeSelector = createSelector(
-    resourceSelector,
-    resource => resource.slotSize
-  );
-
-  const cooldownSelector = createSelector(
-    resourceSelector,
-    resource => resource.cooldown
-  );
-
   const itemsSelector = createSelector(
     reservationsSelector,
     dateSelector,
     resourceIdSelector,
-    slotSizeSelector,
-    cooldownSelector,
-    (reservations, date, resourceId, slotSize, cooldown) => utils.getTimelineItems(
-      moment(date), reservations, resourceId, slotSize, cooldown
+    (reservations, date, resourceId) => utils.getTimelineItems(
+      moment(date), reservations, resourceId
     )
   );
 
@@ -60,10 +46,7 @@ export function selector() {
     itemsSelector,
     nonHoverSelectionSelector,
     resourceSelector,
-    isAdminSelector,
-    (items, selection, resource, isAdmin) => utils.addSelectionData(
-      selection, resource, items, isAdmin
-    )
+    (items, selection, resource) => utils.addSelectionData(selection, resource, items)
   );
 
   return createSelector(
@@ -80,7 +63,6 @@ const AvailabilityTimelineContainer = connect(selector, actions)(AvailabilityTim
 AvailabilityTimelineContainer.propTypes = {
   date: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-
   onReservationSlotClick: PropTypes.func,
   onReservationSlotMouseEnter: PropTypes.func,
   onReservationSlotMouseLeave: PropTypes.func,

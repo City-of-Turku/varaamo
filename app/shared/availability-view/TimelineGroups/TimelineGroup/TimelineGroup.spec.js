@@ -87,54 +87,13 @@ describe('shared/availability-view/TimelineGroup', () => {
 
   test('renders resources', () => {
     const resources = ['1234', '5678', '90ab', 'cdef'];
-    const minPeriod = {
-      1234: '10:00:00',
-      5678: '10:00:00',
-      '90ab': '10:00:00',
-      cdef: '10:00:00',
-    };
-    const maxPeriod = {
-      1234: '10:00:00',
-      5678: '10:00:00',
-      '90ab': '10:00:00',
-      cdef: '10:00:00',
-    };
-    const wrapper = getWrapper({ resources, maxPeriod, minPeriod });
+    const wrapper = getWrapper({ resources });
     const elements = wrapper.find(AvailabilityTimelineContainer);
     expect(elements).toHaveLength(4);
     expect(elements.at(0).prop('id')).toBe(resources[0]);
     expect(elements.at(1).prop('id')).toBe(resources[1]);
     expect(elements.at(2).prop('id')).toBe(resources[2]);
     expect(elements.at(3).prop('id')).toBe(resources[3]);
-  });
-
-  test('renders resources with maxPeriod and minPeriod', () => {
-    const resources = ['timeline-1', 'timeline-2', 'timeline-3', 'timeline-4'];
-    const maxPeriod = {
-      'timeline-1': '10:00:00',
-      'timeline-2': '08:00:00',
-      'timeline-3': '02:00:00',
-      'timeline-4': '05:00:00',
-    };
-    const minPeriod = {
-      'timeline-1': '01:00:00',
-      'timeline-2': '02:00:00',
-      'timeline-3': '06:00:00',
-      'timeline-4': '10:00:00',
-    };
-    const wrapper = getWrapper({ resources, maxPeriod, minPeriod });
-    const elements = wrapper.find(AvailabilityTimelineContainer);
-
-    expect(elements).toHaveLength(4);
-    expect(elements.at(0).prop('maxPeriod')).toBe(maxPeriod[resources[0]]);
-    expect(elements.at(1).prop('maxPeriod')).toBe(maxPeriod[resources[1]]);
-    expect(elements.at(2).prop('maxPeriod')).toBe(maxPeriod[resources[2]]);
-    expect(elements.at(3).prop('maxPeriod')).toBe(maxPeriod[resources[3]]);
-
-    expect(elements.at(0).prop('minPeriod')).toBe(minPeriod[resources[0]]);
-    expect(elements.at(1).prop('minPeriod')).toBe(minPeriod[resources[1]]);
-    expect(elements.at(2).prop('minPeriod')).toBe(minPeriod[resources[2]]);
-    expect(elements.at(3).prop('minPeriod')).toBe(minPeriod[resources[3]]);
   });
 
   describe('componentDidMount', () => {

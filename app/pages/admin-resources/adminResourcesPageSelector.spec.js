@@ -29,18 +29,6 @@ describe('pages/admin-resources/adminResourcesPageSelector', () => {
     expect(getSelected().resourceTypes).toBeDefined();
   });
 
-  test('returns contrast', () => {
-    expect(getSelected().contrast).toBeDefined();
-  });
-
-  test('returns minPeriod', () => {
-    expect(getSelected().minPeriod).toBeDefined();
-  });
-
-  test('returns maxPeriod', () => {
-    expect(getSelected().maxPeriod).toBeDefined();
-  });
-
   test('returns date', () => {
     const selected = getSelected({ 'ui.pages.adminResources': { date: '2017-02-01' } });
     expect(selected.date).toBe('2017-02-01');
@@ -104,34 +92,6 @@ describe('pages/admin-resources/adminResourcesPageSelector', () => {
       const selected = getSelected(extraState);
       expect(selected.selectedResourceTypes).toEqual(['school']);
       expect(selected.resources).toEqual([1]);
-    }
-  );
-
-  test(
-    'returns an object of minPeriod',
-    () => {
-      const minTime = { resourceIdFirst: '01:00:00', resourceIdSecond: '02:00:00' };
-
-      const extraState = {
-        'ui.pages.adminResources.resourceMinPeriod': { resourceIdFirst: '01:00:00', resourceIdSecond: '02:00:00' }
-      };
-
-      const selected = getSelected(extraState);
-      expect(selected.minPeriod).toStrictEqual(minTime);
-    }
-  );
-
-  test(
-    'returns an object of maxPeriod',
-    () => {
-      const maxTime = { resourceIdFirst: '10:00:00', resourceIdSecond: '06:00:00' };
-
-      const extraState = {
-        'ui.pages.adminResources.resourceMaxPeriod': { resourceIdFirst: '10:00:00', resourceIdSecond: '06:00:00' }
-      };
-
-      const selected = getSelected(extraState);
-      expect(selected.maxPeriod).toStrictEqual(maxTime);
     }
   );
 });

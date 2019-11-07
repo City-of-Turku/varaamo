@@ -8,14 +8,11 @@ import { createSelector, createStructuredSelector } from 'reselect';
 
 import { isAdminSelector, isLoggedInSelector } from 'state/selectors/authSelectors';
 import { resourcesSelector } from 'state/selectors/dataSelectors';
-import { contrastSelector } from 'state/selectors/accessibilitySelectors';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
 
 const dateSelector = state => state.ui.pages.adminResources.date || moment().format('YYYY-MM-DD');
 const resourceIdsSelector = state => state.ui.pages.adminResources.resourceIds;
 const selectedResourceTypesSelector = state => state.ui.pages.adminResources.selectedResourceTypes;
-const minPeriodSelector = state => state.ui.pages.adminResources.resourceMinPeriod;
-const maxPeriodSelector = state => state.ui.pages.adminResources.resourceMaxPeriod;
 
 const adminResourcesSelector = createSelector(
   resourceIdsSelector,
@@ -43,7 +40,6 @@ const filteredAdminResourcesIdsSelector = createSelector(
 );
 
 const adminResourcesPageSelector = createStructuredSelector({
-  contrast: contrastSelector,
   date: dateSelector,
   selectedResourceTypes: selectedResourceTypesSelector,
   isAdmin: isAdminSelector,
@@ -51,8 +47,6 @@ const adminResourcesPageSelector = createStructuredSelector({
   isFetchingResources: requestIsActiveSelectorFactory(ActionTypes.API.RESOURCES_GET_REQUEST),
   resources: filteredAdminResourcesIdsSelector,
   resourceTypes: adminResourceTypesSelector,
-  minPeriod: minPeriodSelector,
-  maxPeriod: maxPeriodSelector
 });
 
 export default adminResourcesPageSelector;

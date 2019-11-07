@@ -11,7 +11,6 @@ import {
   selectAdminResourceType,
   openConfirmReservationModal,
   unselectAdminResourceType,
-  clearReservations,
 } from 'actions/uiActions';
 import { injectT } from 'i18n';
 import PageWrapper from 'pages/PageWrapper';
@@ -31,8 +30,6 @@ class UnconnectedAdminResourcesPage extends Component {
   }
 
   componentDidMount() {
-    // clearReservations called to make sure that redux ui.reservations is empty
-    this.props.actions.clearReservations();
     const interval = 10 * 60 * 1000;
     this.fetchResources();
     this.updateResourcesTimer = window.setInterval(this.fetchResources, interval);
@@ -68,12 +65,9 @@ class UnconnectedAdminResourcesPage extends Component {
       resources,
       t,
       resourceTypes,
-      contrast,
-      minPeriod,
-      maxPeriod
     } = this.props;
     return (
-      <PageWrapper className={`admin-resources-page ${contrast}`} title={(t('AdminResourcesPage.adminTitle'))}>
+      <PageWrapper className="admin-resources-page" fluid title={(t('AdminResourcesPage.adminTitle'))}>
         {isAdmin && <h1>{t('AdminResourcesPage.adminTitle')}</h1>}
         {!isAdmin && <h1>{t('AdminResourcesPage.favoriteTitle')}</h1>}
         <Loader loaded={Boolean(!isFetchingResources || resources.length)}>
@@ -87,9 +81,7 @@ class UnconnectedAdminResourcesPage extends Component {
               />
               <AvailabilityView
                 date={this.props.date}
-                groups={[{
-                  name: '', resources, minPeriod, maxPeriod
-                }]}
+                groups={[{ name: '', resources }]}
                 isAdmin={isAdmin}
                 onDateChange={this.props.actions.changeAdminResourcesPageDate}
                 onSelect={this.handleSelect}
@@ -126,9 +118,6 @@ UnconnectedAdminResourcesPage.propTypes = {
   resources: PropTypes.array.isRequired,
   t: PropTypes.func.isRequired,
   resourceTypes: PropTypes.array.isRequired,
-  contrast: PropTypes.string,
-  minPeriod: PropTypes.object,
-  maxPeriod: PropTypes.object
 };
 
 UnconnectedAdminResourcesPage = injectT(UnconnectedAdminResourcesPage);  // eslint-disable-line
@@ -137,7 +126,6 @@ function mapDispatchToProps(dispatch) {
   const actionCreators = {
     changeAdminResourcesPageDate,
     changeRecurringBaseTime: recurringReservations.changeBaseTime,
-    clearReservations,
     fetchFavoritedResources,
     selectAdminResourceType,
     openConfirmReservationModal,

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { injectT } from 'i18n';
 import ReservationPopover from 'shared/reservation-popover';
+import utils from '../utils';
 
 export class UninjectedReservationSlot extends React.Component {
   static propTypes = {
@@ -21,10 +22,6 @@ export class UninjectedReservationSlot extends React.Component {
       hover: PropTypes.bool,
       resourceId: PropTypes.string.isRequired,
     }),
-    minPeriod: PropTypes.string,
-    maxPeriod: PropTypes.string,
-    width: PropTypes.number,
-    isCooldown: PropTypes.bool,
   };
 
   constructor(props) {
@@ -59,8 +56,6 @@ export class UninjectedReservationSlot extends React.Component {
       begin: this.props.begin,
       end: this.props.end,
       resourceId: this.props.resourceId,
-      minPeriod: this.props.minPeriod,
-      maxPeriod: this.props.maxPeriod,
     };
   }
 
@@ -92,18 +87,16 @@ export class UninjectedReservationSlot extends React.Component {
 
   render() {
     const isSelected = this.getIsSelected();
-
     const slot = (
       <button
         className={classNames('reservation-slot', {
           'reservation-slot-selected': isSelected,
           'reservation-slot-selectable': this.props.isSelectable,
-          'reservation-slot-cooldown': this.props.isCooldown,
         })}
         onClick={this.handleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
-        style={{ width: this.props.width }}
+        style={{ width: utils.getTimeSlotWidth() }}
         type="button"
       >
         <span className="a11y-text">Make reservation</span>
@@ -114,8 +107,6 @@ export class UninjectedReservationSlot extends React.Component {
         <ReservationPopover
           begin={this.props.selection.begin}
           end={this.props.selection.end}
-          maxPeriod={this.props.maxPeriod}
-          minPeriod={this.props.minPeriod}
           onCancel={this.props.onSelectionCancel}
         >
           {slot}

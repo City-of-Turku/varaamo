@@ -44,12 +44,10 @@ describe('shared/availability-view/AvailabilityView', () => {
   test('renders TimelineGroups', () => {
     const date = '2016-11-12';
     const groups = [];
-    const isAdmin = true;
-    const element = getWrapper({ date, groups, isAdmin }).find(TimelineGroups);
+    const element = getWrapper({ date, groups }).find(TimelineGroups);
     expect(element).toHaveLength(1);
     expect(element.prop('date')).toBe(date);
     expect(element.prop('groups')).toBe(groups);
-    expect(element.prop('isAdmin')).toBe(isAdmin);
   });
 
   test('has correct initial state', () => {
@@ -257,95 +255,9 @@ describe('shared/availability-view/AvailabilityView', () => {
             end: '2016-01-01T11:30:00Z',
           }]);
         });
-
-        test('when not admin', () => {
-          const resourceId = 'resource-id';
-          const wrapper = doSelect(
-            { isAdmin: false },
-            {
-              resourceId,
-              begin: '2016-01-01T10:30:00Z',
-              end: '2016-01-01T11:00:00Z',
-              minPeriod: '01:00:00',
-              maxPeriod: '10:00:00'
-            },
-            {
-              resourceId,
-              begin: '2016-01-01T11:00:00Z',
-              end: '2016-01-01T11:30:00Z',
-              minPeriod: '01:00:00',
-              maxPeriod: '10:00:00'
-            }
-          );
-          expect(wrapper.state()).toEqual({ selection: null, hoverSelection: null });
-        });
-
-        test('when admin', () => {
-          const resourceId = 'resource-id';
-          const wrapper = doSelect(
-            {},
-            {
-              resourceId,
-              begin: '2016-01-01T10:30:00Z',
-              end: '2016-01-01T11:00:00Z',
-              minPeriod: '02:00:00',
-              maxPeriod: '10:00:00'
-            },
-            {
-              resourceId,
-              begin: '2016-01-01T11:00:00Z',
-              end: '2016-01-01T11:30:00Z',
-              minPeriod: '02:00:00',
-              maxPeriod: '10:00:00'
-            }
-          );
-          expect(wrapper.state()).toEqual({ selection: null, hoverSelection: null });
-        });
       });
 
-      describe('Reservation min/max', () => {
-        function checkReservation(props) {
-          const wrapper = getWrapper(props);
-          const instance = wrapper.instance();
-          return instance;
-        }
-
-        const selection = { begin: '2019-09-07T09:00:00+03:00' };
-
-        test('when selection is under maxPeriod', () => {
-          const instance = checkReservation();
-          instance.state = { selection };
-          const slot = { end: '2019-09-07T10:00:00+03:00', maxPeriod: '02:00:00' };
-          const isUnderMaxPeriod = instance.isUnderReservationMaxPeriod(slot);
-          expect(isUnderMaxPeriod).toBe(true);
-        });
-
-        test('when selection is over maxPeriod', () => {
-          const instance = checkReservation();
-          instance.state = { selection };
-          const slot = { end: '2019-09-07T11:00:00+03:00', maxPeriod: '01:00:00' };
-          const isOverMaxPeriod = instance.isUnderReservationMaxPeriod(slot);
-          expect(isOverMaxPeriod).toBe(false);
-        });
-
-        test('when time is under minPeriod', () => {
-          const instance = checkReservation();
-          instance.state = { selection };
-          const slot = { end: '2019-09-07T10:00:00+03:00', minPeriod: '02:00:00' };
-          const isUnderMinPeriod = instance.isOverReservationMinPeriod(slot);
-          expect(isUnderMinPeriod).toBe(false);
-        });
-
-        test('when time is over minPeriod', () => {
-          const instance = checkReservation();
-          instance.state = { selection };
-          const slot = { end: '2019-09-07T11:00:00+03:00', minPeriod: '01:00:00' };
-          const isOverMinPeriod = instance.isOverReservationMinPeriod(slot);
-          expect(isOverMinPeriod).toBe(true);
-        });
-      });
-
-      describe('end slot is', () => {
+      describe('end slot is invalid', () => {
         function checkInvalid(begin, end) {
           const onSelect = simple.mock();
           const wrapper = doSelect({ onSelect }, begin, end);
@@ -353,30 +265,12 @@ describe('shared/availability-view/AvailabilityView', () => {
           expect(onSelect.called).toBe(false);
         }
 
-        test('invalid same start time', () => {
-          const wrapper = doSelect(
-            {},
-            {
-              resourceId: 'r1',
-              begin: '2016-01-01T10:00:00Z',
-              end: '2016-01-01T10:30:00Z'
-            },
-            {
-              resourceId: 'r1',
-              begin: '2016-01-01T10:00:00Z',
-              end: '2016-01-01T10:30:00Z'
-            }
-          );
-          expect(wrapper.state()).toEqual({ hoverSelection: null, selection: null });
-        });
-
-        test('valid if after start time', () => {
+        test('if after start time', () => {
           const resourceId = 'resource';
-          const start = { resourceId, begin: '2016-01-01T10:00:00Z', end: '2016-01-01T10:30:00Z' };
-          const end = { resourceId, begin: '2016-01-01T10:30:00Z', end: '2016-01-01T11:00:00Z' };
-          const onSelect = simple.mock();
-          const wrapper = doSelect({ onSelect }, start, end);
-          expect(wrapper.state()).toEqual({ hoverSelection: null, selection: null });
+          checkInvalid(
+            { resourceId, begin: '2016-01-01T10:00:00Z' },
+            { resourceId, begin: '2016-01-01T09:30:00Z', end: '2016-01-01T10:00:00Z' }
+          );
         });
 
         test('if different resource', () => {

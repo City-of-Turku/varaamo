@@ -9,7 +9,6 @@ function getWrapper(props) {
   const defaults = {
     date: '2016-01-01',
     groups: [],
-    isAdmin: true,
   };
   return shallow(<TimelineGroups {...defaults} {...props} />);
 }
@@ -62,13 +61,6 @@ describe('shared/availability-view/TimelineGroups', () => {
     const groups = [{ name: 'A', resources: [] }];
     const group = getWrapper({ groups, selection }).find(TimelineGroup);
     expect(group.prop('selection')).toBe(selection);
-  });
-
-  test('passes isAdmin to groups', () => {
-    const selection = { some: 'data' };
-    const groups = [{ name: 'A', resources: [] }];
-    const group = getWrapper({ groups, selection }).find(TimelineGroup);
-    expect(group.prop('isAdmin')).toBeDefined();
   });
 
   describe('componentDidMount', () => {

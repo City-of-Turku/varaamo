@@ -11,12 +11,8 @@ function getWrapper(props) {
     begin: '2017-01-01T10:00:00Z',
     end: '2017-01-01T10:30:00Z',
     resourceId: '1',
-    isCooldown: false,
     isSelectable: true,
     t: s => s,
-    maxPeriod: '10:00:00',
-    minPeriod: '01:00:00',
-    width: 60,
   };
   return shallow(<ReservationSlot {...defaults} {...props} />);
 }
@@ -29,7 +25,7 @@ describe('shared/availability-view/ReservationSlot', () => {
   });
 
   test('has correct width', () => {
-    const expected = utils.getSlotSize('01:00:00');
+    const expected = utils.getTimeSlotWidth();
     const actual = getWrapper().prop('style');
     expect(actual).toEqual({ width: expected });
   });
@@ -38,26 +34,6 @@ describe('shared/availability-view/ReservationSlot', () => {
     const wrapper = getWrapper();
     const instance = wrapper.instance();
     expect(wrapper.prop('onClick')).toBe(instance.handleClick);
-  });
-
-  test('has correct className when isSelectable is true', () => {
-    const wrapper = getWrapper();
-    expect(wrapper.hasClass('reservation-slot-selectable')).toBe(true);
-  });
-
-  test('has correct className when isSelectable is false', () => {
-    const wrapper = getWrapper({ isSelectable: false });
-    expect(wrapper.hasClass('reservation-slot-selectable')).toBe(false);
-  });
-
-  test('has correct className when isCooldown is true', () => {
-    const wrapper = getWrapper({ isCooldown: true });
-    expect(wrapper.hasClass('reservation-slot-cooldown')).toBe(true);
-  });
-
-  test('has correct className when isCooldown is false', () => {
-    const wrapper = getWrapper({ isCooldown: false });
-    expect(wrapper.hasClass('reservation-slot-cooldown')).toBe(false);
   });
 
   describe('Popover', () => {
@@ -124,24 +100,6 @@ describe('shared/availability-view/ReservationSlot', () => {
         },
       });
       expect(popover).toHaveLength(1);
-    });
-
-    test('gets maxPeriod and minPeriod props', () => {
-      const element = getPopover({
-        begin: '2016-01-01T10:00:00Z',
-        end: '2016-01-01T10:30:00Z',
-        maxPeriod: '12:00:00',
-        minPeriod: '02:00:00',
-        selection: {
-          begin: '2016-01-01T10:00:00Z',
-          end: '2016-01-01T12:00:00Z',
-          maxPeriod: '12:00:00',
-          minPeriod: '02:00:00',
-          resourceId: '1',
-        },
-      });
-      expect(element.prop('maxPeriod')).toBe('12:00:00');
-      expect(element.prop('minPeriod')).toBe('02:00:00');
     });
   });
 
@@ -218,15 +176,11 @@ describe('shared/availability-view/ReservationSlot', () => {
         const begin = '2017-01-02T14:00:00Z';
         const end = '2017-01-02T14:30:00Z';
         const resourceId = 'auuxn391';
-        const maxPeriod = '10:00:00';
-        const minPeriod = '01:00:00';
         callHandleClick({}, {
           begin, end, onClick, resourceId
         });
         expect(onClick.callCount).toBe(1);
-        expect(onClick.lastCall.args).toEqual([{
-          begin, end, resourceId, maxPeriod, minPeriod
-        }]);
+        expect(onClick.lastCall.args).toEqual([{ begin, end, resourceId }]);
       });
 
       test('does not call onSelectionCancel', () => {

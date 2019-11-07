@@ -46,60 +46,6 @@ function getState() {
             },
           ],
         },
-        slotSize: '00:30:00',
-        cooldown: '00:00:00',
-        'resource-2': { id: 'resource-2' },
-      },
-    },
-  };
-}
-
-function getStateWithCooldown() {
-  return {
-    data: {
-      resources: {
-        'resource-1': {
-          id: 'resource-1',
-          reservations: [
-            {
-              id: 111,
-              name: 'Reservation 1',
-              begin: moment('2016-01-01T02:00:00').format(),
-              end: moment('2016-01-01T10:00:00').format(),
-            },
-            {
-              id: 222,
-              name: 'Reservation 2',
-              begin: moment('2016-01-01T11:00:00').format(),
-              end: moment('2016-01-01T18:00:00').format(),
-            },
-            {
-              id: 333,
-              name: 'Reservation 3',
-              begin: moment('2016-01-01T18:00:00').format(),
-              end: moment('2016-01-01T23:00:00').format(),
-            },
-            {
-              id: 444,
-              name: 'Cancelled reservation',
-              begin: moment('2016-01-01T10:00:00').format(),
-              end: moment('2016-01-01T11:00:00').format(),
-              state: 'cancelled',
-            },
-            {
-              id: 555,
-              name: 'Denied reservation',
-              begin: moment('2016-01-01T10:00:00').format(),
-              end: moment('2016-01-01T11:00:00').format(),
-              state: 'denied',
-            },
-          ],
-          slotSize: '01:00:00',
-          cooldown: '01:00:00',
-          minPeriod: '01:00:00',
-          maxPeriod: '10:00:00',
-        },
-
         'resource-2': { id: 'resource-2' },
       },
     },
@@ -173,33 +119,6 @@ describe('shared/availability-view/AvailabilityTimelineContainer', () => {
         expect(actual[8]).toEqual({ key: '8', type: 'reservation', data: reservations[1] });
         expect(actual[9]).toEqual({ key: '9', type: 'reservation', data: reservations[2] });
         expect(actual[10].data.isSelectable).toBe(false);
-      });
-
-      test('contains isCooldown, cooldownSize, width', () => {
-        const state = getStateWithCooldown();
-        const reservations = state.data.resources['resource-1'].reservations;
-        const selection = {
-          begin: '2016-01-01T10:00:00',
-          end: '2016-01-01T11:00:00',
-          resourceId: 'resource-1',
-        };
-        const props = { id: 'resource-1', date: '2016-01-01', selection };
-        const actual = selector()(state, props).items;
-        expect(actual[0].data.isCooldown).toBe(false);
-        expect(actual[0].data.cooldownSize).toBe(60);
-        expect(actual[0].data.width).toBe(60);
-        expect(actual[1].data.isCooldown).toBe(false);
-        expect(actual[1].data.cooldownSize).toBe(60);
-        expect(actual[1].data.width).toBe(60);
-        expect(actual[2]).toEqual({ key: '2', type: 'reservation', data: reservations[0] });
-        expect(actual[3].data.isCooldown).toBe(false);
-        expect(actual[3].data.cooldownSize).toBe(60);
-        expect(actual[3].data.width).toBe(60);
-        expect(actual[4]).toEqual({ key: '4', type: 'reservation', data: reservations[1] });
-        expect(actual[5]).toEqual({ key: '5', type: 'reservation', data: reservations[2] });
-        expect(actual[6].data.isCooldown).toBe(false);
-        expect(actual[6].data.cooldownSize).toBe(60);
-        expect(actual[6].data.width).toBe(60);
       });
     });
   });

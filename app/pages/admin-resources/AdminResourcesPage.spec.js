@@ -10,7 +10,6 @@ import { UnconnectedAdminResourcesPage as AdminResourcesPage } from './AdminReso
 
 describe('pages/admin-resources/AdminResourcesPage', () => {
   const changeAdminResourcesPageDate = simple.stub();
-  const clearReservations = simple.stub();
   const fetchFavoritedResources = simple.stub();
   const selectAdminResourceType = simple.stub();
   const openConfirmReservationModal = simple.stub();
@@ -20,7 +19,6 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
     actions: {
       changeAdminResourcesPageDate,
       changeRecurringBaseTime: () => null,
-      clearReservations,
       fetchFavoritedResources,
       selectAdminResourceType,
       openConfirmReservationModal,
@@ -34,9 +32,6 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
     location: { id: '123' },
     resources: [],
     resourceTypes: ['a', 'b', 'c'],
-    contrast: '',
-    minPeriod: {},
-    maxPeriod: {},
   };
 
   function getWrapper(extraProps = {}) {
@@ -44,18 +39,12 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
   }
 
   describe('rendering', () => {
-    test('renders PageWrapper with correct props, no high-contrast', () => {
+    test('renders PageWrapper with correct props', () => {
       const pageWrapper = getWrapper().find(PageWrapper);
       expect(pageWrapper).toHaveLength(1);
-      expect(pageWrapper.prop('className')).toBe('admin-resources-page ');
+      expect(pageWrapper.prop('className')).toBe('admin-resources-page');
       expect(pageWrapper.prop('title')).toBe('AdminResourcesPage.adminTitle');
-    });
-
-    test('renders PageWrapper with correct props, with high-contrast', () => {
-      const pageWrapper = getWrapper({ contrast: 'high-contrast' }).find(PageWrapper);
-      expect(pageWrapper).toHaveLength(1);
-      expect(pageWrapper.prop('className')).toBe('admin-resources-page high-contrast');
-      expect(pageWrapper.prop('title')).toBe('AdminResourcesPage.adminTitle');
+      expect(pageWrapper.prop('fluid')).toBe(true);
     });
 
     describe('when user is not admin', () => {
@@ -108,9 +97,7 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
         const view = wrapper.find(AvailabilityView);
         expect(view).toHaveLength(1);
         expect(view.prop('groups')).toEqual([
-          {
-            name: '', resources, minPeriod: {}, maxPeriod: {}
-          },
+          { name: '', resources },
         ]);
         expect(view.prop('date')).toEqual('2017-01-10');
         expect(view.prop('onDateChange')).toBe(changeAdminResourcesPageDate);
@@ -136,7 +123,6 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
       let instance;
 
       beforeAll(() => {
-        clearReservations.reset();
         fetchFavoritedResources.reset();
         simple.mock(window, 'setInterval').returnWith(timer);
         instance = getWrapper({ isAdmin }).instance();
@@ -169,10 +155,6 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
 
       test('saves interval to this.updateResourcesTimer', () => {
         expect(instance.updateResourcesTimer).toBe(timer);
-      });
-
-      test('clears redux state.ui.reservations', () => {
-        expect(clearReservations.callCount).toBe(1);
       });
     });
   });
