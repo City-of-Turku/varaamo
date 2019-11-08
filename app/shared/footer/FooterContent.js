@@ -38,9 +38,10 @@ class FooterContent extends React.Component {
             <h2>Varaamo</h2>
             <p>
               <FormattedHTMLMessage id="Footer.turkuText" />
-            </p>
-            <Link className="accessibility-info-link" to="/accessibility-info">{t('AccessibilityInfo.title')}</Link>
-            <p role="presentation">
+              <br />
+              <br />
+              <Link className="accessibility-info-link" to="/accessibility-info">{t('AccessibilityInfo.title')}</Link>
+              <br />
               <a className="feedback-link" href={currentLink} rel="noopener noreferrer" target="_blank">
                 {t('Footer.feedbackLink')}
               </a>

@@ -5,6 +5,7 @@ import simple from 'simple-mock';
 import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
+import User from 'utils/fixtures/User';
 import { shallowWithIntl } from 'utils/testUtils';
 import ReservationInformation from './ReservationInformation';
 import ReservationInformationForm from './ReservationInformationForm';
@@ -26,6 +27,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       end: '2016-10-10T11:00:00+03:00',
     },
     unit: Immutable(Unit.build()),
+    user: Immutable(User.build()),
   };
 
   function getWrapper(extraProps) {
@@ -58,6 +60,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     expect(form.prop('onCancel')).toBe(defaultProps.onCancel);
     expect(form.prop('openResourceTermsModal')).toBe(defaultProps.openResourceTermsModal);
     expect(form.prop('resource')).toBe(defaultProps.resource);
+    expect(form.prop('user')).toBe(defaultProps.user);
   });
 
   test('renders text header', () => {
@@ -185,6 +188,81 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
         expect(actual).toEqual(expected);
       }
     );
+
+    test('returns InitialValues from user when no reservation', () => {
+      const user = User.build({
+        displayName: 'First Last',
+        email: 'em@il.com',
+      });
+      const wrapper = getWrapper({ user, reservation: null });
+      const instance = wrapper.instance();
+      const actual = instance.getFormInitialValues();
+      const expectedInfo = {
+        reserverName: 'First Last',
+        reserverEmailAddress: 'em@il.com'
+      };
+      expect(instance.props.reservation).toBe(null);
+      expect(actual).toEqual(expectedInfo);
+    });
+  });
+
+  describe('getFormInitialValuesFromUser', () => {
+    test('returns object with both values if displayName and email exist', () => {
+      const user = User.build({
+        displayName: 'Etunimi Sukunimi',
+        email: 'sähkö@posti.fi',
+      });
+      const expected = {
+        reserverName: user.displayName,
+        reserverEmailAddress: user.email,
+      };
+      const wrapper = getWrapper({ user });
+      const instance = wrapper.instance();
+      expect(instance.props.user.displayName).toBeDefined();
+      expect(instance.props.user.email).toBeDefined();
+      const actual = instance.getFormInitialValuesFromUser();
+      expect(actual).toEqual(expected);
+    });
+
+    test('returns object with reserverEmailAddress if displayName doesnt exist', () => {
+      const user = User.build({
+        email: 'sähkö@posti.fi'
+      });
+      const expected = {
+        reserverEmailAddress: user.email
+      };
+      const wrapper = getWrapper({ user });
+      const instance = wrapper.instance();
+      expect(instance.props.user.displayName).toBeUndefined();
+      expect(instance.props.user.email).toBeDefined();
+      const actual = instance.getFormInitialValuesFromUser();
+      expect(actual).toEqual(expected);
+    });
+
+    test('returns object with reserverName if email doesnt exist', () => {
+      const user = User.build({
+        displayName: 'Etunimi Sukunimi'
+      });
+      const expected = {
+        reserverName: user.displayName
+      };
+      const wrapper = getWrapper({ user });
+      const instance = wrapper.instance();
+      expect(instance.props.user.displayName).toBeDefined();
+      expect(instance.props.user.email).toBeUndefined();
+      const actual = instance.getFormInitialValuesFromUser();
+      expect(actual).toEqual(expected);
+    });
+
+    test('returns empty object if displayName and email dont exist', () => {
+      const user = User.build({});
+      const wrapper = getWrapper({ user });
+      const instance = wrapper.instance();
+      expect(instance.props.user.displayName).toBeUndefined();
+      expect(instance.props.user.email).toBeUndefined();
+      const actual = instance.getFormInitialValuesFromUser();
+      expect(actual).toEqual({});
+    });
   });
 
   describe('getRequiredFormFields', () => {

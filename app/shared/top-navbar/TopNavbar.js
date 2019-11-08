@@ -88,7 +88,7 @@ class TopNavbar extends Component {
     return (
       <div>
         <MobileNavbar contrast={contrast} toggle={this.state.expandMobileNavbar} />
-        <Navbar aria-label={t('Navbar.aria.topNavbar.title')} className={classNames('app-TopNavbar', contrast)} expanded={this.state.expanded} onToggle={() => this.toggleCollapse()}>
+        <Navbar className={classNames('app-TopNavbar', contrast)} expanded={this.state.expanded} onToggle={() => this.toggleCollapse()}>
 
           <Navbar.Header>
             <Navbar.Brand>
@@ -100,6 +100,7 @@ class TopNavbar extends Component {
               <button className="navbar-toggle lang" data-target="#mobile" data-toggle="collapse" tabIndex="-1" type="button">
                 <div aria-label={t('Navbar.aria.topNavbar.mobileLocale')} className="mobile_lang" role="list" type="button">
                   <NavDropdown
+                    aria-label={t('Navbar.language.active')}
                     className="mobile_lang_dropdown"
                     eventKey="lang"
                     id="mobile"
@@ -107,12 +108,12 @@ class TopNavbar extends Component {
                     title={currentLanguage}
                   >
                     {currentLanguage === 'fi'
-                      ? (<MenuItem active aria-label="Suomi" eventKey="fi">FI</MenuItem>)
-                      : (<MenuItem aria-label="Suomi" eventKey="fi">FI</MenuItem>)
+                      ? (<MenuItem active aria-label={t('Navbar.language-finnish')} eventKey="fi">FI</MenuItem>)
+                      : (<MenuItem aria-label={t('Navbar.language-finnish')} eventKey="fi">FI</MenuItem>)
                     }
                     {currentLanguage === 'sv'
-                      ? (<MenuItem active aria-label="Svenska" eventKey="sv">SV</MenuItem>)
-                      : (<MenuItem aria-label="Svenska" eventKey="sv">SV</MenuItem>)
+                      ? (<MenuItem active aria-label={t('Navbar.language-swedish')} eventKey="sv">SV</MenuItem>)
+                      : (<MenuItem aria-label={t('Navbar.language-swedish')} eventKey="sv">SV</MenuItem>)
                     }
                   </NavDropdown>
                 </div>
@@ -139,12 +140,13 @@ class TopNavbar extends Component {
             </div>
           </Navbar.Header>
           <Navbar.Collapse id="navCollapse" role="presentation">
-            <Nav aria-label={t('Navbar.aria.topNavbar.options')} pullRight role="list">
+            <Nav pullRight role="list">
               <ContrastChanger />
 
               <FontChanger />
 
               <NavDropdown
+                aria-label={t('Navbar.language.active')}
                 className="app-TopNavbar__language"
                 eventKey="lang"
                 id="language-nav-dropdown"
@@ -153,19 +155,19 @@ class TopNavbar extends Component {
                 title={currentLanguage}
               >
                 {currentLanguage === 'fi'
-                  ? (<MenuItem active aria-label="Suomi" eventKey="fi">FI</MenuItem>)
-                  : (<MenuItem aria-label="Suomi" eventKey="fi">FI</MenuItem>)
+                  ? (<MenuItem active aria-label={t('Navbar.language-finnish')} eventKey="fi">FI</MenuItem>)
+                  : (<MenuItem aria-label={t('Navbar.language-finnish')} eventKey="fi">FI</MenuItem>)
                 }
                 {currentLanguage === 'sv'
-                  ? (<MenuItem active aria-label="Svenska" eventKey="sv">SV</MenuItem>)
-                  : (<MenuItem aria-label="Svenska" eventKey="sv">SV</MenuItem>)
+                  ? (<MenuItem active aria-label={t('Navbar.language-swedish')} eventKey="sv">SV</MenuItem>)
+                  : (<MenuItem aria-label={t('Navbar.language-swedish')} eventKey="sv">SV</MenuItem>)
                 }
 
               </NavDropdown>
 
               {isLoggedIn && (
                 <NavDropdown
-                  aria-label="Logout"
+                  aria-label={t('Navbar.logout')}
                   className="app-TopNavbar__name"
                   eventKey="lang"
                   id="user-nav-dropdown"

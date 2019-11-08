@@ -99,7 +99,7 @@ class UnconnectedSearchPage extends Component {
         <SearchControls location={location} params={match.params} />
         <MapToggle
           contrast={contrast}
-          hideToggleButtons={!isFetchingSearchResults}
+          hideToggleButtons={isFetchingSearchResults}
           mapVisible={showMap}
           onClick={actions.toggleMap}
           resultCount={resultCount}

@@ -147,5 +147,9 @@ describe('pages/reservation/reservation-time/ReservationTime', () => {
       expect(historyMock.callCount).toBe(1);
       expect(historyMock.lastCall.args).toEqual([expectedPath]);
     });
+
+    test('sets correct state.selectedDate value', () => {
+      expect(instance.state.selectedDate).toEqual(day);
+    });
   });
 });

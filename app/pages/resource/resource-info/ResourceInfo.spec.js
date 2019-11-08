@@ -73,12 +73,10 @@ describe('pages/resource/resource-info/ResourceInfo', () => {
 
     expect(panels).toHaveLength(3);
     expect(panels.at(0).prop('header')).toBe('ResourceInfo.reservationTitle');
+    expect(panels.at(0).prop('defaultExpanded')).toBeTruthy();
     expect(panels.at(1).prop('header')).toBe('ResourceInfo.additionalInfoTitle');
     expect(panels.at(2).prop('header')).toBe('ResourceInfo.equipmentHeader');
-
-    expect(panels.at(0).prop('role')).toBe('tablist');
-    expect(panels.at(1).prop('role')).toBe('tablist');
-    expect(panels.at(2).prop('role')).toBe('tablist');
+    expect(panels.at(2).prop('defaultExpanded')).toBeTruthy();
   });
 
   test('renders panel.titles with correct props', () => {
@@ -88,10 +86,6 @@ describe('pages/resource/resource-info/ResourceInfo', () => {
     expect(panels.at(0).prop('componentClass')).toBe('h3');
     expect(panels.at(1).prop('componentClass')).toBe('h3');
     expect(panels.at(2).prop('componentClass')).toBe('h3');
-
-    expect(panels.at(0).prop('toggle')).toBeTruthy();
-    expect(panels.at(1).prop('toggle')).toBeTruthy();
-    expect(panels.at(2).prop('toggle')).toBeTruthy();
 
     expect(panels.at(0).prop('children')).toBe('ResourceInfo.reservationTitle');
     expect(panels.at(1).prop('children')).toBe('ResourceInfo.additionalInfoTitle');

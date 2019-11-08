@@ -24,70 +24,58 @@ function ResourceInfo({
           {resource.description
           && <WrappedText allowNamedLinks openLinksInNewTab text={resource.description} />}
         </div>
-        <Panel defaultExpanded header={t('ResourceInfo.reservationTitle')} id="reservation-panel" role="tablist">
+        <Panel defaultExpanded header={t('ResourceInfo.reservationTitle')}>
           <Panel.Heading>
-            <Panel.Title componentClass="h3" toggle>
+            <Panel.Title componentClass="h3">
               {t('ResourceInfo.reservationTitle')}
             </Panel.Title>
           </Panel.Heading>
-          <Panel.Collapse>
-            <Panel.Body>
-              <ReservationInfo isLoggedIn={isLoggedIn} resource={resource} />
-            </Panel.Body>
-          </Panel.Collapse>
+          <ReservationInfo isLoggedIn={isLoggedIn} resource={resource} />
         </Panel>
-        <Panel defaultExpanded header={t('ResourceInfo.additionalInfoTitle')} id="additionalInfo-panel" role="tablist">
+        <Panel header={t('ResourceInfo.additionalInfoTitle')}>
           <Panel.Heading>
-            <Panel.Title componentClass="h3" toggle>
+            <Panel.Title componentClass="h3">
               {t('ResourceInfo.additionalInfoTitle')}
             </Panel.Title>
           </Panel.Heading>
-          <Panel.Collapse>
-            <Panel.Body>
-              <Row>
-                <Col className="app-ResourceInfo__address" lg={6} md={6} sm={6} xs={12}>
-                  {unit && unit.name && <span>{unit.name}</span>}
-                  {unit && unit.streetAddress && <span>{unit.streetAddress}</span>}
-                  {unit && <span>{`${unit.addressZip} ${upperFirst(unit.municipality)}`.trim()}</span>}
-                </Col>
-                <Col className="app-ResourceInfo__web" lg={6} md={6} sm={6} xs={12}>
-                  {serviceMapUrl && (
-                  <span className="app-ResourceInfo__servicemap">
-                    <a href={serviceMapUrl} rel="noopener noreferrer" target="_blank">
-                      {t('ResourceInfo.serviceMapLink')}
-                    </a>
-                  </span>
-                  )}
-                  {unit && unit.wwwUrl && (
-                  <span className="app-ResourceInfo__www">
-                    <a href={unit.wwwUrl} rel="noopener noreferrer" target="_blank">
-                      {t('ResourceInfo.webSiteLink')}
-                    </a>
-                  </span>
-                  )}
-                </Col>
-              </Row>
-            </Panel.Body>
-          </Panel.Collapse>
+          <Row>
+            <Col className="app-ResourceInfo__address" lg={6} md={6} sm={6} xs={12}>
+              {unit && unit.name && <span>{unit.name}</span>}
+              {unit && unit.streetAddress && <span>{unit.streetAddress}</span>}
+              {unit && <span>{`${unit.addressZip} ${upperFirst(unit.municipality)}`.trim()}</span>}
+            </Col>
+            <Col className="app-ResourceInfo__web" lg={6} md={6} sm={6} xs={12}>
+              {serviceMapUrl && (
+              <span className="app-ResourceInfo__servicemap">
+                <a href={serviceMapUrl} rel="noopener noreferrer" target="_blank">
+                  {t('ResourceInfo.serviceMapLink')}
+                </a>
+              </span>
+              )}
+              {unit && unit.wwwUrl && (
+              <span className="app-ResourceInfo__www">
+                <a href={unit.wwwUrl} rel="noopener noreferrer" target="_blank">
+                  {t('ResourceInfo.webSiteLink')}
+                </a>
+              </span>
+              )}
+            </Col>
+          </Row>
         </Panel>
         {equipmentList.length > 0 && (
-          <Panel defaultExpanded header={t('ResourceInfo.equipmentHeader')} id="equipment-panel" role="tablist">
+          <Panel defaultExpanded header={t('ResourceInfo.equipmentHeader')}>
             <Panel.Heading>
-              <Panel.Title componentClass="h3" toggle>
+              <Panel.Title componentClass="h3">
                 {t('ResourceInfo.equipmentHeader')}
               </Panel.Title>
             </Panel.Heading>
-            <Panel.Collapse>
-              <Panel.Body>
-                <Row>
-                  <Col className="app-ResourceInfo__equipment" lg={6} md={6} sm={6} xs={12}>
-                    <ul>
-                      {equipmentList}
-                    </ul>
-                  </Col>
-                </Row>
-              </Panel.Body>
-            </Panel.Collapse>
+            <Row>
+              <Col className="app-ResourceInfo__equipment" lg={6} md={6} sm={6} xs={12}>
+                <ul>
+                  {equipmentList}
+                </ul>
+              </Col>
+            </Row>
           </Panel>
         )}
 

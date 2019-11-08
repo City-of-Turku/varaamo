@@ -268,6 +268,7 @@ class UnconnectedReservationPage extends Component {
                     resource={resource}
                     selectedTime={selectedTime}
                     unit={unit}
+                    user={user}
                   />
                 )}
                 {view === 'confirmation' && (reservationCreated || reservationEdited) && (

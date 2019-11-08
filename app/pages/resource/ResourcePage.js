@@ -197,51 +197,47 @@ class UnconnectedResourcePage extends Component {
 
                   <Panel defaultExpanded header={t('ResourceInfo.reserveTitle')} role="region">
                     <Panel.Heading>
-                      <Panel.Title componentClass="h2" toggle>
+                      <Panel.Title componentClass="h2">
                         {t('ResourceCalendar.header')}
                       </Panel.Title>
                     </Panel.Heading>
-                    <Panel.Collapse>
-                      <Panel.Body>
-                        {resource.externalReservationUrl && (
-                        <form action={resource.externalReservationUrl}>
-                          <input
-                            className="btn btn-primary"
-                            type="submit"
-                            value="Siirry ulkoiseen ajanvarauskalenteriin"
-                          />
-                        </form>
-                        )}
-                        {!resource.externalReservationUrl && (
-                        <div>
-                          {/* Show reservation min period text */}
-                          {resource.minPeriod && (
-                          <div className="app-ResourcePage__content-min-period">
-                            <p>{`${t('ReservationInfo.reservationMinLength')} ${minPeriodText}`}</p>
-                          </div>
-                          )}
-                          {/* Show reservation max period text */}
-                          {resource.maxPeriod && (
-                          <div className="app-ResourcePage__content-max-period">
-                            <p>{`${t('ReservationInfo.reservationMaxLength')} ${maxPeriodText}`}</p>
-                          </div>
-                          )}
+                    {resource.externalReservationUrl && (
+                    <form action={resource.externalReservationUrl}>
+                      <input
+                        className="btn btn-primary"
+                        type="submit"
+                        value="Siirry ulkoiseen ajanvarauskalenteriin"
+                      />
+                    </form>
+                    )}
+                    {!resource.externalReservationUrl && (
+                    <div>
+                      {/* Show reservation min period text */}
+                      {resource.minPeriod && (
+                      <div className="app-ResourcePage__content-min-period">
+                        <p>{`${t('ReservationInfo.reservationMinLength')} ${minPeriodText}`}</p>
+                      </div>
+                      )}
+                      {/* Show reservation max period text */}
+                      {resource.maxPeriod && (
+                      <div className="app-ResourcePage__content-max-period">
+                        <p>{`${t('ReservationInfo.reservationMaxLength')} ${maxPeriodText}`}</p>
+                      </div>
+                      )}
 
-                          <ResourceCalendar
-                            disableDays={this.disableDays}
-                            onDateChange={this.handleDateChange}
-                            resourceId={resource.id}
-                            selectedDate={date}
-                          />
-                          <ReservationCalendar
-                            history={history}
-                            location={location}
-                            params={params}
-                          />
-                        </div>
-                        )}
-                      </Panel.Body>
-                    </Panel.Collapse>
+                      <ResourceCalendar
+                        disableDays={this.disableDays}
+                        onDateChange={this.handleDateChange}
+                        resourceId={resource.id}
+                        selectedDate={date}
+                      />
+                      <ReservationCalendar
+                        history={history}
+                        location={location}
+                        params={params}
+                      />
+                    </div>
+                    )}
 
                   </Panel>
                 </Col>

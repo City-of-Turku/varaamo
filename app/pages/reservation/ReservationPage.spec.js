@@ -172,6 +172,19 @@ describe('pages/reservation/ReservationPage', () => {
       () => {
         const reservationInformation = getWrapper().find(ReservationInformation);
         expect(reservationInformation).toHaveLength(1);
+        expect(reservationInformation.prop('isAdmin')).toBe(defaultProps.isAdmin);
+        expect(reservationInformation.prop('isEditing')).toBeDefined();
+        expect(reservationInformation.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
+        expect(reservationInformation.prop('isStaff')).toBe(defaultProps.isStaff);
+        expect(reservationInformation.prop('onBack')).toBeDefined();
+        expect(reservationInformation.prop('onCancel')).toBeDefined();
+        expect(reservationInformation.prop('onConfirm')).toBeDefined();
+        expect(reservationInformation.prop('openResourceTermsModal')).toBe(defaultProps.actions.openResourceTermsModal);
+        expect(reservationInformation.prop('reservation')).toBe(defaultProps.reservationToEdit);
+        expect(reservationInformation.prop('resource')).toBe(defaultProps.resource);
+        expect(reservationInformation.prop('selectedTime')).toBeDefined();
+        expect(reservationInformation.prop('unit')).toBe(defaultProps.unit);
+        expect(reservationInformation.prop('user')).toBe(defaultProps.user);
       }
     );
 

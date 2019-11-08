@@ -1,6 +1,7 @@
 .accessibility-info-page {
   max-width: 100%;
-
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 @media(max-width:$screen-400-min - 50) {

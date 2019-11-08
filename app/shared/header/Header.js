@@ -9,7 +9,7 @@ function Header({ children, location }) {
   const { pathname } = location;
   const activeLink = pathname === '/' ? 'home' : pathname.replace('/', '');
   return (
-    <header aria-label="Header" className="app-Header">
+    <header className="app-Header">
       <TopNavbar />
       <Sticky>
         <MainNavbar activeLink={activeLink} />

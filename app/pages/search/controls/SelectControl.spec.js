@@ -30,7 +30,6 @@ describe('pages/search/controls/SelectControl', () => {
   test('renders a section.app-SelectControl with correct props', () => {
     const wrapper = getWrapper({});
     expect(wrapper.is('section.app-SelectControl')).toBe(true);
-    expect(wrapper.prop('aria-label')).toBe(defaults.label);
   });
 
   test('renders a FormGroup with correct props', () => {

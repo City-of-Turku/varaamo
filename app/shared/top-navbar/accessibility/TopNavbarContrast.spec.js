@@ -21,6 +21,7 @@ describe('shared/top-navbar/accessibility/TopNavbarContrast', () => {
   test('renders accessibility__contrast div', () => {
     const element = content.find('.accessibility__contrast');
     expect(element.length).toBe(1);
+    expect(element.prop('role')).toBe('presentation');
   });
 
   test('renders contrast title', () => {
@@ -53,7 +54,7 @@ describe('shared/top-navbar/accessibility/TopNavbarContrast', () => {
 
     test('has correct props', () => {
       const element = content.find('button').last();
-      expect(element.prop('aria-label')).toBe('Nav.Contrast.title');
+      expect(element.prop('aria-label')).toBe('Nav.Contrast.button');
       expect(element.prop('aria-pressed')).toBe(false);
       expect(element.prop('className')).toBe('contrast_button');
       expect(element.prop('id')).toBe('contrastButton');

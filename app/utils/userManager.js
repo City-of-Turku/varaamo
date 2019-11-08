@@ -8,7 +8,7 @@ const userManagerConfig = {
   redirect_uri: `${baseUrl}/callback`,
   response_type: 'id_token token',
   scope: `openid profile ${SETTINGS.OPENID_AUDIENCE}`,
-  authority: 'https://testitunnistamo.turku.fi',
+  authority: SETTINGS.OPENID_AUTHORITY,
   post_logout_redirect_uri: `${baseUrl}/logout/callback`,
   automaticSilentRenew: true,
   silent_redirect_uri: `${baseUrl}/silent-renew`,

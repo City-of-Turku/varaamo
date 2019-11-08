@@ -395,5 +395,6 @@ UnconnectedReservationInformationForm = injectT(UnconnectedReservationInformatio
 export { UnconnectedReservationInformationForm };
 export default injectT(reduxForm({
   form: FormTypes.RESERVATION,
+  enableReinitialize: true,
   validate,
 })(UnconnectedReservationInformationForm));

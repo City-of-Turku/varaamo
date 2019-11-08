@@ -4,6 +4,7 @@ import simple from 'simple-mock';
 import { Helmet } from 'react-helmet';
 
 import Header from 'shared/header';
+import Footer from 'shared/footer';
 import Notifications from 'shared/notifications';
 import SkipLink from 'shared/skip-link';
 import { getState } from 'utils/testUtils';
@@ -85,6 +86,14 @@ describe('pages/AppContainer', () => {
       expect(getWrapper().find(Header)).toHaveLength(1);
     });
 
+    test('renders main', () => {
+      const element = getWrapper().find('main');
+      expect(element).toHaveLength(1);
+      expect(element.prop('className')).toBe('app-content');
+      expect(element.prop('id')).toBe('main-content');
+      expect(element.prop('tabIndex')).toBe('-1');
+    });
+
     test('renders Notifications', () => {
       expect(getWrapper().find(Notifications)).toHaveLength(1);
     });
@@ -92,6 +101,10 @@ describe('pages/AppContainer', () => {
     test('renders props.children', () => {
       const children = wrapper.find('#child-div');
       expect(children).toHaveLength(1);
+    });
+
+    test('renders Footer', () => {
+      expect(getWrapper().find(Footer)).toHaveLength(1);
     });
 
     test('html lang attribute is set correctly when language is Finnish', () => {

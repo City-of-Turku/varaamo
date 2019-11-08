@@ -25,10 +25,22 @@ class ReservationTime extends Component {
     unit: PropTypes.object.isRequired,
   };
 
+  constructor() {
+    super();
+
+    this.state = {
+      selectedDate: ''
+    };
+  }
+
   handleDateChange = (newDate) => {
     const { resource, history } = this.props;
     const day = newDate.toISOString().substring(0, 10);
     history.replace(`/reservation?date=${day}&resource=${resource.id}`);
+
+    this.setState({
+      selectedDate: day
+    });
   };
 
   render() {
@@ -45,8 +57,7 @@ class ReservationTime extends Component {
       unit,
     } = this.props;
     const { params } = match;
-    const date = moment(selectedReservation.begin).format('YYYY-MM-DD');
-
+    const date = this.state.selectedDate || moment(selectedReservation.begin).format('YYYY-MM-DD');
     return (
       <div className="app-ReservationTime">
         <h2 className="visually-hidden reservationTime__Header">{t('ReservationPhase.timeTitle')}</h2>

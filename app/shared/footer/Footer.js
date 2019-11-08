@@ -7,7 +7,7 @@ import FooterContent from './FooterContent';
 
 export function Footer(props) {
   return (
-    <footer aria-label="Footer" className={props.contrast}>
+    <footer className={props.contrast}>
       <FooterContent currentLang={props.currentLanguage} onLinkClick={props.onLinkClick} />
     </footer>
   );

@@ -56,7 +56,7 @@ export class UnconnectedAppContainer extends Component {
           <Favicon />
           <TestSiteMessage />
         </Header>
-        <main aria-label="Main" className={classNames('app-content')} id="main-content" tabIndex="-1">
+        <main className={classNames('app-content')} id="main-content" tabIndex="-1">
           <Grid>
             <Notifications />
           </Grid>

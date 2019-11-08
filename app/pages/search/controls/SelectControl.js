@@ -82,7 +82,7 @@ class SelectControl extends React.Component {
       isDisabled
     } = this.props;
     return (
-      <section aria-label={label} className="app-SelectControl">
+      <section className="app-SelectControl">
         <FormGroup controlId={id}>
           {label && <ControlLabel>{label}</ControlLabel>}
           {!isLoading

@@ -16,9 +16,10 @@ function getWrapper(props) {
 }
 
 describe('pages/home/HomeSearchBox', () => {
-  test('renders a form.app-HomeSearchBox', () => {
-    const wrapper = getWrapper();
-    expect(wrapper.is('form.app-HomeSearchBox')).toBe(true);
+  test('renders a form', () => {
+    const wrapper = getWrapper().find('form');
+    expect(wrapper.prop('className')).toBe('app-HomeSearchBox');
+    expect(wrapper.prop('onSubmit')).toBeTruthy();
   });
 
   test('renders FormControl with correct props', () => {

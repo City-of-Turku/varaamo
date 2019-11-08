@@ -35,11 +35,11 @@ class ContrastChanger extends Component {
   render() {
     const { t } = this.props;
     return (
-      <li className="navbar__contrast" role="presentation">
-        <div aria-label={t('Nav.Contrast.title')} className="accessibility__contrast">
+      <li className="navbar__contrast">
+        <div className="accessibility__contrast" role="presentation">
           {t('Nav.Contrast.title')}
           <button
-            aria-label={t('Nav.Contrast.title')}
+            aria-label={t('Nav.Contrast.button')}
             aria-pressed={this.state.ariaState}
             className="contrast_button"
             id="contrastButton"

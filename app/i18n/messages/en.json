@@ -111,6 +111,12 @@
   "MapToggle.showMap": "Map",
   "MiniModal.buttonText": "Done",
   "ModalHeader.closeButtonText": "Close",
+  "Nav.FontSize.title": "Fontsize",
+  "Nav.FontSize.small":"Small",
+  "Nav.FontSize.medium":"Medium",
+  "Nav.FontSize.large":"Large",
+  "Nav.Contrast.title": "Contrast",
+  "Nav.Contrast.button": "Change contrast",
   "Navbar.aboutLink": "More information",
   "Navbar.adminResources": "My premises",
   "Navbar.adminMaintenance": "Maintenance",
@@ -126,6 +132,7 @@
   "Navbar.userFavorites": "Favorites",
   "Navbar.header": "Welcome",
   "Navbar.homeLink": "Welcome",
+  "Navbar.language.active":"English",
   "Navbar.language-english": "English language",
   "Navbar.language-finnish": "Finnish language",
   "Navbar.language-swedish": "Swedish language",
@@ -359,7 +366,5 @@
   "UserReservationsPage.preliminaryReservationsHeader": "Preliminary reservations",
   "UserReservationsPage.regularEmptyMessage": "No standard reservations",
   "UserReservationsPage.regularReservationsHeader": "Standard reservations",
-  "UserReservationsPage.title": "My reservations",
-  "Nav.FontSize.title": "Fontsize",
-  "Nav.Contrast.title": "Contrast"
+  "UserReservationsPage.title": "My reservations"
 }

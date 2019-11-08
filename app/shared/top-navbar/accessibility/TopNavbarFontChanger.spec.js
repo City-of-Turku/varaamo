@@ -37,6 +37,7 @@ describe('shared/top-navbar/accessibility/TopNavbarFontChanger', () => {
   describe('buttons have correct props at default', () => {
     test('first button', () => {
       const element = content.find('button').first();
+      expect(element.prop('aria-label')).toBe('Nav.FontSize.small');
       expect(element.prop('aria-pressed')).toBe(true);
       expect(element.prop('className')).toBe('active');
       expect(element.prop('type')).toBe('button');
@@ -44,6 +45,7 @@ describe('shared/top-navbar/accessibility/TopNavbarFontChanger', () => {
 
     test('second button', () => {
       const element = content.find('button').at(1);
+      expect(element.prop('aria-label')).toBe('Nav.FontSize.medium');
       expect(element.prop('aria-pressed')).toBe(false);
       expect(element.prop('className')).toBe('');
       expect(element.prop('type')).toBe('button');
@@ -51,6 +53,7 @@ describe('shared/top-navbar/accessibility/TopNavbarFontChanger', () => {
 
     test('third button', () => {
       const element = content.find('button').last();
+      expect(element.prop('aria-label')).toBe('Nav.FontSize.large');
       expect(element.prop('aria-pressed')).toBe(false);
       expect(element.prop('className')).toBe('');
       expect(element.prop('type')).toBe('button');
@@ -61,17 +64,17 @@ describe('shared/top-navbar/accessibility/TopNavbarFontChanger', () => {
     const instance = getWrapper().instance();
     test('fontsize is small', () => {
       const fontSize = instance.getActiveFontButton(ACC.FONT_SIZES.SMALL);
-      expect(fontSize).toBe(instance.firstA);
+      expect(fontSize).toBe(instance.first);
     });
 
     test('fontsize is medium', () => {
       const fontSize = instance.getActiveFontButton(ACC.FONT_SIZES.MEDIUM);
-      expect(fontSize).toBe(instance.secondA);
+      expect(fontSize).toBe(instance.second);
     });
 
     test('fontsize is large', () => {
       const fontSize = instance.getActiveFontButton(ACC.FONT_SIZES.LARGE);
-      expect(fontSize).toBe(instance.thirdA);
+      expect(fontSize).toBe(instance.third);
     });
   });
   describe('button elements get active class when selected', () => {
@@ -106,6 +109,62 @@ describe('shared/top-navbar/accessibility/TopNavbarFontChanger', () => {
       instance.handleFontSizeClick(ACC.FONT_SIZES.SMALL);
       expect(changeFontSize.callCount).toBe(1);
       expect(changeFontSize.lastCall.args).toEqual([ACC.FONT_SIZES.SMALL]);
+    });
+  });
+
+  describe('setActiveClass returns ', () => {
+    test('active when span === spanID', () => {
+      const spanID = 'second';
+      const instance = getWrapper({ fontSize: ACC.FONT_SIZES.MEDIUM }).instance();
+      const span = instance.setActiveClass(spanID);
+      expect(span).toBe('active');
+    });
+
+    test('"" when span !== spanID', () => {
+      const spanID = 'first';
+      const instance = getWrapper({ fontSize: ACC.FONT_SIZES.MEDIUM }).instance();
+      const span = instance.setActiveClass(spanID);
+      expect(span).toBe('');
+    });
+  });
+
+  describe('setAriaPressed returns ', () => {
+    test('true when span === spanID', () => {
+      const spanID = 'first';
+      const instance = getWrapper({ fontSize: ACC.FONT_SIZES.SMALL }).instance();
+      const span = instance.setAriaPressed(spanID);
+      expect(span).toBe(true);
+    });
+
+    test('false when span !== spanID', () => {
+      const spanID = 'second';
+      const instance = getWrapper({ fontSize: ACC.FONT_SIZES.SMALL }).instance();
+      const span = instance.setAriaPressed(spanID);
+      expect(span).toBe(false);
+    });
+  });
+
+  describe('setAriaLabel returns correct texts', () => {
+    const instance = getWrapper().instance();
+
+    test('to the small text button', () => {
+      const value = instance.setAriaLabel(ACC.FONT_SIZES.SMALL);
+      expect(value).toBe('Nav.FontSize.small');
+    });
+
+    test('to the medium text button', () => {
+      const value = instance.setAriaLabel(ACC.FONT_SIZES.MEDIUM);
+      expect(value).toBe('Nav.FontSize.medium');
+    });
+
+    test('to the large text button', () => {
+      const value = instance.setAriaLabel(ACC.FONT_SIZES.LARGE);
+      expect(value).toBe('Nav.FontSize.large');
+    });
+
+    test('default', () => {
+      const value = instance.setAriaLabel('error');
+      expect(value).toBe('');
     });
   });
 });

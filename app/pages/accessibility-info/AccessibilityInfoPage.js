@@ -24,7 +24,11 @@ class AccessibilityInfoPage extends React.Component {
   /**
    * renders FinnishText/SwedishText according to currentLanguage
    * FinnishText/SwedishText are imported as strings, then given to
-   * FormattedHTMLMessage to render the html strings
+   * FormattedHTMLMessage to render the html strings.
+   *
+   * Normally FormattedHTMLMessage gets texts according to the id
+   * from the .json files but in this case its only a nonexistant dummy id,
+   * so it always uses the defaultMessage which changes with language.
    */
   render() {
     const { t, currentLanguage } = this.props;

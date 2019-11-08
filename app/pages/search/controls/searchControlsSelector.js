@@ -31,6 +31,7 @@ const unitOptionsSelector = createSelector(
   unitsSelector,
   (units) => {
     const unitOptions = values(units)
+      .filter(unit => !unit.hidden)
       .map(unit => ({
         value: unit.id,
         label: unit.name,

@@ -19,6 +19,12 @@ describe('shared/header/Header', () => {
     );
   }
 
+  test('renders header', () => {
+    const element = getWrapper().find('header');
+    expect(element).toHaveLength(1);
+    expect(element.prop('className')).toBe('app-Header');
+  });
+
   test('renders top navbar', () => {
     const topNavbar = getWrapper().find(TopNavbar);
     expect(topNavbar).toHaveLength(1);

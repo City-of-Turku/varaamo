@@ -94,7 +94,6 @@ describe('pages/resource/ResourcePage', () => {
       expect(header).toHaveLength(1);
       expect(header.prop('children')).toBe('ResourceCalendar.header');
       expect(header.prop('componentClass')).toBe('h2');
-      expect(header.prop('toggle')).toBeTruthy();
     });
 
 

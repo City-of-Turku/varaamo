@@ -60,6 +60,7 @@ module.exports = merge(common, {
         CUSTOM_MUNICIPALITY_OPTIONS: process.env.CUSTOM_MUNICIPALITY_OPTIONS,
         CLIENT_ID: JSON.stringify(process.env.CLIENT_ID),
         OPENID_AUDIENCE: JSON.stringify(process.env.OPENID_AUDIENCE),
+        OPENID_AUTHORITY: JSON.stringify(process.env.OPENID_AUTHORITY),
       },
     }),
     new MiniCssExtractPlugin({
