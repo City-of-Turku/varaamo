@@ -7,7 +7,7 @@ import iconHeart from 'hel-icons/dist/shapes/heart-o.svg';
 
 import { injectT } from 'i18n';
 import iconHeartFilled from 'assets/icons/heart-filled.svg';
-import { cleanseNamedLinks } from 'utils/textUtils';
+import { cleanseNamedLinks, createTextSnippet } from 'utils/textUtils';
 import { getResourcePageUrlComponents } from 'utils/resourceUtils';
 import { getMainImage } from 'utils/imageUtils';
 import ResourceAvailability from 'shared/resource-card/label';
@@ -75,7 +75,7 @@ function FavoriteItem({
             </Row>
             <Row>
               <Col className="favorite-description" xs={12}>
-                {cleanseNamedLinks(resource.description)}
+                {createTextSnippet(cleanseNamedLinks(resource.description), 100)}
               </Col>
             </Row>
           </Col>

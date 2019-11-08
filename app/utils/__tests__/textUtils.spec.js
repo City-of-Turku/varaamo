@@ -1,4 +1,4 @@
-import { cleanseNamedLinks } from 'utils/textUtils';
+import { cleanseNamedLinks, createTextSnippet } from 'utils/textUtils';
 
 describe('Utils: textUtils', () => {
   describe('cleanseNamedLinks', () => {
@@ -9,6 +9,21 @@ describe('Utils: textUtils', () => {
     });
     test('returns an empty string if the given text is an empty string', () => {
       expect(cleanseNamedLinks('')).toEqual('');
+    });
+  });
+
+  describe('createTextSnippet', () => {
+    test('if given string is null, returns empty string', () => {
+      const nullString = null;
+      expect(createTextSnippet(nullString, 100)).toEqual('');
+    });
+    test('if given string is shorter than given length, returns same given string', () => {
+      const testString = 'this is a test string';
+      expect(createTextSnippet(testString, 100)).toEqual(testString);
+    });
+    test('if given string is longer than given length, returns string of given length with added dots', () => {
+      const testString = 'this is a test string';
+      expect(createTextSnippet(testString, 4)).toEqual('this...');
     });
   });
 });

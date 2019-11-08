@@ -28,6 +28,24 @@ function cleanseNamedLinks(text) {
   return elements.join('');
 }
 
+/**
+ * Creates a short snippet of given text.
+ * @param {string} text input text for the snippet.
+ * @param {number} maxCharacters how many characters long the snippet can be.
+ */
+function createTextSnippet(text, maxCharacters) {
+  if (text === null) {
+    return '';
+  }
+
+  if (text.length <= maxCharacters) {
+    return text;
+  }
+
+  return `${text.substring(0, maxCharacters)}...`;
+}
+
 export {
   cleanseNamedLinks,
+  createTextSnippet,
 };
