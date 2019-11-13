@@ -23,3 +23,12 @@
     text-align: right;
   }
 }
+
+.reservation-calendar-skip-to-selected-date {
+  margin-left: 15px;
+  margin-bottom: 8px;
+  display: inline-block;
+  @media (max-width: $screen-md-min) {
+    display: none;
+  }
+}

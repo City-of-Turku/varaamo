@@ -11,6 +11,7 @@ import TimeSlot from './TimeSlot';
 describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
   const defaultProps = {
     addNotification: simple.stub(),
+    headerId: 'timeslot-0',
     isAdmin: false,
     isEditing: true,
     isHighlighted: false,
@@ -35,8 +36,14 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
     return getWrapper(props).find('button.app-TimeSlot__action');
   }
 
-  test('renders button.app-TimeSlot__action', () => {
-    expect(getClickableButton()).toHaveLength(1);
+  test('renders button.app-TimeSlot__action with correct props', () => {
+    const actionButton = getClickableButton();
+    expect(actionButton).toHaveLength(1);
+    expect(actionButton.prop('aria-describedby')).toBe(defaultProps.headerId);
+    expect(actionButton.prop('onClick')).toBeDefined();
+    expect(actionButton.prop('onMouseEnter')).toBeDefined();
+    expect(actionButton.prop('onMouseLeave')).toBeDefined();
+    expect(actionButton.prop('type')).toEqual('button');
   });
 
   test('renders app-TimeSlot__icon with correct props', () => {
@@ -73,9 +80,12 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
     expect(icon.prop('className')).toBe('app-TimeSlot__icon');
   });
 
-  test('renders app-TimeSlot__status', () => {
-    const icon = getWrapper().find('.app-TimeSlot__icon');
-    expect(icon).toHaveLength(1);
+  test('renders app-TimeSlot__status with correct props', () => {
+    const status = getWrapper().find('.app-TimeSlot__status');
+    const start = new Date(defaultProps.slot.start);
+    const expected = `${padLeft(start.getHours())}:${padLeft(start.getMinutes())} TimeSlot.available`;
+    expect(status).toHaveLength(1);
+    expect(status.prop('aria-label')).toEqual(expected);
   });
 
   test('does not render clear button when clearing disabled', () => {
@@ -89,10 +99,59 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
     expect(clearButton.prop('aria-label')).toBe('TimeSlot.label.removeSelection');
   });
 
+  describe('skip to summary link', () => {
+    describe('when state.showClear is true', () => {
+      test('renders with correct props', () => {
+        const skipLink = getWrapper({ showClear: true }).find('a.app-TimeSlot__skip');
+        expect(skipLink).toHaveLength(1);
+        expect(skipLink.prop('href')).toBe('#timetable-summary');
+        expect(skipLink.prop('aria-label')).toBe('TimeSlot.label.skipToSummary');
+        expect(skipLink.prop('onBlur')).toBeDefined();
+        expect(skipLink.prop('onFocus')).toBeDefined();
+      });
+
+      test('has class visually-hidden when state.showSkip is false', () => {
+        const wrapper = getWrapper({ showClear: true });
+        const instance = wrapper.instance();
+        instance.setState({ showSkip: false });
+        const skipLink = wrapper.find('a.app-TimeSlot__skip');
+        expect(skipLink.hasClass('visually-hidden')).toBe(true);
+      });
+
+      test('does not have class visually-hidden when state.showSkip is true', () => {
+        const wrapper = getWrapper({ showClear: true });
+        const instance = wrapper.instance();
+        instance.setState({ showSkip: true });
+        const skipLink = wrapper.find('a.app-TimeSlot__skip');
+        expect(skipLink.hasClass('visually-hidden')).toBe(false);
+      });
+
+      test('renders skip link icon', () => {
+        const skipLinkIcon = getWrapper({ showClear: true }).find('span.app-TimeSlot__skip-icon');
+        expect(skipLinkIcon.length).toBe(1);
+      });
+    });
+
+    describe('when state.showClear is false', () => {
+      test('does not render', () => {
+        const skipLink = getWrapper({ showClear: false }).find('a.app-TimeSlot__skip');
+        expect(skipLink).toHaveLength(0);
+      });
+
+      test('does not  render skip link icon', () => {
+        const skipLinkIcon = getWrapper({ showClear: false }).find('span.app-TimeSlot__skip-icon');
+        expect(skipLinkIcon.length).toBe(0);
+      });
+    });
+  });
+
   test('renders slot start time as button text', () => {
     const start = new Date(defaultProps.slot.start);
     const expected = `${padLeft(start.getHours())}:${padLeft(start.getMinutes())}`;
-    expect(getWrapper().text()).toContain(expected);
+    const timeText = getWrapper().find('time.app-TimeSlot__time');
+    expect(timeText.length).toBe(1);
+    expect(timeText.text()).toContain(expected);
+    expect(timeText.prop('aria-hidden')).toBe('true');
   });
 
   test('disables the time slot when isDisabled prop is true', () => {
@@ -341,6 +400,24 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
       expect(getWrapper().instance()
         .getSelectButtonStatusLabel(false, true, false, false, false))
         .toBe('TimeSlot.available');
+    });
+  });
+
+  describe('handleSkipBlur', () => {
+    test('sets state.showSkip to false', () => {
+      const instance = getWrapper().instance();
+      instance.setState({ showSkip: true });
+      instance.handleSkipBlur();
+      expect(instance.state.showSkip).toBe(false);
+    });
+  });
+
+  describe('handleSkipFocus', () => {
+    test('sets state.showSkip to true', () => {
+      const instance = getWrapper().instance();
+      instance.setState({ showSkip: false });
+      instance.handleSkipFocus();
+      expect(instance.state.showSkip).toBe(true);
     });
   });
 });

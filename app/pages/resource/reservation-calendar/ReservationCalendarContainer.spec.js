@@ -2,7 +2,6 @@ import MockDate from 'mockdate';
 import React from 'react';
 import moment from 'moment';
 import simple from 'simple-mock';
-import Row from 'react-bootstrap/lib/Row';
 
 import ReservationCancelModal from 'shared/modals/reservation-cancel';
 import ReservationInfoModal from 'shared/modals/reservation-info';
@@ -105,24 +104,24 @@ describe('pages/resource/reservation-calendar/ReservationCalendarContainer', () 
     );
 
     describe(renderTimeSlots ? 'renders' : 'does not render', () => {
-      test('Comfirmation header', () => {
-        if (renderTimeSlots && props.selected > 0) {
-          const headerconf = getWrapper().find('.reservation-calendar-reserve-info').find('h3');
+      test('confirmation header', () => {
+        if (renderTimeSlots && (props.selected.length > 0)) {
+          const headerconf = wrapper.find('.reservation-calendar-reserve-info').find('h3#timetable-summary');
           expect(headerconf).toHaveLength(1);
           expect(headerconf.text()).toBe('ReservationCalendar.Confirmation.header');
         } else {
-          const headerconf = getWrapper().find('.reservation-calendar-reserve-info').find('h3');
+          const headerconf = wrapper.find('.reservation-calendar-reserve-info').find('h3#timetable-summary');
           expect(headerconf).toHaveLength(0);
         }
       });
 
-      test('Comfirmation text', () => {
-        if (renderTimeSlots && props.selected > 0) {
-          const selectedTime = getWrapper().find('strong');
+      test('confirmation text', () => {
+        if (renderTimeSlots && props.selected.length > 0) {
+          const selectedTime = wrapper.find('strong');
           expect(selectedTime).toHaveLength(1);
           expect(selectedTime.text()).toBe('TimeSlots.selectedDate ');
         } else {
-          const selectedTime = getWrapper().find('strong');
+          const selectedTime = wrapper.find('strong');
           expect(selectedTime).toHaveLength(0);
         }
       });

@@ -36,6 +36,17 @@ class TimeSlots extends Component {
     hoveredTimeSlot: null,
   };
 
+  constructor() {
+    super();
+
+    this.state = {
+      showSkip: false
+    };
+
+    this.handleSkipFocus = this.handleSkipFocus.bind(this);
+    this.handleSkipBlur = this.handleSkipBlur.bind(this);
+  }
+
   onClear = () => {
     const { onClear } = this.props;
     onClear();
@@ -83,6 +94,14 @@ class TimeSlots extends Component {
     return hoveredTimeSlot.end;
   };
 
+  handleSkipFocus() {
+    this.setState({ showSkip: true });
+  }
+
+  handleSkipBlur() {
+    this.setState({ showSkip: false });
+  }
+
   calculatePlaceholders(selectedDate, slots) {
     const firstTimeSlots = slots
       .map(timeslots => timeslots && timeslots[0])
@@ -129,7 +148,7 @@ class TimeSlots extends Component {
     };
   }
 
-  renderTimeSlots = () => {
+  renderTimeSlots = (selectedDateHeaderId) => {
     const {
       selected, selectedDate, slots, resource
     } = this.props;
@@ -159,9 +178,11 @@ class TimeSlots extends Component {
         'app-TimeSlots--date--selected--next--week': isNextWeek,
       });
 
+      const headerId = (slotDate === selectedDate) ? selectedDateHeaderId : `dateslot-${index}`;
+
       return (
         <div className={className} key={`dateslot-${index}`}>
-          <h4 className="app-TimeSlots--date--header">
+          <h4 aria-label={moment(slot.start).format('dddd D.M.')} className="app-TimeSlots--date--header" id={headerId}>
             {slot && slot.start ? moment(slot.start).format('dd D.M') : ''}
           </h4>
 
@@ -178,14 +199,14 @@ class TimeSlots extends Component {
             if (!lastSelectableFound && selected.length && timeSlot.reserved) {
               lastSelectableFound = utils.isSlotAfterSelected(timeSlot, selected);
             }
-            return this.renderTimeSlot(timeSlot, lastSelectableFound, isUnderMinPeriod);
+            return this.renderTimeSlot(timeSlot, lastSelectableFound, isUnderMinPeriod, headerId);
           })}
         </div>
       );
     });
   };
 
-  renderTimeSlot = (slot, lastSelectableFound, isUnderMinPeriod) => {
+  renderTimeSlot = (slot, lastSelectableFound, isUnderMinPeriod, headerId) => {
     const {
       addNotification,
       isAdmin,
@@ -235,6 +256,7 @@ class TimeSlots extends Component {
     const timeSlot = (
       <TimeSlot
         addNotification={addNotification}
+        headerId={headerId}
         isAdmin={isAdmin}
         isDisabled={isMaxExceeded}
         isEditing={isEditing}
@@ -268,11 +290,22 @@ class TimeSlots extends Component {
   };
 
   render() {
-    const { isFetching } = this.props;
+    const { isFetching, t } = this.props;
+
+    const selectedDateHeaderId = 'selected-date';
 
     return (
       <Loader loaded={!isFetching}>
-        <div className="app-TimeSlots">{this.renderTimeSlots()}</div>
+        <a
+          className={classNames('reservation-calendar-skip-to-selected-date', !this.state.showSkip && 'visually-hidden')}
+          href={`#${selectedDateHeaderId}`}
+          onBlur={this.handleSkipBlur}
+          onFocus={this.handleSkipFocus}
+          type="button"
+        >
+          {t('TimeSlots.label.skipToSelectedDate')}
+        </a>
+        <div className="app-TimeSlots">{this.renderTimeSlots(selectedDateHeaderId)}</div>
       </Loader>
     );
   }

@@ -28,7 +28,6 @@ const finalState = Immutable(initialStoreState).merge([initialServerState, initi
 const store = configureStore(finalState);
 const isIEBrowser = browserName === 'IE';
 
-// TODO: make sure silent renew works this way... needs a skeleton html page for it?
 if (window.location.pathname === '/silent-renew') {
   processSilentRenew();
 } else {

@@ -190,15 +190,19 @@
 
     .app-TimeSlot__clear {
       position: absolute;
-      top: -8px;
+      top: -9px;
       right: -8px;
-      height: 35px;
-      width: 35px;
+      height: 37px;
+      width: 36px;
       padding: 0;
       background-color: transparent;
       border: none;
       outline: none;
       text-align: center;
+
+      @include add-focus(2px, currentColor) {
+        outline-offset: -12px;
+      }
 
       .app-TimeSlot__clear-icon {
         display: inline-block;
@@ -206,6 +210,31 @@
         width: 18px;
         vertical-align: middle;
         @include icon-times($white);
+      }
+    }
+
+    .app-TimeSlot__skip {
+      position: absolute;
+      top: 7px;
+      right: -8px;
+      height: 37px;
+      width: 36px;
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      text-align: center;
+
+      @include add-focus(2px, $white) {
+        outline-offset: -12px;
+      }
+
+      .app-TimeSlot__skip-icon {
+        display: inline-block;
+        height: 18px;
+        width: 18px;
+        vertical-align: middle;
+        @include icon-angle-right($white);
       }
     }
   }

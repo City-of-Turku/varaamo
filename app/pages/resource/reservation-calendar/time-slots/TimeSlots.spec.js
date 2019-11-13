@@ -59,25 +59,72 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlots', () => {
     return shallowWithIntl(<TimeSlots {...defaultProps} {...props} />);
   }
 
+  describe('skip to selected date link', () => {
+    test('renders with correct props', () => {
+      const skipLink = getWrapper().find('.reservation-calendar-skip-to-selected-date');
+
+      expect(skipLink.length).toBe(1);
+      expect(skipLink.prop('href')).toEqual('#selected-date');
+      expect(skipLink.prop('onBlur')).toBeDefined();
+      expect(skipLink.prop('onFocus')).toBeDefined();
+      expect(skipLink.prop('type')).toEqual('button');
+      expect(skipLink.text()).toEqual('TimeSlots.label.skipToSelectedDate');
+    });
+
+    test('has class visually-hidden when state.showSkip is false', () => {
+      const wrapper = getWrapper();
+      const instance = wrapper.instance();
+      instance.setState({ showSkip: false });
+      const skipLink = wrapper.find('.reservation-calendar-skip-to-selected-date');
+      expect(skipLink.hasClass('visually-hidden')).toBe(true);
+    });
+
+    test('does not have class visually-hidden when state.showSkip is true', () => {
+      const wrapper = getWrapper();
+      const instance = wrapper.instance();
+      instance.setState({ showSkip: true });
+      const skipLink = wrapper.find('.reservation-calendar-skip-to-selected-date');
+      expect(skipLink.hasClass('visually-hidden')).toBe(false);
+    });
+  });
+
   test('renders div.app-TimeSlots', () => {
     const div = getWrapper().find('div.app-TimeSlots');
     expect(div).toHaveLength(1);
   });
 
-  test('renders timeslot weekday headers with correct texts', () => {
+  test('renders timeslot weekday headers with correct props and text', () => {
     const headers = getWrapper().find('h4.app-TimeSlots--date--header');
     // default test slots has two different days
     expect(headers.length).toBe(2);
 
+    expect(headers.at(0).prop('aria-label')).toEqual(moment(defaultSlots[0][0].start).format('dddd D.M.'));
     // first header text is correct
     expect(headers.at(0).text())
       .toBe(defaultSlots[0][0] && defaultSlots[0][0].start
         ? moment(defaultSlots[0][0].start).format('dd D.M') : '');
 
+    expect(headers.at(1).prop('aria-label')).toEqual(moment(defaultSlots[1][0].start).format('dddd D.M.'));
     // second header text is correct
     expect(headers.at(1).text())
       .toBe(defaultSlots[1][0] && defaultSlots[1][0].start
         ? moment(defaultSlots[1][0].start).format('dd D.M') : '');
+  });
+
+  test('timeslot weekday headers have correct ids', () => {
+    const wrapper = getWrapper();
+    const headers = wrapper.find('h4.app-TimeSlots--date--header');
+    expect(headers.length).toBe(2);
+
+    // first header should be the selected date based on default props
+    const firstHeader = wrapper.find('#selected-date');
+    expect(firstHeader.length).toBe(1);
+    expect(firstHeader).toEqual(headers.at(0));
+
+    // non selected headers should have id "dateslot-index"
+    const secondHeader = wrapper.find('#dateslot-1');
+    expect(secondHeader.length).toBe(1);
+    expect(secondHeader).toEqual(headers.at(1));
   });
 
   describe('rendering individual time slots', () => {
@@ -93,6 +140,8 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlots', () => {
       const timeSlots = getTimeSlotsWrapper();
       timeSlots.forEach((timeSlot, index) => {
         expect(timeSlot.props().addNotification).toBe(defaultProps.addNotification);
+        // first timeslot header id should be "selected-date" and after that "dateslot-index"
+        expect(timeSlot.props().headerId).toBe(index === 0 ? 'selected-date' : 'dateslot-1');
         expect(timeSlot.props().isAdmin).toBe(defaultProps.isAdmin);
         expect(timeSlot.props().isEditing).toBe(defaultProps.isEditing);
         expect(timeSlot.props().isLoggedIn).toBe(defaultProps.isLoggedIn);
@@ -338,6 +387,24 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlots', () => {
     test('returns an empty string if the there are no selected slots', () => {
       const instance = getWrapper({ selected: [] }).instance();
       expect(instance.getReservationEnd()).toBe('');
+    });
+  });
+
+  describe('handleSkipBlur', () => {
+    test('sets state.showSkip to false', () => {
+      const instance = getWrapper().instance();
+      instance.setState({ showSkip: true });
+      instance.handleSkipBlur();
+      expect(instance.state.showSkip).toBe(false);
+    });
+  });
+
+  describe('handleSkipFocus', () => {
+    test('sets state.showSkip to true', () => {
+      const instance = getWrapper().instance();
+      instance.setState({ showSkip: false });
+      instance.handleSkipFocus();
+      expect(instance.state.showSkip).toBe(true);
     });
   });
 

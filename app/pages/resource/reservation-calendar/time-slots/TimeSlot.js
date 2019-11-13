@@ -10,6 +10,7 @@ import { padLeft } from 'utils/timeUtils';
 class TimeSlot extends PureComponent {
   static propTypes = {
     addNotification: PropTypes.func.isRequired,
+    headerId: PropTypes.string.isRequired,
     // eslint-disable-next-line react/no-unused-prop-types
     isDisabled: PropTypes.bool,
     isAdmin: PropTypes.bool.isRequired,
@@ -62,7 +63,11 @@ class TimeSlot extends PureComponent {
     this.state = {
       disabled: false,
       isPast: false,
+      showSkip: false,
     };
+
+    this.handleSkipFocus = this.handleSkipFocus.bind(this);
+    this.handleSkipBlur = this.handleSkipBlur.bind(this);
   }
 
   componentDidMount() {
@@ -172,8 +177,17 @@ class TimeSlot extends PureComponent {
     }
   };
 
+  handleSkipFocus() {
+    this.setState({ showSkip: true });
+  }
+
+  handleSkipBlur() {
+    this.setState({ showSkip: false });
+  }
+
   render() {
     const {
+      headerId,
       isAdmin,
       showClear,
       isHighlighted,
@@ -218,6 +232,7 @@ class TimeSlot extends PureComponent {
         ref={this.timeSlotRef}
       >
         <button
+          aria-describedby={headerId}
           className="app-TimeSlot__action"
           onClick={() => this.handleClick(disabled)}
           onMouseEnter={() => !disabled && onMouseEnter(slot)}
@@ -225,23 +240,34 @@ class TimeSlot extends PureComponent {
           type="button"
         >
           <span aria-hidden="true" className={`app-TimeSlot__icon${showCooldown ? ' cooldown' : ''}`} />
-          <time className="app-TimeSlot__time" dateTime={slot.asISOString}>{startTime}</time>
+          <time aria-hidden="true" className="app-TimeSlot__time" dateTime={slot.asISOString}>{startTime}</time>
           <span
-            aria-label={this.getSelectButtonStatusLabel(
+            aria-label={`${startTime} ${this.getSelectButtonStatusLabel(
               disabled, isLoggedIn, isOwnReservation, slot.reserved, selected
-            )}
+            )}`}
             className="app-TimeSlot__status"
           />
         </button>
         {showClear && (
-          <button
-            aria-label={t('TimeSlot.label.removeSelection')}
-            className="app-TimeSlot__clear"
-            onClick={onClear}
-            type="button"
-          >
-            <span className="app-TimeSlot__clear-icon" />
-          </button>
+          <React.Fragment>
+            <button
+              aria-label={t('TimeSlot.label.removeSelection')}
+              className="app-TimeSlot__clear"
+              onClick={onClear}
+              type="button"
+            >
+              <span className="app-TimeSlot__clear-icon" />
+            </button>
+            <a
+              aria-label={t('TimeSlot.label.skipToSummary')}
+              className={classNames('app-TimeSlot__skip', !this.state.showSkip && 'visually-hidden')}
+              href="#timetable-summary"
+              onBlur={this.handleSkipBlur}
+              onFocus={this.handleSkipFocus}
+            >
+              <span className="app-TimeSlot__skip-icon" />
+            </a>
+          </React.Fragment>
         )}
       </div>
     );
