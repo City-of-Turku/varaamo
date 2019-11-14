@@ -66,7 +66,7 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
       SETTINGS: {
-        API_URL: JSON.stringify(process.env.API_URL || 'https://varaamo.turku.fi:8010/v1'),
+        API_URL: JSON.stringify(process.env.API_URL || 'https://testivaraamo.turku.fi:8010/v1'),
         SHOW_TEST_SITE_MESSAGE: Boolean(process.env.SHOW_TEST_SITE_MESSAGE),
         TRACKING: Boolean(process.env.PIWIK_SITE_ID),
         CUSTOM_MUNICIPALITY_OPTIONS: process.env.CUSTOM_MUNICIPALITY_OPTIONS,

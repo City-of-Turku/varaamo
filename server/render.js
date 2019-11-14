@@ -5,18 +5,7 @@ import config from './config';
 import Html from './Html';
 
 function render(req, res) {
-  const user = req.user;
-  let initialState = {};
-  if (user && user.id && user.token) {
-    initialState = {
-      auth: { userId: user.id, token: user.token },
-      data: {
-        users: {
-          [user.id]: user,
-        },
-      },
-    };
-  }
+  const initialState = {};
 
   const htmlContent = ReactDOMServer.renderToStaticMarkup(
     <Html

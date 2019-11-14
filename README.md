@@ -5,7 +5,7 @@ Varaamo
 [![codecov](https://codecov.io/gh/digipointtku/varaamoTku/branch/master/graph/badge.svg)](https://codecov.io/gh/digipointtku/varaamoTku)
 [![Requirements Status](https://requires.io/github/digipointtku/varaamoTku/requirements.svg?branch=master)](https://requires.io/github/digipointtku/varaamoTku/requirements/?branch=master)
 
-User interface for the City of Turku [varaamo.turku.fi](https://varaamo.turku.fi/) resource reservation service. Uses the [respa API](http://api.hel.fi/respa/v1/).
+User interface for the City of Turku [varaamo.turku.fi](https://varaamo.turku.fi/) resource reservation service. Uses the [respa API](https://varaamo.turku.fi:5010/v1/).
 
 Recommended requirements
 ------------
@@ -24,7 +24,7 @@ Architecture
 - [reselect](https://github.com/reactjs/reselect) is used for getting data from Redux Store and manipulating it to be better usable in React components.
 - [redux-api-middleware](https://github.com/agraboso/redux-api-middleware) is used to interact with the API.
 - The application is run on an [express](http://expressjs.com/) server.
-- Uses [Passport](https://github.com/jaredhanson/passport) and [Passport-Helsinki](https://github.com/City-of-Helsinki/passport-helsinki) for authentication.
+- Uses [redux-oidc](https://github.com/maxmantz/redux-oidc) for authentication.
 - [webpack](https://webpack.github.io/) takes modules with dependencies and generates static assets representing those modules.
 - [Babel](https://babeljs.io/) transforms JavaScript written in ES2015 and JSX syntax to regular JavaScript.
 
@@ -53,7 +53,7 @@ By default the running app can be found at `localhost:3000`.
 1. Install npm dependencies:
 
     ```
-    $ yarn install
+    $ npm install
     ```
 
 2. Make sure you have the following env variables set in an .env file in the root of the project:
@@ -66,9 +66,8 @@ By default the running app can be found at `localhost:3000`.
 
     ```
     CLIENT_ID
-    CLIENT_SECRET
-    SESSION_SECRET
-    TARGET_APP
+    OPENID_AUDIENCE
+    OPENID_AUTHORITY
     API_URL
     ```
 
@@ -81,7 +80,7 @@ By default the running app can be found at `localhost:3000`.
 3. Then, start the development server:
 
     ```
-    $ yarn start
+    $ npm start
     ```
 
 ### Starting production server
@@ -92,13 +91,13 @@ By default the running app uses port `8080`.
 1. Install npm dependencies:
 
     ```
-    $ yarn install
+    $ npm install
     ```
 
 2. Build the production bundle:
 
     ```
-    $ yarn build
+    $ npm build
     ```
 
 3. Make sure you have the required env variables set.
@@ -106,7 +105,7 @@ By default the running app uses port `8080`.
 4. Then, start the production server:
 
     ```
-    $ yarn start:production
+    $ npm start:production
     ```
 
 ### Running tests
@@ -114,19 +113,19 @@ By default the running app uses port `8080`.
 - Run tests:
 
     ```
-    $ yarn test
+    $ npm test
     ```
 
 - Run tests in watch mode:
 
     ```
-    $ yarn test:watch
+    $ npm test:watch
     ```
 
 - Run tests with coverage:
 
     ```
-    $ yarn test:coverage
+    $ npm test:coverage
     ```
 
 ### Running code linter
@@ -134,12 +133,12 @@ By default the running app uses port `8080`.
 - To check the code for linting errors:
 
     ```
-    $ yarn lint
+    $ npm lint
     ```
 - To automate fixing lint:
 
     ```
-    $ yarn lint:fix
+    $ npm lint:fix
     ```
 OR enable `eslint --fix` onSave config in your code editor config.
 

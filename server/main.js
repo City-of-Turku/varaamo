@@ -9,7 +9,6 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import compression from 'compression';
 
-import auth from './auth';
 import webpackConfig from '../config/webpack.development';
 import serverConfig from './config';
 import render from './render';
@@ -50,8 +49,6 @@ if (serverConfig.isProduction) {
 
 // Request logging
 app.use(morgan('combined'));
-
-app.use('/', auth);
 
 app.get('*', render);
 
