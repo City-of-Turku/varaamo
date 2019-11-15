@@ -47,7 +47,25 @@ addLocaleData([...en, ...fi, ...se]);
 function initI18n() {
   const persistedData = loadPersistedLocale();
 
-  const locale = persistedData || constants.DEFAULT_LOCALE;
+  /*
+    if language is not in persistedDate
+      - try to use navigator.language or navigator.userLanguage
+      - use default locale as a fallback
+  */
+
+  const browserLanguage = (navigator.language || navigator.userLanguage).toLowerCase();
+  let locale;
+
+  if (persistedData) {
+    locale = persistedData;
+  } else if (browserLanguage === 'sv' || browserLanguage === 'sv-fi' || browserLanguage === 'sv-se') {
+    locale = 'se';
+  } else if (browserLanguage === 'fi') {
+    locale = browserLanguage;
+  } else {
+    locale = constants.DEFAULT_LOCALE;
+  }
+
   moment.locale(`varaamo-${locale}`);
   const initialIntlState = {
     intl: {
