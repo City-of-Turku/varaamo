@@ -54,11 +54,10 @@ class DatePickerControl extends React.Component {
     this.setState({ visible: true });
   };
 
-  handleConfirm = (value) => {
+  handleConfirm = (value, isValid = true) => {
     const date = value;
-
-    this.setState({ textInputErrorVisible: false });
-    this.props.onConfirm({ date });
+    this.setState({ textInputErrorVisible: !isValid });
+    this.props.onConfirm({ date }, isValid);
     this.hideOverlay();
   };
 
@@ -71,11 +70,7 @@ class DatePickerControl extends React.Component {
     event.preventDefault();
 
     const date = this.state.date;
-    if (isValidDateString(date) === false) {
-      this.setState({ textInputErrorVisible: true });
-    } else {
-      this.handleConfirm(date);
-    }
+    this.handleConfirm(date, isValidDateString(date));
   }
 
   handleDateButtonClick() {
@@ -104,6 +99,7 @@ class DatePickerControl extends React.Component {
             <InputGroup>
               <FormControl
                 aria-describedby={this.state.textInputErrorVisible ? 'date-input-error' : null}
+                onBlur={this.handleDateInputSubmit}
                 onChange={this.handleDateInputChange}
                 type="text"
                 value={localDate}

@@ -70,9 +70,11 @@ describe('pages/search/controls/DatePickerControl', () => {
   describe('FormControl', () => {
     test('renders with correct props', () => {
       const wrapper = getWrapper();
+      const instance = wrapper.instance();
       const formControl = wrapper.find(FormControl);
       expect(formControl).toHaveLength(1);
-      expect(formControl.prop('onChange')).toBe(wrapper.instance().handleDateInputChange);
+      expect(formControl.prop('onChange')).toBe(instance.handleDateInputChange);
+      expect(formControl.prop('onBlur')).toBe(instance.handleDateInputSubmit);
       expect(formControl.prop('type')).toBe('text');
       expect(formControl.prop('value')).toBe(defaults.date);
     });
@@ -194,11 +196,11 @@ describe('pages/search/controls/DatePickerControl', () => {
     test('calls onConfirm with correct value', () => {
       const onConfirm = simple.mock();
       const date = '12.12.2017';
-      const expected = { date };
+      const expected = [{ date }, true];
       const instance = getWrapper({ onConfirm }).instance();
       instance.handleConfirm(date);
       expect(onConfirm.callCount).toBe(1);
-      expect(onConfirm.lastCall.args).toEqual([expected]);
+      expect(onConfirm.lastCall.args).toEqual(expected);
     });
 
     test('sets state.textInputErrorVisible to false', () => {
@@ -249,11 +251,12 @@ describe('pages/search/controls/DatePickerControl', () => {
       const instance = getWrapper().instance();
       instance.state.date = '2.8.2019';
 
-      test('handleConfirm is called', () => {
+      test('handleConfirm is called with correct params', () => {
         instance.handleConfirm = simple.mock();
         instance.handleDateInputSubmit({ preventDefault: () => undefined });
 
         expect(instance.handleConfirm.callCount).toBe(1);
+        expect(instance.handleConfirm.lastCall.args).toEqual([instance.state.date, true]);
       });
     });
 
@@ -261,11 +264,12 @@ describe('pages/search/controls/DatePickerControl', () => {
       const instance = getWrapper().instance();
       instance.state.date = '34.8.2019';
 
-      test('handleConfirm is not called', () => {
+      test('handleConfirm is called with correct params', () => {
         instance.handleConfirm = simple.mock();
         instance.handleDateInputSubmit({ preventDefault: () => undefined });
 
-        expect(instance.handleConfirm.callCount).toBe(0);
+        expect(instance.handleConfirm.callCount).toBe(1);
+        expect(instance.handleConfirm.lastCall.args).toEqual([instance.state.date, false]);
       });
 
       test('state.textInputErrorVisible is set to true', () => {

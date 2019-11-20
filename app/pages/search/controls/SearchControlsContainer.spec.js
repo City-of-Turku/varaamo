@@ -200,11 +200,13 @@ describe('pages/search/controls/SearchControlsContainer', () => {
     });
 
     test('renders search Button with correct props', () => {
-      const buttons = getWrapper({}).find(Button);
+      const wrapper = getWrapper();
+      const buttons = wrapper.find(Button);
       expect(buttons).toHaveLength(2);
       expect(buttons.at(0).prop('bsStyle')).toBe('primary');
       expect(typeof buttons.at(0).prop('onClick')).toBe('function');
       expect(buttons.at(0).prop('type')).toBe('submit');
+      expect(buttons.at(0).prop('disabled')).toBe(!wrapper.instance().state.isDateValid);
     });
 
     test('renders reset Button with correct props', () => {
@@ -326,20 +328,50 @@ describe('pages/search/controls/SearchControlsContainer', () => {
     beforeAll(() => {
       instance = getWrapper().instance();
       instance.handleFiltersChange = simple.mock();
-      instance.handleDateChange(defaultProps.filters);
     });
 
     afterAll(() => {
       simple.restore();
     });
 
-    test('calls handleFiltersChange with given filters', () => {
-      const { date } = defaultProps.filters;
-      const dateInCorrectFormat = moment(date, 'L').format(constants.DATE_FORMAT);
-      const expected = { date: dateInCorrectFormat };
+    afterEach(() => {
+      instance.handleFiltersChange.reset();
+    });
 
-      expect(instance.handleFiltersChange.callCount).toBe(1);
-      expect(instance.handleFiltersChange.lastCall.args[0]).toEqual(expected);
+    describe('when param isValid is true', () => {
+      test('calls handleFiltersChange with given filters', () => {
+        const { date } = defaultProps.filters;
+        instance.handleDateChange(date);
+        const dateInCorrectFormat = moment(date, 'L').format(constants.DATE_FORMAT);
+        const expected = { date: dateInCorrectFormat };
+
+        expect(instance.handleFiltersChange.callCount).toBe(1);
+        expect(instance.handleFiltersChange.lastCall.args[0]).toEqual(expected);
+      });
+
+      test('sets state.isDateValid to true', () => {
+        const { date } = defaultProps.filters;
+        instance.setState({ isDateValid: false });
+        instance.handleDateChange(date);
+        expect(instance.state.isDateValid).toBe(true);
+      });
+    });
+
+    describe('when param isValid is false', () => {
+      const isValid = false;
+
+      test('doesnt call handleFiltersChange when param isValid is false', () => {
+        const { date } = defaultProps.filters;
+        instance.handleDateChange(date, isValid);
+        expect(instance.handleFiltersChange.callCount).toBe(0);
+      });
+
+      test('sets state.isDateValid to false', () => {
+        const { date } = defaultProps.filters;
+        instance.setState({ isDateValid: true });
+        instance.handleDateChange(date, isValid);
+        expect(instance.state.isDateValid).toBe(false);
+      });
     });
   });
 

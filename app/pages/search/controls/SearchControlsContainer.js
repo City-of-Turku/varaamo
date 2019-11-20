@@ -35,6 +35,11 @@ import TimeRangeControl from './TimeRangeControl';
 import iconTimes from './images/times.svg';
 
 class UnconnectedSearchControlsContainer extends Component {
+  constructor() {
+    super();
+    this.state = { isDateValid: true };
+  }
+
   componentDidMount() {
     const { actions, urlSearchFilters } = this.props;
     actions.changeSearchFilters(urlSearchFilters);
@@ -73,11 +78,16 @@ class UnconnectedSearchControlsContainer extends Component {
     });
   };
 
-  handleDateChange = ({ date }) => {
-    const dateInCorrectFormat = moment(date, 'L').format(constants.DATE_FORMAT);
-    this.handleFiltersChange({
-      date: dateInCorrectFormat,
-    });
+  handleDateChange = ({ date }, isValid = true) => {
+    if (!isValid) {
+      this.setState({ isDateValid: false });
+    } else {
+      this.setState({ isDateValid: true });
+      const dateInCorrectFormat = moment(date, 'L').format(constants.DATE_FORMAT);
+      this.handleFiltersChange({
+        date: dateInCorrectFormat,
+      });
+    }
   };
 
   handleFiltersChange = (newFilters) => {
@@ -113,9 +123,11 @@ class UnconnectedSearchControlsContainer extends Component {
   };
 
   handleSearch = (newFilters = {}) => {
-    const page = 1;
-    const filters = { ...this.props.filters, ...newFilters, page };
-    this.props.history.push(`/search?${queryString.stringify(filters)}`);
+    if (this.state.isDateValid) {
+      const page = 1;
+      const filters = { ...this.props.filters, ...newFilters, page };
+      this.props.history.push(`/search?${queryString.stringify(filters)}`);
+    }
   };
 
   handleReset = () => {
@@ -269,6 +281,7 @@ class UnconnectedSearchControlsContainer extends Component {
                 <Button
                   bsStyle="primary"
                   className="app-SearchControlsContainer__submit-button"
+                  disabled={!this.state.isDateValid}
                   key="submit-button"
                   onClick={() => this.handleSearch()}
                   type="submit"
