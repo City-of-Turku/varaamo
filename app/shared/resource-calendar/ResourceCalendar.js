@@ -32,6 +32,7 @@ export class UnconnectedResourceCalendar extends Component {
     this.handleDateTextChange = this.handleDateTextChange.bind(this);
     this.handleDateButtonClick = this.handleDateButtonClick.bind(this);
     this.handleDateTextSubmit = this.handleDateTextSubmit.bind(this);
+    this.handleDateTextOnBlur = this.handleDateTextOnBlur.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +67,12 @@ export class UnconnectedResourceCalendar extends Component {
 
   showOverlay = () => {
     this.setState({ visible: true });
+  }
+
+  handleDateTextOnBlur() {
+    const date = this.state.textInputDate;
+    const isValidDate = isValidDateString(date);
+    this.setState({ textInputErrorVisible: !isValidDate });
   }
 
   handleDateTextChange(event) {
@@ -146,6 +153,7 @@ export class UnconnectedResourceCalendar extends Component {
               <InputGroup>
                 <FormControl
                   aria-describedby={this.state.textInputErrorVisible ? 'date-input-error' : null}
+                  onBlur={this.handleDateTextOnBlur}
                   onChange={this.handleDateTextChange}
                   type="text"
                   value={this.state.textInputDate}

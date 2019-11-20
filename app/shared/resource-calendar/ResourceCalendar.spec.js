@@ -84,6 +84,8 @@ describe('shared/resource-calendar/ResourceCalendar', () => {
     expect(formControl.length).toBe(1);
     expect(formControl.prop('type')).toBe('text');
     expect(formControl.prop('value')).toBe(expected);
+    expect(formControl.prop('onBlur')).toBe(wrapper.instance().handleDateTextOnBlur);
+    expect(formControl.prop('onChange')).toBe(wrapper.instance().handleDateTextChange);
   });
 
   test('renders datepicker button with correct props', () => {
@@ -228,6 +230,24 @@ describe('shared/resource-calendar/ResourceCalendar', () => {
       expect(func(new Date('2015-10-02'))).toBe(false);
       expect(func(new Date('2015-10-03'))).toBe(false);
       expect(func(new Date('2015-10-04'))).toBe(false);
+    });
+  });
+
+  describe('handleDateTextOnBlur', () => {
+    test('sets state.textInputErrorVisible to false if state.textInputDate is a valid date', () => {
+      const instance = getWrapper().instance();
+      instance.state.textInputDate = '1.12.2019';
+      instance.state.textInputErrorVisible = true;
+      instance.handleDateTextOnBlur();
+      expect(instance.state.textInputErrorVisible).toBe(false);
+    });
+
+    test('sets state.textInputErrorVisible to true if state.textInputDate isnt a valid date', () => {
+      const instance = getWrapper().instance();
+      instance.state.textInputDate = '33.12.2019';
+      instance.state.textInputErrorVisible = false;
+      instance.handleDateTextOnBlur();
+      expect(instance.state.textInputErrorVisible).toBe(true);
     });
   });
 
@@ -402,5 +422,11 @@ describe('shared/resource-calendar/ResourceCalendar', () => {
         expect(instance.handleDateChange.lastCall.arg.getDate()).toBe(nextWeekDate);
       }
     );
+  });
+
+  test('componentDidMount', () => {
+    const instance = getWrapper().instance();
+    instance.componentDidMount();
+    expect(instance.state.textInputDate).toBe(moment(defaultProps.selectedDate).format('L'));
   });
 });
