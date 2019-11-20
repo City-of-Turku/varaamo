@@ -168,6 +168,14 @@ describe('/pages/favorites/favoriteItem', () => {
             expect(element.prop('type')).toBe('button');
           });
 
+          test('contains img with correct props when isFavorite is true', () => {
+            const resource = Resource.build({ isFavorite: true });
+            const image = getItem({ resource }).find('.app-ResourceCard__info-cell__icon');
+            expect(image.length).toBe(1);
+            expect(image.prop('alt')).toBe('');
+            expect(image.prop('src')).toBeDefined();
+          });
+
           test('with correct props when isFavorite false', () => {
             const resource = Resource.build({
               isFavorite: false
@@ -178,6 +186,14 @@ describe('/pages/favorites/favoriteItem', () => {
             expect(element.prop('onClick')).toBeTruthy();
             expect(element.prop('title')).toBe('ResourceCard.infoTitle.addFavorite');
             expect(element.prop('type')).toBe('button');
+          });
+
+          test('contains img with correct props when isFavorite is false', () => {
+            const resource = Resource.build({ isFavorite: false });
+            const image = getItem({ resource }).find('.app-ResourceCard__info-cell__icon');
+            expect(image.length).toBe(1);
+            expect(image.prop('alt')).toBe('');
+            expect(image.prop('src')).toBeDefined();
           });
         });
       });

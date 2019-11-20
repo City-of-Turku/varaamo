@@ -69,7 +69,7 @@ function FavoriteItem({
                     }
                   type="button"
                 >
-                  <img alt="test" className="app-ResourceCard__info-cell__icon" src={isFavorite} />
+                  <img alt="" className="app-ResourceCard__info-cell__icon" src={isFavorite} />
                 </button>
               </Col>
             </Row>
