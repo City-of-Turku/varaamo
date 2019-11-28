@@ -57,6 +57,19 @@ describe('initI18n', () => {
       expect(initI18n()).toEqual(expected);
     });
 
+    test('when window.navigator.language is en', () => {
+      window.navigator = { language: 'en' };
+      const expected = {
+        intl: {
+          defaultLocale: constants.DEFAULT_LOCALE,
+          locale: 'en',
+          messages: messages.en,
+        },
+      };
+
+      expect(initI18n()).toEqual(expected);
+    });
+
     test('when window.navigator.language is fi', () => {
       window.navigator = { language: 'fi' };
       const expected = {
@@ -70,7 +83,7 @@ describe('initI18n', () => {
       expect(initI18n()).toEqual(expected);
     });
 
-    test('when window.navigator.language is other than finnish or swedish', () => {
+    test('when window.navigator.language is other than the ones defined for Varaamo', () => {
       window.navigator = { language: 'some-other-language-code' };
       const expected = {
         intl: {
