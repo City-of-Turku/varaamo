@@ -30,7 +30,11 @@ function ResourceInfo({
               {t('ResourceInfo.reservationTitle')}
             </Panel.Title>
           </Panel.Heading>
-          <ReservationInfo isLoggedIn={isLoggedIn} resource={resource} />
+          <ReservationInfo
+            currentLanguage={currentLanguage}
+            isLoggedIn={isLoggedIn}
+            resource={resource}
+          />
         </Panel>
         <Panel header={t('ResourceInfo.additionalInfoTitle')}>
           <Panel.Heading>

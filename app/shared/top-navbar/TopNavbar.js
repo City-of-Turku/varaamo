@@ -74,7 +74,10 @@ class TopNavbar extends Component {
     userManager.signinRedirect({
       data: {
         redirectUrl: window.location.pathname
-      }
+      },
+      extraQueryParams: {
+        ui_locales: this.props.currentLanguage
+      },
     });
   }
 

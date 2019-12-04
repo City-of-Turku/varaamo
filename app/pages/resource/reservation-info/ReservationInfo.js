@@ -11,15 +11,18 @@ import { getMaxPeriodText } from 'utils/resourceUtils';
 import { injectT } from 'i18n';
 import userManager from 'utils/userManager';
 
-function handleLoginClick() {
+function handleLoginClick(currentLanguage) {
   userManager.signinRedirect({
     data: {
       redirectUrl: window.location.pathname
-    }
+    },
+    extraQueryParams: {
+      ui_locales: currentLanguage,
+    },
   });
 }
 
-function renderLoginText(isLoggedIn, resource, t) {
+function renderLoginText(currentLanguage, isLoggedIn, resource, t) {
   if (isLoggedIn || !resource.reservable) {
     return null;
   }
@@ -33,7 +36,7 @@ function renderLoginText(isLoggedIn, resource, t) {
     return (
       <p className="login-text">
         {messageParts[0]}
-        <Button bsStyle="link" className="login-button" onClick={handleLoginClick}>{messageParts[1]}</Button>
+        <Button bsStyle="link" className="login-button" onClick={() => handleLoginClick(currentLanguage)}>{messageParts[1]}</Button>
         {messageParts[2]}
       </p>
     );
@@ -94,19 +97,22 @@ function renderMaxReservationsPerUserText(maxReservationsPerUser, t) {
   );
 }
 
-function ReservationInfo({ isLoggedIn, resource, t }) {
+function ReservationInfo({
+  currentLanguage, isLoggedIn, resource, t
+}) {
   return (
     <div className="app-ReservationInfo">
       <WrappedText allowNamedLinks openLinksInNewTab text={resource.reservationInfo} />
       {renderEarliestResDay(resource.reservableMinDaysInAdvance, t)}
       {renderMaxPeriodText(resource, t)}
       {renderMaxReservationsPerUserText(resource.maxReservationsPerUser, t)}
-      {renderLoginText(isLoggedIn, resource, t)}
+      {renderLoginText(currentLanguage, isLoggedIn, resource, t)}
     </div>
   );
 }
 
 ReservationInfo.propTypes = {
+  currentLanguage: PropTypes.string.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   resource: PropTypes.shape({
     maxPeriod: PropTypes.string,

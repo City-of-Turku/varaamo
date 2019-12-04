@@ -95,6 +95,7 @@ describe('pages/resource/resource-info/ResourceInfo', () => {
   test('renders ReservationInfo with correct props', () => {
     const reservationInfo = getWrapper().find(ReservationInfo);
     expect(reservationInfo).toHaveLength(1);
+    expect(reservationInfo.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
     expect(reservationInfo.prop('isLoggedIn')).toBe(defaultProps.isLoggedIn);
     expect(reservationInfo.prop('resource')).toEqual(defaultProps.resource);
   });
