@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { contrastSelector } from 'state/selectors/accessibilitySelectors';
+import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 import FooterContent from './FooterContent';
 
 export function Footer(props) {
@@ -22,7 +23,7 @@ Footer.propTypes = {
 
 const mapStateToProps = state => ({
   contrast: contrastSelector(state),
-  currentLanguage: state.intl.locale,
+  currentLanguage: currentLanguageSelector(state),
 });
 
 export default connect(mapStateToProps, null)(Footer);

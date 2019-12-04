@@ -1,5 +1,3 @@
-import constants from 'constants/AppConstants';
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
@@ -11,6 +9,7 @@ import iconHome from 'hel-icons/dist/shapes/home.svg';
 
 import { injectT } from 'i18n';
 import ReservationDate from 'shared/reservation-date';
+import { getFeedbackLink } from 'utils/languageUtils';
 
 class ReservationConfirmation extends Component {
   static propTypes = {
@@ -48,7 +47,7 @@ class ReservationConfirmation extends Component {
       currentLanguage, isEdited, reservation, resource, t, user
     } = this.props;
 
-    const href = (currentLanguage === 'sv') ? constants.FEEDBACK_URL.SV : constants.FEEDBACK_URL.FI;
+    const href = getFeedbackLink(currentLanguage);
     let email = '';
     if (reservation.reserverEmailAddress) {
       email = reservation.reserverEmailAddress;

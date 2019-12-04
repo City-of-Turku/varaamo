@@ -1,5 +1,3 @@
-import constants from 'constants/AppConstants';
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
@@ -11,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { injectT } from 'i18n';
 import turkuLogoSrc from 'shared/logo/logo_footer.png';
 import aboLogoSrc from 'shared/logo/logo_footer_sv.png';
+import { getFeedbackLink } from 'utils/languageUtils';
 
 class FooterContent extends React.Component {
   static propTypes = {
@@ -20,8 +19,8 @@ class FooterContent extends React.Component {
 
   render() {
     const { t, currentLang } = this.props;
-    const currentLogo = (currentLang === 'se') ? aboLogoSrc : turkuLogoSrc;
-    const currentLink = (currentLang === 'se') ? constants.FEEDBACK_URL.SV : constants.FEEDBACK_URL.FI;
+    const currentLogo = (currentLang === 'sv') ? aboLogoSrc : turkuLogoSrc;
+    const currentLink = getFeedbackLink(currentLang);
     return (
       <Grid>
         <Row>

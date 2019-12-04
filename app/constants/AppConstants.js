@@ -11,6 +11,7 @@ export default {
   FEEDBACK_URL: {
     FI: 'https://opaskartta.turku.fi/eFeedback/fi/Feedback/30-S%C3%A4hk%C3%B6iset%20asiointipalvelut',
     SV: 'https://opaskartta.turku.fi/eFeedback/sv/Feedback/30-S%C3%A4hk%C3%B6iset%20asiointipalvelut',
+    EN: 'https://opaskartta.turku.fi/eFeedback/en/Feedback/30-S%C3%A4hk%C3%B6iset%20asiointipalvelut',
   },
   FILTER: {
     timeFormat: 'HH:mm',

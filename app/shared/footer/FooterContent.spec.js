@@ -41,9 +41,17 @@ describe('shared/footer/FooterContent', () => {
       });
 
       test('when current language is sv', () => {
-        const feedbackLink = getWrapper({ currentLang: 'se' }).find('.feedback-link');
+        const feedbackLink = getWrapper({ currentLang: 'sv' }).find('.feedback-link');
         expect(feedbackLink.length).toBe(1);
         expect(feedbackLink.prop('href')).toBe(constants.FEEDBACK_URL.SV);
+        expect(feedbackLink.prop('rel')).toBe('noopener noreferrer');
+        expect(feedbackLink.prop('target')).toBe('_blank');
+      });
+
+      test('when current language is en', () => {
+        const feedbackLink = getWrapper({ currentLang: 'en' }).find('.feedback-link');
+        expect(feedbackLink.length).toBe(1);
+        expect(feedbackLink.prop('href')).toBe(constants.FEEDBACK_URL.EN);
         expect(feedbackLink.prop('rel')).toBe('noopener noreferrer');
         expect(feedbackLink.prop('target')).toBe('_blank');
       });

@@ -126,6 +126,15 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       expect(link.length).toBe(1);
       expect(link.prop('values')).toEqual({ href: constants.FEEDBACK_URL.SV });
     });
+
+    test('when currentLanguage is en', () => {
+      const link = getWrapper({ currentLanguage: 'en' })
+        .find(FormattedHTMLMessage)
+        .filter({ id: 'ReservationConfirmation.feedbackText' });
+
+      expect(link.length).toBe(1);
+      expect(link.prop('values')).toEqual({ href: constants.FEEDBACK_URL.EN });
+    });
   });
 
   test('renders reservation.user.email', () => {

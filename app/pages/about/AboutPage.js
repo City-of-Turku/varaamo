@@ -1,12 +1,10 @@
-import constants from 'constants/AppConstants';
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
 
-
 import { injectT } from 'i18n';
 import PageWrapper from 'pages/PageWrapper';
+import { getFeedbackLink } from 'utils/languageUtils';
 
 class AboutPage extends React.Component {
   static propTypes = {
@@ -16,7 +14,8 @@ class AboutPage extends React.Component {
 
   render() {
     const { t, currentLanguage } = this.props;
-    const currentLink = (currentLanguage === 'se') ? constants.FEEDBACK_URL.SV : constants.FEEDBACK_URL.FI;
+    const currentLink = getFeedbackLink(currentLanguage);
+
     return (
       <PageWrapper className="about-page" title={t('AboutPage.title')}>
         <h1>{t('AboutPageContent.defaultHeader')}</h1>
