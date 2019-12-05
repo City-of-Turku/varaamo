@@ -22,8 +22,8 @@ describe('shared/top-navbar/language-dropdown', () => {
   describe('renders', () => {
     test('correct amount of elements', () => {
       const element = getWrapper();
-      expect(element.find('li')).toHaveLength(3);
-      expect(element.find('a')).toHaveLength(3);
+      expect(element.find('li')).toHaveLength(4);
+      expect(element.find('a')).toHaveLength(4);
       expect(element.find('span')).toHaveLength(1);
       expect(element.find('ul')).toHaveLength(1);
     });
@@ -130,9 +130,9 @@ describe('shared/top-navbar/language-dropdown', () => {
         expect(element.prop('className')).toBe('language-dropdown-menu');
       });
 
-      test('both li elements', () => {
+      test('all li elements', () => {
         const element = getWrapper().find('ul').find('li');
-        expect(element).toHaveLength(2);
+        expect(element).toHaveLength(3);
       });
 
       describe('<a> elements ', () => {
@@ -149,26 +149,38 @@ describe('shared/top-navbar/language-dropdown', () => {
         });
 
         test('second element with default props', () => {
-          const element = langWrap().last();
+          const element = langWrap().at(1);
           expect(element.prop('aria-label')).toBe('Navbar.language-swedish');
           expect(element.prop('href')).toBe('#');
           expect(element.prop('onClick')).toBeDefined();
           expect(element.text()).toBe('SV');
         });
 
+        test('third element with default props', () => {
+          const element = langWrap().last();
+          expect(element.prop('aria-label')).toBe('Navbar.language-english');
+          expect(element.prop('href')).toBe('#');
+          expect(element.prop('onClick')).toBeDefined();
+          expect(element.text()).toBe('EN');
+        });
+
         test('get different className props when defaultLang = true', () => {
           const first = langWrap().first();
-          const second = langWrap().last();
+          const second = langWrap().at(1);
+          const third = langWrap().last();
           expect(first.prop('className')).toBe('active');
           expect(second.prop('className')).toBe('');
+          expect(third.prop('className')).toBe('');
         });
 
         test('get different className props when defaultLang = false', () => {
           const currentLanguage = 'sv';
           const first = langWrap({ currentLanguage }).first();
-          const second = langWrap({ currentLanguage }).last();
+          const second = langWrap({ currentLanguage }).at(1);
+          const third = langWrap({ currentLanguage }).last();
           expect(first.prop('className')).toBe('');
           expect(second.prop('className')).toBe('active');
+          expect(third.prop('className')).toBe('');
         });
       });
     });
