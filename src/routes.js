@@ -1,54 +1,59 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 
 import Route from '../app/shared/route';
 import PrivateRoute from '../app/shared/private-route';
 import AppContainer from '../app/pages/AppContainer';
-import AboutPage from '../app/pages/about';
-import AdminResourcesPage from '../app/pages/admin-resources';
 import HomePage from '../app/pages/home';
 import NotFoundPage from '../app/pages/not-found';
-import ReservationPage from '../app/pages/reservation';
-import ResourcePage from '../app/pages/resource';
-import SearchPage from '../app/pages/search';
-import UserReservationsPage from '../app/pages/user-reservations';
-import FavoritesPage from '../app/pages/favorites/favoritesPage';
 import LoginCallback from '../app/pages/auth/LoginCallback';
 import LogoutCallback from '../app/pages/auth/LogoutCallback';
-import AccessibilityInfoPage from '../app/pages/accessibility-info';
+
+// import non-landing pages dynamically
+const SearchPage = lazy(() => import('../app/pages/search'));
+const AboutPage = lazy(() => import('../app/pages/about'));
+const ResourcePage = lazy(() => import('../app/pages/resource'));
+const AccessibilityInfoPage = lazy(() => import('../app/pages/accessibility-info'));
+const AdminResourcesPage = lazy(() => import('../app/pages/admin-resources'));
+const FavoritesPage = lazy(() => import('../app/pages/favorites/favoritesPage'));
+const UserReservationsPage = lazy(() => import('../app/pages/user-reservations'));
+const ReservationPage = lazy(() => import('../app/pages/reservation'));
+
 
 export default () => (
   <AppContainer>
-    <Switch>
-      <Route component={HomePage} componentName="Home" exact path="/" />
-      <Route component={SearchPage} componentName="Search" path="/search" />
-      <Route component={AboutPage} componentName="About" path="/about" />
-      <Route component={ResourcePage} componentName="Resource" path="/resources/:id" />
-      <Route component={AccessibilityInfoPage} componentName="Seloste" path="/accessibility-info" />
+    <Suspense fallback={<div />}>
+      <Switch>
+        <Route component={HomePage} componentName="Home" exact path="/" />
+        <Route component={props => <SearchPage {...props} />} componentName="Search" path="/search" />
+        <Route component={props => <AboutPage {...props} />} componentName="About" path="/about" />
+        <Route component={props => <ResourcePage {...props} />} componentName="Resource" path="/resources/:id" />
+        <Route component={props => <AccessibilityInfoPage {...props} />} componentName="Seloste" path="/accessibility-info" />
 
-      <Route component={LoginCallback} componentName="LoginCallback" path="/callback" />
-      <Route component={LogoutCallback} componentName="LogoutCallback" path="/logout/callback" />
+        <Route component={LoginCallback} componentName="LoginCallback" path="/callback" />
+        <Route component={LogoutCallback} componentName="LogoutCallback" path="/logout/callback" />
 
-      <PrivateRoute
-        component={AdminResourcesPage}
-        componentName="AdminResources"
-        path="/admin-resources"
-      />
-      <PrivateRoute
-        component={FavoritesPage}
-        componentName="Favorites"
-        path="/favourites"
-      />
-      <PrivateRoute
-        component={UserReservationsPage}
-        componentName="MyReservations"
-        path="/my-reservations"
-      />
-      <PrivateRoute component={ReservationPage} componentName="Reservation" path="/reservation" />
+        <PrivateRoute
+          component={props => <AdminResourcesPage {...props} />}
+          componentName="AdminResources"
+          path="/admin-resources"
+        />
+        <PrivateRoute
+          component={props => <FavoritesPage {...props} />}
+          componentName="Favorites"
+          path="/favourites"
+        />
+        <PrivateRoute
+          component={props => <UserReservationsPage {...props} />}
+          componentName="MyReservations"
+          path="/my-reservations"
+        />
+        <PrivateRoute component={props => <ReservationPage {...props} />} componentName="Reservation" path="/reservation" />
 
-      <Redirect from="/home" to="/" />
-      <Redirect from="/resources/:id/reservation" to="/resources/:id" />
-      <Route component={NotFoundPage} componentName="NotFoundPage" path="*" />
-    </Switch>
+        <Redirect from="/home" to="/" />
+        <Redirect from="/resources/:id/reservation" to="/resources/:id" />
+        <Route component={NotFoundPage} componentName="NotFoundPage" path="*" />
+      </Switch>
+    </Suspense>
   </AppContainer>
 );

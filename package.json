@@ -14,6 +14,7 @@
   "description": "Varaamo is the user interface for the City of Turku varaamo.turku.fi resource reservation service.",
   "license": "MIT",
   "dependencies": {
+    "@babel/plugin-syntax-dynamic-import": "7.7.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
@@ -128,7 +129,7 @@
     "build": "./node_modules/.bin/webpack --config config/webpack.production.js",
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint --fix .",
-    "start:production": "NODE_ENV=production node server/index.js",
+    "start:production": "SET NODE_ENV=production&& node server/index.js",
     "start": "node server/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
