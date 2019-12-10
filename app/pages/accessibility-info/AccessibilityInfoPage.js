@@ -26,7 +26,7 @@ class AccessibilityInfoPage extends React.Component {
    *
    * @param {string} currentLanguage language code e.g. fi, sv, en
    * @returns {string} html in string format.
-   * If language code doesn't any of the defined ones Finnish text is returned.
+   * If language code isn't any of the defined ones Finnish text is returned.
    */
   getCorrectText(currentLanguage) {
     switch (currentLanguage) {
