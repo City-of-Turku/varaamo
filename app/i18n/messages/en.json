@@ -89,7 +89,7 @@
   "CookieBar.accept": "Accept",
   "CookieBar.decline": "Decline",
   "CookieBar.description": "We use cookies to improve your browsing experience. By continuing to use Varaamo, you accept the use of cookies.",
-  "CookieBar.link.href": "https://varaamo.turku.fi:8007/cookieInformation-fi.html",
+  "CookieBar.link.href": "https://varaamo.turku.fi:8007/cookieInformation-en.html",
   "CookieBar.link.text": "Link to cookie policy",
   "DatePickerControl.buttonLabel": "Date",
   "DatePickerControl.form.error.feedback": "Check the date",

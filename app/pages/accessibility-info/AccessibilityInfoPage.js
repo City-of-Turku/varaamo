@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
 
-import { FinnishText, SwedishText } from './content';
+import { FinnishText, SwedishText, EnglishText } from './content';
 import { injectT } from 'i18n';
 import PageWrapper from 'pages/PageWrapper';
 
@@ -22,8 +22,28 @@ class AccessibilityInfoPage extends React.Component {
   }
 
   /**
-   * renders FinnishText/SwedishText according to currentLanguage
-   * FinnishText/SwedishText are imported as strings, then given to
+   * Returns correct language text based on given current language code.
+   *
+   * @param {string} currentLanguage language code e.g. fi, sv, en
+   * @returns {string} html in string format.
+   * If language code doesn't any of the defined ones Finnish text is returned.
+   */
+  getCorrectText(currentLanguage) {
+    switch (currentLanguage) {
+      case 'fi':
+        return FinnishText;
+      case 'sv':
+        return SwedishText;
+      case 'en':
+        return EnglishText;
+      default:
+        return FinnishText;
+    }
+  }
+
+  /**
+   * renders FinnishText/SwedishText/EnglishText according to currentLanguage
+   * FinnishText/SwedishText/EnglishText are imported as strings, then given to
    * FormattedHTMLMessage to render the html strings.
    *
    * Normally FormattedHTMLMessage gets texts according to the id
@@ -32,7 +52,7 @@ class AccessibilityInfoPage extends React.Component {
    */
   render() {
     const { t, currentLanguage } = this.props;
-    const content = currentLanguage === 'fi' ? FinnishText : SwedishText;
+    const content = this.getCorrectText(currentLanguage);
     return (
       <PageWrapper className="accessibility-info-page" title={t('AccessibilityInfo.title')}>
         <FormattedHTMLMessage defaultMessage={content} id="AccessibilityContent" />

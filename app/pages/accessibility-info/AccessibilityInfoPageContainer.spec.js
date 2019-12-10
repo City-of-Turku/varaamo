@@ -20,6 +20,11 @@ describe('pages/accessibility-info/AccessibilityInfoPageContainer', () => {
         const selected = mapStateToProps(getState('sv'));
         expect(selected.currentLanguage).toBe('sv');
       });
+
+      test('returns English current locale', () => {
+        const selected = mapStateToProps(getState('en'));
+        expect(selected.currentLanguage).toBe('en');
+      });
     });
   });
 });
