@@ -71,7 +71,7 @@ describe('shared/main-navbar/MainNavbar', () => {
 
     test('does not render a link to respa admin UI', () => {
       const maintenanceLink = getLoggedInNotAdminWrapper()
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.respa });
+        .find(NavItem).filter({ href: 'dev' });
       expect(maintenanceLink).toHaveLength(0);
     });
 
@@ -99,15 +99,14 @@ describe('shared/main-navbar/MainNavbar', () => {
     });
 
     test('renders a link to respa admin UI', () => {
-      const maintenanceLink = getLoggedInAdminWrapper()
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.respa });
-      expect(maintenanceLink).toHaveLength(1);
+      const respaAdminLink = getLoggedInAdminWrapper().find(NavItem).filter({ eventKey: 'adminGuide' });
+      expect(respaAdminLink).toHaveLength(1);
     });
 
     test('renders a link to respa admin UI, open new tab when clicked', () => {
-      const maintenanceLink = getLoggedInAdminWrapper()
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.respa });
-      expect(maintenanceLink.prop('target')).toEqual('_blank');
+      const respaAdminLink = getLoggedInAdminWrapper()
+        .find(NavItem).filter({ eventKey: 'adminGuide' });
+      expect(respaAdminLink.prop('target')).toEqual('_blank');
     });
 
     test('renders a link to varaamo gitbook', () => {
@@ -124,7 +123,7 @@ describe('shared/main-navbar/MainNavbar', () => {
 
     test('renders a external link icon to next to respa admin UI text', () => {
       const maintenanceLink = getLoggedInAdminWrapper()
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.respa });
+        .find(NavItem).filter({ eventKey: 'adminGuide' });
       const icon = maintenanceLink.find(FAIcon);
 
       expect(icon).toHaveLength(1);
@@ -168,7 +167,7 @@ describe('shared/main-navbar/MainNavbar', () => {
 
     test('does not render a link to respa admin UI', () => {
       const maintenanceLink = getNotLoggedInWrapper()
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.respa });
+        .find(NavItem).filter({ eventKey: 'adminGuide' });
       expect(maintenanceLink).toHaveLength(0);
     });
 

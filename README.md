@@ -1,9 +1,9 @@
 Varaamo
 =======
 
-[![Build Status](https://travis-ci.com/digipointtku/varaamoTku.svg?branch=master)](https://travis-ci.com/digipointtku/varaamoTku)
-[![codecov](https://codecov.io/gh/digipointtku/varaamoTku/branch/master/graph/badge.svg)](https://codecov.io/gh/digipointtku/varaamoTku)
-[![Requirements Status](https://requires.io/github/digipointtku/varaamoTku/requirements.svg?branch=master)](https://requires.io/github/digipointtku/varaamoTku/requirements/?branch=master)
+[![Build Status](https://travis-ci.com/digipointtku/varaamo.svg?branch=master)](https://travis-ci.com/digipointtku/varaamo)
+[![codecov](https://codecov.io/gh/digipointtku/varaamo/branch/master/graph/badge.svg)](https://codecov.io/gh/digipointtku/varaamo)
+[![Requirements Status](https://requires.io/github/digipointtku/varaamo/requirements.svg?branch=master)](https://requires.io/github/digipointtku/varaamo/requirements/?branch=master)
 
 User interface for the City of Turku [varaamo.turku.fi](https://varaamo.turku.fi/) resource reservation service. Uses the [respa API](https://varaamo.turku.fi:5010/v1/).
 
@@ -69,12 +69,16 @@ By default the running app can be found at `localhost:3000`.
     OPENID_AUDIENCE
     OPENID_AUTHORITY
     API_URL
+    ADMIN_URL
     ```
 
     Environment's variable guideline:
 
     - `API_URL`:
       Custom config to replace global application's api URL. Expected value is valid URL string.
+
+    - `ADMIN_URL`:
+      Custom config to replace global application's admin respa URL. Expected value is valid URL string.
 
 
 3. Then, start the development server:
