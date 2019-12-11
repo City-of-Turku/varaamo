@@ -2,8 +2,8 @@ Varaamo
 =======
 
 [![Build Status](https://travis-ci.com/digipointtku/varaamo.svg?branch=master)](https://travis-ci.com/digipointtku/varaamo)
-[![codecov](https://codecov.io/gh/digipointtku/varaamo/branch/master/graph/badge.svg)](https://codecov.io/gh/digipointtku/varaamo)
-[![Requirements Status](https://requires.io/github/digipointtku/varaamo/requirements.svg?branch=master)](https://requires.io/github/digipointtku/varaamo/requirements/?branch=master)
+[![codecov](https://codecov.io/gh/digipointtku/varaamo/branch/develop/graph/badge.svg)](https://codecov.io/gh/digipointtku/varaamo)
+[![Requirements Status](https://requires.io/github/digipointtku/varaamo/requirements.svg?branch=develop)](https://requires.io/github/digipointtku/varaamo/requirements/?branch=develop)
 
 User interface for the City of Turku [varaamo.turku.fi](https://varaamo.turku.fi/) resource reservation service. Uses the [respa API](https://varaamo.turku.fi:5010/v1/).
 
