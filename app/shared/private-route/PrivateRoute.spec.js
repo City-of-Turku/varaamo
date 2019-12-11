@@ -11,6 +11,7 @@ import {
   mapDispatchToProps,
 } from './PrivateRoute';
 import userManager from 'utils/userManager';
+import SignInRedirectRoute from './sign-in-redirect/SignInRedirectRoute';
 
 describe('shared/private-route/PrivateRoute', () => {
   describe('UnconnectedPrivateRoute', () => {
@@ -73,18 +74,16 @@ describe('shared/private-route/PrivateRoute', () => {
       expect(updateRoute.callCount).toBe(1);
     });
 
-    test('does not call userManager.signinRedirect if the userId is defined', () => {
-      const wrapper = getWrapper('AdminPage', '1234');
-      wrapper.instance().renderOrRedirect();
+    describe('renderOrRedirect', () => {
+      test('returns props.component if user is defined', () => {
+        const instance = getWrapper('AdminPage', '1234', false).instance();
+        expect(instance.renderOrRedirect()).toStrictEqual(<instance.props.component />);
+      });
 
-      expect(redirectMock.callCount).toBe(0);
-    });
-
-    test('calls userManager.signinRedirect if the userId is not defined', () => {
-      const wrapper = getWrapper('AdminPage', null);
-      wrapper.instance().renderOrRedirect();
-
-      expect(redirectMock.callCount).toBe(1);
+      test('returns SignInRedirectRoute if user is not defined', () => {
+        const instance = getWrapper('AdminPage', null, false).instance();
+        expect(instance.renderOrRedirect()).toStrictEqual(<SignInRedirectRoute />);
+      });
     });
   });
 

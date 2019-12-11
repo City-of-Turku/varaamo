@@ -4,9 +4,9 @@ import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import SignInRedirectRoute from './sign-in-redirect/SignInRedirectRoute';
 import { updateRoute } from 'actions/routeActions';
 import userIdSelector from 'state/selectors/userIdSelector';
-import userManager from 'utils/userManager';
 import { isLoadingUserSelector } from 'state/selectors/authSelectors';
 
 export class UnconnectedPrivateRoute extends Component {
@@ -28,10 +28,13 @@ export class UnconnectedPrivateRoute extends Component {
   renderOrRedirect(routerProps) {
     const { userId, component: RouteComponent } = this.props;
 
+    // if user id is defined, route to given component/page
     if (userId) {
       return <RouteComponent {...routerProps} />;
     }
-    return userManager.signinRedirect();
+
+    // if user id isn't defined, route to sign in redirect component/page
+    return <SignInRedirectRoute />;
   }
 
   render() {
