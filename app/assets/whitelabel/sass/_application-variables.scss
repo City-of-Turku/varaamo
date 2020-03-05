@@ -1,0 +1,75 @@
+//
+// Application specific visual customisation
+// -----------------------------------------
+
+$theme-primary-dark:    $hel-coat !default;
+$theme-primary-light:   $hel-summer !default;
+
+$theme-secondary-dark:  $hel-brick !default;
+$theme-secondary-light: $hel-fog !default;
+
+$theme-highlight-dark:  $hel-bus !default;
+$theme-highlight-light: $hel-copper !default;
+
+// Non brand
+$white:         #ffffff;
+$light-gray:    #ebedf1;
+$dark-gray:     #525a65;
+$medium-gray:   #abb2bd;
+$black:         #000000;
+
+$theme-success:       $hel-tram;
+$theme-success-light: $hel-copper;
+$theme-info:          $hel-coat;
+$theme-info-light:    $hel-fog;
+$theme-warning:       $hel-summer;
+$theme-warning-light: $hel-engel;
+$theme-danger:        $hel-metro;
+$theme-danger-light:  $hel-suomenlinna;
+
+$blue: $hel-coat;
+$copper: $hel-copper;
+$gold: $hel-gold;
+$green: $hel-tram;
+$orange: $hel-metro;
+$pink: $hel-suomenlinna;
+$red: $hel-brick;
+$silver: $hel-silver;
+$yellow: $hel-summer;
+
+$bootstrap-sass-asset-helper: false !default;
+
+// Glyphicon icon path
+$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
+
+$turku-fonts: 'Open Sans', sans-serif;
+
+$font-family-sans-serif: $turku-fonts;
+
+
+// Other variables
+$font-weight-bold:       600;
+$font-weight-regular:    400;
+$font-weight-light:      200;
+
+
+$favorite-color:         #BF0863;
+$max-map-z-index:        1000;
+$input-box-shadow-focus: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+$force-open-navbar-screen-width: 1280px;
+
+
+// Buttons
+$element-size-medium:          38px;
+$element-size-small:           24px;
+$element-size-mini:            18px;
+$button-border-radius:         30px;
+$button-horizontal-padding:    15px;
+
+// Component variables
+
+$app-ResourceCard-height: 180px;
+$app-SearchPage-max-width: 800px;
+$app-SearchPage-margin: 10px;
+
+

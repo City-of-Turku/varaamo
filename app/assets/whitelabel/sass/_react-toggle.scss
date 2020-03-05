@@ -1,0 +1,42 @@
+.react-toggle {
+  margin-right: 10px;
+  vertical-align: middle;
+  transition: color 0.3s;
+
+  &,
+  &:hover,
+  &:active {
+    .react-toggle-track {
+      background-color: $black !important;
+      position: relative;
+    }
+  }
+
+  &.react-toggle--checked,
+  &.react-toggle--checked:hover,
+  &:focus,
+  &:hover {
+    &:not(.react-toggle--disabled) .react-toggle-track {
+      background-color: $green !important;
+    }
+  }
+
+  &.react-toggle:focus-within{
+    @include focusElement;
+  }
+
+  .react-toggle-thumb,
+  &.react-toggle--checked .react-toggle-thumb {
+    box-shadow: none;
+    border-color: $black;
+    border-width: 2px;
+  }
+  &:focus .react-toggle-thumb,
+  &:hover .react-toggle-thumb,
+  &:active .react-toggle-thumb,
+  &:active:not(.react-toggle--disabled) .react-toggle-thumb,
+  &.react-toggle--focus .react-toggle-thumb {
+    box-shadow: none !important;
+    background-color: $white;
+  }
+}

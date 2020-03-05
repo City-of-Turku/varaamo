@@ -9,9 +9,12 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore } from 'redux';
 import Immutable from 'seamless-immutable';
 
-import '../app/assets/styles/main.scss';
-import '../app/assets/styles/customization/espoo/customization.scss';
-import '../app/assets/styles/customization/vantaa/customization.scss';
+// import '../app/assets/styles/main.scss';
+// import '../app/assets/styles/customization/espoo/customization.scss';
+// import '../app/assets/styles/customization/vantaa/customization.scss';
+import '../app/assets/whitelabel/sass/app.scss';
+// eslint-disable-next-line import/no-unresolved
+import '@city-assets/sass/app.scss';
 import { initI18n } from '../app/i18n';
 import configureStore from '../app/store/configureStore';
 import rootReducer from '../app/state/rootReducer';

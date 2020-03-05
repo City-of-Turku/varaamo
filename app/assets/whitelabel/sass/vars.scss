@@ -1,3 +1,13 @@
+// Layout
+
+$screen-400: 400px !default;
+$screen-400-min: $screen-400 !default;
+$screen-400-max: ($screen-xs-min -1) !default;
+
+$screen-xl: 1400px !default;
+$screen-xl-min: $screen-xl !default;
+$screen-lg-max: ($screen-xl-min - 1) !default;
+
 // Typography
 
 $font-size-h1: 2em;
@@ -14,7 +24,6 @@ $fontSize-large: 22px;
 $fontSize-mobile-small: 15px;
 $fontSize-mobile-medium: 16px;
 $fontSize-mobile-large: 18px;
-
 
 // Colors
 $focus-highlight: black ;
@@ -33,15 +42,11 @@ $varaamo-darkgreen: #00a97a;
 $varaamo-darkgray: #404040;
 $varaamo-high-contrast-red: #AB0124;
 
-
-// Layout
-
-$screen-400: 400px !default;
-$screen-400-min: $screen-400 !default;
-$screen-400-max: ($screen-xs-min -1) !default;
-
-$screen-xl: 1400px !default;
-$screen-xl-min: $screen-xl !default;
-$screen-lg-max: ($screen-xl-min - 1) !default;
-
-
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

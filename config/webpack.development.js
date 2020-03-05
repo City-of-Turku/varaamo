@@ -7,7 +7,9 @@ const merge = require('webpack-merge');
 const autoprefixer = require('autoprefixer');
 
 const common = require('./webpack.common');
+const assetPath = require('./assetPath');
 
+console.log(assetPath);
 module.exports = merge(common, {
   mode: 'development',
   entry: [
@@ -74,6 +76,7 @@ module.exports = merge(common, {
         CLIENT_ID: JSON.stringify(process.env.CLIENT_ID),
         OPENID_AUDIENCE: JSON.stringify(process.env.OPENID_AUDIENCE),
         OPENID_AUTHORITY: JSON.stringify(process.env.OPENID_AUTHORITY),
+        CITY_THEME: JSON.stringify(process.env.CITY_THEME || 'default'),
       },
     }),
     new webpack.HotModuleReplacementPlugin(),

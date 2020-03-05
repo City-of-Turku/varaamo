@@ -16,10 +16,12 @@ import enMessages from 'i18n/messages/en.json';
 import fiMessages from 'i18n/messages/fi.json';
 import svMessages from 'i18n/messages/sv.json';
 
+// eslint-disable-next-line import/no-unresolved,import/order
+import fiTURKU from '@city-i18n/fi.json';
 
 const messages = {
   en: enMessages,
-  fi: fiMessages,
+  fi: { ...fiMessages, ...fiTURKU },
   se: svMessages,
 };
 

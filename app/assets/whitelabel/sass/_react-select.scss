@@ -1,0 +1,203 @@
+$selectBorderWidth: 2px;
+$selectBorderRadius: 2px;
+$selectBoxPadding: 0 0 0 8px;
+$selectLineHeight: 39px;
+$selectDropdownBorderWidth: 5px 5px 2.5px;
+$selectFocusedOptionColor: lighten($hel-fog, 15%);
+$selectFontSize: 30px;
+$selectDropdownWidth: 25px;
+$selectMenuPaddingTop: -2px;
+$selectDropdownAfterMarginTop: 4px;
+$selectDropdownPaddingRight: 4px;
+
+.app-Select { // Made dropdown button transparent and added focus and borders
+  display: flex;
+  flex: 1;
+  background-color: transparent;
+  border: 2px solid $black;
+  &:focus-within {
+    @include add-focus(3px);
+  }
+
+  &--is-disabled {
+    background-color: $silver;
+    color: $dark-gray;
+  }
+
+  .app-Select__control {
+    border: $selectBorderWidth solid $input-border;
+    border-radius: $selectBorderRadius;
+    box-sizing: border-box;
+    background: transparent;
+    box-shadow: none;
+    flex: 1;
+
+    &--is-focused {
+      outline: none;
+      border-color: $input-border-focus;
+    }
+
+    &--menu-is-open {
+      border-color: $black;
+      border-radius: 0;
+      border-width: $selectBorderWidth;
+    }
+
+    &--is-disabled {
+      background-color: $silver;
+      border: $selectBorderWidth solid $dark-gray;
+      color: $dark-gray;
+    }
+  }
+
+  .app-Select__indicator-separator {
+    display: none;
+  }
+
+  .app-Select__clear-indicator {
+    font-size: $selectFontSize;
+    color: $black;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+      color: $black;
+    }
+  }
+
+  .app-Select__indicators {
+    padding-right: $selectDropdownPaddingRight;
+  }
+  .app-Select__dropdown-indicator {
+    font-size: $selectFontSize;
+    color: $black;
+    display: flex;
+    justify-content: center;
+    width: $selectDropdownWidth;
+    height: 100%;
+    align-items: center;
+
+    &:hover {
+      color: $black;
+    }
+
+    &:after {
+      display: block;
+      content: "";
+      margin-top: $selectDropdownAfterMarginTop;
+      width: 0;
+      height: 0;
+      border-color: $black transparent transparent;
+      border-width: $selectDropdownBorderWidth;
+      border-style: solid;
+    }
+
+    svg {
+      display: none;
+    }
+  }
+
+  .app-Select__multi-value {
+    background: $black;
+    border-radius: 0;
+
+    &__label {
+      color: $white;
+    }
+
+    &__remove {
+      color: $white;
+      cursor: pointer;
+
+      &:hover {
+        color: $white;
+        background: transparent;
+      }
+    }
+  }
+
+  .app-Select__placeholder {
+    color: $dark-gray;
+  }
+
+  .app-Select__menu {
+    margin-top: $selectMenuPaddingTop;
+    border: $selectBorderWidth solid $black;
+    border-radius: 0;
+    box-shadow: none;
+
+    &-list {
+      padding: 0;
+    }
+  }
+
+  .app-Select__option {
+    &:active,
+    &--is-focused {
+      background-color: $selectFocusedOptionColor;;
+      color: $black;
+    }
+
+    &--is-selected {
+      background-color: $hel-fog;
+      color: $black;
+    }
+  }
+
+  .app-Select__value-container--has-value {
+    .app-Select__single-value {
+      font-size: 1em;
+      color: $black;
+    }
+  }
+
+  .app-Select__value-container {
+    padding: $selectBoxPadding;
+  }
+}
+
+.app-SelectControl {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  padding-top: 15px;
+
+  #purpose, #unit, #people, #app-Sort { // Fixed dropdown button size
+    @media (min-width: 1401px) {
+      width: 410px;
+    }
+    @media (min-width: $screen-lg-min) and (max-width: 1400px) {
+      width: 360px;
+    }
+    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+      width: 295px;
+    }
+    @media (max-width: $screen-xs-max) {
+      width: 95%;
+    }
+  }
+
+  .form-group {
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .app-SelectControl__clear-button{
+    display: none;
+    &.is-visible {
+      display: contents;
+    }
+    img { // Fixed position of the clear-button
+      width: 24px;
+      position: absolute;
+      bottom: 2px;
+      right: -10px;
+      @media (max-width: $screen-xs-min) {
+        right: 5px;
+      }
+    }
+  }
+
+}
+
