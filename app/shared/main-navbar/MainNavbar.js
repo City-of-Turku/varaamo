@@ -38,7 +38,11 @@ class MainNavbar extends React.Component {
       isLoggedIn,
       t,
       contrast,
+      currentLanguage,
     } = this.props;
+
+    const gitbookURL = currentLanguage === 'sv' ? constants.NAV_ADMIN_URLS.gitbook_sv : constants.NAV_ADMIN_URLS.gitbook;
+
     return (
       <Navbar aria-label={t('Navbar.aria.mainNavbar.title')} className={classNames('app-MainNavbar', contrast)} expanded={this.state.expanded} onToggle={() => this.toggleCollapse()}>
         <Navbar.Header>
@@ -91,7 +95,7 @@ class MainNavbar extends React.Component {
                     <FAIcon icon={faExternalLinkAlt} />
                   </NavItem>
 
-                  <NavItem eventKey="adminGuide" href={constants.NAV_ADMIN_URLS.gitbook} target="_blank">
+                  <NavItem eventKey="adminGuide" href={gitbookURL} target="_blank">
                     {t('Navbar.adminGuide')}
                     <FAIcon icon={faExternalLinkAlt} />
                   </NavItem>
@@ -117,6 +121,7 @@ MainNavbar.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
   contrast: PropTypes.string,
+  currentLanguage: PropTypes.string,
 };
 
 export default injectT(MainNavbar);

@@ -17,6 +17,7 @@ describe('shared/main-navbar/MainNavbar', () => {
     const defaults = {
       activeLink: pathname,
       changeLocale: () => null,
+      currentLanguage: 'fi',
       clearSearchResults: () => null,
       isAdmin: false,
       isLoggedIn: false,
@@ -109,9 +110,15 @@ describe('shared/main-navbar/MainNavbar', () => {
       expect(respaAdminLink.prop('target')).toEqual('_blank');
     });
 
-    test('renders a link to varaamo gitbook', () => {
+    test('renders a link to default(finnish) varaamo gitbook when language is not swedish', () => {
       const gitbookLink = getLoggedInAdminWrapper()
         .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.gitbook });
+      expect(gitbookLink).toHaveLength(1);
+    });
+
+    test('renders a link to swedish varaamo gitbook when language is swedish', () => {
+      const gitbookLink = getLoggedInAdminWrapper({ currentLanguage: 'sv' })
+        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.gitbook_sv });
       expect(gitbookLink).toHaveLength(1);
     });
 

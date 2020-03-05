@@ -20,6 +20,7 @@ export default {
   },
   NAV_ADMIN_URLS: {
     gitbook: 'https://digipoint-turku.gitbook.io/varaamo-turku/',
+    gitbook_sv: 'https://digipoint-turku.gitbook.io/varaamo-turku/v/v.1.0.0-swedish/',
     respa: SETTINGS.ADMIN_URL,
   },
   NOTIFICATION_DEFAULTS: {

@@ -5,6 +5,7 @@ import { clearSearchResults } from 'actions/searchActions';
 import { isAdminSelector, isLoggedInSelector } from 'state/selectors/authSelectors';
 import { contrastSelector } from 'state/selectors/accessibilitySelectors';
 import { changeLocale } from 'i18n';
+import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 import MainNavbar from './MainNavbar';
 
 const contrastOptionsSelector = state => contrastSelector(state);
@@ -13,6 +14,7 @@ export const selector = createStructuredSelector({
   isAdmin: isAdminSelector,
   isLoggedIn: isLoggedInSelector,
   contrast: contrastOptionsSelector,
+  currentLanguage: currentLanguageSelector,
 });
 
 const actions = {
