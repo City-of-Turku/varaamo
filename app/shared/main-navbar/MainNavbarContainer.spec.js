@@ -38,6 +38,6 @@ describe('shared/main-navbar/MainNavbarContainer', () => {
     test('returns currentLanguage', () => {
       const selected = selector(getState());
       expect(selected.currentLanguage).toBeDefined();
-    })
+    });
   });
 });
