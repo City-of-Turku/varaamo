@@ -36,7 +36,7 @@ export default (`
     </p>
     <p>
       <span class="value">
-        <a href="https://opaskartta.turku.fi/eFeedback/en/Feedback/30-S%C3%A4hk%C3%B6iset%20asiointipalvelut" target="_blank" rel="noopener noreferrer">Please feel free to give feedback on the web accessibility of our digital service on this web form</a>
+        <a href="https://opaskartta.turku.fi/eFeedback/en/Feedback/87/1049" target="_blank" rel="noopener noreferrer">Please feel free to give feedback on the web accessibility of our digital service on this web form</a>
       </span>
     </p>
     <p>
