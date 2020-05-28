@@ -20,6 +20,7 @@ import iconPhotoAndAudio from './images/frontpage_music.svg';
 import iconSports from './images/frontpage_sport.svg';
 import iconGuidance from './images/frontpage_guidance.svg';
 import iconMeetingsAndWorking from './images/frontpage_work.svg';
+import iconAdviceServices from './images/frontpage_advice_services.svg';
 import FAIcon from 'shared/fontawesome-icon';
 
 const purposeIcons = {
@@ -29,7 +30,8 @@ const purposeIcons = {
   manufacturing: iconManufacturing,
   meetingsAndWorking: iconMeetingsAndWorking,
   events: iconOrganizeEvents,
-  sauna: iconSauna
+  sauna: iconSauna,
+  adviceServices: iconAdviceServices
 };
 
 class UnconnectedHomePage extends Component {
