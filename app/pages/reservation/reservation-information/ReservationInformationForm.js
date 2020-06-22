@@ -229,6 +229,15 @@ class UnconnectedReservationInformationForm extends Component {
               { autoComplete: 'address-level2' },
             )
           }
+          {includes(this.props.fields, 'homeMunicipality')
+            && this.renderField(
+              'homeMunicipality',
+              'municipality',
+              'select',
+              t('common.homeMunicipality'),
+              { options: resource.includedReservationHomeMunicipalityFields },
+            )
+          }
           {includes(this.props.fields, 'billingAddressStreet')
             && <h3>{t('common.billingAddressLabel')}</h3>
           }

@@ -158,6 +158,10 @@ class UnconnectedReservationEditForm extends Component {
         {this.renderStaticInfoRow('reserverPhoneNumber')}
         {this.renderStaticInfoRow('reserverEmailAddress')}
         {this.renderAddressRow('reserverAddress')}
+        {('homeMunicipality' in reservation)
+           && this.renderInfoRow(t('common.homeMunicipality'),
+             (reservation.homeMunicipality && reservation.homeMunicipality.name)
+               ? reservation.homeMunicipality.name[t('common.languageCode')] : '')}
         {this.renderAddressRow('billingAddress')}
         {this.renderStaticInfoRow('accessCode')}
         {!(reservation.requireAssistance === undefined)

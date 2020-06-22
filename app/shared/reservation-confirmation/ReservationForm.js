@@ -271,7 +271,7 @@ class UnconnectedReservationForm extends Component {
               )}
             </Well>
           )}
-          {includes(this.props.fields, 'reserverAddressStreet') && (
+          {(includes(this.props.fields, 'reserverAddressStreet') || includes(this.props.fields, 'homeMunicipality')) && (
             <Well>
               <p>{t('common.reserverAddressLabel')}</p>
               {this.renderField(
@@ -294,6 +294,13 @@ class UnconnectedReservationForm extends Component {
                 'text',
                 t('common.addressCityLabel'),
                 { autoComplete: 'address-level2' },
+              )}
+              {this.renderField(
+                'homeMunicipality',
+                'municipality',
+                'select',
+                t('common.homeMunicipality'),
+                { options: resource.includedReservationHomeMunicipalityFields },
               )}
             </Well>
           )}

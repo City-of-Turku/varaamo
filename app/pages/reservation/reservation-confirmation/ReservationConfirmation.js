@@ -170,6 +170,12 @@ class ReservationConfirmation extends Component {
                 t('common.addressCityLabel'),
                 reservation.reserverAddressCity
               )}
+            {reservation.homeMunicipality
+              && this.renderField(
+                'homeMunicipality',
+                t('common.homeMunicipality'),
+                reservation.homeMunicipality.name[currentLanguage]
+              )}
             {reservation.billingAddressStreet && (
               <Col xs={12}><h3 id="billingInformationHeader">{t('common.billingAddressLabel')}</h3></Col>
             )}

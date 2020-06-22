@@ -38,6 +38,15 @@
       padding-bottom: 0;
     }
 
+    .select-input {
+      border: 2px solid #000000;
+      margin-top: 7px;
+  
+      @media(max-width: $screen-md-min){
+        width: 100%;
+      }
+    }
+
     .app-TimeControls {
       display: flex;
 

@@ -11,6 +11,14 @@
     margin-bottom: 8px;
    }
   }
+  .select-input {
+    border: 2px solid #000000;
+    margin-top: 7px;
+
+    @media(max-width: $screen-md-min){
+      width: 100%;
+    }
+  }
 
 
   .has-error{

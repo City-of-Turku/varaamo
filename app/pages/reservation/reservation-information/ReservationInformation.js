@@ -70,7 +70,26 @@ class ReservationInformation extends Component {
       reservation,
       resource,
     } = this.props;
-    let rv = reservation ? pick(reservation, this.getFormFields()) : {};
+
+    let rv = {};
+
+    if (reservation) {
+      // Dont allow fields with objects unless the objects have key id in them.
+      // The keys can be used as form field values eg for select input
+      const nonObjectFields = this.getFormFields().filter(field => typeof (reservation[field]) !== 'object');
+
+      const objectFieldsWithId = this.getFormFields().filter(
+        field => (reservation[field] && typeof (reservation[field]) === 'object' && reservation[field].id)
+      );
+
+      rv = objectFieldsWithId.map((objectField) => {
+        const obj = {};
+        obj[objectField] = reservation[objectField].id;
+        return obj;
+      });
+
+      rv = Object.assign(...rv, pick(reservation, [...nonObjectFields]));
+    }
     if (isEditing) {
       rv = { ...rv, staffEvent: isStaffEvent(reservation, resource) };
     }

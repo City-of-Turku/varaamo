@@ -5,6 +5,7 @@ import Checkbox from './Checkbox';
 import FormControl from './FormControl';
 import ReduxFormField from './ReduxFormField';
 import FormControlCheckbox from './FormControlCheckbox';
+import SelectField from './SelectField';
 
 describe('shared/form-fields/ReduxFormField', () => {
   const defaultProps = {
@@ -33,6 +34,14 @@ describe('shared/form-fields/ReduxFormField', () => {
       const wrapper = getWrapper({ type: 'checkbox' });
       const checkbox = wrapper.find(Checkbox);
       expect(checkbox.length).toBe(1);
+    });
+  });
+
+  describe('if type is "select"', () => {
+    test('renders a SelectField component', () => {
+      const wrapper = getWrapper({ type: 'select' });
+      const selectField = wrapper.find(SelectField);
+      expect(selectField.length).toBe(1);
     });
   });
 

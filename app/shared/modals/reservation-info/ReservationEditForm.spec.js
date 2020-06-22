@@ -210,6 +210,19 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
           expect(getData()).not.toContain('common.additionalInfo.label');
         });
       });
+
+      describe('home municipality', () => {
+        test('is rendered if reservation supports it', () => {
+          const userReservation = Reservation.build({
+            homeMunicipality: 'test'
+          });
+          expect(getData({ reservation: userReservation }))
+            .toContain('common.homeMunicipality');
+        });
+        test('is not rendered if reservation doesnt support it', () => {
+          expect(getData()).not.toContain('common.homeMunicipality');
+        });
+      });
     });
 
     describe('form fields', () => {

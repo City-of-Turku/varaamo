@@ -187,10 +187,11 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       billingAddressZip: 'billing address zip',
       billingAddressCity: 'billing address city',
       reservationExtraQuestions: 'Extra information',
+      homeMunicipality: { id: 'city-id', name: { fi: 'city-fi', en: 'city-en', sv: 'city-sv' } },
       user: User.build(),
     });
     const fields = getWrapper({ reservation }).find('.app-ReservationConfirmation__field');
-    expect(fields).toHaveLength(17);
+    expect(fields).toHaveLength(18);
   });
 
   describe('Button onClick', () => {

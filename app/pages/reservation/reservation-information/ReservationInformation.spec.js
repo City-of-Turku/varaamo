@@ -145,16 +145,19 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     const reservation = Reservation.build({
       someField1: 'some value 1',
       someField2: 'some value 2',
+      someField3: null,
+      someField4: { id: 'some-id', name: { fi: 'text-fi', en: 'text-en', sv: 'text-sv' } }
     });
     const resource = Resource.build({
       requiredReservationExtraFields: ['some_field_1'],
-      supportedReservationExtraFields: ['some_field_1', 'some_field_2'],
+      supportedReservationExtraFields: ['some_field_1', 'some_field_2', 'some_field_3', 'some_field_4'],
     });
 
     test('returns correct form values', () => {
       const expected = {
         someField1: 'some value 1',
         someField2: 'some value 2',
+        someField4: 'some-id',
       };
       const wrapper = getWrapper({ reservation, resource });
       const instance = wrapper.instance();
@@ -167,6 +170,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       const expected = {
         someField1: 'some value 1',
         someField2: 'some value 2',
+        someField4: 'some-id',
         staffEvent: false,
       };
       const wrapper = getWrapper({ isEditing: true, reservation, resource });

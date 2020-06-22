@@ -4,6 +4,7 @@ import React from 'react';
 import Checkbox from './Checkbox';
 import FormControl from './FormControl';
 import FormControlCheckbox from './FormControlCheckbox';
+import SelectField from './SelectField';
 
 function ReduxFormField({
   controlProps = {}, fieldName, help, info, input, label, labelErrorPrefix, meta, type, altCheckbox
@@ -27,6 +28,10 @@ function ReduxFormField({
     }
 
     return <Checkbox {...childProps} />;
+  }
+
+  if (type === 'select') {
+    return <SelectField {...childProps} />;
   }
 
   return <FormControl {...childProps} />;
