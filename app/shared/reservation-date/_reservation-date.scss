@@ -3,19 +3,16 @@
     background-color: $white;
     border: 1px solid $brand-primary;
     color: $black;
-    margin: 0px auto;
+    margin: 0 auto 8px auto;
     text-align: center;
     width: 150px;
     height: 130px;
     display: block;
     font-weight: bold;
-    .reservation-date__day-number {
-      margin-top: 20px;
-      font-weight: bold;
-      padding: 10px;
-    }
   }
+  
   &__month {
+    font-size: initial;
     background-color: $blue;
     color: $white;
     margin: 0;
@@ -28,30 +25,18 @@
   }
 
   &__day-number {
-    position: absolute;
-    font-size: 2em;
+
+    margin-top: 12px;
+    font-size: 2rem;
     display: block;
     text-align: center;
     width: 150px;
-    top: 95px;
-    @media (max-width: $screen-xs-min) {
-      top: 125px;
-    }
   }
 
   &__day-of-week{
-    position: absolute;
     display: block;
     text-align: center;
     width: 150px;
-    top: 175px;
-    margin-top: 5px;
-    @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-      top: 170px;
-    }
-    @media (max-width: $screen-xs-min) {
-      top: 200px;
-    }
   }
   &__icon {
     height: 20px;
@@ -60,6 +45,7 @@
   &__time {
     margin-bottom: 0;
     font-weight: bold;
+    text-align: center;
     .glyphicon {
       vertical-align: top;
     }
