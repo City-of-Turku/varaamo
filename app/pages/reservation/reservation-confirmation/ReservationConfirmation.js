@@ -15,6 +15,7 @@ class ReservationConfirmation extends Component {
   static propTypes = {
     currentLanguage: PropTypes.string,
     isEdited: PropTypes.bool,
+    isLoggedIn: PropTypes.bool.isRequired,
     reservation: PropTypes.object.isRequired,
     resource: PropTypes.object.isRequired,
     t: PropTypes.func.isRequired,
@@ -22,8 +23,9 @@ class ReservationConfirmation extends Component {
     history: PropTypes.object.isRequired,
   };
 
-  handleReservationsButton() {
-    this.props.history.replace('/my-reservations');
+  handleReservationsButton(isLoggedIn) {
+    if (isLoggedIn) this.props.history.replace('/my-reservations');
+    else this.props.history.replace('/');
   }
 
   renderField(field, label, value) {
@@ -42,9 +44,21 @@ class ReservationConfirmation extends Component {
     );
   }
 
+  renderReturnButton(isLoggedIn, t) {
+    return (
+      <Button
+        bsStyle="primary"
+        className="app-ReservationConfirmation__button"
+        onClick={() => this.handleReservationsButton(isLoggedIn)}
+      >
+        {isLoggedIn ? t('ReservationConfirmation.ownReservationButton') : t('ReservationConfirmation.returnToHomeButton')}
+      </Button>
+    );
+  }
+
   render() {
     const {
-      currentLanguage, isEdited, reservation, resource, t, user
+      currentLanguage, isEdited, isLoggedIn, reservation, resource, t, user
     } = this.props;
 
     const href = getFeedbackLink(currentLanguage);
@@ -85,13 +99,7 @@ class ReservationConfirmation extends Component {
               <FormattedHTMLMessage id="ReservationConfirmation.feedbackText" values={{ href }} />
             </p>
             <p className="app-ReservationConfirmation__button-wrapper">
-              <Button
-                bsStyle="primary"
-                className="app-ReservationConfirmation__button"
-                onClick={() => this.handleReservationsButton()}
-              >
-                {t('ReservationConfirmation.ownReservationButton')}
-              </Button>
+              {this.renderReturnButton(isLoggedIn, t)}
             </p>
           </Well>
         </Col>

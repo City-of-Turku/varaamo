@@ -161,7 +161,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
             isAdmin={isAdmin}
             isEditing={isEditing}
             isFetching={isFetchingResource}
-            isLoggedIn={isLoggedIn}
+            isLoggedIn={isLoggedIn || resource.authentication === 'unauthenticated'} // count as logged in if no auth needed
             isStaff={isStaff}
             onClear={actions.clearTimeSlots}
             onClick={actions.toggleTimeSlot}

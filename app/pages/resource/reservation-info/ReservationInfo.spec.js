@@ -100,6 +100,12 @@ describe('pages/resource/reservation-info/ReservationInfo', () => {
       expect(loginText).toHaveLength(0);
     });
 
+    test('is not rendered if resource doesnt require authentication', () => {
+      const resource = { authentication: 'unauthenticated', ...defaultProps.resource };
+      const loginText = getWrapper({ isLoggedIn: false, resource }).find('.login-text');
+      expect(loginText).toHaveLength(0);
+    });
+
     test('is rendered otherwise', () => {
       const resource = {
         reservable: true,

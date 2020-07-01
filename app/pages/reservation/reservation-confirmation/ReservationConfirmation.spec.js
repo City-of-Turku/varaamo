@@ -23,6 +23,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
     currentLanguage: 'fi',
     history,
     isEdited: false,
+    isLoggedIn: false,
     reservation: Immutable(Reservation.build({ user: User.build() })),
     resource: Immutable(Resource.build()),
     user: Immutable(User.build()),
@@ -162,10 +163,26 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
     expect(email.prop('values')).toEqual({ email: user.email });
   });
 
-  test('renders Button with correct props', () => {
-    const button = getWrapper().find(Button);
-    expect(button).toHaveLength(1);
-    expect(typeof button.prop('onClick')).toBe('function');
+  describe('renders Button', () => {
+    test('with correct props', () => {
+      const button = getWrapper().find(Button);
+      expect(button).toHaveLength(1);
+      expect(typeof button.prop('onClick')).toBe('function');
+      expect(button.prop('bsStyle')).toBe('primary');
+      expect(button.prop('className')).toBe('app-ReservationConfirmation__button');
+    });
+
+    test('with correct text when isLoggedIn is false', () => {
+      const isLoggedIn = false;
+      const button = getWrapper({ isLoggedIn }).find(Button);
+      expect(button.children().text()).toBe('ReservationConfirmation.returnToHomeButton');
+    });
+
+    test('with correct text when isLoggedIn is true', () => {
+      const isLoggedIn = true;
+      const button = getWrapper({ isLoggedIn }).find(Button);
+      expect(button.children().text()).toBe('ReservationConfirmation.ownReservationButton');
+    });
   });
 
   test('renders reserver details fields', () => {
@@ -222,21 +239,30 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
   });
 
   describe('handleReservationsButton', () => {
-    const expectedPath = '/my-reservations';
-    let instance;
     let historyMock;
 
-    beforeAll(() => {
-      instance = getWrapper().instance();
-      historyMock = simple.mock(history, 'replace');
-      instance.handleReservationsButton();
-    });
-
-    afterAll(() => {
+    afterEach(() => {
       simple.restore();
     });
 
-    test('calls browserHistory replace with correct path', () => {
+    test('calls browserHistory replace with correct path when isLoggedIn is true', () => {
+      const isLoggedIn = true;
+      const expectedPath = '/my-reservations';
+      const instance = getWrapper().instance();
+      historyMock = simple.mock(history, 'replace');
+      instance.handleReservationsButton(isLoggedIn);
+
+      expect(historyMock.callCount).toBe(1);
+      expect(historyMock.lastCall.args).toEqual([expectedPath]);
+    });
+
+    test('calls browserHistory replace with correct path when isLoggedIn is false', () => {
+      const isLoggedIn = false;
+      const expectedPath = '/';
+      const instance = getWrapper().instance();
+      historyMock = simple.mock(history, 'replace');
+      instance.handleReservationsButton(isLoggedIn);
+
       expect(historyMock.callCount).toBe(1);
       expect(historyMock.lastCall.args).toEqual([expectedPath]);
     });

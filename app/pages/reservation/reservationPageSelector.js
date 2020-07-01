@@ -10,6 +10,7 @@ import {
   createIsStaffSelector,
   currentUserSelector,
   isAdminSelector,
+  isLoggedInSelector,
 } from 'state/selectors/authSelectors';
 import { createResourceSelector, unitsSelector } from 'state/selectors/dataSelectors';
 import dateSelector from 'state/selectors/dateSelector';
@@ -43,6 +44,7 @@ const reservationPageSelector = createStructuredSelector({
   currentLanguage: currentLanguageSelector,
   date: dateSelector,
   isAdmin: isAdminSelector,
+  isLoggedIn: isLoggedInSelector,
   isStaff: createIsStaffSelector(resourceSelector),
   isFetchingResource: requestIsActiveSelectorFactory(ActionTypes.API.RESOURCE_GET_REQUEST),
   isMakingReservations: requestIsActiveSelectorFactory(ActionTypes.API.RESERVATION_POST_REQUEST),

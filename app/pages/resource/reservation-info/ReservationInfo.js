@@ -23,7 +23,7 @@ function handleLoginClick(currentLanguage) {
 }
 
 function renderLoginText(currentLanguage, isLoggedIn, resource, t) {
-  if (isLoggedIn || !resource.reservable) {
+  if (isLoggedIn || !resource.reservable || resource.authentication === 'unauthenticated') {
     return null;
   }
 

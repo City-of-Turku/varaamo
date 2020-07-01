@@ -48,7 +48,7 @@ export default () => (
           componentName="MyReservations"
           path="/my-reservations"
         />
-        <PrivateRoute component={props => <ReservationPage {...props} />} componentName="Reservation" path="/reservation" />
+        <Route component={props => <ReservationPage {...props} />} componentName="Reservation" path="/reservation" />
 
         <Redirect from="/home" to="/" />
         <Redirect from="/resources/:id/reservation" to="/resources/:id" />

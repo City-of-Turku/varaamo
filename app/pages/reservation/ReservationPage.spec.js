@@ -35,6 +35,7 @@ describe('pages/reservation/ReservationPage', () => {
     currentLanguage: 'fi',
     date: '2016-10-10',
     isAdmin: false,
+    isLoggedIn: false,
     isStaff: false,
     isFetchingResource: false,
     isMakingReservations: false,
@@ -210,10 +211,13 @@ describe('pages/reservation/ReservationPage', () => {
       const wrapper = getWrapper({ reservationEdited });
       wrapper.setState({ view: 'confirmation' });
       const reservationConfirmation = wrapper.find(ReservationConfirmation);
+      const isEdited = Object.keys(reservationEdited).length !== 0;
 
       expect(reservationConfirmation).toHaveLength(1);
       expect(reservationConfirmation.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
       expect(reservationConfirmation.prop('history')).toBe(defaultProps.history);
+      expect(reservationConfirmation.prop('isEdited')).toBe(isEdited);
+      expect(reservationConfirmation.prop('isLoggedIn')).toBe(defaultProps.isLoggedIn);
       expect(reservationConfirmation.prop('reservation')).toBe(reservationEdited);
       expect(reservationConfirmation.prop('resource')).toBe(defaultProps.resource);
       expect(reservationConfirmation.prop('user')).toBe(defaultProps.user);

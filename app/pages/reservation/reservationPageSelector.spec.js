@@ -90,6 +90,14 @@ describe('pages/reservation/reservationPageSelector', () => {
     expect(selected.isAdmin).toBeDefined();
   });
 
+  test('returns isLoggedIn', () => {
+    const state = getState();
+    const props = getProps();
+    const selected = reservationPageSelector(state, props);
+
+    expect(selected.isLoggedIn).toBeDefined();
+  });
+
   test('returns isStaff', () => {
     const state = getState();
     const props = getProps();

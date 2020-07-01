@@ -195,6 +195,7 @@ class UnconnectedReservationPage extends Component {
       contrast,
       currentLanguage,
       isAdmin,
+      isLoggedIn,
       isStaff,
       isFetchingResource,
       isMakingReservations,
@@ -276,6 +277,7 @@ class UnconnectedReservationPage extends Component {
                     currentLanguage={currentLanguage}
                     history={history}
                     isEdited={isEdited}
+                    isLoggedIn={isLoggedIn}
                     reservation={reservationCreated || reservationEdited}
                     resource={resource}
                     user={user}
@@ -310,6 +312,7 @@ UnconnectedReservationPage.propTypes = {
   unit: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 UnconnectedReservationPage = injectT(UnconnectedReservationPage); // eslint-disable-line
 
