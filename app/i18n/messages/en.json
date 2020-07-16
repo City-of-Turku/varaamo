@@ -221,6 +221,7 @@
   "ReservationForm.numberOfParticipants.overError": "Number of participants is over max capacity {peopleCapacity}",
   "ReservationForm.numberOfParticipants.underError": "There needs to be at least one participant",
   "ReservationForm.maxLengthError": "The maximum length of the field is {maxLength} characters",
+  "ReservationForm.phoneNumberError": "Enter a valid phone number which can start with character '+' and otherwise contains only numbers",
   "ReservationForm.requiredError": "Mandatory information",
   "ReservationForm.staffEventHelp": "The Department’s own events are approved automatically and the only mandatory information is the name of the person making the reservation and a description of the event.",
   "ReservationForm.staffEventLabel": "The Department’s own events",

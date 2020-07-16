@@ -13,7 +13,7 @@ import Well from 'react-bootstrap/lib/Well';
 import { Field, Fields, reduxForm } from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
 
-
+import { isValidPhoneNumber } from 'utils/reservationUtils';
 import WrappedText from 'shared/wrapped-text';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import { injectT } from 'i18n';
@@ -23,6 +23,12 @@ const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {
     if (reserverEmailAddress && !isEmail(reserverEmailAddress)) {
       return t('ReservationForm.emailError');
+    }
+    return null;
+  },
+  reserverPhoneNumber: (t, { reserverPhoneNumber }) => {
+    if (reserverPhoneNumber && !isValidPhoneNumber(reserverPhoneNumber)) {
+      return t('ReservationForm.phoneNumberError');
     }
     return null;
   },

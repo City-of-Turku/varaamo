@@ -8,6 +8,7 @@ import some from 'lodash/some';
 import sortBy from 'lodash/sortBy';
 import tail from 'lodash/tail';
 import moment from 'moment';
+import { PhoneNumberUtil } from 'google-libphonenumber';
 
 
 function combine(reservations) {
@@ -82,6 +83,33 @@ function getEditReservationUrl(reservation) {
   return `/reservation?begin=${beginStr}&date=${date}&end=${endStr}&id=${id || ''}&resource=${resource}`;
 }
 
+function isValidPhoneNumber(number) {
+  // only allow numbers and + if its the first char
+  const regex = /^([+]\d*|\d*)$/;
+  if (regex.test(number) === false) {
+    return false;
+  }
+
+  const phoneUtil = PhoneNumberUtil.getInstance();
+  // if number starts with +, try to parse with any country code
+  if (number && number[0] === '+') {
+    try {
+      const parsedNumber = phoneUtil.parse(number, '');
+      return phoneUtil.isValidNumber(parsedNumber);
+    } catch (error) {
+      return false;
+    }
+  } else {
+    // if number doesnt start with +, assume country code is FI
+    try {
+      const parsedNumber = phoneUtil.parseAndKeepRawInput(number, 'FI');
+      return phoneUtil.isValidNumber(parsedNumber);
+    } catch (error) {
+      return false;
+    }
+  }
+}
+
 export {
   combine,
   isStaffEvent,
@@ -90,4 +118,5 @@ export {
   getMissingValues,
   getNextAvailableTime,
   getNextReservation,
+  isValidPhoneNumber,
 };

@@ -119,6 +119,26 @@ describe('shared/reservation-confirmation/ReservationForm', () => {
       });
     });
 
+    describe('reserverPhoneNumber', () => {
+      const props = {
+        fields: ['reserverPhoneNumber'],
+        requiredFields: [],
+        t,
+      };
+
+      test('returns an error if reserverPhoneNumber is invalid', () => {
+        const values = { reserverPhoneNumber: '+358-401-23123' };
+        const errors = validate(values, props);
+        expect(errors.reserverPhoneNumber).toBeDefined();
+      });
+
+      test('does not return an error if reserverPhoneNumber is valid', () => {
+        const values = { reserverPhoneNumber: '+35840123123' };
+        const errors = validate(values, props);
+        expect(errors.reserverPhoneNumber).toBeFalsy();
+      });
+    });
+
     describe('numberOfParticipants', () => {
       const props = {
         fields: ['numberOfParticipants'],

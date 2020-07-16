@@ -221,6 +221,7 @@
   "ReservationForm.numberOfParticipants.overError": "Osallistujamäärä on yli maksimikapasiteetin {peopleCapacity}",
   "ReservationForm.numberOfParticipants.underError": "Osallistujamäärän on oltava vähintään yksi",
   "ReservationForm.maxLengthError": "Kentän maksimipituus on {maxLength} merkkiä",
+  "ReservationForm.phoneNumberError": "Syötä kunnollinen puhelinnumero, joka voi alkaa +-merkillä ja sisältää vain numeroita",
   "ReservationForm.requiredError": "Pakollinen tieto",
   "ReservationForm.staffEventHelp": "Viraston oma tapahtuma hyväksytään automaattisesti ja ainoat pakolliset tiedot ovat varaajan nimi ja tilaisuuden kuvaus.",
   "ReservationForm.staffEventLabel": "Viraston oma tapahtuma",
