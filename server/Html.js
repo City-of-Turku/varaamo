@@ -9,37 +9,6 @@ class Html extends Component {
     return `window.INITIAL_STATE = ${serialize(initialState)};`;
   }
 
-  renderAnalyticsCode(piwikSiteId) {
-    if (!piwikSiteId) {
-      return null;
-    }
-    const scriptString = `
-      var _paq = _paq || [];
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//testivaraamo.turku.fi:8003/";
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', ${piwikSiteId}]);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript';
-        g.async=true;
-        g.defer=true;
-        g.src=u+'matomo.js';
-        s.parentNode.insertBefore(g,s);
-      })();
-    `;
-    const imgSrc = `//testivaraamo.turku.fi:8003/piwik.php?idsite=${piwikSiteId}`;
-    return (
-      <div>
-        <script dangerouslySetInnerHTML={{ __html: scriptString }} />
-        <noscript>
-          <p><img alt="" src={imgSrc} style={{ border: 0 }} /></p>
-        </noscript>
-      </div>
-    );
-  }
-
   renderStylesLink(appCssSrc, isProduction) {
     if (!isProduction) {
       return null;
@@ -54,7 +23,6 @@ class Html extends Component {
       appScriptSrc,
       initialState,
       isProduction,
-      piwikSiteId,
     } = this.props;
     const initialStateHtml = this.getInitialStateHtml(initialState);
 
@@ -79,7 +47,6 @@ class Html extends Component {
           <script dangerouslySetInnerHTML={{ __html: initialStateHtml }} />
           <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en-gb,Intl.~locale.fi,Intl.~locale.sv" />
           <script src={appScriptSrc} />
-          {this.renderAnalyticsCode(piwikSiteId)}
         </body>
       </html>
     );
@@ -91,7 +58,6 @@ Html.propTypes = {
   appScriptSrc: PropTypes.string.isRequired,
   initialState: PropTypes.object.isRequired,
   isProduction: PropTypes.bool.isRequired,
-  piwikSiteId: PropTypes.string,
 };
 
 export default Html;

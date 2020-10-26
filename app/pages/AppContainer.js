@@ -28,6 +28,11 @@ export const selector = createStructuredSelector({
 });
 
 export class UnconnectedAppContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.checkCookie();
+  }
+
   componentDidMount() {
     this.removeFacebookAppendedHash();
   }
@@ -44,6 +49,52 @@ export class UnconnectedAppContainer extends Component {
       window.history.pushState('', document.title, window.location.pathname);
     }
   }
+
+  checkCookie() {
+    if (SETTINGS.TRACKING) {
+      if (document.cookie.split('; ').find(row => row.startsWith('CookieConsent'))) {
+        const consentValue = document.cookie.split('; ').find(row => row.startsWith('CookieConsent')).split('=')[1];
+        if (consentValue === 'true') {
+          this.addCookie();
+        }
+      }
+    }
+    return false;
+  }
+
+  addCookie() {
+    if (SETTINGS.TRACKING) {
+      const cookieScript = document.createElement('script');
+      cookieScript.type = 'text/javascript';
+      const content = document.createTextNode(this.renderAnalyticsCode(SETTINGS.TRACKING_ID));
+      cookieScript.append(content);
+      document.getElementsByTagName('head')[0].appendChild(cookieScript);
+    }
+  }
+
+  renderAnalyticsCode(piwikSiteId) {
+    if (!piwikSiteId) {
+      return null;
+    }
+    const scriptString = `
+      var _paq = _paq || [];
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="https://testivaraamo.turku.fi:8003/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', ${piwikSiteId}]);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript';
+        g.async=true;
+        g.defer=true;
+        g.src=u+'matomo.js';
+        s.parentNode.insertBefore(g,s);
+      })();
+    `;
+    return scriptString;
+  }
+
 
   render() {
     const { fontSize } = this.props;
@@ -64,7 +115,7 @@ export class UnconnectedAppContainer extends Component {
           {this.props.children}
         </main>
         <Footer />
-        <CookieBar />
+        <CookieBar onAcceptFunc={() => this.addCookie()} />
       </div>
     );
   }

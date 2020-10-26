@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { injectT } from 'i18n';
 
-function CookieBar({ t }) {
+function CookieBar({ t, onAcceptFunc }) {
   return (
     <CookieConsent
       buttonClasses="cookie-accept-button"
@@ -17,8 +17,8 @@ function CookieBar({ t }) {
       disableButtonStyles
       enableDeclineButton
       expires={90}
-      onDecline={() => { window.location.replace('http://www.turku.fi'); }}
-      setDeclineCookie={false}
+      onAccept={onAcceptFunc}
+      setDeclineCookie
     >
       {t('CookieBar.description')}
       <div className="cookiePolicy">
@@ -30,6 +30,7 @@ function CookieBar({ t }) {
 
 CookieBar.propTypes = {
   t: PropTypes.func.isRequired,
+  onAcceptFunc: PropTypes.func.isRequired,
 };
 
 export default injectT(CookieBar);

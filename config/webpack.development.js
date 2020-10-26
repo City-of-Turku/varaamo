@@ -70,6 +70,7 @@ module.exports = merge(common, {
         API_URL: JSON.stringify(process.env.API_URL || 'https://testivaraamo.turku.fi:8010/v1'),
         SHOW_TEST_SITE_MESSAGE: Boolean(process.env.SHOW_TEST_SITE_MESSAGE),
         TRACKING: Boolean(process.env.PIWIK_SITE_ID),
+        TRACKING_ID: JSON.stringify(process.env.PIWIK_SITE_ID),
         CUSTOM_MUNICIPALITY_OPTIONS: process.env.CUSTOM_MUNICIPALITY_OPTIONS,
         CLIENT_ID: JSON.stringify(process.env.CLIENT_ID),
         OPENID_AUDIENCE: JSON.stringify(process.env.OPENID_AUDIENCE),
