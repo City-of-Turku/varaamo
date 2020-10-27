@@ -21,8 +21,9 @@ describe('shared/CookieBar', () => {
     expect(wrapper.prop('disableButtonStyles')).toBe(true);
     expect(wrapper.prop('enableDeclineButton')).toBe(true);
     expect(wrapper.prop('onDecline')).toBeDefined();
+    expect(wrapper.prop('onAccept')).toBeDefined();
     expect(wrapper.prop('expires')).toBe(90);
-    expect(wrapper.prop('setDeclineCookie')).toBe(false);
+    expect(wrapper.prop('setDeclineCookie')).toBe(true);
     expect(wrapper.contains('CookieBar.description')).toBe(true);
   });
 
