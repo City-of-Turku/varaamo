@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { withRouter } from 'react-router-dom';
 
-import { checkCookieConsent, addCookieScript } from '../utils/cookieUtils';
+import { checkCookieConsent } from '../utils/cookieUtils';
 import CookieBar from 'shared/cookiebar/CookieBar';
 import { fetchUser } from 'actions/userActions';
 import Favicon from 'shared/favicon';
@@ -70,9 +70,7 @@ export class UnconnectedAppContainer extends Component {
           {this.props.children}
         </main>
         <Footer />
-        <CookieBar
-          onAcceptFunc={() => addCookieScript()}
-        />
+        <CookieBar />
       </div>
     );
   }

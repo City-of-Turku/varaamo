@@ -2,9 +2,10 @@ import React from 'react';
 import CookieConsent from 'react-cookie-consent';
 import PropTypes from 'prop-types';
 
+import { addCookieScript } from '../../utils/cookieUtils';
 import { injectT } from 'i18n';
 
-function CookieBar({ t, onAcceptFunc }) {
+function CookieBar({ t }) {
   return (
     <CookieConsent
       buttonClasses="cookie-accept-button"
@@ -17,7 +18,7 @@ function CookieBar({ t, onAcceptFunc }) {
       disableButtonStyles
       enableDeclineButton
       expires={90}
-      onAccept={onAcceptFunc}
+      onAccept={addCookieScript}
       setDeclineCookie
     >
       {t('CookieBar.description')}
@@ -30,7 +31,6 @@ function CookieBar({ t, onAcceptFunc }) {
 
 CookieBar.propTypes = {
   t: PropTypes.func.isRequired,
-  onAcceptFunc: PropTypes.func.isRequired,
 };
 
 export default injectT(CookieBar);
