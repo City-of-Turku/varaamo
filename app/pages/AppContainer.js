@@ -55,6 +55,7 @@ export class UnconnectedAppContainer extends Component {
     const { fontSize } = this.props;
     return (
       <div className={classNames('app', getCustomizationClassName(), (fontSize))}>
+        <CookieBar />
         <SkipLink />
 
         <Helmet htmlAttributes={{ lang: this.props.currentLanguage }} title="Varaamo" />
@@ -70,7 +71,6 @@ export class UnconnectedAppContainer extends Component {
           {this.props.children}
         </main>
         <Footer />
-        <CookieBar />
       </div>
     );
   }
