@@ -62,8 +62,8 @@ describe('initI18n', () => {
       const expected = {
         intl: {
           defaultLocale: constants.DEFAULT_LOCALE,
-          locale: 'en',
-          messages: messages.en,
+          locale: 'fi',
+          messages: messages.fi,
         },
       };
 

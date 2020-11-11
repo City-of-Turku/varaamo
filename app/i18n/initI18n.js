@@ -60,8 +60,6 @@ function initI18n() {
     locale = persistedData;
   } else if (browserLanguage === 'sv' || browserLanguage === 'sv-fi' || browserLanguage === 'sv-se') {
     locale = 'se';
-  } else if (browserLanguage.includes('en')) {
-    locale = 'en';
   } else if (browserLanguage === 'fi') {
     locale = browserLanguage;
   } else {
