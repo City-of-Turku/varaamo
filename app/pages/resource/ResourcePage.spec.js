@@ -79,6 +79,7 @@ describe('pages/resource/ResourcePage', () => {
     test('renders PageWrapper with correct props', () => {
       const pageWrapper = getWrapper().find(PageWrapper);
       expect(pageWrapper).toHaveLength(1);
+      expect(pageWrapper.prop('canonicalUrl')).toBe(window.location.origin + window.location.pathname);
       expect(pageWrapper.prop('title')).toBe(defaultProps.resource.name);
       expect(pageWrapper.prop('transparent')).toBe(true);
     });

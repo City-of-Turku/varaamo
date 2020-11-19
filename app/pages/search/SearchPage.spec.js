@@ -60,6 +60,7 @@ describe('pages/search/SearchPage', () => {
     test('renders PageWrapper with correct props', () => {
       const pageWrapper = getWrapper().find(PageWrapper);
       expect(pageWrapper).toHaveLength(1);
+      expect(pageWrapper.prop('canonicalUrl')).toBe(window.location.origin + window.location.pathname);
       expect(pageWrapper.prop('className')).toBe('app-SearchPage__wrapper');
       expect(pageWrapper.prop('title')).toBe('SearchPage.title');
       expect(pageWrapper.prop('transparent')).toBe(true);

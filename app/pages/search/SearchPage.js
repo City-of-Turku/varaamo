@@ -105,7 +105,12 @@ class UnconnectedSearchPage extends Component {
           resultCount={resultCount}
         />
 
-        <PageWrapper className="app-SearchPage__wrapper" title={t('SearchPage.title')} transparent>
+        <PageWrapper
+          canonicalUrl={window.location.origin + window.location.pathname}
+          className="app-SearchPage__wrapper"
+          title={t('SearchPage.title')}
+          transparent
+        >
           <h2 className="app-SearchPage__header visually-hidden">{t('SearchResults.label')}</h2>
           <Row className="app-SearchPage__sortControlRow">
             <Col className="app-SearchPage__sortControl" md={4} mdOffset={8} sm={6}>
