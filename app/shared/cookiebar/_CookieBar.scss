@@ -1,39 +1,46 @@
-
-
-.cookie-accept-button{
-  display: flex;
-  background: $turku-yellow;
-  border: 0px;
-  border-radius: 12px;
-  box-shadow: none;
-  color: black;
-  cursor: pointer;
-  flex: 0 0 auto;
-  padding: 5px 10px;
-  margin: auto 8px auto 12px;
-  @media (max-width: $screen-xs-max) {
-    margin: auto 12px 12px auto;
-  }
-}
-
-.cookie-decline-button {
-  display: flex;
-  background: $turku-red;
-  border: 0px;
-  border-radius: 12px;
-  box-shadow: none;
-  color: black;
-  cursor: pointer;
-  flex: 0 0 auto;
-  padding: 5px 10px;
-  margin: auto 12px auto auto;
-  @media (max-width: $screen-xs-max) {
-    margin: auto auto 12px 20px;
-  }
-}
-
 .cookieConsent {
-  @media (min-width: $screen-sm-min) {
-    flex-wrap: nowrap!important;
+  align-items: baseline;
+  background: rgb(53, 53, 53);
+  border-top: initial;
+  bottom: 0;
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 1100;
+
+    :focus {
+      outline: white solid 3px;
+    }
+
+  .cookie-content {
+    margin: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cookie-button {
+    border-radius: 0;
+    border: 1px solid black;
+    box-shadow: none;
+    color: black;
+    cursor: pointer;
+    flex: 0 0 auto;
+    margin: 0 15px 15px 15px;
+    padding: 5px 10px;
+  }
+
+  #cookie-accept-button{
+    background: $turku-yellow;
+  }
+
+  #cookie-decline-button {
+    background: $turku-red;
   }
 }
+
+
