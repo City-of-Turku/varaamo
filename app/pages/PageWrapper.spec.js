@@ -19,10 +19,31 @@ describe('pages/PageWrapper', () => {
     );
   }
 
-  test('renders Helmet with correct title prop', () => {
+  describe('Helmet', () => {
     const helmet = getWrapper().find(Helmet);
-    expect(helmet).toHaveLength(1);
-    expect(helmet.prop('title')).toBe('Test title - Varaamo');
+
+    test('is rendered', () => {
+      expect(helmet).toHaveLength(1);
+    });
+
+    test('has child title', () => {
+      const title = helmet.find('title');
+      expect(title).toHaveLength(1);
+      expect(title.text()).toBe(`${defaultProps.title} - Varaamo`);
+    });
+
+    test('has canonical link if canonicalUrl given in props', () => {
+      const canonicalUrl = 'https://varaamo.fi/page';
+      const canonicalLink = getWrapper({ canonicalUrl }).find('link');
+      expect(canonicalLink).toHaveLength(1);
+      expect(canonicalLink.prop('href')).toBe(canonicalUrl);
+      expect(canonicalLink.prop('rel')).toBe('canonical');
+    });
+
+    test('does not have canonical link if canonicalUrl is not given in props', () => {
+      const canonicalLink = helmet.find('link');
+      expect(canonicalLink).toHaveLength(0);
+    });
   });
 
   test('renders a div with the className given in props', () => {

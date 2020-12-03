@@ -2,23 +2,24 @@ import React from 'react';
 import CookieConsent from 'react-cookie-consent';
 import PropTypes from 'prop-types';
 
+import { addCookieScript } from '../../utils/cookieUtils';
 import { injectT } from 'i18n';
 
 function CookieBar({ t }) {
   return (
     <CookieConsent
-      buttonClasses="cookie-accept-button"
+      buttonClasses="cookie-button"
       buttonId="cookie-accept-button"
       buttonText={t('CookieBar.accept')}
-      contentStyle={{ flex: 'auto' }}
-      declineButtonClasses="cookie-decline-button"
+      contentClasses="cookie-content"
+      declineButtonClasses="cookie-button"
       declineButtonId="cookie-decline-button"
       declineButtonText={t('CookieBar.decline')}
-      disableButtonStyles
+      disableStyles
       enableDeclineButton
       expires={90}
-      onDecline={() => { window.location.replace('http://www.turku.fi'); }}
-      setDeclineCookie={false}
+      onAccept={addCookieScript}
+      setDeclineCookie
     >
       {t('CookieBar.description')}
       <div className="cookiePolicy">

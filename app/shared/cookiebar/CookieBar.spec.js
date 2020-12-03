@@ -11,18 +11,19 @@ describe('shared/CookieBar', () => {
   test('renders CookieBar with correct props', () => {
     const wrapper = getWrapper();
     expect(wrapper).toHaveLength(1);
-    expect(wrapper.prop('buttonClasses')).toBe('cookie-accept-button');
+    expect(wrapper.prop('buttonClasses')).toBe('cookie-button');
     expect(wrapper.prop('buttonId')).toBe('cookie-accept-button');
     expect(wrapper.prop('buttonText')).toEqual('CookieBar.accept');
-    expect(wrapper.prop('contentStyle')).toEqual({ flex: 'auto' });
-    expect(wrapper.prop('declineButtonClasses')).toBe('cookie-decline-button');
+    expect(wrapper.prop('contentClasses')).toBe('cookie-content');
+    expect(wrapper.prop('declineButtonClasses')).toBe('cookie-button');
     expect(wrapper.prop('declineButtonId')).toBe('cookie-decline-button');
     expect(wrapper.prop('declineButtonText')).toEqual('CookieBar.decline');
-    expect(wrapper.prop('disableButtonStyles')).toBe(true);
+    expect(wrapper.prop('disableStyles')).toBe(true);
     expect(wrapper.prop('enableDeclineButton')).toBe(true);
     expect(wrapper.prop('onDecline')).toBeDefined();
+    expect(wrapper.prop('onAccept')).toBeDefined();
     expect(wrapper.prop('expires')).toBe(90);
-    expect(wrapper.prop('setDeclineCookie')).toBe(false);
+    expect(wrapper.prop('setDeclineCookie')).toBe(true);
     expect(wrapper.contains('CookieBar.description')).toBe(true);
   });
 

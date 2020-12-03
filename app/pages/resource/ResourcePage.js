@@ -181,7 +181,11 @@ class UnconnectedResourcePage extends Component {
             />
           )}
           {!showMap && (
-            <PageWrapper title={resource.name || ''} transparent>
+            <PageWrapper
+              canonicalUrl={window.location.origin + window.location.pathname}
+              title={resource.name || ''}
+              transparent
+            >
               <div>
                 <Col className="app-ResourcePage__content" lg={9} md={9} xs={12}>
                   {mainImage
