@@ -7,8 +7,20 @@ import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
 import User from 'utils/fixtures/User';
 import { shallowWithIntl } from 'utils/testUtils';
+import { getFormattedProductPrice, checkOrderPrice } from 'utils/reservationUtils';
 import ReservationInformation from './ReservationInformation';
 import ReservationInformationForm from './ReservationInformationForm';
+
+jest.mock('utils/reservationUtils', () => {
+  const originalModule = jest.requireActual('utils/reservationUtils');
+  return {
+    __esModule: true,
+    ...originalModule,
+    checkOrderPrice: jest.fn(() => Promise.resolve({
+      order: { id: 'test' },
+    })),
+  };
+});
 
 describe('pages/reservation/reservation-information/ReservationInformation', () => {
   const defaultProps = {
@@ -69,13 +81,43 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     expect(header.text()).toBe('ReservationPhase.informationTitle');
   });
 
-  test('renders correct reservation details and time', () => {
+  test('renders correct reservation details and time when reservation is free', () => {
     const details = getWrapper().find('.app-ReservationDetails__value');
     expect(details).toHaveLength(2);
     expect(details.at(0).props().children).toContain(defaultProps.resource.name);
     expect(details.at(0).props().children).toContain(defaultProps.unit.name);
     expect(details.at(1).props().children).toContain('10.10.2016');
     expect(details.at(1).props().children).toContain('(1 h)');
+  });
+
+  test('renders correct reservation details and time when reservation has products', () => {
+    const resource = Resource.build({
+      products: [{ id: 'test1' }, { id: 'test2' }]
+    });
+    const order = {
+      order_lines: [{
+        product: {
+          price: { amount: '3.50', period: '01:00:00', type: 'per_period' },
+          quantity: 1,
+          type: 'rent'
+        }
+      }],
+      price: '3.50'
+    };
+    const wrapper = getWrapper({ resource });
+    const instance = wrapper.instance();
+    instance.setState({ order });
+    const details = wrapper.find('.app-ReservationDetails__value');
+
+    expect(details).toHaveLength(4);
+    expect(details.at(0).props().children).toContain(resource.name);
+    expect(details.at(0).props().children).toContain(defaultProps.unit.name);
+    expect(details.at(1).props().children).toContain(
+      getFormattedProductPrice(order.order_lines[0].product)
+    );
+    expect(details.at(2).props().children).toContain('common.priceWithVAT');
+    expect(details.at(3).props().children).toContain('10.10.2016');
+    expect(details.at(3).props().children).toContain('(1 h)');
   });
 
   describe('onConfirm', () => {
@@ -287,6 +329,27 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       const actual = instance.getRequiredFormFields(resource, 'terms and conditions');
 
       expect(actual).toEqual(['someField1', 'someField2', 'termsAndConditions']);
+    });
+  });
+
+  describe('componentDidMount', () => {
+    beforeEach(() => {
+      checkOrderPrice.mockClear();
+    });
+    test('calls checkOrderPrice when props.resource has products', () => {
+      const resource = Resource.build({
+        products: [{ id: 'test1' }, { id: 'test2' }]
+      });
+      const instance = getWrapper({ resource }).instance();
+      instance.componentDidMount();
+      expect(checkOrderPrice).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not call checkOrderPrice when props.resource has no products', () => {
+      const resource = Resource.build({ products: [] });
+      const instance = getWrapper({ resource }).instance();
+      instance.componentDidMount();
+      expect(checkOrderPrice).toHaveBeenCalledTimes(0);
     });
   });
 });

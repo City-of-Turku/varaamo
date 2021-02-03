@@ -1,0 +1,38 @@
+import { shallow } from 'enzyme';
+import React from 'react';
+
+import ReservationConfirmation from '../reservation-confirmation/ReservationConfirmation';
+import { UnconnectedPaymentSuccess as PaymentSuccess } from './PaymentSuccess';
+
+
+describe('pages/reservation/payment/PaymentFailed', () => {
+  const defaultProps = {
+    reservation: { id: 'test-reservation' },
+    resource: { id: 'test-resource' },
+    user: { name: 'test-user' },
+    isLoggedIn: false,
+    history: {}
+  };
+
+  function getWrapper(extraProps) {
+    return shallow(<PaymentSuccess {...defaultProps} {...extraProps} />);
+  }
+
+  describe('renders', () => {
+    test('wrapping div', () => {
+      const div = getWrapper();
+      expect(div).toHaveLength(1);
+      expect(div.prop('className')).toBe('reservation-payment-success');
+    });
+
+    test('ReservationConfirmation with correct props', () => {
+      const reservationConf = getWrapper().find(ReservationConfirmation);
+      expect(reservationConf).toHaveLength(1);
+      expect(reservationConf.prop('history')).toBe(defaultProps.history);
+      expect(reservationConf.prop('isLoggedIn')).toBe(defaultProps.isLoggedIn);
+      expect(reservationConf.prop('reservation')).toBe(defaultProps.reservation);
+      expect(reservationConf.prop('resource')).toBe(defaultProps.resource);
+      expect(reservationConf.prop('user')).toBe(defaultProps.user);
+    });
+  });
+});

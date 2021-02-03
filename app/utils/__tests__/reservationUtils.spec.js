@@ -12,7 +12,13 @@ import {
   getNextAvailableTime,
   getNextReservation,
   isValidPhoneNumber,
+  createOrderLines,
+  hasProducts,
+  createOrder,
+  checkOrderPrice,
+  getFormattedProductPrice,
 } from 'utils/reservationUtils';
+import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 
 describe('Utils: reservationUtils', () => {
   describe('combine', () => {
@@ -335,6 +341,86 @@ describe('Utils: reservationUtils', () => {
           expect(isValidPhoneNumber('04012312312')).toBe(true);
         });
       });
+    });
+  });
+
+  describe('hasProducts', () => {
+    test('returns true if given resource has products', () => {
+      const resource = { products: [{ 0: { id: 'test1' } }] };
+      expect(hasProducts(resource)).toBe(true);
+    });
+
+    test('returns false if given resource does not have products', () => {
+      const resource = { products: undefined };
+      expect(hasProducts(resource)).toBe(false);
+    });
+  });
+
+  describe('createOrderLines', () => {
+    test('returns an array of objects with product and quantity if products is not empty', () => {
+      const products = [{ id: 'test1' }, { id: 'test2' }];
+      const expected = [{ product: 'test1', quantity: 1 }, { product: 'test2', quantity: 1 }];
+      expect(createOrderLines(products)).toStrictEqual(expected);
+    });
+
+    test('returns null if given products is empty', () => {
+      const products = [];
+      expect(createOrderLines(products)).toBe(null);
+    });
+  });
+
+  describe('createOrder', () => {
+    test('returns order object with order_lines and return_url if given products is not empty', () => {
+      const products = [{ id: 'test1' }, { id: 'test2' }];
+      const expected = {
+        order_lines: createOrderLines(products),
+        return_url: `${window.location.origin}/reservation-payment-return`
+      };
+      expect(createOrder(products)).toStrictEqual(expected);
+    });
+
+    test('returns null if given products is empty', () => {
+      const products = [];
+      expect(createOrder(products)).toBe(null);
+    });
+  });
+
+  describe('checkOrderPrice', () => {
+    const testResult = { price: 'test' };
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => Promise.resolve(testResult),
+    }));
+    afterAll(() => {
+      fetch.mockClear();
+    });
+    test('calls fetch with correct parameters', async () => {
+      const begin = '2015-10-16T08:00:00.000Z';
+      const end = '2015-10-16T09:00:00.000Z';
+      const products = [{ id: 'test1' }, { id: 'test2' }];
+      const orderLines = createOrderLines(products);
+      const state = { auth: { user: null } };
+      const payload = { begin, end, order_lines: orderLines };
+      const request = { method: 'POST', headers: getHeadersCreator()(state), body: JSON.stringify(payload) };
+      const result = await checkOrderPrice(begin, end, orderLines, state);
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetch.mock.calls[0][0]).toBe(buildAPIUrl('order/check_price'));
+      expect(fetch.mock.calls[0][1]).toStrictEqual(request);
+      expect(result).toBe(testResult);
+    });
+  });
+
+  describe('getFormattedProductPrice', () => {
+    test('returns price without period divider if product is type fixed', () => {
+      const product = { price: { amount: '3.50', period: '01:00:00', type: 'fixed' } };
+      const expected = `${product.price.amount}€`;
+      expect(getFormattedProductPrice(product)).toBe(expected);
+    });
+
+    test('returns price with period divider if product is not type fixed', () => {
+      const product = { price: { amount: '3.50', period: '01:00:00', type: 'period' } };
+      const expected = `${product.price.amount}€ / 1 h`;
+      expect(getFormattedProductPrice(product)).toBe(expected);
     });
   });
 });

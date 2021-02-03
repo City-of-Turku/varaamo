@@ -11,12 +11,13 @@ import { Field, reduxForm } from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
 
 
-import { isValidPhoneNumber } from 'utils/reservationUtils';
+import { isValidPhoneNumber, hasProducts } from 'utils/reservationUtils';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import TermsField from 'shared/form-fields/TermsField';
 import { injectT } from 'i18n';
 import ReservationTermsModal from 'shared/modals/reservation-terms';
 import WrappedText from 'shared/wrapped-text/WrappedText';
+import ReservationSubmitButton from './ReservationSubmitButton';
 
 const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {
@@ -131,6 +132,7 @@ class UnconnectedReservationInformationForm extends Component {
     );
   }
 
+  // TODO: refactor to support payment terms
   renderTermsField(name) {
     const { openResourceTermsModal, t } = this.props;
     const label = t('ReservationInformationForm.termsAndConditionsLabel');
@@ -376,13 +378,12 @@ class UnconnectedReservationInformationForm extends Component {
               </Button>
               )
             }
-            <Button
-              bsStyle="primary"
-              disabled={isMakingReservations}
-              type="submit"
-            >
-              {isMakingReservations ? t('common.saving') : t('common.save')}
-            </Button>
+            <ReservationSubmitButton
+              handleSubmit={handleSubmit}
+              hasPayment={hasProducts(resource)}
+              isMakingReservations={isMakingReservations}
+              onConfirm={onConfirm}
+            />
           </div>
         </Form>
         <ReservationTermsModal resource={resource} />

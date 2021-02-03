@@ -9,7 +9,9 @@ import Well from 'react-bootstrap/lib/Well';
 import moment from 'moment';
 
 import { injectT } from 'i18n';
-import { isStaffEvent } from 'utils/reservationUtils';
+import {
+  isStaffEvent, checkOrderPrice, createOrderLines, hasProducts, getFormattedProductPrice
+} from 'utils/reservationUtils';
 import { getTermsAndConditions } from 'utils/resourceUtils';
 import ReservationInformationForm from './ReservationInformationForm';
 
@@ -26,10 +28,33 @@ class ReservationInformation extends Component {
     reservation: PropTypes.object,
     resource: PropTypes.object.isRequired,
     selectedTime: PropTypes.object.isRequired,
+    state: PropTypes.object,
     t: PropTypes.func.isRequired,
     unit: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = { order: null };
+  }
+
+  componentDidMount() {
+    if (!hasProducts(this.props.resource)) {
+      return;
+    }
+
+    const products = this.props.resource.products;
+    const {
+      begin,
+      end,
+    } = this.props.selectedTime;
+
+    checkOrderPrice(begin, end, createOrderLines(products), this.props.state)
+      .then(order => this.setState({ order }))
+      .catch(() => this.setState({ order: null }));
+  }
 
   onConfirm = (values) => {
     const { onConfirm } = this.props;
@@ -59,6 +84,10 @@ class ReservationInformation extends Component {
 
     if (termsAndConditions) {
       formFields.push('termsAndConditions');
+    }
+
+    if (hasProducts(resource)) {
+      formFields.push('paymentTermsAndConditions');
     }
 
     return uniq(formFields);
@@ -119,6 +148,10 @@ class ReservationInformation extends Component {
       requiredFormFields.push('termsAndConditions');
     }
 
+    if (hasProducts(resource)) {
+      requiredFormFields.push('paymentTermsAndConditions');
+    }
+
     return requiredFormFields;
   }
 
@@ -147,6 +180,7 @@ class ReservationInformation extends Component {
       unit,
       user,
     } = this.props;
+    const { order } = this.state;
     const termsAndConditions = getTermsAndConditions(resource);
     const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
     const endText = moment(selectedTime.end).format('HH:mm');
@@ -185,6 +219,34 @@ class ReservationInformation extends Component {
                 {unit.name}
               </Col>
             </Row>
+            {hasProducts(resource) && order && (
+              <React.Fragment>
+                <Row>
+                  <Col md={4}>
+                    <span className="app-ReservationDetails__name">
+                      {t('common.priceLabel')}
+                    </span>
+                  </Col>
+                  <Col md={8}>
+                    <span className="app-ReservationDetails__value">
+                      {getFormattedProductPrice(order.order_lines[0].product)}
+                    </span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={4}>
+                    <span className="app-ReservationDetails__name">
+                      {t('common.priceTotalLabel')}
+                    </span>
+                  </Col>
+                  <Col md={8}>
+                    <span className="app-ReservationDetails__value">
+                      {t('common.priceWithVAT', { price: order.price, vat: order.order_lines[0].product.price.tax_percentage })}
+                    </span>
+                  </Col>
+                </Row>
+              </React.Fragment>
+            )}
             <Row>
               <Col className="app-ReservationDetails__label" md={4}>
                 {t('ReservationPage.detailsTime')}

@@ -14,6 +14,7 @@ import ReservationInformation from './reservation-information/ReservationInforma
 import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import { UnconnectedReservationPage as ReservationPage } from './ReservationPage';
+import { createOrder } from '../../utils/reservationUtils';
 
 describe('pages/reservation/ReservationPage', () => {
   const resource = Immutable(Resource.build());
@@ -57,6 +58,7 @@ describe('pages/reservation/ReservationPage', () => {
         resource: resource.id,
       },
     ],
+    state: {},
     unit: Immutable(Unit.build()),
     user: Immutable(User.build()),
   };
@@ -348,6 +350,11 @@ describe('pages/reservation/ReservationPage', () => {
   });
 
   describe('componentWillUpdate', () => {
+    const realLocation = window.location;
+    afterAll(() => {
+      window.location = realLocation;
+    });
+
     test(
       'sets state view confirmation when next props has reservationCreated',
       () => {
@@ -371,6 +378,22 @@ describe('pages/reservation/ReservationPage', () => {
         expect(instance.state.view).toBe('confirmation');
       }
     );
+
+    test('sets window.location to paymentUrl when next props has reservation with order.paymentUrl', () => {
+      delete window.location;
+      window.location = new URL('https://www.current-location.fi');
+
+      const instance = getWrapper().instance();
+      const reservationCreated = Reservation.build();
+      const paymentUrl = 'http://test-payment-url.fi';
+      reservationCreated.order = { paymentUrl };
+      const nextProps = {
+        reservationCreated
+      };
+      instance.componentWillUpdate(nextProps);
+
+      expect(window.location).toBe(paymentUrl);
+    });
   });
   describe('componentWillUnmount when state.view is confirmation', () => {
     const clearReservations = simple.mock();
@@ -533,14 +556,17 @@ describe('pages/reservation/ReservationPage', () => {
       expect(postReservation.callCount).toBe(0);
       expect(putReservation.callCount).toBe(1);
       expect(putReservation.lastCall.args[0].preferredLanguage).toEqual('fi');
+      expect('order' in putReservation.lastCall.args[0]).toBe(false);
       expect(putReservation.lastCall.args[0].comments).toEqual('-');
       expect(putReservation.lastCall.args[0].someField).toEqual(values.someField);
     });
 
     test('calls postReservation action when reservationToEdit empty', () => {
+      const products = [{ id: 'test-id', type: 'rent' }];
       postReservation.reset();
       putReservation.reset();
       const instance = getWrapper({
+        resource: Immutable(Resource.build({ products })),
         actions: {
           postReservation,
           putReservation,
@@ -549,6 +575,8 @@ describe('pages/reservation/ReservationPage', () => {
       instance.handleReservation(values);
       expect(postReservation.callCount).toBe(1);
       expect(postReservation.lastCall.args[0].preferredLanguage).toEqual('fi');
+      expect(postReservation.lastCall.args[0].order)
+        .toEqual(createOrder(instance.props.resource.products));
       expect(putReservation.callCount).toBe(0);
     });
   });

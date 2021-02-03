@@ -8,6 +8,7 @@ import HomePage from '../app/pages/home';
 import NotFoundPage from '../app/pages/not-found';
 import LoginCallback from '../app/pages/auth/LoginCallback';
 import LogoutCallback from '../app/pages/auth/LogoutCallback';
+import ReservationPaymentReturnPage from '../app/pages/reservation/payment/ReservationPaymentReturnPage';
 
 // import non-landing pages dynamically
 const SearchPage = lazy(() => import('../app/pages/search'));
@@ -49,6 +50,11 @@ export default () => (
           path="/my-reservations"
         />
         <Route component={props => <ReservationPage {...props} />} componentName="Reservation" path="/reservation" />
+        <Route
+          component={props => <ReservationPaymentReturnPage {...props} />}
+          componentName="ReservationPaymentReturn"
+          path="/reservation-payment-return"
+        />
 
         <Redirect from="/home" to="/" />
         <Redirect from="/resources/:id/reservation" to="/resources/:id" />

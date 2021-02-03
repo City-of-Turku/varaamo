@@ -8,6 +8,7 @@ describe('pages/reservation/reservation-phases/ReservationPhases', () => {
   const defaultProps = {
     currentPhase: 'information',
     isEditing: false,
+    hasPayment: false,
   };
 
   function getWrapper(extraProps) {
@@ -107,6 +108,30 @@ describe('pages/reservation/reservation-phases/ReservationPhases', () => {
       expect(phases.at(2).prop('isActive')).toBe(true);
       expect(phases.at(2).prop('isCompleted')).toBe(false);
       expect(phases.at(2).prop('title')).toBe('ReservationPhase.confirmationTitle');
+    });
+  });
+
+  describe('when hasPayment is true and isEditing is true', () => {
+    test('renders four phases', () => {
+      const phases = getWrapper({
+        currentPhase: 'confirmation',
+        isEditing: true,
+        hasPayment: true
+      }).find(ReservationPhase);
+      expect(phases).toHaveLength(4);
+      expect(phases.at(2).prop('title')).toBe('ReservationPhase.paymentTitle');
+    });
+  });
+
+  describe('when hasPayment is true and isEditing is false', () => {
+    test('renders three phases', () => {
+      const phases = getWrapper({
+        currentPhase: 'confirmation',
+        isEditing: false,
+        hasPayment: true
+      }).find(ReservationPhase);
+      expect(phases).toHaveLength(3);
+      expect(phases.at(1).prop('title')).toBe('ReservationPhase.paymentTitle');
     });
   });
 });

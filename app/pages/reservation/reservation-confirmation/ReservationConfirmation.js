@@ -10,6 +10,7 @@ import iconHome from 'hel-icons/dist/shapes/home.svg';
 import { injectT } from 'i18n';
 import ReservationDate from 'shared/reservation-date';
 import { getFeedbackLink } from 'utils/languageUtils';
+import { getFormattedProductPrice } from '../../../utils/reservationUtils';
 
 class ReservationConfirmation extends Component {
   static propTypes = {
@@ -183,6 +184,18 @@ class ReservationConfirmation extends Component {
                 'homeMunicipality',
                 t('common.homeMunicipality'),
                 reservation.homeMunicipality.name[currentLanguage]
+              )}
+            {reservation.order
+              && this.renderField(
+                'pricePerPeriod',
+                t('common.priceLabel'),
+                getFormattedProductPrice(reservation.order.orderLines[0].product),
+              )}
+            {reservation.order
+              && this.renderField(
+                'reservationPrice',
+                t('common.priceTotalLabel'),
+                `${reservation.order.price}€`,
               )}
             {reservation.billingAddressStreet && (
               <Col xs={12}><h3 id="billingInformationHeader">{t('common.billingAddressLabel')}</h3></Col>

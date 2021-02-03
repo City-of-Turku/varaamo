@@ -122,6 +122,14 @@ describe('pages/reservation/reservationPageSelector', () => {
     expect(selected.isMakingReservations).toBeDefined();
   });
 
+  test('return state', () => {
+    const state = getState();
+    const props = getProps();
+    const selected = reservationPageSelector(state, props);
+
+    expect(selected.state).toBeDefined();
+  });
+
   test('returns resource', () => {
     const state = getState();
     const props = getProps();

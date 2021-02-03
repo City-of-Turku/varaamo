@@ -49,6 +49,7 @@ const reservationPageSelector = createStructuredSelector({
   isFetchingResource: requestIsActiveSelectorFactory(ActionTypes.API.RESOURCE_GET_REQUEST),
   isMakingReservations: requestIsActiveSelectorFactory(ActionTypes.API.RESERVATION_POST_REQUEST),
   selected: selectedSelector,
+  state: state => state,
   resourceId: resourceIdSelector,
   resource: resourceSelector,
   reservationToEdit: toEditSelector,

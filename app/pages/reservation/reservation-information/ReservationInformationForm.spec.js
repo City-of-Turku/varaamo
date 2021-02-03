@@ -13,6 +13,8 @@ import {
   UnconnectedReservationInformationForm as ReservationInformationForm,
   validate,
 } from './ReservationInformationForm';
+import ReservationSubmitButton from './ReservationSubmitButton';
+import { hasProducts } from '../../../utils/reservationUtils';
 
 describe('pages/reservation/reservation-information/ReservationInformationForm', () => {
   describe('validation', () => {
@@ -349,15 +351,11 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
 
     describe('form buttons', () => {
       describe('when is editing is false', () => {
-        const buttons = getWrapper({ isEditing: false }).find(Button);
-        test('renders two buttons', () => {
-          expect(buttons.length).toBe(2);
-        });
-
-        describe('the first button', () => {
-          const button = buttons.at(0);
-
-          test('has correct text', () => {
+        const button = getWrapper({ isEditing: false }).find(Button);
+        describe('renders a Button', () => {
+          test('with correct props', () => {
+            expect(button).toHaveLength(1);
+            expect(button.prop('bsStyle')).toBe('warning');
             expect(button.props().children).toBe('common.cancel');
           });
 
@@ -369,19 +367,20 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           });
         });
 
-        describe('the second button', () => {
-          const button = buttons.at(1);
-
-          test('has correct text', () => {
-            expect(button.props().children).toBe('common.save');
-          });
+        test('renders ReservationSubmitButton with correct props', () => {
+          const submitButton = getWrapper().find(ReservationSubmitButton);
+          expect(submitButton).toHaveLength(1);
+          expect(submitButton.prop('handleSubmit')).toBe(defaultProps.handleSubmit);
+          expect(submitButton.prop('hasPayment')).toBe(hasProducts(defaultProps.resource));
+          expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
+          expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
         });
       });
 
       describe('when is editing is true', () => {
         const buttons = getWrapper({ isEditing: true }).find(Button);
-        test('renders three buttons', () => {
-          expect(buttons.length).toBe(3);
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
         });
 
         describe('the first button', () => {
@@ -414,12 +413,13 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           });
         });
 
-        describe('the third button', () => {
-          const button = buttons.at(2);
-
-          test('has correct text', () => {
-            expect(button.props().children).toBe('common.save');
-          });
+        test('renders ReservationSubmitButton with correct props', () => {
+          const submitButton = getWrapper({ isEditing: true }).find(ReservationSubmitButton);
+          expect(submitButton).toHaveLength(1);
+          expect(submitButton.prop('handleSubmit')).toBe(defaultProps.handleSubmit);
+          expect(submitButton.prop('hasPayment')).toBe(hasProducts(defaultProps.resource));
+          expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
+          expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
         });
       });
     });

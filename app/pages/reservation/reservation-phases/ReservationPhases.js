@@ -7,12 +7,15 @@ import ReservationPhase from './ReservationPhase';
 
 ReservationPhases.propTypes = {
   currentPhase: PropTypes.string.isRequired,
+  hasPayment: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool,
   t: PropTypes.func.isRequired,
 };
 
-function ReservationPhases({ currentPhase, isEditing, t }) {
-  const phases = ['information', 'confirmation'];
+function ReservationPhases({
+  currentPhase, hasPayment, isEditing, t
+}) {
+  const phases = hasPayment ? ['information', 'payment', 'confirmation'] : ['information', 'confirmation'];
   if (isEditing) {
     phases.splice(0, 0, 'time');
   }
