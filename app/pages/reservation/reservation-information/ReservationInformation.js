@@ -12,7 +12,7 @@ import { injectT } from 'i18n';
 import {
   isStaffEvent, checkOrderPrice, createOrderLines, hasProducts, getFormattedProductPrice
 } from 'utils/reservationUtils';
-import { getTermsAndConditions } from 'utils/resourceUtils';
+import { getTermsAndConditions, getPaymentTermsAndConditions } from 'utils/resourceUtils';
 import ReservationInformationForm from './ReservationInformationForm';
 
 class ReservationInformation extends Component {
@@ -25,6 +25,7 @@ class ReservationInformation extends Component {
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
     openResourceTermsModal: PropTypes.func.isRequired,
+    openResourcePaymentTermsModal: PropTypes.func.isRequired,
     reservation: PropTypes.object,
     resource: PropTypes.object.isRequired,
     selectedTime: PropTypes.object.isRequired,
@@ -174,6 +175,7 @@ class ReservationInformation extends Component {
       onBack,
       onCancel,
       openResourceTermsModal,
+      openResourcePaymentTermsModal,
       resource,
       selectedTime,
       t,
@@ -182,6 +184,7 @@ class ReservationInformation extends Component {
     } = this.props;
     const { order } = this.state;
     const termsAndConditions = getTermsAndConditions(resource);
+    const paymentTermsAndConditions = getPaymentTermsAndConditions(resource);
     const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
     const endText = moment(selectedTime.end).format('HH:mm');
     const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
@@ -199,7 +202,9 @@ class ReservationInformation extends Component {
             onBack={onBack}
             onCancel={onCancel}
             onConfirm={this.onConfirm}
+            openResourcePaymentTermsModal={openResourcePaymentTermsModal}
             openResourceTermsModal={openResourceTermsModal}
+            paymentTermsAndConditions={paymentTermsAndConditions}
             requiredFields={this.getRequiredFormFields(resource, termsAndConditions)}
             resource={resource}
             termsAndConditions={termsAndConditions}

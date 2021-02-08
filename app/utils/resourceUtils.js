@@ -211,6 +211,11 @@ function getTermsAndConditions(resource = {}) {
   return `${specificTerms}${genericTerms}`;
 }
 
+function getPaymentTermsAndConditions(resource = {}) {
+  const paymentTerms = resource.paymentTerms || '';
+  return paymentTerms;
+}
+
 function reservingIsRestricted(resource, date) {
   if (!date) {
     return false;
@@ -234,6 +239,7 @@ export {
   getResourcePageUrl,
   getResourcePageUrlComponents,
   getTermsAndConditions,
+  getPaymentTermsAndConditions,
   reservingIsRestricted,
   getMinPeriodText
 };

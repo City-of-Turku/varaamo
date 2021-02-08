@@ -10,6 +10,7 @@ import { shallowWithIntl } from 'utils/testUtils';
 import { getFormattedProductPrice, checkOrderPrice } from 'utils/reservationUtils';
 import ReservationInformation from './ReservationInformation';
 import ReservationInformationForm from './ReservationInformationForm';
+import { getPaymentTermsAndConditions } from '../../../utils/resourceUtils';
 
 jest.mock('utils/reservationUtils', () => {
   const originalModule = jest.requireActual('utils/reservationUtils');
@@ -31,6 +32,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     onBack: simple.stub(),
     onCancel: simple.stub(),
     onConfirm: simple.stub(),
+    openResourcePaymentTermsModal: simple.stub(),
     openResourceTermsModal: simple.stub(),
     reservation: Immutable(Reservation.build()),
     resource: Immutable(Resource.build()),
@@ -64,14 +66,19 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
   });
 
   test('renders an ReservationInformationForm element', () => {
-    const form = getWrapper().find(ReservationInformationForm);
+    const resource = Resource.build({
+      paymentTerms: { fi: 'testimaksuehdot', en: 'test payment terms' }
+    });
+    const form = getWrapper({ resource }).find(ReservationInformationForm);
     expect(form).toHaveLength(1);
     expect(form.prop('isEditing')).toBe(defaultProps.isEditing);
     expect(form.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
     expect(form.prop('onBack')).toBe(defaultProps.onBack);
     expect(form.prop('onCancel')).toBe(defaultProps.onCancel);
+    expect(form.prop('openResourcePaymentTermsModal')).toBe(defaultProps.openResourcePaymentTermsModal);
     expect(form.prop('openResourceTermsModal')).toBe(defaultProps.openResourceTermsModal);
-    expect(form.prop('resource')).toBe(defaultProps.resource);
+    expect(form.prop('paymentTermsAndConditions')).toBe(getPaymentTermsAndConditions(resource));
+    expect(form.prop('resource')).toBe(resource);
     expect(form.prop('user')).toBe(defaultProps.user);
   });
 

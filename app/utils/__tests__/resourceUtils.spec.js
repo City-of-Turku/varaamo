@@ -16,6 +16,7 @@ import {
   getOpenReservations,
   getResourcePageUrl,
   getTermsAndConditions,
+  getPaymentTermsAndConditions,
   reservingIsRestricted,
   getResourcePageUrlComponents,
   getMinPeriodText,
@@ -926,6 +927,18 @@ describe('Utils: resourceUtils', () => {
 
         expect(getTermsAndConditions(resource)).toBe('');
       });
+    });
+  });
+
+  describe('getPaymentTermsAndConditions', () => {
+    test('returns resource.paymentTerms if it exists', () => {
+      const resource = { paymentTerms: 'this is the payment terms' };
+      expect(getPaymentTermsAndConditions(resource)).toBe(resource.paymentTerms);
+    });
+
+    test('returns empty string if given resource doesnt have payment terms', () => {
+      const resource = { };
+      expect(getPaymentTermsAndConditions(resource)).toBe('');
     });
   });
 

@@ -17,6 +17,7 @@ import {
   clearReservations,
   closeReservationSuccessModal,
   openResourceTermsModal,
+  openResourcePaymentTermsModal,
 } from 'actions/uiActions';
 import PageWrapper from 'pages/PageWrapper';
 import { injectT } from 'i18n';
@@ -281,6 +282,7 @@ class UnconnectedReservationPage extends Component {
                     onBack={this.handleBack}
                     onCancel={this.handleCancel}
                     onConfirm={this.handleReservation}
+                    openResourcePaymentTermsModal={actions.openResourcePaymentTermsModal}
                     openResourceTermsModal={actions.openResourceTermsModal}
                     reservation={reservationToEdit}
                     resource={resource}
@@ -341,6 +343,7 @@ function mapDispatchToProps(dispatch) {
     closeReservationSuccessModal,
     fetchResource,
     openResourceTermsModal,
+    openResourcePaymentTermsModal,
     putReservation,
     postReservation,
   };

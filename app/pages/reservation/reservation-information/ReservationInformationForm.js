@@ -93,11 +93,17 @@ export function validate(values, {
     if (includes(currentRequiredFields, field)) {
       // required fields cant be empty or have only white space in them
       if (!values[field] || (typeof (values[field]) === 'string' && values[field].trim().length === 0)) {
-        errors[field] = (
-          field === 'termsAndConditions'
-            ? t('ReservationForm.termsAndConditionsError')
-            : t('ReservationForm.requiredError')
-        );
+        switch (field) {
+          case 'termsAndConditions':
+            errors[field] = t('ReservationForm.termsAndConditionsError');
+            break;
+          case 'paymentTermsAndConditions':
+            errors[field] = t('ReservationForm.paymentTermsAndConditionsError');
+            break;
+          default:
+            errors[field] = t('ReservationForm.requiredError');
+            break;
+        }
       }
     }
   });
@@ -132,11 +138,11 @@ class UnconnectedReservationInformationForm extends Component {
     );
   }
 
-  // TODO: refactor to support payment terms
-  renderTermsField(name) {
-    const { openResourceTermsModal, t } = this.props;
+  renderTermsField(name, isPayment = false) {
+    const { t } = this.props;
     const label = t('ReservationInformationForm.termsAndConditionsLabel');
-    const labelLink = `${t('ReservationInformationForm.termsAndConditionsLink')}`;
+    const labelLink = isPayment ? `${t('ReservationInformationForm.paymentTermsAndConditionsLink')}`
+      : `${t('ReservationInformationForm.termsAndConditionsLink')}`;
     return (
       <Field
         component={TermsField}
@@ -144,7 +150,9 @@ class UnconnectedReservationInformationForm extends Component {
         label={label}
         labelLink={labelLink}
         name={name}
-        onClick={openResourceTermsModal}
+        onClick={
+          isPayment ? this.props.openResourcePaymentTermsModal : this.props.openResourceTermsModal
+        }
       />
     );
   }
@@ -162,6 +170,7 @@ class UnconnectedReservationInformationForm extends Component {
       staffEventSelected,
       t,
       termsAndConditions,
+      paymentTermsAndConditions,
     } = this.props;
 
     this.requiredFields = staffEventSelected
@@ -361,6 +370,9 @@ class UnconnectedReservationInformationForm extends Component {
           {termsAndConditions
             && this.renderTermsField('termsAndConditions')
           }
+          {paymentTermsAndConditions
+            && this.renderTermsField('paymentTermsAndConditions', true)
+          }
           <div className="form-controls">
             <Button
               bsStyle="warning"
@@ -387,6 +399,7 @@ class UnconnectedReservationInformationForm extends Component {
           </div>
         </Form>
         <ReservationTermsModal resource={resource} />
+        <ReservationTermsModal resource={resource} termsType="payment" />
       </div>
     );
   }
@@ -401,11 +414,13 @@ UnconnectedReservationInformationForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   openResourceTermsModal: PropTypes.func.isRequired,
+  openResourcePaymentTermsModal: PropTypes.func.isRequired,
   requiredFields: PropTypes.array.isRequired,
   resource: PropTypes.object.isRequired,
   staffEventSelected: PropTypes.bool,
   t: PropTypes.func.isRequired,
   termsAndConditions: PropTypes.string.isRequired,
+  paymentTermsAndConditions: PropTypes.string.isRequired,
 };
 UnconnectedReservationInformationForm = injectT(UnconnectedReservationInformationForm);  // eslint-disable-line
 

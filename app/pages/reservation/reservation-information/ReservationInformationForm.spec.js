@@ -67,6 +67,28 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           expect(errors[fieldName]).toBeDefined();
         });
 
+        test('returns correct error if field is termsAndConditions and required', () => {
+          const fieldName = 'termsAndConditions';
+          const props = {
+            fields: [fieldName],
+            requiredFields: [fieldName],
+            t,
+          };
+          const errors = validate(values, props);
+          expect(errors[fieldName]).toBe('ReservationForm.termsAndConditionsError');
+        });
+
+        test('returns correct error if field is paymentTermsAndConditions and required', () => {
+          const fieldName = 'paymentTermsAndConditions';
+          const props = {
+            fields: [fieldName],
+            requiredFields: [fieldName],
+            t,
+          };
+          const errors = validate(values, props);
+          expect(errors[fieldName]).toBe('ReservationForm.paymentTermsAndConditionsError');
+        });
+
         test('does not return an error if field is not in requiredFields', () => {
           const fieldName = 'someField';
           const props = {
@@ -189,9 +211,11 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
       onBack: simple.mock(),
       onCancel: simple.mock(),
       onConfirm: simple.mock(),
+      openResourcePaymentTermsModal: simple.mock(),
       openResourceTermsModal: simple.mock(),
       requiredFields: [],
       resource: Resource.build(),
+      paymentTermsAndConditions: '',
       termsAndConditions: '',
     };
 
@@ -335,6 +359,10 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           const field = wrapper.find(Field).filter({ component: TermsField });
 
           expect(field.length).toBe(1);
+          expect(field.prop('label')).toBe('ReservationInformationForm.termsAndConditionsLabel');
+          expect(field.prop('labelLink')).toBe('ReservationInformationForm.termsAndConditionsLink');
+          expect(field.prop('name')).toBe('termsAndConditions');
+          expect(field.prop('onClick')).toBe(defaultProps.openResourceTermsModal);
         });
       });
 
@@ -342,6 +370,32 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
         test('does not render terms and conditions input wrapper', () => {
           const termsAndConditions = '';
           const wrapper = getWrapper({ termsAndConditions });
+          const field = wrapper.find(Field).filter({ component: TermsField });
+
+          expect(field.length).toBe(0);
+        });
+      });
+    });
+
+    describe('payment terms', () => {
+      describe('when payment terms are given in props', () => {
+        test('renders payment terms input wrapper', () => {
+          const paymentTermsAndConditions = 'Some payment terms text';
+          const wrapper = getWrapper({ paymentTermsAndConditions });
+          const field = wrapper.find(Field).filter({ component: TermsField });
+
+          expect(field.length).toBe(1);
+          expect(field.prop('label')).toBe('ReservationInformationForm.termsAndConditionsLabel');
+          expect(field.prop('labelLink')).toBe('ReservationInformationForm.paymentTermsAndConditionsLink');
+          expect(field.prop('name')).toBe('paymentTermsAndConditions');
+          expect(field.prop('onClick')).toBe(defaultProps.openResourcePaymentTermsModal);
+        });
+      });
+
+      describe('when payment terms are not given in props', () => {
+        test('does not render payment terms input wrapper', () => {
+          const paymentTermsAndConditions = '';
+          const wrapper = getWrapper({ paymentTermsAndConditions });
           const field = wrapper.find(Field).filter({ component: TermsField });
 
           expect(field.length).toBe(0);

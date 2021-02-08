@@ -28,6 +28,7 @@ describe('pages/reservation/ReservationPage', () => {
       closeReservationSuccessModal: simple.mock(),
       fetchResource: simple.mock(),
       handleRedirect: simple.mock(),
+      openResourcePaymentTermsModal: simple.mock(),
       openResourceTermsModal: simple.mock(),
       putReservation: simple.mock(),
       postReservation: simple.mock(),
@@ -182,6 +183,8 @@ describe('pages/reservation/ReservationPage', () => {
         expect(reservationInformation.prop('onBack')).toBeDefined();
         expect(reservationInformation.prop('onCancel')).toBeDefined();
         expect(reservationInformation.prop('onConfirm')).toBeDefined();
+        expect(reservationInformation.prop('openResourcePaymentTermsModal'))
+          .toBe(defaultProps.actions.openResourcePaymentTermsModal);
         expect(reservationInformation.prop('openResourceTermsModal')).toBe(defaultProps.actions.openResourceTermsModal);
         expect(reservationInformation.prop('reservation')).toBe(defaultProps.reservationToEdit);
         expect(reservationInformation.prop('resource')).toBe(defaultProps.resource);
