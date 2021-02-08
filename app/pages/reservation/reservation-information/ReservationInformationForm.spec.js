@@ -357,8 +357,10 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           const termsAndConditions = 'Some terms and conditions text';
           const wrapper = getWrapper({ termsAndConditions });
           const field = wrapper.find(Field).filter({ component: TermsField });
+          const isRequired = 'termsAndConditions' in defaultProps.requiredFields;
 
           expect(field.length).toBe(1);
+          expect(field.prop('isRequired')).toBe(isRequired);
           expect(field.prop('label')).toBe('ReservationInformationForm.termsAndConditionsLabel');
           expect(field.prop('labelLink')).toBe('ReservationInformationForm.termsAndConditionsLink');
           expect(field.prop('name')).toBe('termsAndConditions');
@@ -383,8 +385,10 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           const paymentTermsAndConditions = 'Some payment terms text';
           const wrapper = getWrapper({ paymentTermsAndConditions });
           const field = wrapper.find(Field).filter({ component: TermsField });
+          const isRequired = 'paymentTermsAndConditions' in defaultProps.requiredFields;
 
           expect(field.length).toBe(1);
+          expect(field.prop('isRequired')).toBe(isRequired);
           expect(field.prop('label')).toBe('ReservationInformationForm.termsAndConditionsLabel');
           expect(field.prop('labelLink')).toBe('ReservationInformationForm.paymentTermsAndConditionsLink');
           expect(field.prop('name')).toBe('paymentTermsAndConditions');

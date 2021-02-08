@@ -143,9 +143,12 @@ class UnconnectedReservationInformationForm extends Component {
     const label = t('ReservationInformationForm.termsAndConditionsLabel');
     const labelLink = isPayment ? `${t('ReservationInformationForm.paymentTermsAndConditionsLink')}`
       : `${t('ReservationInformationForm.termsAndConditionsLink')}`;
+
+    const isRequired = includes(this.requiredFields, name);
     return (
       <Field
         component={TermsField}
+        isRequired={isRequired}
         key={name}
         label={label}
         labelLink={labelLink}
