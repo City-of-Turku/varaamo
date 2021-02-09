@@ -42,6 +42,16 @@ function isLoggedInSelector(state) {
   return Boolean(state.auth.user);
 }
 
+const loginExpiresAtSelector = createSelector(
+  authUserSelector,
+  (user) => {
+    if (user) {
+      return user.expires_at;
+    }
+    return null;
+  }
+);
+
 const staffUnitsSelector = createSelector(
   currentUserSelector,
   (currentUser) => {
@@ -74,6 +84,7 @@ export {
   isSuperUserSelector,
   isLoadingUserSelector,
   isLoggedInSelector,
+  loginExpiresAtSelector,
   staffUnitsSelector,
   isManagerForSelector,
 };

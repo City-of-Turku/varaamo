@@ -9,6 +9,7 @@ import {
   isLoadingUserSelector,
   isLoggedInSelector,
   staffUnitsSelector,
+  loginExpiresAtSelector,
 } from './authSelectors';
 
 describe('state/selectors/authSelectors', () => {
@@ -163,6 +164,20 @@ describe('state/selectors/authSelectors', () => {
 
     test('returns true if user is defined', () => {
       expect(getSelected({ user: {} })).toBe(true);
+    });
+  });
+
+  describe('loginExpiresAtSelector', () => {
+    function getSelected({ user }) {
+      const state = getState({ auth: { user } });
+      return loginExpiresAtSelector(state);
+    }
+    test('returns expires at value if user exists', () => {
+      expect(getSelected({ user: { expires_at: 1612853993 } })).toBe(1612853993);
+    });
+
+    test('returns null if user does not exist', () => {
+      expect(getSelected({ user: undefined })).toBe(null);
     });
   });
 

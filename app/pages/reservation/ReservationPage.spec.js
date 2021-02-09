@@ -15,6 +15,7 @@ import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import { UnconnectedReservationPage as ReservationPage } from './ReservationPage';
 import { createOrder } from '../../utils/reservationUtils';
+import userManager from 'utils/userManager';
 
 describe('pages/reservation/ReservationPage', () => {
   const resource = Immutable(Resource.build());
@@ -350,6 +351,15 @@ describe('pages/reservation/ReservationPage', () => {
         expect(instance.fetchResource.lastCall.args).toEqual([]);
       });
     });
+
+    test('calls handleSigninRefresh', () => {
+      const loginExpiresAt = 1612788418;
+      const instance = getWrapper({ loginExpiresAt }).instance();
+      const spy = jest.spyOn(instance, 'handleSigninRefresh');
+      instance.componentDidMount();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(defaultProps.isLoggedIn, loginExpiresAt, 20);
+    });
   });
 
   describe('componentWillUpdate', () => {
@@ -527,6 +537,31 @@ describe('pages/reservation/ReservationPage', () => {
         expect(historyMock.lastCall.args).toEqual([expectedPath]);
       }
     );
+  });
+
+  describe('handleSigninRefresh', () => {
+    const signinSilentMock = simple.mock();
+
+    beforeEach(() => {
+      signinSilentMock.reset();
+      simple.mock(userManager, 'signinSilent', signinSilentMock);
+    });
+
+    test('calls userManager.signinSilent if isLoggedIn and loginExpiresAt are truthy', () => {
+      const instance = getWrapper().instance();
+      const isLoggedIn = true;
+      const loginExpiresAt = 1612788418;
+      instance.handleSigninRefresh(isLoggedIn, loginExpiresAt);
+      expect(signinSilentMock.callCount).toBe(1);
+    });
+
+    test('does not call userManager.signinSilent if isLoggedIn or loginExpiresAt is falsy', () => {
+      const instance = getWrapper().instance();
+      const isLoggedIn = false;
+      const loginExpiresAt = 1612788418;
+      instance.handleSigninRefresh(isLoggedIn, loginExpiresAt);
+      expect(signinSilentMock.callCount).toBe(0);
+    });
   });
 
   describe('handleConfirmTime', () => {

@@ -27,6 +27,7 @@ import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import reservationPageSelector from './reservationPageSelector';
 import { createOrder, hasProducts } from '../../utils/reservationUtils';
+import userManager from 'utils/userManager';
 
 class UnconnectedReservationPage extends Component {
   constructor(props) {
@@ -52,6 +53,8 @@ class UnconnectedReservationPage extends Component {
       reservationToEdit,
       selected,
       history,
+      isLoggedIn,
+      loginExpiresAt
     } = this.props;
     if (
       isEmpty(reservationCreated)
@@ -76,6 +79,9 @@ class UnconnectedReservationPage extends Component {
       this.fetchResource();
       window.scrollTo(0, 0);
     }
+
+    // ensure user has enough time to complete reservation
+    this.handleSigninRefresh(isLoggedIn, loginExpiresAt, 20);
   }
 
   componentWillUpdate(nextProps) {
@@ -176,6 +182,18 @@ class UnconnectedReservationPage extends Component {
       history.replace('/my-reservations');
     } else {
       history.replace(`/resources/${resource.id}`);
+    }
+  }
+
+  // silently refreshes login if current login is old enough
+  handleSigninRefresh(isLoggedIn, loginExpiresAt, minMinutesLeft = 20) {
+    // dont handle if user is not currently logged in
+    if (isLoggedIn && loginExpiresAt) {
+      const expiresAt = moment.unix(loginExpiresAt);
+      const minutesLeft = expiresAt.diff(moment(), 'minutes');
+      if (minutesLeft < minMinutesLeft) {
+        userManager.signinSilent();
+      }
     }
   }
 
@@ -334,6 +352,7 @@ UnconnectedReservationPage.propTypes = {
   user: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  loginExpiresAt: PropTypes.number
 };
 UnconnectedReservationPage = injectT(UnconnectedReservationPage); // eslint-disable-line
 
