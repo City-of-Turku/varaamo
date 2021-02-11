@@ -26,8 +26,20 @@ const validators = {
     }
     return null;
   },
+  billingEmailAddress: (t, { billingEmailAddress }) => {
+    if (billingEmailAddress && !isEmail(billingEmailAddress)) {
+      return t('ReservationForm.emailError');
+    }
+    return null;
+  },
   reserverPhoneNumber: (t, { reserverPhoneNumber }) => {
     if (reserverPhoneNumber && !isValidPhoneNumber(reserverPhoneNumber)) {
+      return t('ReservationForm.phoneNumberError');
+    }
+    return null;
+  },
+  billingPhoneNumber: (t, { billingPhoneNumber }) => {
+    if (billingPhoneNumber && !isValidPhoneNumber(billingPhoneNumber)) {
       return t('ReservationForm.phoneNumberError');
     }
     return null;
@@ -56,6 +68,10 @@ const maxLengths = {
   billingAddressCity: 100,
   billingAddressStreet: 100,
   billingAddressZip: 30,
+  billingEmailAddress: 100,
+  billingFirstName: 100,
+  billingLastName: 100,
+  billingPhoneNumber: 30,
   comments: 256,
   company: 100,
   eventDescription: 256,
@@ -257,6 +273,45 @@ class UnconnectedReservationInformationForm extends Component {
               'select',
               t('common.homeMunicipality'),
               { options: resource.includedReservationHomeMunicipalityFields },
+            )
+          }
+          {includes(this.props.fields, 'billingFirstName')
+            && <h3 className="app-ReservationPage__title">{t('common.paymentInformationLabel')}</h3>
+          }
+          {includes(this.props.fields, 'billingFirstName')
+            && this.renderField(
+              'billingFirstName',
+              'cc-given-name',
+              'text',
+              t('common.billingFirstNameLabel'),
+              { autoComplete: 'cc-given-name' },
+            )
+          }
+          {includes(this.props.fields, 'billingLastName')
+            && this.renderField(
+              'billingLastName',
+              'cc-family-name',
+              'text',
+              t('common.billingLastNameLabel'),
+              { autoComplete: 'cc-family-name' },
+            )
+          }
+          {includes(this.props.fields, 'billingPhoneNumber')
+            && this.renderField(
+              'billingPhoneNumber',
+              'phone',
+              'tel',
+              t('common.billingPhoneNumberLabel'),
+              { autoComplete: 'tel' },
+            )
+          }
+          {includes(this.props.fields, 'billingEmailAddress')
+            && this.renderField(
+              'billingEmailAddress',
+              'email',
+              'email',
+              t('common.billingEmailAddressLabel'),
+              { autoComplete: 'email' },
             )
           }
           {includes(this.props.fields, 'billingAddressStreet')

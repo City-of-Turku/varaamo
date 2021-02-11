@@ -146,6 +146,26 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
       });
     });
 
+    describe('billingEmailAddress', () => {
+      const props = {
+        fields: ['billingEmailAddress'],
+        requiredFields: [],
+        t,
+      };
+
+      test('returns an error if billingEmailAddress is invalid', () => {
+        const values = { billingEmailAddress: 'luke@' };
+        const errors = validate(values, props);
+        expect(errors.billingEmailAddress).toBeDefined();
+      });
+
+      test('does not return an error if billingEmailAddress is valid', () => {
+        const values = { billingEmailAddress: 'luke@skywalker.com' };
+        const errors = validate(values, props);
+        expect(errors.billingEmailAddress).toBeFalsy();
+      });
+    });
+
     describe('reserverPhoneNumber', () => {
       const props = {
         fields: ['reserverPhoneNumber'],
@@ -163,6 +183,26 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
         const values = { reserverPhoneNumber: '+35840123123' };
         const errors = validate(values, props);
         expect(errors.reserverPhoneNumber).toBeFalsy();
+      });
+    });
+
+    describe('billingPhoneNumber', () => {
+      const props = {
+        fields: ['billingPhoneNumber'],
+        requiredFields: [],
+        t,
+      };
+
+      test('returns an error if billingPhoneNumber is invalid', () => {
+        const values = { billingPhoneNumber: '+358-401-23123' };
+        const errors = validate(values, props);
+        expect(errors.billingPhoneNumber).toBeDefined();
+      });
+
+      test('does not return an error if billingPhoneNumber is valid', () => {
+        const values = { billingPhoneNumber: '+35840123123' };
+        const errors = validate(values, props);
+        expect(errors.billingPhoneNumber).toBeFalsy();
       });
     });
 
