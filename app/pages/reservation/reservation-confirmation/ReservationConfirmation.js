@@ -200,6 +200,30 @@ class ReservationConfirmation extends Component {
             {reservation.billingAddressStreet && (
               <Col xs={12}><h3 id="billingInformationHeader">{t('common.billingAddressLabel')}</h3></Col>
             )}
+            {reservation.billingFirstName
+              && this.renderField(
+                'billingFirstName',
+                t('common.billingFirstNameLabel'),
+                reservation.billingFirstName,
+              )}
+            {reservation.billingLastName
+              && this.renderField(
+                'billingLastName',
+                t('common.billingLastNameLabel'),
+                reservation.billingLastName,
+              )}
+            {reservation.billingPhoneNumber
+              && this.renderField(
+                'billingPhoneNumber',
+                t('common.billingPhoneNumberLabel'),
+                reservation.billingPhoneNumber,
+              )}
+            {reservation.billingEmailAddress
+              && this.renderField(
+                'billingEmailAddress',
+                t('common.billingEmailAddressLabel'),
+                reservation.billingEmailAddress,
+              )}
             {reservation.billingAddressStreet
               && this.renderField(
                 'billingAddressStreet',
