@@ -10,8 +10,9 @@ describe('shared/resource-list/ResourceIcons', () => {
     resource: Immutable(Resource.build({
       peopleCapacity: 10,
       maxPeriod: '02:00:00',
-      minPricePerHour: '10.00',
-      maxPricePerHour: '25.00',
+      minPrice: '10.00',
+      maxPrice: '25.00',
+      priceType: 'hourly',
     })),
   };
 
@@ -100,45 +101,45 @@ describe('shared/resource-list/ResourceIcons', () => {
     });
 
     test('renders range of prices', () => {
-      expect(spanText.text()).toBe('10 - 25 €/h');
+      expect(spanText.text()).toBe('10 - 25 €/common.unit.time.hour');
     });
 
     test('renders max euro if no min price', () => {
       const props = {
-        maxPricePerHour: '25.00',
-        minPricePerHour: null,
+        maxPrice: '25.00',
+        minPrice: null,
       };
-      expect(getSpanTextWithProps(props).text()).toBe('25 €/h');
+      expect(getSpanTextWithProps(props).text()).toBe('25 €/common.unit.time.hour');
     });
 
     test('renders min price if no max price', () => {
       const props = {
-        maxPricePerHour: '10.00',
-        minPricePerHour: null,
+        maxPrice: '10.00',
+        minPric: null,
       };
-      expect(getSpanTextWithProps(props).text()).toBe('10 €/h');
+      expect(getSpanTextWithProps(props).text()).toBe('10 €/common.unit.time.hour');
     });
 
     test('renders one price if min and max prices are the same', () => {
       const props = {
-        maxPricePerHour: '10.00',
-        minPricePerHour: '10.00',
+        maxPrice: '10.00',
+        minPrice: '10.00',
       };
-      expect(getSpanTextWithProps(props).text()).toBe('10 €/h');
+      expect(getSpanTextWithProps(props).text()).toBe('10 €/common.unit.time.hour');
     });
 
     test('renders "free" message if price is 0', () => {
       const props = {
-        maxPricePerHour: null,
-        minPricePerHour: '0.00',
+        maxPrice: null,
+        minPrice: '0.00',
       };
       expect(getSpanTextWithProps(props).text()).toBe('ResourceIcons.free');
     });
 
     test('renders "free" message if price prop is not passed', () => {
       const props = {
-        maxPricePerHour: null,
-        minPricePerHour: null,
+        maxPrice: null,
+        minPrice: null,
       };
       expect(getSpanTextWithProps(props).text()).toBe('ResourceIcons.free');
     });

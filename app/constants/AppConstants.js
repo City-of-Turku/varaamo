@@ -59,6 +59,12 @@ export default {
       labelTextId: 'common.requested',
     },
   },
+  RESOURCE_PRICE_TYPES: {
+    HOURLY: 'hourly',
+    DAILY: 'daily',
+    WEEKLY: 'weekly',
+    FIXED: 'fixed',
+  },
   SEARCH_PAGE_SIZE: 30,
   DEFAULT_MUNICIPALITY_OPTIONS: ['Helsinki', 'Espoo', 'Vantaa'],
   SHOW_TEST_SITE_MESSAGE: SETTINGS.SHOW_TEST_SITE_MESSAGE,

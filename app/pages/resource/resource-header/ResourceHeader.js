@@ -13,7 +13,7 @@ import { injectT } from 'i18n';
 import iconClock from 'assets/icons/clock-o.svg';
 import iconMap from 'assets/icons/map.svg';
 import FavoriteButton from 'shared/favorite-button';
-import { getHourlyPrice, getMaxPeriodText } from 'utils/resourceUtils';
+import { getPrice, getMaxPeriodText } from 'utils/resourceUtils';
 
 function ResourceHeader({
   onBackClick,
@@ -47,7 +47,7 @@ function ResourceHeader({
 
   const peopleCapacityText = t('ResourceCard.peopleCapacity', { people: resource.peopleCapacity });
   const maxPeriodText = getMaxPeriodText(t, resource);
-  const priceText = getHourlyPrice(t, resource);
+  const priceText = getPrice(t, resource);
   const typeName = resource.type ? resource.type.name : '\u00A0';
   const distance = formatDistance(resource.distance);
 

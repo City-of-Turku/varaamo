@@ -114,19 +114,57 @@ function getEquipment(resource) {
   return resourceEquipment;
 }
 
-function getHourlyPrice(t, { minPricePerHour, maxPricePerHour }) {
-  if (!(minPricePerHour || maxPricePerHour)) {
+function getPriceUnit(resourcePriceType) {
+  switch (resourcePriceType) {
+    case constants.RESOURCE_PRICE_TYPES.HOURLY:
+      return 'hour';
+    case constants.RESOURCE_PRICE_TYPES.DAILY:
+      return 'day';
+    case constants.RESOURCE_PRICE_TYPES.WEEKLY:
+      return 'week';
+    case constants.RESOURCE_PRICE_TYPES.FIXED:
+    default:
+      return null;
+  }
+}
+
+function getPriceEnding(resourcePriceType, labels) {
+  const resourcePriceUnit = getPriceUnit(resourcePriceType);
+  const translatedPriceUnit = resourcePriceUnit ? labels[resourcePriceUnit] : null;
+
+  return resourcePriceUnit ? `€/${translatedPriceUnit}` : '€';
+}
+
+function getPrice(t, resource) {
+  const minPrice = !isNaN(resource.minPrice)
+    ? Number(resource.minPrice)
+    : resource.minPrice;
+  const maxPrice = !isNaN(resource.maxPrice)
+    ? Number(resource.maxPrice)
+    : resource.maxPrice;
+
+  if (!(minPrice || maxPrice)) {
     return t('ResourceIcons.free');
   }
-  if (minPricePerHour && maxPricePerHour && minPricePerHour !== maxPricePerHour) {
-    return `${Number(minPricePerHour)} - ${Number(maxPricePerHour)} €/h`;
+
+  const priceEnding = getPriceEnding(resource.priceType, {
+    hour: t('common.unit.time.hour'),
+    day: t('common.unit.time.day'),
+    week: t('common.unit.time.week'),
+  });
+
+  if (minPrice && maxPrice && minPrice !== maxPrice) {
+    return `${Number(minPrice)} - ${Number(maxPrice)} ${priceEnding}`;
   }
-  const priceString = maxPricePerHour || minPricePerHour;
+
+  const priceString = maxPrice || minPrice;
   const price = priceString !== 0 ? Number(priceString) : 0;
+
   if (price === 0) {
     return t('ResourceIcons.free');
   }
-  return price ? `${price} €/h` : null;
+
+  return price ? `${price} ${priceEnding}` : null;
 }
 
 function getHumanizedPeriod(period) {
@@ -231,7 +269,6 @@ export {
   getAvailabilityDataForNow,
   getAvailabilityDataForWholeDay,
   getEquipment,
-  getHourlyPrice,
   getHumanizedPeriod,
   getMaxPeriodText,
   getOpeningHours,
@@ -240,6 +277,7 @@ export {
   getResourcePageUrlComponents,
   getTermsAndConditions,
   getPaymentTermsAndConditions,
+  getPrice,
   reservingIsRestricted,
   getMinPeriodText
 };

@@ -19,7 +19,7 @@ import UnpublishedLabel from 'shared/label/Unpublished';
 import iconMap from 'assets/icons/map.svg';
 import BackgroundImage from 'shared/background-image';
 import { getMainImage } from 'utils/imageUtils';
-import { getHourlyPrice, getResourcePageUrlComponents } from 'utils/resourceUtils';
+import { getPrice, getResourcePageUrlComponents } from 'utils/resourceUtils';
 import { cleanseNamedLinks } from 'utils/textUtils';
 import ResourceAvailability from './label';
 import ResourceCardInfoCell from './info';
@@ -187,7 +187,7 @@ class ResourceCard extends Component {
             >
               <Fragment>
                 <span className="app-ResourceCard__hourly-price">
-                  {getHourlyPrice(t, resource) || '\u00A0'}
+                  {getPrice(t, resource) || '\u00A0'}
                 </span>
               </Fragment>
 
