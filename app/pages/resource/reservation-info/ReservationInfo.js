@@ -11,18 +11,26 @@ import { getMaxPeriodText } from 'utils/resourceUtils';
 import { injectT } from 'i18n';
 import userManager from 'utils/userManager';
 
-function handleLoginClick(currentLanguage) {
-  userManager.signinRedirect({
-    data: {
-      redirectUrl: window.location.pathname
-    },
-    extraQueryParams: {
-      ui_locales: currentLanguage,
-    },
-  });
+async function handleLoginClick(currentLanguage, addNotification) {
+  try {
+    await userManager.signinRedirect({
+      data: {
+        redirectUrl: window.location.pathname
+      },
+      extraQueryParams: {
+        ui_locales: currentLanguage
+      },
+    });
+  } catch (error) {
+    addNotification({
+      messageId: 'Notifications.loginErrorMessage',
+      type: 'error',
+      timeOut: 10000,
+    });
+  }
 }
 
-function renderLoginText(currentLanguage, isLoggedIn, resource, t) {
+function renderLoginText(addNotification, currentLanguage, isLoggedIn, resource, t) {
   if (isLoggedIn || !resource.reservable || resource.authentication === 'unauthenticated') {
     return null;
   }
@@ -36,7 +44,7 @@ function renderLoginText(currentLanguage, isLoggedIn, resource, t) {
     return (
       <p className="login-text">
         {messageParts[0]}
-        <Button bsStyle="link" className="login-button" onClick={() => handleLoginClick(currentLanguage)}>{messageParts[1]}</Button>
+        <Button bsStyle="link" className="login-button" onClick={() => handleLoginClick(currentLanguage, addNotification)}>{messageParts[1]}</Button>
         {messageParts[2]}
       </p>
     );
@@ -44,7 +52,7 @@ function renderLoginText(currentLanguage, isLoggedIn, resource, t) {
   // else create a button of the whole message
   return (
     <p className="login-text">
-      <Button bsStyle="link" className="login-button" onClick={handleLoginClick}>{message}</Button>
+      <Button bsStyle="link" className="login-button" onClick={() => handleLoginClick(addNotification)}>{message}</Button>
     </p>
   );
 }
@@ -98,7 +106,7 @@ function renderMaxReservationsPerUserText(maxReservationsPerUser, t) {
 }
 
 function ReservationInfo({
-  currentLanguage, isLoggedIn, resource, t
+  addNotification, currentLanguage, isLoggedIn, resource, t
 }) {
   return (
     <div className="app-ReservationInfo">
@@ -106,12 +114,13 @@ function ReservationInfo({
       {renderEarliestResDay(resource.reservableMinDaysInAdvance, t)}
       {renderMaxPeriodText(resource, t)}
       {renderMaxReservationsPerUserText(resource.maxReservationsPerUser, t)}
-      {renderLoginText(currentLanguage, isLoggedIn, resource, t)}
+      {renderLoginText(addNotification, currentLanguage, isLoggedIn, resource, t)}
     </div>
   );
 }
 
 ReservationInfo.propTypes = {
+  addNotification: PropTypes.func.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   resource: PropTypes.shape({

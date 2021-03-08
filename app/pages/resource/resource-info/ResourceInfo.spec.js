@@ -12,6 +12,7 @@ import ReservationInfo from '../reservation-info';
 
 describe('pages/resource/resource-info/ResourceInfo', () => {
   const defaultProps = {
+    addNotification: () => null,
     currentLanguage: 'fi',
     isLoggedIn: false,
     resource: Immutable(
@@ -95,6 +96,7 @@ describe('pages/resource/resource-info/ResourceInfo', () => {
   test('renders ReservationInfo with correct props', () => {
     const reservationInfo = getWrapper().find(ReservationInfo);
     expect(reservationInfo).toHaveLength(1);
+    expect(reservationInfo.prop('addNotification')).toBe(defaultProps.addNotification);
     expect(reservationInfo.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
     expect(reservationInfo.prop('isLoggedIn')).toBe(defaultProps.isLoggedIn);
     expect(reservationInfo.prop('resource')).toEqual(defaultProps.resource);

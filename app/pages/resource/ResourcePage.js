@@ -12,6 +12,7 @@ import Panel from 'react-bootstrap/lib/Panel';
 import Lightbox from 'lightbox-react';
 import 'lightbox-react/style.css';
 
+import { addNotification } from 'actions/notificationsActions';
 import { fetchResource } from 'actions/resourceActions';
 import { clearReservations, toggleResourceMap } from 'actions/uiActions';
 import PageWrapper from 'pages/PageWrapper';
@@ -224,6 +225,7 @@ class UnconnectedResourcePage extends Component {
                       mainImageMobileVisibility: true,
                     })}
                   <ResourceInfo
+                    addNotification={actions.addNotification}
                     currentLanguage={currentLanguage}
                     equipment={equipment}
                     isLoggedIn={isLoggedIn}
@@ -333,6 +335,7 @@ UnconnectedResourcePage = injectT(UnconnectedResourcePage); // eslint-disable-li
 
 function mapDispatchToProps(dispatch) {
   const actionCreators = {
+    addNotification,
     clearReservations,
     fetchResource,
     toggleResourceMap,

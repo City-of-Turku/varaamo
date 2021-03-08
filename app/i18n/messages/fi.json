@@ -158,6 +158,8 @@
   "NotFoundPage.searchPageLink": "hakusivulta",
   "NotFoundPage.title": "404 Sivua ei löydy",
   "Notifications.errorMessage": "Jotain meni vikaan. Yritä hetken päästä uudelleen.",
+  "Notifications.loginErrorMessage": "Kirjautuminen epäonnistui. Yritä hetken päästä uudelleen.",
+  "Notifications.userFetchErrorMessage": "Käyttäjätietojen hakeminen epäonnistui. Yritä hetken päästä uudelleen.",
   "Notifications.loginMessage": "Kirjaudu sisään jatkaaksesi.",
   "Notifications.loginToReserve": "Kirjaudu sisään tehdäksesi varauksen tähän tilaan.",
   "Notifications.reservationDeleteSuccessMessage": "Varauksen peruminen onnistui.",

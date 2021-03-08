@@ -54,6 +54,7 @@ describe('pages/resource/ResourcePage', () => {
   const defaultProps = {
     history,
     actions: {
+      addNotification: () => null,
       clearReservations: () => null,
       fetchResource: () => null,
       toggleResourceMap: () => null,
@@ -118,6 +119,7 @@ describe('pages/resource/ResourcePage', () => {
       const resourceInfo = getWrapper().find(ResourceInfo);
       const equipmentList = ['equipment 1', 'equipment 2', 'equipment 3'];
       expect(resourceInfo).toHaveLength(1);
+      expect(resourceInfo.prop('addNotification')).toEqual(defaultProps.actions.addNotification);
       expect(resourceInfo.prop('resource')).toEqual(defaultProps.resource);
       expect(resourceInfo.prop('unit')).toEqual(defaultProps.unit);
       expect(resourceInfo.prop('equipment')).toEqual(equipmentList);

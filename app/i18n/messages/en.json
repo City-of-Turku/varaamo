@@ -158,6 +158,8 @@
   "NotFoundPage.searchPageLink": "search page",
   "NotFoundPage.title": "404 Page not found",
   "Notifications.errorMessage": "Something went wrong. Please try again in a moment.",
+  "Notifications.loginErrorMessage": "Failed to login. Please try again in a moment.",
+  "Notifications.userFetchErrorMessage": "Failed to retrieve user info. Please try again in a moment.",
   "Notifications.loginMessage": "Sign in to continue.",
   "Notifications.loginToReserve": "Log in to reserve these premises.",
   "Notifications.reservationDeleteSuccessMessage": "Your reservation was successfully cancelled.",

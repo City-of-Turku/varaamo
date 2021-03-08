@@ -8,6 +8,7 @@ import ReservationInfo from './ReservationInfo';
 
 describe('pages/resource/reservation-info/ReservationInfo', () => {
   const defaultProps = {
+    addNotification: () => null,
     currentLanguage: 'fi',
     isLoggedIn: false,
     resource: Immutable(
