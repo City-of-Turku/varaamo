@@ -123,7 +123,7 @@ class UnconnectedResourcePage extends Component {
   };
 
   fetchResourceOutlookCalendarLinks() {
-    return this.props.actions.fetchResourceOutlookCalendarLinks();
+    return this.props.actions.fetchResourceOutlookCalendarLinks(this.props.id);
   }
 
   createResourceOutlookCalendarLink() {
@@ -184,6 +184,10 @@ class UnconnectedResourcePage extends Component {
       && (
         this.props.resource.userPermissions.isManager
         || this.props.resource.userPermissions.isAdmin
+      )
+      && (
+        !!this.props.calendarLink
+        || this.props.canCreateCalendarLink
       );
 
     return (
@@ -330,6 +334,7 @@ UnconnectedResourcePage.propTypes = {
   contrast: PropTypes.string,
   currentLanguage: PropTypes.string,
   calendarLink: PropTypes.object,
+  canCreateCalendarLink: PropTypes.bool,
 };
 UnconnectedResourcePage = injectT(UnconnectedResourcePage); // eslint-disable-line
 

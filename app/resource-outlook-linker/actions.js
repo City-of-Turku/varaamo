@@ -26,7 +26,11 @@ function isInteger(n) {
 }
 
 
-function fetchResourceOutlookCalendarLinks() {
+function fetchResourceOutlookCalendarLinks(resourceId) {
+  if (!isString(resourceId)) {
+    throw new TypeError(`Expected string for resourceId but got something else. (Value was ${resourceId}).`);
+  }
+
   return {
     [RSAA]: {
       types: [
@@ -34,7 +38,7 @@ function fetchResourceOutlookCalendarLinks() {
         actionTypes.RESOURCE_OUTLOOK_CALENDAR_LINKS_GET_SUCCESS,
         actionTypes.RESOURCE_OUTLOOK_CALENDAR_LINKS_GET_ERROR,
       ],
-      endpoint: buildAPIUrl('o365/calendar_links', { isOwn: true }),
+      endpoint: buildAPIUrl('o365/calendar_links', { resourceId, isOwn: true }),
       method: 'GET',
       headers: getHeadersCreator(),
     }

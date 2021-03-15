@@ -26,6 +26,11 @@ function calendarLinkSelector(state, props) {
     && state.resourceOutlookLinks[props.match.params.id];
 }
 
+function canCreateCalendarLinkSelector(state) {
+  return state.resourceOutlookLinks
+    && state.resourceOutlookLinks.canCreate === true;
+}
+
 const resourcePageSelector = createStructuredSelector({
   date: dateSelector,
   id: resourceIdSelector,
@@ -38,6 +43,7 @@ const resourcePageSelector = createStructuredSelector({
   contrast: contrastOptionsSelector,
   currentLanguage: currentLanguageSelector,
   calendarLink: calendarLinkSelector,
+  canCreateCalendarLink: canCreateCalendarLinkSelector,
 });
 
 export default resourcePageSelector;
