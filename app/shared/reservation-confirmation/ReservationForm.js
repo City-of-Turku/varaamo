@@ -310,9 +310,44 @@ class UnconnectedReservationForm extends Component {
               )}
             </Well>
           )}
-          {includes(this.props.fields, 'billingAddressStreet') && (
-            <Well>
+          {(includes(this.props.fields, 'billingFirstName')
+            || includes(this.props.fields, 'billingLastName')
+            || includes(this.props.fields, 'billingPhoneNumber')
+            || includes(this.props.fields, 'billingEmailAddress')
+            || includes(this.props.fields, 'billingAddressStreet')
+            || includes(this.props.fields, 'billingAddressZip')
+            || includes(this.props.fields, 'billingAddressCity'))
+            && (
+            <Well id="billing-info-well">
               <p>{t('common.billingAddressLabel')}</p>
+              {this.renderField(
+                'billingFirstName',
+                'cc-given-name',
+                'text',
+                t('common.billingFirstNameLabel'),
+                { autoComplete: 'cc-given-name' },
+              )}
+              {this.renderField(
+                'billingLastName',
+                'cc-family-name',
+                'text',
+                t('common.billingLastNameLabel'),
+                { autoComplete: 'cc-family-name' },
+              )}
+              {this.renderField(
+                'billingPhoneNumber',
+                'phone',
+                'tel',
+                t('common.billingPhoneNumberLabel'),
+                { autoComplete: 'tel' },
+              )}
+              {this.renderField(
+                'billingEmailAddress',
+                'email',
+                'email',
+                t('common.billingEmailAddressLabel'),
+                { autoComplete: 'email' },
+              )}
               {this.renderField(
                 'billingAddressStreet',
                 'address',
@@ -335,7 +370,7 @@ class UnconnectedReservationForm extends Component {
                 { autoComplete: 'address-level2' },
               )}
             </Well>
-          )}
+            )}
           {this.renderField(
             'comments',
             'comments',
