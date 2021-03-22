@@ -319,6 +319,12 @@ describe('shared/reservation-confirmation/ReservationForm', () => {
           expect(billingInfoHeading.text()).toBe('common.billingAddressLabel');
         });
       });
+
+      test('does not render billing info Well when none of the billing fields are given in props', () => {
+        const fields = [];
+        const billingInfoWell = getWrapper({ fields }).find('#billing-info-well');
+        expect(billingInfoWell).toHaveLength(0);
+      });
     });
 
     describe('terms and conditions', () => {
