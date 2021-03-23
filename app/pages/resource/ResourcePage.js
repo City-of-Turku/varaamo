@@ -237,7 +237,7 @@ class UnconnectedResourcePage extends Component {
                     unit={unit}
                   />
 
-                  <Panel defaultExpanded header={t('ResourceInfo.reserveTitle')} role="region">
+                  <Panel defaultExpanded header={t('ResourceInfo.reserveTitle')} id="reservation-panel" role="region">
                     <Panel.Heading>
                       <Panel.Title componentClass="h2">
                         {t('ResourceCalendar.header')}

@@ -197,3 +197,10 @@ $content-padding: 10px;
       }
    }
 }
+
+#reservation-panel {
+  min-height: 450px;
+  @media (min-width: $screen-md-min){
+    min-height: 680px;
+  }
+}
