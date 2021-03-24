@@ -57,45 +57,50 @@ class ReservationControls extends Component {
     };
   }
 
-  renderButtons(buttons, isAdmin, isStaff, reservation) {
+  renderButtons(buttons, isAdmin, isStaff, reservation, canModify, canDelete) {
     if (!reservation.needManualConfirmation) {
       if (reservation.state === 'cancelled') {
         return null;
       }
-      return isAdmin
-        ? [buttons.edit, buttons.cancel]
-        : [buttons.edit, buttons.cancel];
+      const givenButtons = [];
+      if (canModify) {
+        givenButtons.push(buttons.edit);
+      }
+      if (canDelete) {
+        givenButtons.push(buttons.cancel);
+      }
+      return givenButtons;
     }
 
     switch (reservation.state) {
       case 'cancelled': {
         return isAdmin
-          ? [buttons.info]
-          : [buttons.info];
+          ? []
+          : [];
       }
 
       case 'confirmed': {
         if (isAdmin) {
           return isStaff
-            ? [buttons.info, buttons.cancel, buttons.edit]
-            : [buttons.info, buttons.cancel];
+            ? [buttons.cancel, buttons.edit]
+            : [buttons.cancel];
         }
-        return [buttons.info, buttons.cancel];
+        return [buttons.cancel];
       }
 
       case 'denied': {
         return isAdmin
-          ? [buttons.info]
-          : [buttons.info];
+          ? []
+          : [];
       }
 
       case 'requested': {
         if (isAdmin) {
           return isStaff
-            ? [buttons.info, buttons.confirm, buttons.deny, buttons.edit]
-            : [buttons.info, buttons.edit];
+            ? [buttons.confirm, buttons.deny, buttons.edit]
+            : [buttons.edit];
         }
-        return [buttons.info, buttons.edit, buttons.cancel];
+        return [buttons.edit, buttons.cancel];
       }
 
       default: {
@@ -107,13 +112,23 @@ class ReservationControls extends Component {
   render() {
     const { isAdmin, isStaff, reservation } = this.props;
 
+    /*
+      Reservation permissions can be used to determine what user can do.
+      For example reservations with paid products cannot be modified without
+      correct staff permissions.
+     */
+    const userPermissions = 'userPermissions' in reservation ? reservation.userPermissions : {};
+    const canModify = 'canModify' in userPermissions ? userPermissions.canModify : false;
+    const canDelete = 'canDelete' in userPermissions ? userPermissions.canDelete : false;
+
     if (!reservation || moment() > moment(reservation.end)) {
       return null;
     }
 
     return (
       <div className="buttons">
-        {this.renderButtons(this.buttons, isAdmin, isStaff, reservation)}
+        {this.buttons.info}
+        {this.renderButtons(this.buttons, isAdmin, isStaff, reservation, canModify, canDelete)}
       </div>
     );
   }

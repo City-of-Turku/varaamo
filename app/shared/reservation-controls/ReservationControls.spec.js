@@ -32,19 +32,68 @@ describe('shared/reservation-controls/ReservationControls', () => {
     const isAdmin = true;
 
     describe('with regular reservation', () => {
-      const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed' });
-      const buttons = getWrapper(reservation, isAdmin).find(Button);
+      describe('without reservation user permissions', () => {
+        const userPermissions = {};
+        const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
 
-      test('renders two buttons', () => {
-        expect(buttons.length).toBe(2);
+        test('renders one button', () => {
+          expect(buttons.length).toBe(1);
+        });
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
       });
 
-      describe('the first button', () => {
-        makeButtonTests(buttons.at(0), 'edit', 'ReservationControls.edit', onEditClick);
+      describe('with reservation user permission canModify', () => {
+        const userPermissions = { canModify: true };
+        const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
+        });
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
+        });
       });
 
-      describe('the second button', () => {
-        makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
+      describe('with reservation user permission canDelete', () => {
+        const userPermissions = { canDelete: true };
+        const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
+        });
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
+        });
+      });
+
+      describe('with reservation user permissions canModify and canDelete', () => {
+        const userPermissions = { canModify: true, canDelete: true };
+        const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+        test('renders three buttons', () => {
+          expect(buttons.length).toBe(3);
+        });
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
+        });
+        describe('the third button', () => {
+          makeButtonTests(buttons.at(2), 'cancel', 'ReservationControls.cancel', onCancelClick);
+        });
       });
     });
 
@@ -167,19 +216,68 @@ describe('shared/reservation-controls/ReservationControls', () => {
     const isAdmin = false;
 
     describe('with regular reservation', () => {
-      const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed' });
-      const buttons = getWrapper(reservation, isAdmin).find(Button);
+      describe('without reservation user permissions', () => {
+        const userPermissions = {};
+        const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
 
-      test('renders two buttons', () => {
-        expect(buttons.length).toBe(2);
+        test('renders one button', () => {
+          expect(buttons.length).toBe(1);
+        });
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
       });
 
-      describe('the first button', () => {
-        makeButtonTests(buttons.at(0), 'edit', 'ReservationControls.edit', onEditClick);
+      describe('with reservation user permission canModify', () => {
+        const userPermissions = { canModify: true };
+        const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
+        });
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
+        });
       });
 
-      describe('the second button', () => {
-        makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
+      describe('with reservation user permission canDelete', () => {
+        const userPermissions = { canDelete: true };
+        const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
+        });
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
+        });
+      });
+
+      describe('with reservation user permissions canModify and canDelete', () => {
+        const userPermissions = { canModify: true, canDelete: true };
+        const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+        test('renders three buttons', () => {
+          expect(buttons.length).toBe(3);
+        });
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
+        });
+        describe('the third button', () => {
+          makeButtonTests(buttons.at(2), 'cancel', 'ReservationControls.cancel', onCancelClick);
+        });
       });
     });
 
