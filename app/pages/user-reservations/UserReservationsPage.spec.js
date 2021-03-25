@@ -155,6 +155,7 @@ describe('pages/user-reservations/UserReservationsPage', () => {
       test('fetches only user\'s own reservations', () => {
         expect(fetchReservations.callCount).toBe(1);
         expect(fetchReservations.lastCall.args[0].isOwn).toBe(true);
+        expect(fetchReservations.lastCall.args[0].include).toBe('order_detail');
       });
     });
 
@@ -184,6 +185,7 @@ describe('pages/user-reservations/UserReservationsPage', () => {
 
       test('fetches admin\'s own reservations', () => {
         expect(fetchReservations.calls[1].args[0].isOwn).toBe(true);
+        expect(fetchReservations.calls[1].args[0].include).toBe('order_detail');
       });
     });
   });

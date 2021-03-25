@@ -30,7 +30,7 @@ class UnconnectedUserReservationsPage extends Component {
     }
     this.props.actions.fetchResources();
     this.props.actions.fetchUnits();
-    this.props.actions.fetchReservations({ isOwn: true });
+    this.props.actions.fetchReservations({ isOwn: true, include: 'order_detail' });
   }
 
   componentWillReceiveProps(nextProps) {

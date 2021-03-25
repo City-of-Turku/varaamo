@@ -59,18 +59,6 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
         return getWrapper(props).find(Form).html();
       }
 
-      test('renders billingAddressCity', () => {
-        expect(getData()).toContain(reservation.billingAddressCity);
-      });
-
-      test('renders billingAddressStreet', () => {
-        expect(getData()).toContain(reservation.billingAddressStreet);
-      });
-
-      test('renders billingAddressZip', () => {
-        expect(getData()).toContain(reservation.billingAddressZip);
-      });
-
       describe('comments', () => {
         test('are not rendered if user is not an admin', () => {
           const props = {
@@ -153,17 +141,27 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
           reserverEmailAddress: null,
           user,
         });
+        describe('when user is staff', () => {
+          const isStaff = true;
+          test('renders reservation user name when reserverName is empty', () => {
+            expect(getData({ reservation: userReservation, isStaff })).toContain(user.displayName);
+          });
 
-        test('renders reservation user name when reserverName is empty', () => {
-          expect(getData({ reservation: userReservation })).toContain(user.displayName);
+          test('renders reservation user email when reserverEmailAddress is empty', () => {
+            expect(getData({ reservation: userReservation, isStaff })).toContain(user.email);
+          });
         });
+        describe('when user is not staff', () => {
+          const isStaff = false;
+          test('does not render reservation user name when reserverName is empty', () => {
+            expect(getData({ reservation: userReservation, isStaff }))
+              .not.toContain(user.displayName);
+          });
 
-        test(
-          'renders reservation user email when reserverEmailAddress is empty',
-          () => {
-            expect(getData({ reservation: userReservation })).toContain(user.email);
-          }
-        );
+          test('does not render reservation user email when reserverEmailAddress is empty', () => {
+            expect(getData({ reservation: userReservation, isStaff })).not.toContain(user.email);
+          });
+        });
       });
 
       describe('requires assistance', () => {
@@ -221,6 +219,52 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
         });
         test('is not rendered if reservation doesnt support it', () => {
           expect(getData()).not.toContain('common.homeMunicipality');
+        });
+      });
+
+      describe('order details', () => {
+        describe('when reservation has order with price info', () => {
+          const userReservation = Reservation.build({
+            order: {
+              orderLines: [{
+                product: {
+                  price: { amount: '3.50', period: '01:00:00', type: 'per_period' },
+                  quantity: 1,
+                  type: 'rent'
+                }
+              }],
+              price: '3.50'
+            }
+          });
+
+          test('heading is rendered', () => {
+            expect(getData({ reservation: userReservation }))
+              .toContain('common.orderDetailsLabel');
+          });
+          test('price is rendered', () => {
+            expect(getData({ reservation: userReservation }))
+              .toContain('common.priceLabel');
+          });
+          test('total price is rendered', () => {
+            expect(getData({ reservation: userReservation }))
+              .toContain('common.priceTotalLabel');
+          });
+        });
+
+        describe('when reservation does not have an order', () => {
+          const userReservation = Reservation.build({ order: null });
+          test('heading is not rendered', () => {
+            expect(getData({ reservation: userReservation }))
+              .not.toContain('common.orderDetailsLabel');
+          });
+          test('price is not rendered', () => {
+            expect(getData({ reservation: userReservation }))
+              .not.toContain('common.priceLabel');
+          });
+          test('total price is not rendered', () => {
+            expect(getData({ reservation: userReservation }))
+              .not.toContain('common.priceTotalLabel');
+          });
         });
       });
     });

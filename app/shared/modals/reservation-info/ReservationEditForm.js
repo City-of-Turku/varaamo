@@ -12,11 +12,13 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Well from 'react-bootstrap/lib/Well';
 import { Field, Fields, reduxForm } from 'redux-form';
+import { Row } from 'react-bootstrap';
 
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import ReservationTimeControls from 'shared/form-fields/ReservationTimeControls';
 import TimeRange from 'shared/time-range';
 import { injectT } from 'i18n';
+import { getFormattedProductPrice } from '../../../utils/reservationUtils';
 
 class UnconnectedReservationEditForm extends Component {
   constructor(props) {
@@ -48,6 +50,16 @@ class UnconnectedReservationEditForm extends Component {
       reservation[`${addressType}City`]
     );
     return this.renderInfoRow(label, value);
+  }
+
+  renderHeading(label) {
+    return (
+      <Row>
+        <Col sm={3}>
+          <h4 className="reservation-edit-form-heading">{label}</h4>
+        </Col>
+      </Row>
+    );
   }
 
   renderInfoRow(label, value) {
@@ -137,16 +149,22 @@ class UnconnectedReservationEditForm extends Component {
 
     if (isEmpty(reservation)) return <span />;
 
+    const order = ('order' in reservation && typeof (reservation.order)) === 'object' ? reservation.order : null;
+    const orderLine = (order && 'orderLines' in order) ? order.orderLines[0] : null;
+    const price = (order && 'price' in order) ? order.price : null;
+
     return (
       <Form
         className={classNames('reservation-edit-form', { editing: isEditing })}
         horizontal
         onSubmit={handleSubmit}
       >
-        <Well>
-          {this.renderUserInfoRow('displayName', 'userName')}
-          {this.renderUserInfoRow('email', 'userEmail')}
-        </Well>
+        {isStaff && (
+          <Well>
+            {this.renderUserInfoRow('displayName', 'userName')}
+            {this.renderUserInfoRow('email', 'userEmail')}
+          </Well>
+        )}
         {this.renderEditableInfoRow('eventSubject', 'text')}
         {this.renderStaticInfoRow('reserverName')}
         {this.renderEditableInfoRow('eventDescription', 'textarea', { maxLength: '256' })}
@@ -162,7 +180,6 @@ class UnconnectedReservationEditForm extends Component {
            && this.renderInfoRow(t('common.homeMunicipality'),
              (reservation.homeMunicipality && reservation.homeMunicipality.name)
                ? reservation.homeMunicipality.name[t('common.languageCode')] : '')}
-        {this.renderAddressRow('billingAddress')}
         {this.renderStaticInfoRow('accessCode')}
         {!(reservation.requireAssistance === undefined)
            && this.renderInfoRow(t('common.requireAssistanceLabel'), reservation.requireAssistance ? t('common.yes') : t('common.no'))}
@@ -170,6 +187,17 @@ class UnconnectedReservationEditForm extends Component {
            && this.renderInfoRow(t('common.requireWorkstationLabel'), reservation.requireWorkstation ? t('common.yes') : t('common.no'))}
         {this.renderInfoRow(t('common.additionalInfo.label'), reservation.reservationExtraQuestions)}
         {isAdmin && !reservationIsEditable && this.renderStaticInfoRow('comments')}
+        {(orderLine && price) && (
+          <Well>
+            {this.renderHeading(t('common.orderDetailsLabel'))}
+            {this.renderInfoRow(t('common.priceLabel'), getFormattedProductPrice(orderLine.product))}
+            {this.renderInfoRow(t('common.priceTotalLabel'),
+              t('common.priceWithVAT', {
+                price,
+                vat: orderLine.product.price.taxPercentage
+              }))}
+          </Well>
+        )}
         {isAdmin && reservationIsEditable && (
           <div className="form-controls">
             {!isEditing && (
