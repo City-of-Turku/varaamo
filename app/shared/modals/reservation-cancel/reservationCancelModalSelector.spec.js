@@ -50,6 +50,29 @@ describe('shared/modals/reservation-cancel/reservationCancelModalSelector', () =
         expect(selected.cancelAllowed).toBe(false);
       }
     );
+
+    test('returns false if user is not admin and reservation has an order', () => {
+      const reservationA = {
+        id: 'reservation-A',
+        needManualConfirmation: true,
+        state: 'confirmed',
+        order: { id: 'abc123' }
+      };
+      const reservationB = {
+        id: 'reservation-B',
+        needManualConfirmation: false,
+        state: 'requested',
+        order: { id: 'fgh456' }
+      };
+      const selectedA = getSelected({
+        'ui.reservations.toCancel': [reservationA],
+      });
+      const selectedB = getSelected({
+        'ui.reservations.toCancel': [reservationB],
+      });
+      expect(selectedA.cancelAllowed).toBe(false);
+      expect(selectedB.cancelAllowed).toBe(false);
+    });
   });
 
   describe('isCancellingReservations', () => {

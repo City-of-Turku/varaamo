@@ -13,6 +13,7 @@ import {
   getNextReservation,
   isValidPhoneNumber,
   createOrderLines,
+  hasOrder,
   hasProducts,
   createOrder,
   checkOrderPrice,
@@ -341,6 +342,18 @@ describe('Utils: reservationUtils', () => {
           expect(isValidPhoneNumber('04012312312')).toBe(true);
         });
       });
+    });
+  });
+
+  describe('hasOrder', () => {
+    test('returns true if given reservation has an order', () => {
+      const reservation = { id: 'abc123', order: { id: 'fgh456' } };
+      expect(hasOrder(reservation)).toBe(true);
+    });
+
+    test('returns false if given reservation does not have an order', () => {
+      const reservation = { id: 'abc123', order: null };
+      expect(hasOrder(reservation)).toBe(false);
     });
   });
 

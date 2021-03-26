@@ -112,6 +112,15 @@ function isValidPhoneNumber(number) {
 }
 
 /**
+ * Checks if given reservation has an order.
+ * @param {object} reservation
+ * @returns {boolean} true if reservation has order, and false if not
+ */
+function hasOrder(reservation) {
+  return 'order' in reservation && !!reservation.order;
+}
+
+/**
  * Checks if given resource has products.
  * @param {object} resource
  * @returns {boolean} true or false
@@ -205,6 +214,7 @@ export {
   getNextAvailableTime,
   getNextReservation,
   isValidPhoneNumber,
+  hasOrder,
   hasProducts,
   createOrderLines,
   createOrder,
