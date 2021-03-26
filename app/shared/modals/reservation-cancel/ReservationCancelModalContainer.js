@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
-import { FormattedHTMLMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -69,7 +68,6 @@ class UnconnectedReservationCancelModalContainer extends Component {
             && (
             <div>
               <p>{t('ReservationCancelModal.cancelNotAllowedInfo')}</p>
-              <p><FormattedHTMLMessage id="ReservationCancelModal.takeIntoAccount" /></p>
               <p className="responsible-contact-info">{resource.responsibleContactInfo}</p>
             </div>
             )
