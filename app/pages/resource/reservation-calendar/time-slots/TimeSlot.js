@@ -131,7 +131,7 @@ class TimeSlot extends PureComponent {
       };
     }
     return {
-      message: resource.reservationInfo,
+      message: t('Notifications.noRightToReserve'),
       type: 'info',
       timeOut: 10000,
     };

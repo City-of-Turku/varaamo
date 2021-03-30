@@ -254,8 +254,8 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
       const instance = getWrapper().instance();
       const result = instance.getReservationInfoNotification(true, resource, defaultProps.slot, t);
 
-      expect(t.callCount).toBe(0);
-      expect(result.message).toBe(resource.reservationInfo);
+      expect(t.callCount).toBe(1);
+      expect(result.message).toBe(t('Notifications.noRightToReserve'));
       expect(result.type).toBe('info');
       expect(result.timeOut).toBe(10000);
     });

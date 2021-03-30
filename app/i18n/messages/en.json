@@ -176,6 +176,7 @@
   "Notifications.userFetchErrorMessage": "Failed to retrieve user info. Please try again in a moment.",
   "Notifications.loginMessage": "Sign in to continue.",
   "Notifications.loginToReserve": "Log in to reserve these premises.",
+  "Notifications.noRightToReserve": "You do not have the right to make this reservation.",
   "Notifications.reservationDeleteSuccessMessage": "Your reservation was successfully cancelled.",
   "Notifications.reservationUpdateSuccessMessage": "Your reservation has been updated.",
   "Notifications.selectTimeToReserve.warning": "The reservation overlaps with the existing reservation or is outside the opening hours.",

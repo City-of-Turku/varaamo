@@ -178,6 +178,7 @@
   "Notifications.userFetchErrorMessage": "Användarinformations hämtning misslyckades. Försök igen om en liten stund.",
   "Notifications.loginMessage": "Logga in för att fortsätta.",
   "Notifications.loginToReserve": "Logga in för att boka detta utrymme.",
+  "Notifications.noRightToReserve": "Du har inte rätt att göra denna bokning.",
   "Notifications.reservationDeleteSuccessMessage": "Bokningen avbokades.",
   "Notifications.reservationUpdateSuccessMessage": "Bokningen uppdaterades.",
   "Notifications.selectTimeToReserve.warning": "Bokningen överlappar med befintlig bokning eller ligger utanför öppettiderna.",
