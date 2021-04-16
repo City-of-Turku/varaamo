@@ -37,6 +37,11 @@ class Html extends Component {
           <meta content="Turun kaupungin Varaamo-palvelusta voit varata tiloja, laitteita ja palveluita, kun haluat pitää kokouksen, pelata pelejä, harrastaa tai tavata asiantuntijan." name="description" />
           <meta content="Digipoint" name="author" />
           <meta content="x4GUwZEJru1x6OpgxdEMMfLatFyGx5lmxlbD0AMqtbw" name="google-site-verification" />
+          <meta content={process.env.OG_IMG_URL} property="og:image" />
+          <meta content="image/jpeg" property="og:image:type" />
+          <meta content="1200" property="og:image:width" />
+          <meta content="630" property="og:image:height" />
+          <meta content="website" property="og:type" />
           <link href="https://overpass-30e2.kxcdn.com/overpass.css" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" />
           {this.renderStylesLink(appCssSrc, isProduction)}

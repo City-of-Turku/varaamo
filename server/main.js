@@ -17,6 +17,9 @@ const app = express();
 const compiler = webpack(webpackConfig);
 const port = serverConfig.port;
 
+// serve static assets like images outside of normal bundling
+app.use('/static', express.static(path.join(__dirname, '../public'), { maxAge: '7d' }));
+
 if (serverConfig.isProduction) {
   console.log('Starting production server...');
 

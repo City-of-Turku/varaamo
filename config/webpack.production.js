@@ -63,6 +63,7 @@ module.exports = merge(common, {
         CLIENT_ID: JSON.stringify(process.env.CLIENT_ID),
         OPENID_AUDIENCE: JSON.stringify(process.env.OPENID_AUDIENCE),
         OPENID_AUTHORITY: JSON.stringify(process.env.OPENID_AUTHORITY),
+        OG_IMG_URL: JSON.stringify(process.env.OG_IMG_URL || 'https://varaamo.turku.fi/static/images/aurajoki.jpg'),
       },
     }),
     new MiniCssExtractPlugin({
