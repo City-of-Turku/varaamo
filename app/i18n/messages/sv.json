@@ -106,7 +106,6 @@
   "CookieBar.accept": "Acceptera alla cookies",
   "CookieBar.decline": "Acceptera endast funktionella cookies",
   "CookieBar.description": "Vi använder cookies för att kunna ge dig en bättre upplevelse. Du kan acceptera alla cookies eller endast funktionella (nödvändiga) cookies.",
-  "CookieBar.link.href": "https://varaamo.turku.fi:8007/cookieInformation-sv.html",
   "CookieBar.link.text": "Länk till Cookie Policy",
   "DatePickerControl.buttonLabel": "Datum",
   "DatePickerControl.form.error.feedback": "Kontrollera datum",

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { addCookieScript } from '../../utils/cookieUtils';
 import { injectT } from 'i18n';
 
-function CookieBar({ t }) {
+function CookieBar({ t, currentLanguage }) {
   return (
     <CookieConsent
       buttonClasses="cookie-button"
@@ -23,13 +23,19 @@ function CookieBar({ t }) {
     >
       {t('CookieBar.description')}
       <div className="cookiePolicy">
-        <a href={t('CookieBar.link.href')} style={{ color: 'white' }}>{t('CookieBar.link.text')}</a>
+        <a
+          href={SETTINGS.COOKIE_POLICY_BASE_URL + currentLanguage}
+          style={{ color: 'white' }}
+        >
+          {t('CookieBar.link.text')}
+        </a>
       </div>
     </CookieConsent>
   );
 }
 
 CookieBar.propTypes = {
+  currentLanguage: PropTypes.string,
   t: PropTypes.func.isRequired,
 };
 

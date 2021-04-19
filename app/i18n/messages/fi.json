@@ -106,7 +106,6 @@
   "CookieBar.accept": "Hyväksy kaikki evästeet",
   "CookieBar.decline": "Hyväksy vain pakolliset evästeet",
   "CookieBar.description": "Käytämme evästeitä analytiikassa ja parantaaksemme käyttökokemustasi Varaamossa. Voit joko hyväksyä kaikki evästeet tai pelkästään toiminnallisesti pakolliset evästeet.",
-  "CookieBar.link.href": "https://varaamo.turku.fi:8007/cookieInformation-fi.html",
   "CookieBar.link.text": "Linkki evästekäytäntöön",
   "DatePickerControl.buttonLabel": "Päivämäärä",
   "DatePickerControl.form.error.feedback": "Tarkista päivämäärä",
