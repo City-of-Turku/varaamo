@@ -206,6 +206,13 @@ class UnconnectedReservationForm extends Component {
             { autoComplete: 'name' },
           )}
           {this.renderField(
+            'company',
+            'company',
+            'text',
+            t('common.companyLabel'),
+            {}
+          )}
+          {this.renderField(
             'reserverId',
             'reserverId',
             'text',

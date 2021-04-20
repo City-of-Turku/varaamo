@@ -16,6 +16,7 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
     billingAddressCity: 'New York',
     billingAddressStreet: 'Billing Street 11',
     billingAddressZip: '99999',
+    company: 'company name',
     reserverId: '112233-123A',
     comments: 'Just some comments.',
     eventDescription: 'Jedi mind tricks',
@@ -111,6 +112,10 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
 
       test('renders reserverEmailAddress', () => {
         expect(getData()).toContain(reservation.reserverEmailAddress);
+      });
+
+      test('renders company', () => {
+        expect(getData()).toContain(reservation.company);
       });
 
       describe('reserverId', () => {

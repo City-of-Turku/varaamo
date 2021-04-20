@@ -173,6 +173,7 @@ class UnconnectedReservationEditForm extends Component {
         {this.renderInfoRow(t('common.resourceLabel'), resource.name)}
 
         {isStaff && this.renderStaticInfoRow('reserverId')}
+        {this.renderStaticInfoRow('company')}
         {this.renderStaticInfoRow('reserverPhoneNumber')}
         {this.renderStaticInfoRow('reserverEmailAddress')}
         {this.renderAddressRow('reserverAddress')}

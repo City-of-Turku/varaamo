@@ -113,6 +113,12 @@ class ReservationConfirmation extends Component {
                 t('common.reserverNameLabel'),
                 reservation.reserverName
               )}
+            {reservation.company
+              && this.renderField(
+                'company',
+                t('common.companyLabel'),
+                reservation.company
+              )}
             {reservation.reserverId
               && this.renderField('reserverId', t('common.reserverIdLabel'), reservation.reserverId)}
             {reservation.reserverPhoneNumber

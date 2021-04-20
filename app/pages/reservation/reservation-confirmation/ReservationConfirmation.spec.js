@@ -199,6 +199,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
   test('renders reserver details fields', () => {
     const reservation = Reservation.build({
       reserverName: 'reserver name',
+      company: 'company name',
       reserverId: 'reserver id',
       reserverPhoneNumber: '050 1234567',
       reserverEmailAddress: 'reserver email',
@@ -239,7 +240,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       }
     });
     const fields = getWrapper({ reservation }).find('.app-ReservationConfirmation__field');
-    expect(fields).toHaveLength(24);
+    expect(fields).toHaveLength(25);
   });
 
   describe('Button onClick', () => {
