@@ -41,6 +41,17 @@ export default {
     'Content-Type': 'application/json',
   },
   REQUIRED_STAFF_EVENT_FIELDS: ['eventDescription', 'reserverName'],
+  RESERVATION_SHOWONLY_FILTERS: {
+    FAVORITE: 'favorite',
+    CAN_MODIFY: 'can_modify',
+  },
+  RESERVATION_STATE: {
+    CONFIRMED: 'confirmed',
+    REQUESTED: 'requested',
+    CANCELLED: 'cancelled',
+    DENIED: 'denied',
+    WAITING_FOR_PAYMENT: 'waiting_for_payment',
+  },
   RESERVATION_STATE_LABELS: {
     cancelled: {
       labelBsStyle: 'default',
