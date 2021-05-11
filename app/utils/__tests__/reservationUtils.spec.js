@@ -18,6 +18,8 @@ import {
   createOrder,
   checkOrderPrice,
   getFormattedProductPrice,
+  canUserCancelReservation,
+  canUserModifyReservation,
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 
@@ -434,6 +436,94 @@ describe('Utils: reservationUtils', () => {
       const product = { price: { amount: '3.50', period: '01:00:00', type: 'period' } };
       const expected = `${product.price.amount}€ / 1 h`;
       expect(getFormattedProductPrice(product)).toBe(expected);
+    });
+  });
+
+  describe('canUserModifyReservation ', () => {
+    test('return false by default if (logged in) user has no permission defined', () => {
+      const reservation = Reservation.build();
+      const canModify = canUserModifyReservation(reservation);
+
+      expect(canModify).toBe(false);
+    });
+
+    test('return false if (logged in) user has can_modify false', () => {
+      const reservation = Reservation.build({
+        userPermissions: {
+          canModify: false,
+        },
+      });
+      const canModify = canUserModifyReservation(reservation);
+
+      expect(canModify).toBe(false);
+    });
+
+    test('return false if (logged in) user has can_modify true, but reservation state was canceled', () => {
+      const reservation = Reservation.build({
+        userPermissions: {
+          canModify: true,
+        },
+        state: constants.RESERVATION_STATE.CANCELLED
+      });
+      const canModify = canUserModifyReservation(reservation);
+
+      expect(canModify).toBe(false);
+    });
+
+    test('return true if (logged in) user has can_modify true, state not canceled', () => {
+      const reservation = Reservation.build({
+        userPermissions: {
+          canModify: true,
+        },
+        state: constants.RESERVATION_STATE.CONFIRMED
+      });
+      const canModify = canUserModifyReservation(reservation);
+
+      expect(canModify).toBe(true);
+    });
+  });
+
+  describe('canUserCancelReservation ', () => {
+    test('return false by default if (logged in) user has no permission defined', () => {
+      const reservation = Reservation.build();
+      const canCancel = canUserCancelReservation(reservation);
+
+      expect(canCancel).toBe(false);
+    });
+
+    test('return false if (logged in) user has can_delete false', () => {
+      const reservation = Reservation.build({
+        userPermissions: {
+          canDelete: false,
+        },
+      });
+      const canCancel = canUserCancelReservation(reservation);
+
+      expect(canCancel).toBe(false);
+    });
+
+    test('return false if (logged in) user has can_delete true, but reservation state was canceled', () => {
+      const reservation = Reservation.build({
+        userPermissions: {
+          canDelete: true,
+        },
+        state: constants.RESERVATION_STATE.CANCELLED
+      });
+      const canCancel = canUserCancelReservation(reservation);
+
+      expect(canCancel).toBe(false);
+    });
+
+    test('return true if (logged in) user has can_delete true, state not canceled', () => {
+      const reservation = Reservation.build({
+        userPermissions: {
+          canDelete: true,
+        },
+        state: constants.RESERVATION_STATE.CONFIRMED
+      });
+      const canCancel = canUserCancelReservation(reservation);
+
+      expect(canCancel).toBe(true);
     });
   });
 });

@@ -7,6 +7,7 @@ import last from 'lodash/last';
 import some from 'lodash/some';
 import sortBy from 'lodash/sortBy';
 import tail from 'lodash/tail';
+import get from 'lodash/get';
 import moment from 'moment';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
@@ -204,6 +205,42 @@ function getFormattedProductPrice(product) {
 
   return `${price}€${priceEnding}`;
 }
+
+/**
+ * Check if current user (logged in user) has
+ * permission to modify selected reservation.
+ *
+ * Reservation which is in canceled state can not be changed to something else.
+ *
+ * @param {Object} reservation
+ * @returns {Boolean} False by default
+ */
+export const canUserModifyReservation = (reservation) => {
+  if (get(reservation, 'userPermissions.canModify', false)
+      && reservation.state !== constants.RESERVATION_STATE.CANCELLED) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
+ * Check if current user (logged in user) has
+ * permission to cancel (delete) selected reservation.
+ *
+ * Reservation which is in canceled state can not be changed to something else.
+ *
+ * @param {Object} reservation
+ * @returns {Boolean} False by default
+ */
+export const canUserCancelReservation = (reservation) => {
+  if (get(reservation, 'userPermissions.canDelete', false)
+      && reservation.state !== constants.RESERVATION_STATE.CANCELLED) {
+    return true;
+  }
+
+  return false;
+};
 
 export {
   combine,
