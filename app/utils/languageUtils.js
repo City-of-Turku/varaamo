@@ -1,5 +1,7 @@
 import constants from 'constants/AppConstants';
 
+import { get, values } from 'lodash';
+
 /**
    * Returns correct feedback link based on given current language.
    *
@@ -20,4 +22,22 @@ function getFeedbackLink(currentLanguage) {
   }
 }
 
-export { getFeedbackLink };
+/**
+ * Returns a localized value for given field.
+ * @param {object} field with translations e.g. name: {fi: ..., en: ..., sv: ...}
+ * @param {string} locale fi, en or sv
+ * @param {boolean} fallback try to find any other translation if given locale doesn't have a value.
+ * Default is false.
+ * @returns {string|null} localized value or null
+ */
+function getLocalizedFieldValue(field, locale, fallback = false) {
+  const localeValue = get(field, locale, null);
+
+  if (localeValue || !fallback) {
+    return localeValue;
+  }
+
+  return values(field).find(fallbackValue => !!fallbackValue);
+}
+
+export { getFeedbackLink, getLocalizedFieldValue };
