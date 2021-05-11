@@ -20,6 +20,7 @@ function ManageReservationsDropdown({
   return (
     <div className="app-ManageReservationDropdown">
       <DropdownButton
+        id={`ManageReservationDropdown-${reservation.id}`}
         title={t('ManageReservationsList.actionsHeader')}
       >
         <MenuItem onClick={onInfoClick}>

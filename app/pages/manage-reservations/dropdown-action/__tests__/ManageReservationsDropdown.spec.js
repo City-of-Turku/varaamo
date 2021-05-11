@@ -30,6 +30,7 @@ describe('ManageReservationsDropdown', () => {
     test('DropdownButton', () => {
       const button = getWrapper().find(DropdownButton);
       expect(button).toHaveLength(1);
+      expect(button.prop('id')).toBe(`ManageReservationDropdown-${defaultProps.reservation.id}`);
       expect(button.prop('title')).toBe('ManageReservationsList.actionsHeader');
     });
 
