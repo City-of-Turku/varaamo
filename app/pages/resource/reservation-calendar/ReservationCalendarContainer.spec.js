@@ -63,6 +63,7 @@ describe('pages/resource/reservation-calendar/ReservationCalendarContainer', () 
     isEditing: false,
     isFetchingResource: false,
     isLoggedIn: true,
+    isStrongAuthSatisfied: true,
     isStaff: false,
     location: { search: '' },
     params: { id: resource.id },

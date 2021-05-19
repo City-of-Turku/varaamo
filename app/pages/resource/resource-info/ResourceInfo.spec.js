@@ -15,6 +15,7 @@ describe('pages/resource/resource-info/ResourceInfo', () => {
     addNotification: () => null,
     currentLanguage: 'fi',
     isLoggedIn: false,
+    isStrongAuthSatisfied: true,
     resource: Immutable(
       Resource.build({
         description: 'Some description',
@@ -99,6 +100,7 @@ describe('pages/resource/resource-info/ResourceInfo', () => {
     expect(reservationInfo.prop('addNotification')).toBe(defaultProps.addNotification);
     expect(reservationInfo.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
     expect(reservationInfo.prop('isLoggedIn')).toBe(defaultProps.isLoggedIn);
+    expect(reservationInfo.prop('isStrongAuthSatisfied')).toBe(defaultProps.isStrongAuthSatisfied);
     expect(reservationInfo.prop('resource')).toEqual(defaultProps.resource);
   });
 

@@ -11,7 +11,7 @@ import { getServiceMapUrl } from 'utils/unitUtils';
 import ReservationInfo from '../reservation-info';
 
 function ResourceInfo({
-  addNotification, currentLanguage, isLoggedIn, resource, unit, t, equipment
+  addNotification, currentLanguage, isLoggedIn, isStrongAuthSatisfied, resource, unit, t, equipment
 }) {
   const serviceMapUrl = getServiceMapUrl(unit, currentLanguage);
   const equipmentList = equipment.map((thing, index) => <li key={index}>{thing}</li>);
@@ -34,6 +34,7 @@ function ResourceInfo({
             addNotification={addNotification}
             currentLanguage={currentLanguage}
             isLoggedIn={isLoggedIn}
+            isStrongAuthSatisfied={isStrongAuthSatisfied}
             resource={resource}
           />
         </Panel>
@@ -94,6 +95,7 @@ ResourceInfo.propTypes = {
   currentLanguage: PropTypes.string,
   equipment: PropTypes.array,
   isLoggedIn: PropTypes.bool.isRequired,
+  isStrongAuthSatisfied: PropTypes.bool.isRequired,
   resource: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
   unit: PropTypes.object.isRequired,

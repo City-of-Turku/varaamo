@@ -3,7 +3,7 @@ import ActionTypes from 'constants/ActionTypes';
 import { createSelector, createStructuredSelector } from 'reselect';
 
 import { isAdminSelector, isLoggedInSelector } from 'state/selectors/authSelectors';
-import { createResourceSelector, unitsSelector } from 'state/selectors/dataSelectors';
+import { createResourceSelector, unitsSelector, createStrongAuthSatisfiedSelector } from 'state/selectors/dataSelectors';
 import { contrastSelector } from 'state/selectors/accessibilitySelectors';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 import dateSelector from 'state/selectors/dateSelector';
@@ -37,6 +37,7 @@ const resourcePageSelector = createStructuredSelector({
   isAdmin: isAdminSelector,
   isFetchingResource: requestIsActiveSelectorFactory(ActionTypes.API.RESOURCE_GET_REQUEST),
   isLoggedIn: isLoggedInSelector,
+  isStrongAuthSatisfied: createStrongAuthSatisfiedSelector(resourceSelector),
   resource: resourceSelector,
   showMap: showMapSelector,
   unit: unitSelector,

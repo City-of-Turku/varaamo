@@ -11,6 +11,7 @@ describe('pages/resource/reservation-info/ReservationInfo', () => {
     addNotification: () => null,
     currentLanguage: 'fi',
     isLoggedIn: false,
+    isStrongAuthSatisfied: true,
     resource: Immutable(
       Resource.build({
         maxPeriod: '04:00:00',
@@ -88,11 +89,6 @@ describe('pages/resource/reservation-info/ReservationInfo', () => {
   });
 
   describe('login text', () => {
-    test('is not rendered if user is logged in', () => {
-      const loginText = getWrapper({ isLoggedIn: true }).find('.login-text');
-      expect(loginText).toHaveLength(0);
-    });
-
     test('is not rendered if resource is not reservable', () => {
       const resource = {
         reservable: false,
@@ -101,28 +97,59 @@ describe('pages/resource/reservation-info/ReservationInfo', () => {
       expect(loginText).toHaveLength(0);
     });
 
-    test('is not rendered if resource doesnt require authentication', () => {
-      const resource = { authentication: 'unauthenticated', ...defaultProps.resource };
-      const loginText = getWrapper({ isLoggedIn: false, resource }).find('.login-text');
-      expect(loginText).toHaveLength(0);
+    describe('when strong auth requirement is satisfied', () => {
+      const isStrongAuthSatisfied = true;
+      test('is not rendered if user is logged in', () => {
+        const loginText = getWrapper({ isLoggedIn: true, isStrongAuthSatisfied }).find('.login-text');
+        expect(loginText).toHaveLength(0);
+      });
+
+      test('is not rendered if resource doesnt require authentication', () => {
+        const resource = { authentication: 'unauthenticated', ...defaultProps.resource };
+        const loginText = getWrapper({ isLoggedIn: false, isStrongAuthSatisfied, resource }).find('.login-text');
+        expect(loginText).toHaveLength(0);
+      });
+
+      test('is rendered otherwise', () => {
+        const resource = {
+          reservable: true,
+        };
+        const loginText = getWrapper({ isLoggedIn: false, isStrongAuthSatisfied, resource }).find('.login-text');
+        expect(loginText).toHaveLength(1);
+      });
+
+      test('contains login Button with correct text when login text is rendered', () => {
+        const resource = {
+          reservable: true,
+        };
+        const loginButton = getWrapper({ isLoggedIn: false, isStrongAuthSatisfied, resource }).find('.login-button');
+        expect(loginButton).toHaveLength(1);
+        expect(loginButton.prop('bsStyle')).toBe('link');
+        expect(loginButton.prop('onClick')).toBeDefined();
+        expect(loginButton.prop('children')).toBe('ReservationInfo.loginMessage');
+      });
     });
 
-    test('is rendered otherwise', () => {
-      const resource = {
-        reservable: true,
-      };
-      const loginText = getWrapper({ isLoggedIn: false, resource }).find('.login-text');
-      expect(loginText).toHaveLength(1);
-    });
+    describe('when strong auth requirement is not satisfied', () => {
+      const isStrongAuthSatisfied = false;
+      test('is rendered', () => {
+        const resource = {
+          reservable: true,
+        };
+        const loginText = getWrapper({ isLoggedIn: false, isStrongAuthSatisfied, resource }).find('.login-text');
+        expect(loginText).toHaveLength(1);
+      });
 
-    test('contains login Button when login text is rendered', () => {
-      const resource = {
-        reservable: true,
-      };
-      const loginButton = getWrapper({ isLoggedIn: false, resource }).find('.login-button');
-      expect(loginButton).toHaveLength(1);
-      expect(loginButton.prop('bsStyle')).toBe('link');
-      expect(loginButton.prop('onClick')).toBeDefined();
+      test('contains login Button with correct text when login text is rendered', () => {
+        const resource = {
+          reservable: true,
+        };
+        const loginButton = getWrapper({ isLoggedIn: false, isStrongAuthSatisfied, resource }).find('.login-button');
+        expect(loginButton).toHaveLength(1);
+        expect(loginButton.prop('bsStyle')).toBe('link');
+        expect(loginButton.prop('onClick')).toBeDefined();
+        expect(loginButton.prop('children')).toBe('ReservationInfo.loginMessageStrongAuth');
+      });
     });
   });
 });

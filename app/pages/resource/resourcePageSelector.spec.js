@@ -88,6 +88,14 @@ describe('pages/resource/resourcePageSelector', () => {
     expect(selected.isLoggedIn).toBeDefined();
   });
 
+  test('returns isStrongAuthSatisfied', () => {
+    const state = getState();
+    const props = getProps();
+    const selected = resourcePageSelector(state, props);
+
+    expect(selected.isStrongAuthSatisfied).toBeDefined();
+  });
+
   test('returns resource', () => {
     const state = getState();
     const props = getProps();
