@@ -44,7 +44,7 @@ function ReservationDataRow({
         <ManageReservationsDropdown
           onEditClick={() => onEditClick(reservation)}
           onEditReservation={onEditReservation}
-          onInfoClick={() => onInfoClick(reservation)}
+          onInfoClick={() => onInfoClick(getNormalizedReservation(reservation))}
           reservation={getNormalizedReservation(reservation)}
           userCanCancel={canUserCancelReservation(reservation)}
           userCanModify={canUserModifyReservation(reservation)}
