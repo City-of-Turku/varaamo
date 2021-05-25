@@ -18,6 +18,10 @@ export default {
     timePeriod: 30,
     timePeriodType: 'minutes',
   },
+  MANAGE_RESERVATIONS: {
+    PAGE_SIZE: 10,
+    MAX_SHOWN_PAGINATION_BUTTONS: 9,
+  },
   NAV_ADMIN_URLS: {
     gitbook: 'https://digipoint-turku.gitbook.io/varaamo-turku/',
     gitbook_sv: 'https://digipoint-turku.gitbook.io/varaamo-turku/v/v.1.0.0-swedish/',
