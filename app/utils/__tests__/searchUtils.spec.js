@@ -1,6 +1,10 @@
+import queryString from 'query-string';
+
 import {
   getFetchParamsFromFilters,
   pickSupportedFilters,
+  getFiltersFromUrl,
+  getSearchFromFilters,
 } from 'utils/searchUtils';
 import { getDateStartAndEndTimes } from 'utils/timeUtils';
 
@@ -52,6 +56,45 @@ describe('Utils: searchUtils', () => {
       };
 
       expect(pickSupportedFilters(filters)).toEqual(expected);
+    });
+  });
+
+  describe('getFiltersFromUrl', () => {
+    const location = { search: '?date=2021-05-25&state=confirmed&test=123' };
+
+    test('returns correct filters when supported filters is not given', () => {
+      expect(getFiltersFromUrl(location)).toStrictEqual({ date: '2021-05-25' });
+    });
+
+    test('returns correct filters when supported filters is given', () => {
+      const supportedFilters = { date: '', state: '' };
+      expect(getFiltersFromUrl(location, supportedFilters)).toStrictEqual({
+        date: '2021-05-25',
+        state: 'confirmed'
+      });
+    });
+
+    test('returns correct filters when supported filters is set to false', () => {
+      const supportedFilters = false;
+      expect(getFiltersFromUrl(location, supportedFilters)).toStrictEqual({
+        date: '2021-05-25',
+        state: 'confirmed',
+        test: '123',
+      });
+    });
+  });
+
+  describe('getSearchFromFilters', () => {
+    test('returns correct query string when filters is not given', () => {
+      expect(getSearchFromFilters()).toBe('');
+    });
+
+    test('returns correct query string when filters is given', () => {
+      const filters = { test: 123, foo: 'bar' };
+      const expected = queryString.stringify(
+        Object.assign({}, filters)
+      );
+      expect(getSearchFromFilters(filters)).toBe(expected);
     });
   });
 });

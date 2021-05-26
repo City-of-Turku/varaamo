@@ -1,0 +1,20 @@
+@import './inputs/dateField';
+@import './inputs/buttonGroupField';
+@import './filters/manageReservationsFilters';
+@import './status/manageReservationsStatus';
+@import './list/manageReservationsList';
+
+.app-ManageReservationsPage {
+  h1 {
+    margin: 32px 0 16px;
+  }
+
+  &__filters {
+    background-color: #dedfe1;
+    padding: 0 0 40px;
+  }
+
+  &__list {
+    margin-top: 20px;
+  }
+}

@@ -90,6 +90,11 @@ class MainNavbar extends React.Component {
             {isAdmin
               && (
                 <Fragment>
+                  <LinkContainer to="/manage-reservations">
+                    <NavItem eventKey="manage-reservations" onClick={() => this.collapseItem()}>
+                      {t('Navbar.manageReservations')}
+                    </NavItem>
+                  </LinkContainer>
                   <NavItem eventKey="adminMaintenance" href={constants.NAV_ADMIN_URLS.respa} target="_blank">
                     {t('Navbar.adminMaintenance')}
                     <FAIcon icon={faExternalLinkAlt} />

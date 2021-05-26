@@ -5,7 +5,17 @@ import {
   reservationsSelector,
   resourcesSelector,
   unitsSelector,
+  userFavouriteResourcesSelector,
 } from './dataSelectors';
+
+jest.mock('./authSelectors', () => {
+  const originalModule = jest.requireActual('./authSelectors');
+  return {
+    __esModule: true,
+    ...originalModule,
+    currentUserSelector: jest.fn(() => ({ favoriteResources: ['test123'] })),
+  };
+});
 
 describe('state/selectors/dataSelectors', () => {
   describe('purposesSelector', () => {
@@ -100,6 +110,14 @@ describe('state/selectors/dataSelectors', () => {
       const state = getState();
       const selected = createResourceSelector(idSelector)(state);
       expect(selected).toEqual({});
+    });
+  });
+
+  describe('userFavouriteResourcesSelector', () => {
+    test('returns current user favorite resources', () => {
+      const state = getState();
+      const selected = userFavouriteResourcesSelector(state);
+      expect(selected).toStrictEqual(['test123']);
     });
   });
 });
