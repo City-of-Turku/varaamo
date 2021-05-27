@@ -120,8 +120,6 @@ class ManageReservationsPage extends React.Component {
       {}, reservation, { resource: reservation.resource.id }
     );
 
-    // TODO: handle reservation page "back/history"
-
     // fetch resource before changing page to make sure reservation page has
     // all needed info to function
     this.handleFetchResource(reservation.resource.id, reservation.begin);

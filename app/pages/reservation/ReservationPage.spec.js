@@ -325,8 +325,36 @@ describe('pages/reservation/ReservationPage', () => {
         simple.restore();
       });
 
-      test('calls history.replace() with /my-reservations', () => {
+      test('calls history.replace() with /resources/id', () => {
         const expectedPath = `/resources/${resource.id}`;
+        expect(historyMock.callCount).toBe(1);
+        expect(historyMock.lastCall.args).toEqual([expectedPath]);
+      });
+    });
+
+    describe('when reservations and selected empty and location search path is manage-reservations', () => {
+      let historyMock;
+
+      beforeAll(() => {
+        historyMock = simple.mock(history, 'replace');
+        const instance = getWrapper({
+          location: {
+            search: '?path=manage-reservations',
+          },
+          reservationCreated: null,
+          reservationEdited: null,
+          reservationToEdit: null,
+          selected: [],
+        }).instance();
+        instance.componentDidMount();
+      });
+
+      afterAll(() => {
+        simple.restore();
+      });
+
+      test('calls history.replace() with /manage-reservations', () => {
+        const expectedPath = '/manage-reservations';
         expect(historyMock.callCount).toBe(1);
         expect(historyMock.lastCall.args).toEqual([expectedPath]);
       });
@@ -508,9 +536,8 @@ describe('pages/reservation/ReservationPage', () => {
       simple.restore();
     });
 
-    test(
-      'calls browserHistory.replace() with /my-reservations when reservationToEdit not empty',
-      () => {
+    describe('when reservationToEdit is not empty calls browserHistory.replace()', () => {
+      test('with /my-reservations', () => {
         historyMock.reset();
         const expectedPath = '/my-reservations';
         const instance = getWrapper({
@@ -520,8 +547,23 @@ describe('pages/reservation/ReservationPage', () => {
 
         expect(historyMock.callCount).toBe(1);
         expect(historyMock.lastCall.args).toEqual([expectedPath]);
-      }
-    );
+      });
+
+      test('with /manage-reservations when location search path is manage-reservations', () => {
+        historyMock.reset();
+        const expectedPath = '/manage-reservations';
+        const instance = getWrapper({
+          reservationToEdit: Reservation.build(),
+          location: {
+            search: '?path=manage-reservations',
+          },
+        }).instance();
+        instance.handleCancel();
+
+        expect(historyMock.callCount).toBe(1);
+        expect(historyMock.lastCall.args).toEqual([expectedPath]);
+      });
+    });
 
     test(
       'calls history.replace() with /resources when reservationToEdit empty',

@@ -66,6 +66,8 @@ class UnconnectedReservationPage extends Component {
 
       if (!query.id && query.resource) {
         history.replace(`/resources/${query.resource}`);
+      } else if ('path' in query && query.path === 'manage-reservations') {
+        history.replace('/manage-reservations');
       } else {
         history.replace('/my-reservations');
       }
@@ -177,9 +179,16 @@ class UnconnectedReservationPage extends Component {
   };
 
   handleCancel = () => {
-    const { reservationToEdit, resource, history } = this.props;
+    const {
+      reservationToEdit, resource, history, location
+    } = this.props;
     if (!isEmpty(reservationToEdit)) {
-      history.replace('/my-reservations');
+      const query = queryString.parse(location.search);
+      if ('path' in query && query.path === 'manage-reservations') {
+        history.replace('/manage-reservations');
+      } else {
+        history.replace('/my-reservations');
+      }
     } else {
       history.replace(`/resources/${resource.id}`);
     }
