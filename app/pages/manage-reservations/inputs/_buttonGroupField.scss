@@ -5,15 +5,26 @@
     margin: 0 calc(#{2px}*-1)
   }
 
+  legend {
+    margin-bottom: 0px;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
   &__button {
     margin: 0 8px 8px 0 !important;
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 500;
 
     &.active,
     &:hover {
       background-color: #000000 !important;
       color: #dedfe1 !important;
+    }
+
+    &:focus-within {
+      outline: solid 3px white;
+      outline-offset: -2px;
     }
   }
 }

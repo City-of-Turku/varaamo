@@ -54,10 +54,10 @@ function ManageReservationsFilters({
                 onChange={(startDateValue) => {
                   onDateFilterChange(startDateValue, endDate, filters, onSearchChange);
                 }}
-                placeholder={t('ManageReservationsFilters.startDatePlaceholder')}
+                placeholder={t('common.select')}
                 value={startDate ? moment(startDate).toDate() : null}
               />
-              {/* <div className="separator">-</div> */}
+              <div className="separator" />
               <DateField
                 id="endDateField"
                 label={t('ManageReservationsFilters.endDateLabel')}
@@ -65,7 +65,7 @@ function ManageReservationsFilters({
                 onChange={(endDateValue) => {
                   onDateFilterChange(startDate, endDateValue, filters, onSearchChange);
                 }}
-                placeholder={t('ManageReservationsFilters.endDatePlaceholder')}
+                placeholder={t('common.select')}
                 value={endDate ? moment(endDate).toDate() : null}
               />
             </div>

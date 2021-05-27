@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/lib/ToggleButton';
 
@@ -15,8 +13,8 @@ function ButtonGroupField({
 }) {
   return (
     <div className="app-ButtonGroupField">
-      <FormGroup controlId={`buttonGroupField-${id}`}>
-        {label && <ControlLabel className="app-ButtonGroupField__label">{label}</ControlLabel>}
+      <fieldset>
+        {label && <legend className="app-ButtonGroupField__label">{label}</legend>}
         <ToggleButtonGroup
           className="app-ButtonGroupField__buttons"
           onChange={onChange}
@@ -33,7 +31,7 @@ function ButtonGroupField({
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
-      </FormGroup>
+      </fieldset>
     </div>
   );
 }

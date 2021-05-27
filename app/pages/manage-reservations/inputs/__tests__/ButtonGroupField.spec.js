@@ -1,8 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import {
-  ControlLabel, FormGroup, ToggleButton, ToggleButtonGroup
-} from 'react-bootstrap';
+import { ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 
 import ButtonGroupField from '../ButtonGroupField';
 
@@ -29,25 +27,24 @@ describe('ButtonGroupField', () => {
       expect(wrapper).toHaveLength(1);
     });
 
-    test('FormGroup', () => {
-      const formGroup = getWrapper().find(FormGroup);
-      expect(formGroup).toHaveLength(1);
-      expect(formGroup.prop('controlId')).toBe(`buttonGroupField-${defaultProps.id}`);
+    test('fieldset', () => {
+      const fieldset = getWrapper().find('fieldset');
+      expect(fieldset).toHaveLength(1);
     });
 
-    describe('ControlLabel', () => {
+    describe('legend', () => {
       test('when prop label is given', () => {
         const label = 'test-label';
-        const controlLabel = getWrapper({ label }).find(ControlLabel);
-        expect(controlLabel).toHaveLength(1);
-        expect(controlLabel.prop('className')).toBe('app-ButtonGroupField__label');
-        expect(controlLabel.props().children).toBe(label);
+        const legend = getWrapper({ label }).find('legend');
+        expect(legend).toHaveLength(1);
+        expect(legend.prop('className')).toBe('app-ButtonGroupField__label');
+        expect(legend.props().children).toBe(label);
       });
 
       test('when prop label is not given', () => {
         const label = undefined;
-        const controlLabel = getWrapper({ label }).find(ControlLabel);
-        expect(controlLabel).toHaveLength(0);
+        const legend = getWrapper({ label }).find('legend');
+        expect(legend).toHaveLength(0);
       });
     });
 

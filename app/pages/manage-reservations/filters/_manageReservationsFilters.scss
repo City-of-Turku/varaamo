@@ -11,13 +11,7 @@
     }
 
     .separator {
-      margin-bottom: $form-group-margin-bottom;
-      width: 30px;
-      padding-top: 24px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      padding: 4px;
 
       @media (max-width: $screen-sm-max) {
         display: none;
@@ -27,7 +21,7 @@
 
   &__resetButton {
     margin-top: 24px;
-
+    color: #0065AD !important;
     img {
       margin-left: -8px;
       width: $line-height-computed;

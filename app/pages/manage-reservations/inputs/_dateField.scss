@@ -19,8 +19,12 @@
     }
 
     .placeholder {
-      color: $input-color-placeholder;
+      color: #6C7789;
     }
+  }
+
+  .input-group-addon {
+    background-color: white;
   }
 
   &__icon {

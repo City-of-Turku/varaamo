@@ -68,6 +68,11 @@ describe('ManageReservationsFilters', () => {
         expect(div).toHaveLength(1);
       });
 
+      test('date picker separator div', () => {
+        const div = firstRow.find('.separator');
+        expect(div).toHaveLength(1);
+      });
+
       describe('DateFields', () => {
         const dateFields = firstRow.find(DateField);
         test('start and end', () => {
@@ -80,7 +85,7 @@ describe('ManageReservationsFilters', () => {
           expect(startField.prop('label')).toBe('ManageReservationsFilters.startDateLabel');
           expect(startField.prop('locale')).toBeDefined();
           expect(startField.prop('onChange')).toBeDefined();
-          expect(startField.prop('placeholder')).toBe('ManageReservationsFilters.startDatePlaceholder');
+          expect(startField.prop('placeholder')).toBe('common.select');
           expect(startField.prop('value')).toBe(null);
         });
 
@@ -90,7 +95,7 @@ describe('ManageReservationsFilters', () => {
           expect(endField.prop('label')).toBe('ManageReservationsFilters.endDateLabel');
           expect(endField.prop('locale')).toBeDefined();
           expect(endField.prop('onChange')).toBeDefined();
-          expect(endField.prop('placeholder')).toBe('ManageReservationsFilters.endDatePlaceholder');
+          expect(endField.prop('placeholder')).toBe('common.select');
           expect(endField.prop('value')).toBe(null);
         });
       });
