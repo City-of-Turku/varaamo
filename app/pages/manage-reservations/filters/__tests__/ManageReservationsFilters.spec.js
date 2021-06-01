@@ -106,8 +106,7 @@ describe('ManageReservationsFilters', () => {
         expect(textField.prop('id')).toBe('searchField');
         expect(textField.prop('label')).toBe('ManageReservationsFilters.searchLabel');
         expect(textField.prop('onChange')).toBeDefined();
-        expect(textField.prop('placeholder')).toBe('ManageReservationsFilters.searchPlaceholder');
-        expect(textField.prop('value')).toBe(get(defaultProps.filters, 'reserver_info_search', ''));
+        expect(textField.prop('value')).toBe(get(defaultProps.filters, 'reserver_name', ''));
       });
     });
 

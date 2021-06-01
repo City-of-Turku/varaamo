@@ -74,9 +74,8 @@ function ManageReservationsFilters({
             <TextField
               id="searchField"
               label={t('ManageReservationsFilters.searchLabel')}
-              onChange={event => onFilterChange('reserver_info_search', event.target.value, filters, onSearchChange)}
-              placeholder={t('ManageReservationsFilters.searchPlaceholder')}
-              value={get(filters, 'reserver_info_search', '')}
+              onChange={event => onFilterChange('reserver_name', event.target.value, filters, onSearchChange)}
+              value={get(filters, 'reserver_name', '')}
             />
           </Col>
         </Row>
