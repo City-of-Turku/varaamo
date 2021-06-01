@@ -15,12 +15,8 @@ function ReservationDataRow({
 }) {
   return (
     <tr>
-      <td>{get(reservation, 'user.displayName') || '-'}</td>
-      {/*
-        TODO: double check user.email vs reserverEmailAddress
-        and user.displayName vs reserverName
-       */}
-      <td>{get(reservation, 'user.email') || '-'}</td>
+      <td>{get(reservation, 'reserverName') || '-'}</td>
+      <td>{get(reservation, 'reserverEmailAddress') || '-'}</td>
       <td>
         {getLocalizedFieldValue(
           get(reservation, 'resource.name'), locale

@@ -18,12 +18,16 @@ describe('manage-reservation/list/ReservationDataRow', () => {
   const resource = Resource.build();
   const user = User.build({ displayName: 'Test Name' });
   const eventDescription = 'This is a description';
+  const reserverName = 'Test Tester';
+  const reserverEmailAddress = 'test@tester@gmail.com';
   const defaultProps = {
     locale: 'en',
     reservation: Reservation.build({
       resource,
       user,
-      eventDescription
+      eventDescription,
+      reserverName,
+      reserverEmailAddress
     }),
     onInfoClick: jest.fn(),
     onEditClick: jest.fn(),
@@ -46,12 +50,12 @@ describe('manage-reservation/list/ReservationDataRow', () => {
 
     test('first td with correct data', () => {
       const tableData = getWrapper().find('td').at(0);
-      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'user.displayName'));
+      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'reserverName'));
     });
 
     test('second td with correct data', () => {
       const tableData = getWrapper().find('td').at(1);
-      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'user.email') || '-');
+      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'reserverEmailAddress') || '-');
     });
 
     test('third td with correct data', () => {
