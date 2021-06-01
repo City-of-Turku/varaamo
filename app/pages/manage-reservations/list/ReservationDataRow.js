@@ -15,7 +15,6 @@ function ReservationDataRow({
 }) {
   return (
     <tr>
-      <td>{get(reservation, 'eventDescription') || '-'}</td>
       <td>{get(reservation, 'user.displayName') || '-'}</td>
       {/*
         TODO: double check user.email vs reserverEmailAddress

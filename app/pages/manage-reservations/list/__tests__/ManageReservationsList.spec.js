@@ -44,17 +44,16 @@ describe('ManageReservationsList', () => {
 
     test('table headings with correct texts', () => {
       const tableHeadings = getWrapper().find('th');
-      expect(tableHeadings).toHaveLength(10);
-      expect(tableHeadings.at(0).text()).toBe('ManageReservationsList.subjectHeader');
-      expect(tableHeadings.at(1).text()).toBe('ManageReservationsList.nameHeader');
-      expect(tableHeadings.at(2).text()).toBe('ManageReservationsList.emailHeader');
-      expect(tableHeadings.at(3).text()).toBe('ManageReservationsList.resourceHeader');
-      expect(tableHeadings.at(4).text()).toBe('ManageReservationsList.premiseHeader');
-      expect(tableHeadings.at(5).text()).toBe('ManageReservationsList.dateAndTimeHeader');
-      expect(tableHeadings.at(6).text()).toBe('ManageReservationsList.pinHeader');
-      expect(tableHeadings.at(7).text()).toBe('common.comments');
-      expect(tableHeadings.at(8).text()).toBe('ManageReservationsList.statusHeader');
-      expect(tableHeadings.at(9).text()).toBe('ManageReservationsList.actionsHeader');
+      expect(tableHeadings).toHaveLength(9);
+      expect(tableHeadings.at(0).text()).toBe('ManageReservationsList.nameHeader');
+      expect(tableHeadings.at(1).text()).toBe('ManageReservationsList.emailHeader');
+      expect(tableHeadings.at(2).text()).toBe('ManageReservationsList.resourceHeader');
+      expect(tableHeadings.at(3).text()).toBe('ManageReservationsList.premiseHeader');
+      expect(tableHeadings.at(4).text()).toBe('ManageReservationsList.dateAndTimeHeader');
+      expect(tableHeadings.at(5).text()).toBe('ManageReservationsList.pinHeader');
+      expect(tableHeadings.at(6).text()).toBe('common.comments');
+      expect(tableHeadings.at(7).text()).toBe('ManageReservationsList.statusHeader');
+      expect(tableHeadings.at(8).text()).toBe('ManageReservationsList.actionsHeader');
     });
 
     test('tbody', () => {

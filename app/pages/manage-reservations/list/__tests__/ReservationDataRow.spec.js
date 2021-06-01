@@ -41,66 +41,61 @@ describe('manage-reservation/list/ReservationDataRow', () => {
 
     test('correct amount of td', () => {
       const tableDatas = getWrapper().find('td');
-      expect(tableDatas).toHaveLength(10);
+      expect(tableDatas).toHaveLength(9);
     });
 
     test('first td with correct data', () => {
       const tableData = getWrapper().find('td').at(0);
-      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'eventDescription'));
+      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'user.displayName'));
     });
 
     test('second td with correct data', () => {
       const tableData = getWrapper().find('td').at(1);
-      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'user.displayName'));
+      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'user.email') || '-');
     });
 
     test('third td with correct data', () => {
       const tableData = getWrapper().find('td').at(2);
-      expect(tableData.props().children).toBe(get(defaultProps.reservation, 'user.email') || '-');
-    });
-
-    test('4th td with correct data', () => {
-      const tableData = getWrapper().find('td').at(3);
       expect(tableData.props().children).toBe(getLocalizedFieldValue(
         get(defaultProps.reservation, 'resource.name'), defaultProps.locale
       ) || '-');
     });
 
-    test('5th td with correct data', () => {
-      const tableData = getWrapper().find('td').at(4);
+    test('4th td with correct data', () => {
+      const tableData = getWrapper().find('td').at(3);
       expect(tableData.props().children).toBe(getLocalizedFieldValue(
         get(defaultProps.reservation, 'resource.unit.name'), defaultProps.locale
       ) || '-');
     });
 
-    test('6th td with correct data', () => {
-      const tableData = getWrapper().find('td').at(5);
+    test('5th td with correct data', () => {
+      const tableData = getWrapper().find('td').at(4);
       expect(tableData.props().children).toBe(getDateAndTime(defaultProps.reservation));
     });
 
-    test('7th td with correct data', () => {
-      const tableData = getWrapper().find('td').at(6);
+    test('6th td with correct data', () => {
+      const tableData = getWrapper().find('td').at(5);
       const pincode = tableData.find(ManageReservationsPincode);
       expect(pincode).toHaveLength(1);
       expect(pincode.prop('reservation')).toBe(defaultProps.reservation);
     });
 
-    test('8th td with correct data', () => {
-      const tableData = getWrapper().find('td').at(7);
+    test('7th td with correct data', () => {
+      const tableData = getWrapper().find('td').at(6);
       const comment = tableData.find(ManageReservationsComment);
       expect(comment).toHaveLength(1);
       expect(comment.prop('comments')).toBe(defaultProps.reservation.comments);
     });
 
-    test('9th td with correct data', () => {
-      const tableData = getWrapper().find('td').at(8);
+    test('8th td with correct data', () => {
+      const tableData = getWrapper().find('td').at(7);
       const status = tableData.find(ManageReservationsStatus);
       expect(status).toHaveLength(1);
       expect(status.prop('reservation')).toBe(defaultProps.reservation);
     });
 
-    test('10th td with correct data', () => {
-      const tableData = getWrapper().find('td').at(9);
+    test('9th td with correct data', () => {
+      const tableData = getWrapper().find('td').at(8);
       const dropdown = tableData.find(ManageReservationsDropdown);
       expect(dropdown).toHaveLength(1);
       expect(dropdown.prop('onEditClick')).toBeDefined();

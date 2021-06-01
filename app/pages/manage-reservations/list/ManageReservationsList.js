@@ -13,7 +13,6 @@ function ManageReservationsList({
       <Table className="app-ManageReservationsList__table">
         <thead>
           <tr>
-            <th>{t('ManageReservationsList.subjectHeader')}</th>
             <th>{t('ManageReservationsList.nameHeader')}</th>
             <th>{t('ManageReservationsList.emailHeader')}</th>
             <th>{t('ManageReservationsList.resourceHeader')}</th>
