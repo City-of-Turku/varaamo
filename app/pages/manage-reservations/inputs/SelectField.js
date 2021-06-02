@@ -36,7 +36,7 @@ function SelectField({
         <Select
           className="app-Select"
           classNamePrefix="app-Select"
-          id={id}
+          inputId={id}
           isClearable={isClearable}
           isMulti={isMulti}
           isSearchable={isSearchable}

@@ -57,7 +57,7 @@ describe('SelectField', () => {
       expect(select).toHaveLength(1);
       expect(select.prop('className')).toBe('app-Select');
       expect(select.prop('classNamePrefix')).toBe('app-Select');
-      expect(select.prop('id')).toBe(defaultProps.id);
+      expect(select.prop('inputId')).toBe(defaultProps.id);
       expect(select.prop('isClearable')).toBe(defaultProps.isClearable);
       expect(select.prop('isMulti')).toBe(defaultProps.isMulti);
       expect(select.prop('isSearchable')).toBe(defaultProps.isSearchable);
