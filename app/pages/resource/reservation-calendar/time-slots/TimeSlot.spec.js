@@ -17,6 +17,7 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
     isHighlighted: false,
     isUnderMinPeriod: false,
     isLoggedIn: true,
+    isStrongAuthSatisfied: true,
     isSelectable: true,
     onClear: simple.stub(),
     onClick: simple.stub(),
@@ -219,7 +220,7 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
       const t = simple.stub();
       const slot = { end: '2016-10-11T10:00:00.000Z' };
       const instance = getWrapper().instance();
-      const result = instance.getReservationInfoNotification(true, {}, slot, t);
+      const result = instance.getReservationInfoNotification(true, true, {}, slot, t);
 
       expect(result).toBeNull();
       expect(t.callCount).toBe(0);
@@ -229,10 +230,24 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
       const t = simple.stub();
       const slot = { reserved: true };
       const instance = getWrapper().instance();
-      const result = instance.getReservationInfoNotification(true, {}, slot, t);
+      const result = instance.getReservationInfoNotification(true, true, {}, slot, t);
 
       expect(result).toBeNull();
       expect(t.callCount).toBe(0);
+    });
+
+    test('returns correct message when resource is reservable but not strong auth satisfied', () => {
+      const t = message => message;
+      const resource = Resource.build({ reservable: true });
+      const instance = getWrapper().instance();
+      const isStrongAuthSatisfied = false;
+      const result = instance.getReservationInfoNotification(
+        true, isStrongAuthSatisfied, resource, defaultProps.slot, t
+      );
+
+      expect(result.message).toBe(t('Notifications.loginToReserveStrongAuth'));
+      expect(result.type).toBe('info');
+      expect(result.timeOut).toBe(10000);
     });
 
     test('returns message when not logged in and resource is reservable', () => {
@@ -240,7 +255,10 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
       const t = simple.stub().returnWith(message);
       const resource = Resource.build({ reservable: true });
       const instance = getWrapper().instance();
-      const result = instance.getReservationInfoNotification(false, resource, defaultProps.slot, t);
+      const isStrongAuthSatisfied = true;
+      const result = instance.getReservationInfoNotification(
+        false, isStrongAuthSatisfied, resource, defaultProps.slot, t
+      );
 
       expect(t.callCount).toBe(1);
       expect(result.message).toBe(message);
@@ -252,7 +270,10 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
       const t = simple.stub();
       const resource = Resource.build({ reservationInfo: 'reservation info' });
       const instance = getWrapper().instance();
-      const result = instance.getReservationInfoNotification(true, resource, defaultProps.slot, t);
+      const isStrongAuthSatisfied = true;
+      const result = instance.getReservationInfoNotification(
+        true, isStrongAuthSatisfied, resource, defaultProps.slot, t
+      );
 
       expect(t.callCount).toBe(1);
       expect(result.message).toBe(t('Notifications.noRightToReserve'));
@@ -370,32 +391,52 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
   });
 
   describe('getSelectButtonStatusLabel', () => {
-    // Params in order: isDisabled, isLoggedIn, isOwnReservation, isReserved, isSelected
+    // Params in order:
+    // isDisabled, isLoggedIn, isStrongAuthSatisfied, isOwnReservation, isReserved, isSelected;
     test('return correct string when timeslot is own reservation', () => {
       expect(getWrapper().instance()
-        .getSelectButtonStatusLabel(false, false, true, false, false))
+        .getSelectButtonStatusLabel(false, false, false, true, false, false))
         .toBe('TimeSlot.notSelectable - TimeSlot.ownReservation');
     });
     test('return correct string when timeslot is reserved', () => {
       expect(getWrapper().instance()
-        .getSelectButtonStatusLabel(false, false, false, true, false))
+        .getSelectButtonStatusLabel(false, false, false, false, true, false))
         .toBe('TimeSlot.notSelectable - TimeSlot.reserved');
     });
     test('return correct string when timeslot is selected', () => {
       expect(getWrapper().instance()
-        .getSelectButtonStatusLabel(false, false, false, false, true))
+        .getSelectButtonStatusLabel(false, false, false, false, false, true))
         .toBe('TimeSlot.selected');
     });
-    test('return correct string when timeslot is not selectable', () => {
-      expect(getWrapper().instance()
-        .getSelectButtonStatusLabel(true, true, false, false, false))
+    test('return correct string when resource is not reservable', () => {
+      const resource = Resource.build({
+        reservable: false,
+        userPermissions: { canMakeReservations: false }
+      });
+      expect(getWrapper({ resource }).instance()
+        .getSelectButtonStatusLabel(false, false, false, false, false, false))
         .toBe('TimeSlot.notSelectable');
     });
-    test('return correct string when timeslot is not selectable and user is not logged in', () => {
-      expect(getWrapper().instance()
-        .getSelectButtonStatusLabel(true, false, false, false, false))
-        .toBe('TimeSlot.notSelectable - TimeSlot.logInFirst');
+    describe('when strong auth is satisfied', () => {
+      test('return correct string when timeslot is not selectable', () => {
+        expect(getWrapper().instance()
+          .getSelectButtonStatusLabel(true, true, true, false, false, false))
+          .toBe('TimeSlot.notSelectable');
+      });
+      test('return correct string when timeslot is not selectable and user is not logged in', () => {
+        expect(getWrapper().instance()
+          .getSelectButtonStatusLabel(true, false, true, false, false, false))
+          .toBe('TimeSlot.notSelectable - TimeSlot.logInFirst');
+      });
     });
+    describe('when strong auth is not satisfied', () => {
+      test('return correct string when timeslot is not selectable', () => {
+        expect(getWrapper().instance()
+          .getSelectButtonStatusLabel(true, false, false, false, false, false))
+          .toBe('TimeSlot.notSelectable - TimeSlot.logInFirstStrongAuth');
+      });
+    });
+
     test('return correct string when timeslot is available', () => {
       expect(getWrapper().instance()
         .getSelectButtonStatusLabel(false, true, false, false, false))

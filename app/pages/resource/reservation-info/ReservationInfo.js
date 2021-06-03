@@ -30,13 +30,22 @@ async function handleLoginClick(currentLanguage, addNotification) {
   }
 }
 
-function renderLoginText(addNotification, currentLanguage, isLoggedIn, resource, t) {
-  if (isLoggedIn || !resource.reservable || resource.authentication === 'unauthenticated') {
+function renderLoginText(
+  addNotification, currentLanguage, isLoggedIn, isStrongAuthSatisfied, resource, t
+) {
+  // login text should never be shown when resource is not reservable
+  if (!resource.reservable) {
     return null;
+  }
+  // login text should be shown if strong auth requirement is not met
+  if (isStrongAuthSatisfied) {
+    if (isLoggedIn || resource.authentication === 'unauthenticated') {
+      return null;
+    }
   }
 
   // fetch login text and split it with given separator
-  const message = t('ReservationInfo.loginMessage');
+  const message = isStrongAuthSatisfied ? t('ReservationInfo.loginMessage') : t('ReservationInfo.loginMessageStrongAuth');
   const messageParts = message.split('<a>');
 
   // if message has three parts e.g. "start of message <a>link text<a> end of message"
@@ -106,7 +115,7 @@ function renderMaxReservationsPerUserText(maxReservationsPerUser, t) {
 }
 
 function ReservationInfo({
-  addNotification, currentLanguage, isLoggedIn, resource, t
+  addNotification, currentLanguage, isLoggedIn, isStrongAuthSatisfied, resource, t
 }) {
   return (
     <div className="app-ReservationInfo">
@@ -114,7 +123,9 @@ function ReservationInfo({
       {renderEarliestResDay(resource.reservableMinDaysInAdvance, t)}
       {renderMaxPeriodText(resource, t)}
       {renderMaxReservationsPerUserText(resource.maxReservationsPerUser, t)}
-      {renderLoginText(addNotification, currentLanguage, isLoggedIn, resource, t)}
+      {renderLoginText(
+        addNotification, currentLanguage, isLoggedIn, isStrongAuthSatisfied, resource, t
+      )}
     </div>
   );
 }
@@ -123,6 +134,7 @@ ReservationInfo.propTypes = {
   addNotification: PropTypes.func.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  isStrongAuthSatisfied: PropTypes.bool.isRequired,
   resource: PropTypes.shape({
     maxPeriod: PropTypes.string,
     maxReservationsPerUser: PropTypes.number,

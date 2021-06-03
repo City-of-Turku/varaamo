@@ -1,4 +1,5 @@
 import { getState } from 'utils/testUtils';
+import Resource from '../../utils/fixtures/Resource';
 import {
   createResourceSelector,
   purposesSelector,
@@ -6,7 +7,18 @@ import {
   resourcesSelector,
   unitsSelector,
   userFavouriteResourcesSelector,
+  createStrongAuthSatisfiedSelector,
 } from './dataSelectors';
+import { isStrongAuthSatisfied } from 'utils/resourceUtils';
+
+jest.mock('utils/resourceUtils', () => {
+  const originalModule = jest.requireActual('utils/resourceUtils');
+  return {
+    __esModule: true,
+    ...originalModule,
+    isStrongAuthSatisfied: jest.fn(),
+  };
+});
 
 jest.mock('./authSelectors', () => {
   const originalModule = jest.requireActual('./authSelectors');
@@ -118,6 +130,33 @@ describe('state/selectors/dataSelectors', () => {
       const state = getState();
       const selected = userFavouriteResourcesSelector(state);
       expect(selected).toStrictEqual(['test123']);
+    });
+  });
+
+  describe('createStrongAuthSatisfiedSelector', () => {
+    beforeEach(() => { isStrongAuthSatisfied.mockClear(); });
+    afterEach(() => { isStrongAuthSatisfied.mockClear(); });
+
+    test('calls isStrongAuthSatisfied with correct params', () => {
+      const user = { id: 'u-1', isStrongAuth: true };
+      const state = getState({
+        auth: {
+          user: {
+            profile: {
+              sub: user.id
+            },
+          },
+        },
+        data: {
+          users: { [user.id]: user },
+        },
+      });
+      const resource = Resource.build({ authentication: 'strong' });
+      const resourceSelector = () => resource;
+      createStrongAuthSatisfiedSelector(resourceSelector)(state);
+      expect(isStrongAuthSatisfied.mock.calls.length).toBe(1);
+      expect(isStrongAuthSatisfied.mock.calls[0][0]).toBe(resource);
+      expect(isStrongAuthSatisfied.mock.calls[0][1]).toBe(true);
     });
   });
 });

@@ -263,6 +263,19 @@ function reservingIsRestricted(resource, date) {
   return Boolean(isLimited && !isAdmin);
 }
 
+/**
+ * Checks whether strong auth requirement is satisfied with given resource and
+ * strong auth status.
+ * @param {object} resource
+ * @param {boolean} hasStrongAuth has user authenticated via strong method
+ * @returns {boolean} true when resource requires strong auth and user has strong auth
+ * or when resource doesnt require strong auth. False in other cases.
+ */
+function isStrongAuthSatisfied(resource, hasStrongAuth) {
+  const strongAuthRequired = resource.authentication === 'strong';
+  return !strongAuthRequired || (strongAuthRequired && hasStrongAuth);
+}
+
 export {
   hasMaxReservations,
   isOpenNow,
@@ -279,5 +292,6 @@ export {
   getPaymentTermsAndConditions,
   getPrice,
   reservingIsRestricted,
-  getMinPeriodText
+  getMinPeriodText,
+  isStrongAuthSatisfied,
 };

@@ -13,7 +13,7 @@ import {
   isAdminSelector,
   isLoggedInSelector,
 } from 'state/selectors/authSelectors';
-import { createResourceSelector } from 'state/selectors/dataSelectors';
+import { createResourceSelector, createStrongAuthSatisfiedSelector } from 'state/selectors/dataSelectors';
 import dateSelector from 'state/selectors/dateSelector';
 import timeSelector from 'state/selectors/timeSelector';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
@@ -100,6 +100,7 @@ const reservationCalendarSelector = createStructuredSelector({
   isEditing: isEditingSelector,
   isFetchingResource: requestIsActiveSelectorFactory(ActionTypes.API.RESOURCE_GET_REQUEST),
   isLoggedIn: isLoggedInSelector,
+  isStrongAuthSatisfied: createStrongAuthSatisfiedSelector(resourceSelector),
   isStaff: createIsStaffSelector(resourceSelector),
   resource: resourceSelector,
   selected: selectedSelector,

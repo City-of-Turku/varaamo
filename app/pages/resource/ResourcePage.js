@@ -155,6 +155,7 @@ class UnconnectedResourcePage extends Component {
       date,
       isFetchingResource,
       isLoggedIn,
+      isStrongAuthSatisfied,
       location,
       match,
       resource,
@@ -233,6 +234,7 @@ class UnconnectedResourcePage extends Component {
                     currentLanguage={currentLanguage}
                     equipment={equipment}
                     isLoggedIn={isLoggedIn}
+                    isStrongAuthSatisfied={isStrongAuthSatisfied}
                     resource={resource}
                     unit={unit}
                   />
@@ -324,6 +326,7 @@ UnconnectedResourcePage.propTypes = {
   id: PropTypes.string.isRequired,
   isFetchingResource: PropTypes.bool.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  isStrongAuthSatisfied: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,

@@ -41,6 +41,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
     isEditing: PropTypes.bool.isRequired,
     isFetchingResource: PropTypes.bool.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
+    isStrongAuthSatisfied: PropTypes.bool.isRequired,
     isStaff: PropTypes.bool.isRequired,
     // eslint-disable-next-line react/no-unused-prop-types
     location: PropTypes.shape({
@@ -139,6 +140,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
       isEditing,
       isFetchingResource,
       isLoggedIn,
+      isStrongAuthSatisfied,
       isStaff,
       params,
       resource,
@@ -163,6 +165,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
             isFetching={isFetchingResource}
             isLoggedIn={isLoggedIn || resource.authentication === 'unauthenticated'} // count as logged in if no auth needed
             isStaff={isStaff}
+            isStrongAuthSatisfied={isStrongAuthSatisfied}
             onClear={actions.clearTimeSlots}
             onClick={actions.toggleTimeSlot}
             resource={resource}

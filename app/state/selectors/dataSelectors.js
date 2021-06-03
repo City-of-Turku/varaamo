@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 
 import { createTranslatedSelector } from 'state/selectors/translationSelectors';
-import { currentUserSelector } from './authSelectors';
+import { currentUserSelector, hasStrongAuthSelector } from './authSelectors';
+import { isStrongAuthSatisfied } from 'utils/resourceUtils';
 
 const purposesSelector = createTranslatedSelector(state => state.data.purposes);
 const reservationsSelector = state => state.data.reservations;
@@ -19,6 +20,13 @@ function createResourceSelector(idSelector) {
 const userFavouriteResourcesSelector = createSelector(
   currentUserSelector, userData => userData && userData.favoriteResources,
 );
+function createStrongAuthSatisfiedSelector(resourceSelector) {
+  return createSelector(
+    resourceSelector,
+    hasStrongAuthSelector,
+    (resource, hasStrongAuth) => isStrongAuthSatisfied(resource, hasStrongAuth)
+  );
+}
 
 export {
   createResourceSelector,
@@ -27,4 +35,5 @@ export {
   resourcesSelector,
   unitsSelector,
   userFavouriteResourcesSelector,
+  createStrongAuthSatisfiedSelector,
 };

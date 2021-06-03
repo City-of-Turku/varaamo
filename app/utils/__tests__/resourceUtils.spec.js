@@ -5,6 +5,7 @@ import moment from 'moment';
 import queryString from 'query-string';
 import simple from 'simple-mock';
 
+import Resource from '../fixtures/Resource';
 import {
   hasMaxReservations,
   isOpenNow,
@@ -21,7 +22,8 @@ import {
   reservingIsRestricted,
   getResourcePageUrlComponents,
   getMinPeriodText,
-  getEquipment
+  getEquipment,
+  isStrongAuthSatisfied,
 } from 'utils/resourceUtils';
 
 describe('Utils: resourceUtils', () => {
@@ -1050,6 +1052,34 @@ describe('Utils: resourceUtils', () => {
         const resource = { userPermissions: { isAdmin: false }, reservableBefore };
         const isLimited = reservingIsRestricted(resource, date);
         expect(isLimited).toBe(true);
+      });
+    });
+  });
+
+  describe('isStrongAuthSatisfied', () => {
+    describe('when resource requires strong auth', () => {
+      const resource = Resource.build({ authentication: 'strong' });
+      test('returns true when strong auth status is true', () => {
+        const hasStrongAuth = true;
+        expect(isStrongAuthSatisfied(resource, hasStrongAuth)).toBe(true);
+      });
+
+      test('returns false when strong auth status is false', () => {
+        const hasStrongAuth = false;
+        expect(isStrongAuthSatisfied(resource, hasStrongAuth)).toBe(false);
+      });
+    });
+
+    describe('when resource doesnt require strong auth', () => {
+      const resource = Resource.build({ authentication: 'none' });
+      test('returns true when strong auth status is true', () => {
+        const hasStrongAuth = true;
+        expect(isStrongAuthSatisfied(resource, hasStrongAuth)).toBe(true);
+      });
+
+      test('returns true when strong auth status is false', () => {
+        const hasStrongAuth = false;
+        expect(isStrongAuthSatisfied(resource, hasStrongAuth)).toBe(true);
       });
     });
   });

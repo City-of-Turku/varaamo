@@ -66,6 +66,7 @@ describe('pages/resource/ResourcePage', () => {
     id: resource.id,
     isFetchingResource: false,
     isLoggedIn: true,
+    isStrongAuthSatisfied: true,
     location: { search: 'date' },
     match: { params: {} },
     resource: Immutable(resource),
@@ -123,6 +124,8 @@ describe('pages/resource/ResourcePage', () => {
       expect(resourceInfo.prop('resource')).toEqual(defaultProps.resource);
       expect(resourceInfo.prop('unit')).toEqual(defaultProps.unit);
       expect(resourceInfo.prop('equipment')).toEqual(equipmentList);
+      expect(resourceInfo.prop('isLoggedIn')).toEqual(defaultProps.isLoggedIn);
+      expect(resourceInfo.prop('isStrongAuthSatisfied')).toEqual(defaultProps.isStrongAuthSatisfied);
       expect(resourceInfo.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
     });
 

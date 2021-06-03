@@ -10,6 +10,7 @@ import {
   isLoggedInSelector,
   staffUnitsSelector,
   loginExpiresAtSelector,
+  hasStrongAuthSelector,
 } from './authSelectors';
 
 describe('state/selectors/authSelectors', () => {
@@ -153,6 +154,32 @@ describe('state/selectors/authSelectors', () => {
       const isLoadingUser = true;
       const state = getState({ auth: { isLoadingUser } });
       expect(isLoadingUserSelector(state)).toEqual(isLoadingUser);
+    });
+  });
+
+  describe('hasStrongAuthSelector', () => {
+    function getSelected(user = {}) {
+      const state = getState({
+        auth: {
+          user: {
+            profile: {
+              sub: user.id
+            }
+          }
+        },
+        'data.users': { [user.id]: user },
+      });
+      return hasStrongAuthSelector(state);
+    }
+
+    test('returns true when user has strong auth', () => {
+      const user = { id: 'u-1', isStrongAuth: true };
+      expect(getSelected(user)).toBe(true);
+    });
+
+    test('returns false when user does not have strong auth', () => {
+      const user = { id: 'u-1', isStrongAuth: false };
+      expect(getSelected(user)).toBe(false);
     });
   });
 
