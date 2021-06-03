@@ -100,6 +100,14 @@ describe('pages/resource/reservation-calendar/reservationCalendarSelector', () =
     expect(selected.isLoggedIn).toBeDefined();
   });
 
+  test('returns isStrongAuthSatisfied', () => {
+    const state = getState(resource);
+    const props = getProps(resource.id);
+    const selected = reservationCalendarSelector(state, props);
+
+    expect(selected.isStrongAuthSatisfied).toBeDefined();
+  });
+
   test('returns isStaff', () => {
     const state = getState(resource);
     const props = getProps(resource.id);

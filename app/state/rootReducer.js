@@ -3,6 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 import { intlReducer } from 'react-intl-redux';
 import { reducer as oidcReducer } from 'redux-oidc';
 
+import resourceOutlookReducer from 'resource-outlook-linker/reducer';
 import apiReducers from './reducers/api';
 import dataReducer from './reducers/dataReducer';
 import notificationsReducer from './reducers/notificationsReducer';
@@ -18,4 +19,5 @@ export default combineReducers({
   notifications: notificationsReducer,
   recurringReservations: recurringReservations.reducer,
   ui: uiReducers,
+  resourceOutlookLinks: resourceOutlookReducer,
 });

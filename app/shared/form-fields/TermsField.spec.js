@@ -17,6 +17,7 @@ describe('shared/form-fields/TermsField', () => {
     labelLink: 'some link label',
     meta: {},
     onClick: () => null,
+    isRequired: false
   };
 
   function getWrapper(props) {
@@ -59,16 +60,41 @@ describe('shared/form-fields/TermsField', () => {
       expect(rbCheckbox.length).toBe(1);
     });
 
+    test('gets correct props', () => {
+      const rbCheckbox = getWrapper().find(RBCheckbox);
+      expect(rbCheckbox.prop('aria-required')).toBe(defaultProps.isRequired);
+      const inputKeys = Object.keys(defaultProps.input);
+      inputKeys.forEach((key) => {
+        expect(rbCheckbox.prop(key)).toBe(defaultProps.input[key]);
+      });
+    });
+
     test('gets the label as its children', () => {
       const rbCheckbox = getWrapper().find(RBCheckbox);
       expect(rbCheckbox.props().children).toEqual(expect.arrayContaining([defaultProps.label]));
     });
+
+    test('gets * in its children if isRequired is true', () => {
+      const rbCheckbox = getWrapper({ isRequired: true }).find(RBCheckbox);
+      expect(rbCheckbox.props().children).toContain('*');
+    });
+
+    test('does not get * in its children if isRequired is false', () => {
+      const rbCheckbox = getWrapper({ isRequired: false }).find(RBCheckbox);
+      expect(rbCheckbox.props().children).not.toContain('*');
+    });
   });
 
-  describe('HelpBlock component with link', () => {
+  describe('Button component with link', () => {
     test('is rendered', () => {
       const link = getWrapper().find('.terms-checkbox-field-link');
       expect(link.length).toBe(1);
+    });
+
+    test('gets correct props', () => {
+      const link = getWrapper().find('.terms-checkbox-field-link');
+      expect(link.prop('onClick')).toBe(defaultProps.onClick);
+      expect(link.prop('variant')).toBe('link');
     });
 
     test('displays the help text given in props', () => {
@@ -91,12 +117,12 @@ describe('shared/form-fields/TermsField', () => {
       const meta = { error: 'some error', touched: true };
       test('is rendered', () => {
         const helpBlock = getWrapper({ meta }).find(HelpBlock);
-        expect(helpBlock.length).toBe(2);
+        expect(helpBlock.length).toBe(1);
       });
 
       test('displays the error text given in props', () => {
         const helpBlock = getWrapper({ meta }).find(HelpBlock);
-        expect(helpBlock.at(1).props().children).toBe(meta.error);
+        expect(helpBlock.props().children).toBe(meta.error);
       });
     });
 
@@ -104,7 +130,7 @@ describe('shared/form-fields/TermsField', () => {
       const meta = {};
       test('is not rendered', () => {
         const helpBlock = getWrapper({ meta }).find(HelpBlock);
-        expect(helpBlock.length).toBe(1);
+        expect(helpBlock.length).toBe(0);
       });
     });
   });

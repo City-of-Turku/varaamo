@@ -1,6 +1,8 @@
 import first from 'lodash/first';
 import isEmpty from 'lodash/isEmpty';
 import last from 'lodash/last';
+import get from 'lodash/get';
+import has from 'lodash/has';
 import moment from 'moment';
 import React, { Component } from 'react';
 import Loader from 'react-loader';
@@ -15,6 +17,7 @@ import {
   clearReservations,
   closeReservationSuccessModal,
   openResourceTermsModal,
+  openResourcePaymentTermsModal,
 } from 'actions/uiActions';
 import PageWrapper from 'pages/PageWrapper';
 import { injectT } from 'i18n';
@@ -23,6 +26,8 @@ import ReservationInformation from './reservation-information/ReservationInforma
 import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import reservationPageSelector from './reservationPageSelector';
+import { createOrder, hasProducts } from '../../utils/reservationUtils';
+import userManager from 'utils/userManager';
 
 class UnconnectedReservationPage extends Component {
   constructor(props) {
@@ -48,6 +53,8 @@ class UnconnectedReservationPage extends Component {
       reservationToEdit,
       selected,
       history,
+      isLoggedIn,
+      loginExpiresAt
     } = this.props;
     if (
       isEmpty(reservationCreated)
@@ -72,15 +79,25 @@ class UnconnectedReservationPage extends Component {
       this.fetchResource();
       window.scrollTo(0, 0);
     }
+
+    // ensure user has enough time to complete reservation
+    this.handleSigninRefresh(isLoggedIn, loginExpiresAt, 20);
   }
 
   componentWillUpdate(nextProps) {
+    // changes to confirm page if receives correct reservation props from backend
+    // if requires payment, redirect to given url
     const { reservationCreated: nextCreated, reservationEdited: nextEdited } = nextProps;
     const { reservationCreated, reservationEdited } = this.props;
     if (
       (!isEmpty(nextCreated) || !isEmpty(nextEdited))
       && (nextCreated !== reservationCreated || nextEdited !== reservationEdited)
     ) {
+      if (has(nextCreated, 'order.paymentUrl')) {
+        const paymentUrl = get(nextCreated, 'order.paymentUrl');
+        window.location = paymentUrl;
+        return;
+      }
       // TODO: fix this lint
       // eslint-disable-next-line react/no-will-update-set-state
       this.setState({
@@ -123,6 +140,7 @@ class UnconnectedReservationPage extends Component {
       const { begin } = first(selected);
       const { end } = last(selected);
       const preferredLanguage = currentLanguage;
+      const order = createOrder(resource.products);
 
       if (!isEmpty(reservationToEdit)) {
         // old reservation values before editing
@@ -148,6 +166,7 @@ class UnconnectedReservationPage extends Component {
       } else {
         actions.postReservation({
           ...values,
+          order,
           preferredLanguage,
           begin,
           end,
@@ -163,6 +182,18 @@ class UnconnectedReservationPage extends Component {
       history.replace('/my-reservations');
     } else {
       history.replace(`/resources/${resource.id}`);
+    }
+  }
+
+  // silently refreshes login if current login is old enough
+  handleSigninRefresh(isLoggedIn, loginExpiresAt, minMinutesLeft = 20) {
+    // dont handle if user is not currently logged in
+    if (isLoggedIn && loginExpiresAt) {
+      const expiresAt = moment.unix(loginExpiresAt);
+      const minutesLeft = expiresAt.diff(moment(), 'minutes');
+      if (minutesLeft < minMinutesLeft) {
+        userManager.signinSilent();
+      }
     }
   }
 
@@ -232,6 +263,7 @@ class UnconnectedReservationPage extends Component {
       `ReservationPage.${isEditing || isEdited ? 'editReservationTitle' : 'newReservationTitle'}`
     );
     const params = queryString.parse(location.search);
+    const hasPayment = hasProducts(resource);
 
     return (
       <div className="app-ReservationPage">
@@ -240,7 +272,11 @@ class UnconnectedReservationPage extends Component {
             <div className={`app-ReservationPage__content ${contrast}`}>
               <h1>{title}</h1>
               <Loader loaded={!isEmpty(resource)}>
-                <ReservationPhases currentPhase={view} isEditing={isEditing || isEdited} />
+                <ReservationPhases
+                  currentPhase={view}
+                  hasPayment={hasPayment}
+                  isEditing={isEditing || isEdited}
+                />
                 {view === 'time' && isEditing && (
                   <ReservationTime
                     history={history}
@@ -264,10 +300,12 @@ class UnconnectedReservationPage extends Component {
                     onBack={this.handleBack}
                     onCancel={this.handleCancel}
                     onConfirm={this.handleReservation}
+                    openResourcePaymentTermsModal={actions.openResourcePaymentTermsModal}
                     openResourceTermsModal={actions.openResourceTermsModal}
                     reservation={reservationToEdit}
                     resource={resource}
                     selectedTime={selectedTime}
+                    state={this.props.state}
                     unit={unit}
                     user={user}
                   />
@@ -308,11 +346,13 @@ UnconnectedReservationPage.propTypes = {
   reservationEdited: PropTypes.object,
   resource: PropTypes.object.isRequired,
   selected: PropTypes.array.isRequired,
+  state: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
   unit: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  loginExpiresAt: PropTypes.number
 };
 UnconnectedReservationPage = injectT(UnconnectedReservationPage); // eslint-disable-line
 
@@ -322,6 +362,7 @@ function mapDispatchToProps(dispatch) {
     closeReservationSuccessModal,
     fetchResource,
     openResourceTermsModal,
+    openResourcePaymentTermsModal,
     putReservation,
     postReservation,
   };

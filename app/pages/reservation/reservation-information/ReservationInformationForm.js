@@ -11,12 +11,13 @@ import { Field, reduxForm } from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
 
 
-import { isValidPhoneNumber } from 'utils/reservationUtils';
+import { isValidPhoneNumber, hasProducts } from 'utils/reservationUtils';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import TermsField from 'shared/form-fields/TermsField';
 import { injectT } from 'i18n';
 import ReservationTermsModal from 'shared/modals/reservation-terms';
 import WrappedText from 'shared/wrapped-text/WrappedText';
+import ReservationSubmitButton from './ReservationSubmitButton';
 
 const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {
@@ -25,8 +26,20 @@ const validators = {
     }
     return null;
   },
+  billingEmailAddress: (t, { billingEmailAddress }) => {
+    if (billingEmailAddress && !isEmail(billingEmailAddress)) {
+      return t('ReservationForm.emailError');
+    }
+    return null;
+  },
   reserverPhoneNumber: (t, { reserverPhoneNumber }) => {
     if (reserverPhoneNumber && !isValidPhoneNumber(reserverPhoneNumber)) {
+      return t('ReservationForm.phoneNumberError');
+    }
+    return null;
+  },
+  billingPhoneNumber: (t, { billingPhoneNumber }) => {
+    if (billingPhoneNumber && !isValidPhoneNumber(billingPhoneNumber)) {
       return t('ReservationForm.phoneNumberError');
     }
     return null;
@@ -55,6 +68,10 @@ const maxLengths = {
   billingAddressCity: 100,
   billingAddressStreet: 100,
   billingAddressZip: 30,
+  billingEmailAddress: 100,
+  billingFirstName: 100,
+  billingLastName: 100,
+  billingPhoneNumber: 30,
   comments: 256,
   company: 100,
   eventDescription: 256,
@@ -92,11 +109,17 @@ export function validate(values, {
     if (includes(currentRequiredFields, field)) {
       // required fields cant be empty or have only white space in them
       if (!values[field] || (typeof (values[field]) === 'string' && values[field].trim().length === 0)) {
-        errors[field] = (
-          field === 'termsAndConditions'
-            ? t('ReservationForm.termsAndConditionsError')
-            : t('ReservationForm.requiredError')
-        );
+        switch (field) {
+          case 'termsAndConditions':
+            errors[field] = t('ReservationForm.termsAndConditionsError');
+            break;
+          case 'paymentTermsAndConditions':
+            errors[field] = t('ReservationForm.paymentTermsAndConditionsError');
+            break;
+          default:
+            errors[field] = t('ReservationForm.requiredError');
+            break;
+        }
       }
     }
   });
@@ -131,18 +154,24 @@ class UnconnectedReservationInformationForm extends Component {
     );
   }
 
-  renderTermsField(name) {
-    const { openResourceTermsModal, t } = this.props;
+  renderTermsField(name, isPayment = false) {
+    const { t } = this.props;
     const label = t('ReservationInformationForm.termsAndConditionsLabel');
-    const labelLink = `${t('ReservationInformationForm.termsAndConditionsLink')}`;
+    const labelLink = isPayment ? `${t('ReservationInformationForm.paymentTermsAndConditionsLink')}`
+      : `${t('ReservationInformationForm.termsAndConditionsLink')}`;
+
+    const isRequired = includes(this.requiredFields, name);
     return (
       <Field
         component={TermsField}
+        isRequired={isRequired}
         key={name}
         label={label}
         labelLink={labelLink}
         name={name}
-        onClick={openResourceTermsModal}
+        onClick={
+          isPayment ? this.props.openResourcePaymentTermsModal : this.props.openResourceTermsModal
+        }
       />
     );
   }
@@ -160,6 +189,7 @@ class UnconnectedReservationInformationForm extends Component {
       staffEventSelected,
       t,
       termsAndConditions,
+      paymentTermsAndConditions,
     } = this.props;
 
     this.requiredFields = staffEventSelected
@@ -189,6 +219,13 @@ class UnconnectedReservationInformationForm extends Component {
             'text',
             t('common.reserverNameLabel'),
             { autoComplete: 'name' },
+          )}
+          {this.renderField(
+            'company',
+            'company',
+            'text',
+            t('common.companyLabel'),
+            {}
           )}
           {this.renderField(
             'reserverId',
@@ -245,8 +282,50 @@ class UnconnectedReservationInformationForm extends Component {
               { options: resource.includedReservationHomeMunicipalityFields },
             )
           }
-          {includes(this.props.fields, 'billingAddressStreet')
-            && <h3>{t('common.billingAddressLabel')}</h3>
+          {(includes(this.props.fields, 'billingFirstName')
+            || includes(this.props.fields, 'billingLastName')
+            || includes(this.props.fields, 'billingPhoneNumber')
+            || includes(this.props.fields, 'billingEmailAddress')
+            || includes(this.props.fields, 'billingAddressStreet')
+            || includes(this.props.fields, 'billingAddressZip')
+            || includes(this.props.fields, 'billingAddressCity'))
+            && <h3 className="app-ReservationPage__title" id="payment-info-heading">{t('common.payerInformationLabel')}</h3>
+          }
+          {includes(this.props.fields, 'billingFirstName')
+            && this.renderField(
+              'billingFirstName',
+              'cc-given-name',
+              'text',
+              t('common.billingFirstNameLabel'),
+              { autoComplete: 'cc-given-name' },
+            )
+          }
+          {includes(this.props.fields, 'billingLastName')
+            && this.renderField(
+              'billingLastName',
+              'cc-family-name',
+              'text',
+              t('common.billingLastNameLabel'),
+              { autoComplete: 'cc-family-name' },
+            )
+          }
+          {includes(this.props.fields, 'billingPhoneNumber')
+            && this.renderField(
+              'billingPhoneNumber',
+              'phone',
+              'tel',
+              t('common.billingPhoneNumberLabel'),
+              { autoComplete: 'tel' },
+            )
+          }
+          {includes(this.props.fields, 'billingEmailAddress')
+            && this.renderField(
+              'billingEmailAddress',
+              'email',
+              'email',
+              t('common.billingEmailAddressLabel'),
+              { autoComplete: 'email' },
+            )
           }
           {includes(this.props.fields, 'billingAddressStreet')
             && this.renderField(
@@ -277,7 +356,7 @@ class UnconnectedReservationInformationForm extends Component {
           }
           {(includes(this.props.fields, 'eventSubject')
           || includes(this.props.fields, 'eventDescription')
-          || includes(this.props.fields, 'numberofParticipants')
+          || includes(this.props.fields, 'numberOfParticipants')
           || includes(this.props.fields, 'requireAssistance')
           || includes(this.props.fields, 'comments'))
           && <h3 className="ReservationInformationForm">{t('ReservationInformationForm.eventInformationTitle')}</h3>
@@ -359,6 +438,9 @@ class UnconnectedReservationInformationForm extends Component {
           {termsAndConditions
             && this.renderTermsField('termsAndConditions')
           }
+          {paymentTermsAndConditions
+            && this.renderTermsField('paymentTermsAndConditions', true)
+          }
           <div className="form-controls">
             <Button
               bsStyle="warning"
@@ -376,16 +458,16 @@ class UnconnectedReservationInformationForm extends Component {
               </Button>
               )
             }
-            <Button
-              bsStyle="primary"
-              disabled={isMakingReservations}
-              type="submit"
-            >
-              {isMakingReservations ? t('common.saving') : t('common.save')}
-            </Button>
+            <ReservationSubmitButton
+              handleSubmit={handleSubmit}
+              hasPayment={hasProducts(resource)}
+              isMakingReservations={isMakingReservations}
+              onConfirm={onConfirm}
+            />
           </div>
         </Form>
         <ReservationTermsModal resource={resource} />
+        <ReservationTermsModal resource={resource} termsType="payment" />
       </div>
     );
   }
@@ -400,11 +482,13 @@ UnconnectedReservationInformationForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   openResourceTermsModal: PropTypes.func.isRequired,
+  openResourcePaymentTermsModal: PropTypes.func.isRequired,
   requiredFields: PropTypes.array.isRequired,
   resource: PropTypes.object.isRequired,
   staffEventSelected: PropTypes.bool,
   t: PropTypes.func.isRequired,
   termsAndConditions: PropTypes.string.isRequired,
+  paymentTermsAndConditions: PropTypes.string.isRequired,
 };
 UnconnectedReservationInformationForm = injectT(UnconnectedReservationInformationForm);  // eslint-disable-line
 

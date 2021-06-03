@@ -4,8 +4,12 @@ import { shallowWithIntl } from 'utils/testUtils';
 import CookieBar from './CookieBar';
 
 describe('shared/CookieBar', () => {
-  function getWrapper() {
-    return shallowWithIntl(<CookieBar />);
+  const defaultProps = {
+    currentLanguage: 'fi',
+  };
+
+  function getWrapper(props) {
+    return shallowWithIntl(<CookieBar {...defaultProps} {...props} />);
   }
 
   test('renders CookieBar with correct props', () => {
@@ -33,9 +37,13 @@ describe('shared/CookieBar', () => {
   });
 
   test('renders link to cookie policy with correct props', () => {
+    global.SETTINGS = {
+      COOKIE_POLICY_BASE_URL: 'https://cookie-policy/'
+    };
+
     const policyLink = getWrapper().find('a');
     expect(policyLink.length).toBe(1);
-    expect(policyLink.prop('href')).toEqual('CookieBar.link.href');
+    expect(policyLink.prop('href')).toEqual(SETTINGS.COOKIE_POLICY_BASE_URL + defaultProps.currentLanguage);
     expect(policyLink.prop('style')).toEqual({ color: 'white' });
     expect(policyLink.text()).toEqual('CookieBar.link.text');
   });

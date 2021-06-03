@@ -2,6 +2,7 @@ import trim from 'lodash/trim';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 
+import { addNotification } from 'actions/notificationsActions';
 import { clearSearchResults } from 'actions/searchActions';
 import { authUserSelector, currentUserSelector, isLoggedInSelector } from 'state/selectors/authSelectors';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
@@ -18,7 +19,7 @@ const userNameSelector = createSelector(
     } if (user.email) {
       return user.email;
     }
-    return user.emails && user.emails.length ? user.emails[0].value : '';
+    return user.emails && user.emails.length ? user.emails[0].value : '⠀⠀-⠀⠀';
   }
 );
 
@@ -43,6 +44,7 @@ export const selector = createStructuredSelector({
 });
 
 const actions = {
+  addNotification,
   changeLocale,
   clearSearchResults,
 };

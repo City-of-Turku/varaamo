@@ -41,11 +41,21 @@
   &__buttons {
     display: inline-block;
     padding-top: 15px;
-    button:not(:first-child) {
-      margin-left: 15px;
-    }
-    @media (min-width: $screen-md-min) {
-
+    button {
+      @include add-focus(3px, currentColor) {}
+      font-size: 1em;
+      text-align: left;
+      margin-right: 10px;
+      margin-top: 10px;
+      @media (max-width: $screen-xs-max) {
+        width: 230px;
+      }
+      @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+        width: 240px;
+      }
+      @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+        width: 270px;
+      }
     }
   }
   &__map-button {
@@ -59,9 +69,6 @@
 }
 // Added focus to "Show on map" and "Add to favorites" buttons and made them scalable, fixed their sizes and alignment on mobile devices
 .app-ResourceHeader__map-button {
-  @include add-focus(3px, currentColor) {}
-  font-size: 1em;
-  text-align: left;
   @media (max-width: $screen-xs-max) {
     width: 230px;
   }
@@ -73,11 +80,7 @@
   }
 }
 .favorite-button {
-  @include add-focus(3px, currentColor) {}
-  font-size: 1em;
-  text-align: left;
   @media (max-width: $screen-xs-max) {
-    margin-top: 10px;
     margin-left: 0 !important;
     width: 230px;
   }
@@ -86,5 +89,16 @@
   }
   @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
     width: 275px;
+  }
+}
+
+.calendar-link-button {
+  @media (max-width: $screen-xs-max) {
+  }
+  @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    display: block;
+  }
+  @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+    display: block;
   }
 }

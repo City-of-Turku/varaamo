@@ -22,6 +22,7 @@ import LoginControls from './login-logout-controls/LoginControls';
 
 class TopNavbar extends Component {
   static propTypes = {
+    addNotification: PropTypes.func.isRequired,
     changeLocale: PropTypes.func.isRequired,
     currentLanguage: PropTypes.string.isRequired,
     idToken: PropTypes.string.isRequired,
@@ -70,15 +71,23 @@ class TopNavbar extends Component {
     e.preventDefault();
   }
 
-  handleLoginClick() {
-    userManager.signinRedirect({
-      data: {
-        redirectUrl: window.location.pathname
-      },
-      extraQueryParams: {
-        ui_locales: this.props.currentLanguage
-      },
-    });
+  async handleLoginClick() {
+    try {
+      await userManager.signinRedirect({
+        data: {
+          redirectUrl: window.location.pathname
+        },
+        extraQueryParams: {
+          ui_locales: this.props.currentLanguage
+        },
+      });
+    } catch (error) {
+      this.props.addNotification({
+        message: this.props.t('Notifications.loginErrorMessage'),
+        type: 'error',
+        timeOut: 10000,
+      });
+    }
   }
 
   toggleMobileNavbar() {

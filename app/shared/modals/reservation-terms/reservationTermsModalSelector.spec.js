@@ -9,19 +9,35 @@ describe('shared/modals/reservation-terms/reservationTermsModalSelector', () => 
     return reservationTermsModalSelector(state);
   }
 
-  describe('show', () => {
+  describe('showGeneric', () => {
     test('returns true if modals.open contain RESOURCE_TERMS', () => {
       const selected = getSelected({
         'ui.modals.open': [ModalTypes.RESOURCE_TERMS],
       });
-      expect(selected.show).toBe(true);
+      expect(selected.showGeneric).toBe(true);
     });
 
     test('returns false if modals.open does not contain RESOURCE_TERMS', () => {
       const selected = getSelected({
         'ui.modals.open': [],
       });
-      expect(selected.show).toBe(false);
+      expect(selected.showGeneric).toBe(false);
+    });
+  });
+
+  describe('showPayment', () => {
+    test('returns true if modals.open contain RESOURCE_TERMS', () => {
+      const selected = getSelected({
+        'ui.modals.open': [ModalTypes.RESOURCE_PAYMENT_TERMS],
+      });
+      expect(selected.showPayment).toBe(true);
+    });
+
+    test('returns false if modals.open does not contain RESOURCE_PAYMENT_TERMS', () => {
+      const selected = getSelected({
+        'ui.modals.open': [],
+      });
+      expect(selected.showPayment).toBe(false);
     });
   });
 });

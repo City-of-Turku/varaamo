@@ -100,6 +100,14 @@ function notificationsReducer(state = initialState, action) {
       return addNotification(state, getErrorNotification(action.payload));
     }
 
+    case types.API.USER_GET_ERROR: {
+      return addNotification(state, {
+        messageId: 'Notifications.userFetchErrorMessage',
+        type: 'error',
+        timeOut: 30000,
+      });
+    }
+
     default: {
       return state;
     }

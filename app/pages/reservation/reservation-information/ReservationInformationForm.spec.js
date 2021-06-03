@@ -13,6 +13,8 @@ import {
   UnconnectedReservationInformationForm as ReservationInformationForm,
   validate,
 } from './ReservationInformationForm';
+import ReservationSubmitButton from './ReservationSubmitButton';
+import { hasProducts } from '../../../utils/reservationUtils';
 
 describe('pages/reservation/reservation-information/ReservationInformationForm', () => {
   describe('validation', () => {
@@ -63,6 +65,28 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           };
           const errors = validate(values, props);
           expect(errors[fieldName]).toBeDefined();
+        });
+
+        test('returns correct error if field is termsAndConditions and required', () => {
+          const fieldName = 'termsAndConditions';
+          const props = {
+            fields: [fieldName],
+            requiredFields: [fieldName],
+            t,
+          };
+          const errors = validate(values, props);
+          expect(errors[fieldName]).toBe('ReservationForm.termsAndConditionsError');
+        });
+
+        test('returns correct error if field is paymentTermsAndConditions and required', () => {
+          const fieldName = 'paymentTermsAndConditions';
+          const props = {
+            fields: [fieldName],
+            requiredFields: [fieldName],
+            t,
+          };
+          const errors = validate(values, props);
+          expect(errors[fieldName]).toBe('ReservationForm.paymentTermsAndConditionsError');
         });
 
         test('does not return an error if field is not in requiredFields', () => {
@@ -122,6 +146,26 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
       });
     });
 
+    describe('billingEmailAddress', () => {
+      const props = {
+        fields: ['billingEmailAddress'],
+        requiredFields: [],
+        t,
+      };
+
+      test('returns an error if billingEmailAddress is invalid', () => {
+        const values = { billingEmailAddress: 'luke@' };
+        const errors = validate(values, props);
+        expect(errors.billingEmailAddress).toBeDefined();
+      });
+
+      test('does not return an error if billingEmailAddress is valid', () => {
+        const values = { billingEmailAddress: 'luke@skywalker.com' };
+        const errors = validate(values, props);
+        expect(errors.billingEmailAddress).toBeFalsy();
+      });
+    });
+
     describe('reserverPhoneNumber', () => {
       const props = {
         fields: ['reserverPhoneNumber'],
@@ -139,6 +183,26 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
         const values = { reserverPhoneNumber: '+35840123123' };
         const errors = validate(values, props);
         expect(errors.reserverPhoneNumber).toBeFalsy();
+      });
+    });
+
+    describe('billingPhoneNumber', () => {
+      const props = {
+        fields: ['billingPhoneNumber'],
+        requiredFields: [],
+        t,
+      };
+
+      test('returns an error if billingPhoneNumber is invalid', () => {
+        const values = { billingPhoneNumber: '+358-401-23123' };
+        const errors = validate(values, props);
+        expect(errors.billingPhoneNumber).toBeDefined();
+      });
+
+      test('does not return an error if billingPhoneNumber is valid', () => {
+        const values = { billingPhoneNumber: '+35840123123' };
+        const errors = validate(values, props);
+        expect(errors.billingPhoneNumber).toBeFalsy();
       });
     });
 
@@ -187,9 +251,11 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
       onBack: simple.mock(),
       onCancel: simple.mock(),
       onConfirm: simple.mock(),
+      openResourcePaymentTermsModal: simple.mock(),
       openResourceTermsModal: simple.mock(),
       requiredFields: [],
       resource: Resource.build(),
+      paymentTermsAndConditions: '',
       termsAndConditions: '',
     };
 
@@ -213,6 +279,31 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
         const header = getWrapper({ fields }).find('.reservationers-Info');
         expect(header).toHaveLength(1);
         expect(header.text()).toBe('ReservationInformationForm.reserverInformationTitle');
+      });
+
+      describe('Billing info heading', () => {
+        const billingFields = [
+          'billingFirstName',
+          'billingLastName',
+          'billingPhoneNumber',
+          'billingEmailAddress',
+          'billingAddressStreet',
+          'billingAddressZip',
+          'billingAddressCity'
+        ];
+        test('is rendered when any of the billing fields are among form fields', () => {
+          billingFields.forEach((billingField) => {
+            const fields = [billingField];
+            const billingHeading = getWrapper({ fields }).find('#payment-info-heading');
+            expect(billingHeading).toHaveLength(1);
+            expect(billingHeading.text()).toBe('common.payerInformationLabel');
+          });
+        });
+        test('is not rendered when none of the billing fields are among form fields', () => {
+          const fields = [];
+          const billingHeading = getWrapper({ fields }).find('#payment-info-title');
+          expect(billingHeading).toHaveLength(0);
+        });
       });
 
       test('renders Reservation Information Form when field is selected', () => {
@@ -331,8 +422,14 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           const termsAndConditions = 'Some terms and conditions text';
           const wrapper = getWrapper({ termsAndConditions });
           const field = wrapper.find(Field).filter({ component: TermsField });
+          const isRequired = 'termsAndConditions' in defaultProps.requiredFields;
 
           expect(field.length).toBe(1);
+          expect(field.prop('isRequired')).toBe(isRequired);
+          expect(field.prop('label')).toBe('ReservationInformationForm.termsAndConditionsLabel');
+          expect(field.prop('labelLink')).toBe('ReservationInformationForm.termsAndConditionsLink');
+          expect(field.prop('name')).toBe('termsAndConditions');
+          expect(field.prop('onClick')).toBe(defaultProps.openResourceTermsModal);
         });
       });
 
@@ -347,17 +444,41 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
       });
     });
 
+    describe('payment terms', () => {
+      describe('when payment terms are given in props', () => {
+        test('renders payment terms input wrapper', () => {
+          const paymentTermsAndConditions = 'Some payment terms text';
+          const wrapper = getWrapper({ paymentTermsAndConditions });
+          const field = wrapper.find(Field).filter({ component: TermsField });
+          const isRequired = 'paymentTermsAndConditions' in defaultProps.requiredFields;
+
+          expect(field.length).toBe(1);
+          expect(field.prop('isRequired')).toBe(isRequired);
+          expect(field.prop('label')).toBe('ReservationInformationForm.termsAndConditionsLabel');
+          expect(field.prop('labelLink')).toBe('ReservationInformationForm.paymentTermsAndConditionsLink');
+          expect(field.prop('name')).toBe('paymentTermsAndConditions');
+          expect(field.prop('onClick')).toBe(defaultProps.openResourcePaymentTermsModal);
+        });
+      });
+
+      describe('when payment terms are not given in props', () => {
+        test('does not render payment terms input wrapper', () => {
+          const paymentTermsAndConditions = '';
+          const wrapper = getWrapper({ paymentTermsAndConditions });
+          const field = wrapper.find(Field).filter({ component: TermsField });
+
+          expect(field.length).toBe(0);
+        });
+      });
+    });
+
     describe('form buttons', () => {
       describe('when is editing is false', () => {
-        const buttons = getWrapper({ isEditing: false }).find(Button);
-        test('renders two buttons', () => {
-          expect(buttons.length).toBe(2);
-        });
-
-        describe('the first button', () => {
-          const button = buttons.at(0);
-
-          test('has correct text', () => {
+        const button = getWrapper({ isEditing: false }).find(Button);
+        describe('renders a Button', () => {
+          test('with correct props', () => {
+            expect(button).toHaveLength(1);
+            expect(button.prop('bsStyle')).toBe('warning');
             expect(button.props().children).toBe('common.cancel');
           });
 
@@ -369,19 +490,20 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           });
         });
 
-        describe('the second button', () => {
-          const button = buttons.at(1);
-
-          test('has correct text', () => {
-            expect(button.props().children).toBe('common.save');
-          });
+        test('renders ReservationSubmitButton with correct props', () => {
+          const submitButton = getWrapper().find(ReservationSubmitButton);
+          expect(submitButton).toHaveLength(1);
+          expect(submitButton.prop('handleSubmit')).toBe(defaultProps.handleSubmit);
+          expect(submitButton.prop('hasPayment')).toBe(hasProducts(defaultProps.resource));
+          expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
+          expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
         });
       });
 
       describe('when is editing is true', () => {
         const buttons = getWrapper({ isEditing: true }).find(Button);
-        test('renders three buttons', () => {
-          expect(buttons.length).toBe(3);
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
         });
 
         describe('the first button', () => {
@@ -414,12 +536,13 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           });
         });
 
-        describe('the third button', () => {
-          const button = buttons.at(2);
-
-          test('has correct text', () => {
-            expect(button.props().children).toBe('common.save');
-          });
+        test('renders ReservationSubmitButton with correct props', () => {
+          const submitButton = getWrapper({ isEditing: true }).find(ReservationSubmitButton);
+          expect(submitButton).toHaveLength(1);
+          expect(submitButton.prop('handleSubmit')).toBe(defaultProps.handleSubmit);
+          expect(submitButton.prop('hasPayment')).toBe(hasProducts(defaultProps.resource));
+          expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
+          expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
         });
       });
     });

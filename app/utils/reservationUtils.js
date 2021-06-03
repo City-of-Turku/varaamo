@@ -10,6 +10,7 @@ import tail from 'lodash/tail';
 import moment from 'moment';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
+import { buildAPIUrl, getHeadersCreator } from './apiUtils';
 
 function combine(reservations) {
   if (!reservations || !reservations.length) {
@@ -110,6 +111,100 @@ function isValidPhoneNumber(number) {
   }
 }
 
+/**
+ * Checks if given reservation has an order.
+ * @param {object} reservation
+ * @returns {boolean} true if reservation has order, and false if not
+ */
+function hasOrder(reservation) {
+  return 'order' in reservation && !!reservation.order;
+}
+
+/**
+ * Checks if given resource has products.
+ * @param {object} resource
+ * @returns {boolean} true or false
+ */
+function hasProducts(resource) {
+  return 'products' in resource && !!resource.products && resource.products.length > 0;
+}
+
+/**
+ * Creates an array of product objects with product id and quantity.
+ * @param {Array} products array
+ * @returns {Array} product objects e.g. [{product: id-1, quantity: 1}, ...]
+ * or null if given products is empty
+ */
+function createOrderLines(products) {
+  if (products && products.length > 0) {
+    return products.map(product => ({ product: product.id, quantity: 1 }));
+  }
+
+  return null;
+}
+
+/**
+ * Creates an order object with order lines and return url.
+ * @param {Array} products array
+ * @returns {object} order object e.g.
+ * {order_lines: {...}, returnUrl: 'mysite/reservation-payment-return'}
+ * or null if given products is empty
+ */
+function createOrder(products) {
+  if (products && products.length > 0) {
+    const orderLines = createOrderLines(products);
+
+    const returnUrl = `${window.location.origin}/reservation-payment-return`;
+    const order = { order_lines: orderLines, return_url: returnUrl };
+    return order;
+  }
+  return null;
+}
+
+/**
+ * Makes a POST request to check price of given order.
+ * @param {string} begin time
+ * @param {string} end time
+ * @param {Array} orderLines products of this order
+ * @param {object} state current redux state
+ * @returns {object} response price data
+ */
+async function checkOrderPrice(begin, end, orderLines, state) {
+  const apiUrl = buildAPIUrl('order/check_price');
+  const payload = {
+    begin,
+    end,
+    order_lines: orderLines
+  };
+
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: getHeadersCreator()(state),
+    body: JSON.stringify(payload)
+  });
+  const data = await response.json();
+  return data;
+}
+
+/**
+ * Creates and returns a formatted price string.
+ * @param {object} product which has price data
+ * @returns {string} formatted price
+ */
+function getFormattedProductPrice(product) {
+  const price = product.price.amount;
+  const pricePeriod = product.price.period;
+  const priceType = product.price.type;
+  const duration = moment.duration(pricePeriod);
+  const hours = duration.asHours();
+  const period = hours >= 1
+    ? `${hours} h`
+    : `${duration.asMinutes()} min`;
+  const priceEnding = priceType === 'fixed' ? '' : ` / ${period}`;
+
+  return `${price}€${priceEnding}`;
+}
+
 export {
   combine,
   isStaffEvent,
@@ -119,4 +214,10 @@ export {
   getNextAvailableTime,
   getNextReservation,
   isValidPhoneNumber,
+  hasOrder,
+  hasProducts,
+  createOrderLines,
+  createOrder,
+  checkOrderPrice,
+  getFormattedProductPrice
 };

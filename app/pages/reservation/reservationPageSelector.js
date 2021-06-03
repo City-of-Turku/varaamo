@@ -11,6 +11,7 @@ import {
   currentUserSelector,
   isAdminSelector,
   isLoggedInSelector,
+  loginExpiresAtSelector,
 } from 'state/selectors/authSelectors';
 import { createResourceSelector, unitsSelector } from 'state/selectors/dataSelectors';
 import dateSelector from 'state/selectors/dateSelector';
@@ -48,7 +49,9 @@ const reservationPageSelector = createStructuredSelector({
   isStaff: createIsStaffSelector(resourceSelector),
   isFetchingResource: requestIsActiveSelectorFactory(ActionTypes.API.RESOURCE_GET_REQUEST),
   isMakingReservations: requestIsActiveSelectorFactory(ActionTypes.API.RESERVATION_POST_REQUEST),
+  loginExpiresAt: loginExpiresAtSelector,
   selected: selectedSelector,
+  state: state => state,
   resourceId: resourceIdSelector,
   resource: resourceSelector,
   reservationToEdit: toEditSelector,

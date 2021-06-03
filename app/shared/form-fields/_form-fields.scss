@@ -9,6 +9,11 @@
 .terms-checkbox-field {
   .checkbox {
     display: inline;
+
+    input[type="checkbox"]{
+      position: inherit;
+      margin-right: 8px;
+    }
   }
   .terms-checkbox-field-link {
     cursor: pointer;
@@ -18,5 +23,8 @@
     margin-bottom: 0;
     text-decoration: underline;
     font-size: 1em;
+    margin: 0;
+    border-width: 0;
+    padding: 2px 2px 2px 6px;
   }
 }

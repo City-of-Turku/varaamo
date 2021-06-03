@@ -15,9 +15,11 @@ describe('shared/modals/reservation-cancel/ReservationTermsModal', () => {
   const defaultProps = {
     actions: {
       closeResourceTermsModal: () => null,
+      closeResourcePaymentTermsModal: () => null
     },
     resource,
-    show: true,
+    showGeneric: true,
+    showPayment: false,
   };
 
   function getWrapper(extraProps = {}) {
@@ -44,10 +46,16 @@ describe('shared/modals/reservation-cancel/ReservationTermsModal', () => {
         expect(getModalHeaderWrapper().props().closeLabel).toBe('ModalHeader.closeButtonText');
       });
 
-      test('contains title', () => {
+      test('contains correct title when terms type is not payment', () => {
         const modalTitle = getModalHeaderWrapper().find(Modal.Title);
         expect(modalTitle.length).toBe(1);
         expect(modalTitle.prop('children')).toBe('ReservationTermsModal.resourceTermsTitle');
+      });
+
+      test('contains corrent title when terms type is payment', () => {
+        const modalTitle = getModalHeaderWrapper({ termsType: 'payment' }).find(Modal.Title);
+        expect(modalTitle.length).toBe(1);
+        expect(modalTitle.prop('children')).toBe('ReservationTermsModal.resourcePaymentTermsTitle');
       });
     });
 
@@ -60,19 +68,36 @@ describe('shared/modals/reservation-cancel/ReservationTermsModal', () => {
         expect(getModalBodyWrapper()).toHaveLength(1);
       });
 
-      test('renders resource name', () => {
-        const texts = getModalBodyWrapper().find('span');
-        expect(texts).toHaveLength(2);
-        expect(texts.at(0).text()).toContain('ReservationTermsModal.resourceTermsSubTitle');
+      test('renders correct subtitle when terms type is not payment', () => {
+        const text = getModalBodyWrapper().find('.app-ReservationTermsModal-body');
+        expect(text).toHaveLength(1);
+        expect(text.text()).toContain('ReservationTermsModal.resourceTermsSubTitle');
       });
 
-      test('renders generic terms', () => {
+      test('renders correct subtitle when terms type is payment', () => {
+        const text = getModalBodyWrapper({ termsType: 'payment' }).find('.app-ReservationTermsModal-body');
+        expect(text).toHaveLength(1);
+        expect(text.text()).toContain('ReservationTermsModal.resourcePaymentTermsSubTitle');
+      });
+
+      test('renders correct WrappedText when terms type is not payment', () => {
         const resourceWithTerms = Resource.build({
           genericTerms: 'some generic terms',
         });
         const wrappedText = getModalBodyWrapper({ resource: resourceWithTerms }).find(WrappedText);
         expect(wrappedText).toHaveLength(1);
         expect(wrappedText.prop('text')).toBe(resourceWithTerms.genericTerms);
+        expect(wrappedText.prop('allowNamedLinks')).toBe(true);
+        expect(wrappedText.prop('openLinksInNewTab')).toBe(true);
+      });
+
+      test('renders correct WrappedText when terms type is not payment', () => {
+        const resourceWithTerms = Resource.build({
+          paymentTerms: 'some payment terms',
+        });
+        const wrappedText = getModalBodyWrapper({ resource: resourceWithTerms, termsType: 'payment' }).find(WrappedText);
+        expect(wrappedText).toHaveLength(1);
+        expect(wrappedText.prop('text')).toBe(resourceWithTerms.paymentTerms);
         expect(wrappedText.prop('allowNamedLinks')).toBe(true);
         expect(wrappedText.prop('openLinksInNewTab')).toBe(true);
       });
@@ -87,12 +112,28 @@ describe('shared/modals/reservation-cancel/ReservationTermsModal', () => {
         expect(getModalFooterWrapper).toHaveLength(1);
       });
 
-      test('renders button', () => {
+      describe('renders button', () => {
         const closeResourceTermsModal = simple.mock();
-        const actions = { closeResourceTermsModal };
-        const button = getModalFooterWrapper({ actions }).find(Button);
-        expect(button).toHaveLength(1);
-        expect(button.prop('onClick')).toBe(closeResourceTermsModal);
+        const closeResourcePaymentTermsModal = simple.mock();
+        const actions = { closeResourceTermsModal, closeResourcePaymentTermsModal };
+
+        test('with correct props when terms type is not payment', () => {
+          const button = getModalFooterWrapper({ actions }).find(Button);
+          expect(button).toHaveLength(1);
+          expect(button.prop('bsStyle')).toBe('primary');
+          expect(button.prop('className')).toBe('pull-right');
+          expect(button.prop('onClick')).toBe(closeResourceTermsModal);
+          expect(button.prop('children')).toBe('common.continue');
+        });
+
+        test('with correct props when terms type is payment', () => {
+          const button = getModalFooterWrapper({ actions, termsType: 'payment' }).find(Button);
+          expect(button).toHaveLength(1);
+          expect(button.prop('bsStyle')).toBe('primary');
+          expect(button.prop('className')).toBe('pull-right');
+          expect(button.prop('onClick')).toBe(closeResourcePaymentTermsModal);
+          expect(button.prop('children')).toBe('common.continue');
+        });
       });
     });
   });

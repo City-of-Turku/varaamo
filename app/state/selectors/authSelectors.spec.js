@@ -9,6 +9,8 @@ import {
   isLoadingUserSelector,
   isLoggedInSelector,
   staffUnitsSelector,
+  loginExpiresAtSelector,
+  hasStrongAuthSelector,
 } from './authSelectors';
 
 describe('state/selectors/authSelectors', () => {
@@ -155,6 +157,32 @@ describe('state/selectors/authSelectors', () => {
     });
   });
 
+  describe('hasStrongAuthSelector', () => {
+    function getSelected(user = {}) {
+      const state = getState({
+        auth: {
+          user: {
+            profile: {
+              sub: user.id
+            }
+          }
+        },
+        'data.users': { [user.id]: user },
+      });
+      return hasStrongAuthSelector(state);
+    }
+
+    test('returns true when user has strong auth', () => {
+      const user = { id: 'u-1', isStrongAuth: true };
+      expect(getSelected(user)).toBe(true);
+    });
+
+    test('returns false when user does not have strong auth', () => {
+      const user = { id: 'u-1', isStrongAuth: false };
+      expect(getSelected(user)).toBe(false);
+    });
+  });
+
   describe('isLoggedInSelector', () => {
     function getSelected({ user }) {
       const state = getState({ auth: { user } });
@@ -163,6 +191,20 @@ describe('state/selectors/authSelectors', () => {
 
     test('returns true if user is defined', () => {
       expect(getSelected({ user: {} })).toBe(true);
+    });
+  });
+
+  describe('loginExpiresAtSelector', () => {
+    function getSelected({ user }) {
+      const state = getState({ auth: { user } });
+      return loginExpiresAtSelector(state);
+    }
+    test('returns expires at value if user exists', () => {
+      expect(getSelected({ user: { expires_at: 1612853993 } })).toBe(1612853993);
+    });
+
+    test('returns null if user does not exist', () => {
+      expect(getSelected({ user: undefined })).toBe(null);
     });
   });
 

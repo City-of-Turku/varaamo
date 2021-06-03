@@ -38,9 +38,24 @@ const isManagerForSelector = createSelector(
   }
 );
 
+const hasStrongAuthSelector = createSelector(
+  currentUserSelector,
+  currentUser => Boolean(currentUser.isStrongAuth)
+);
+
 function isLoggedInSelector(state) {
   return Boolean(state.auth.user);
 }
+
+const loginExpiresAtSelector = createSelector(
+  authUserSelector,
+  (user) => {
+    if (user) {
+      return user.expires_at;
+    }
+    return null;
+  }
+);
 
 const staffUnitsSelector = createSelector(
   currentUserSelector,
@@ -74,6 +89,8 @@ export {
   isSuperUserSelector,
   isLoadingUserSelector,
   isLoggedInSelector,
+  loginExpiresAtSelector,
   staffUnitsSelector,
   isManagerForSelector,
+  hasStrongAuthSelector,
 };

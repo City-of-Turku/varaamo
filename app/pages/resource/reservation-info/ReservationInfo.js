@@ -11,24 +11,41 @@ import { getMaxPeriodText } from 'utils/resourceUtils';
 import { injectT } from 'i18n';
 import userManager from 'utils/userManager';
 
-function handleLoginClick(currentLanguage) {
-  userManager.signinRedirect({
-    data: {
-      redirectUrl: window.location.pathname
-    },
-    extraQueryParams: {
-      ui_locales: currentLanguage,
-    },
-  });
+async function handleLoginClick(currentLanguage, addNotification) {
+  try {
+    await userManager.signinRedirect({
+      data: {
+        redirectUrl: window.location.pathname
+      },
+      extraQueryParams: {
+        ui_locales: currentLanguage
+      },
+    });
+  } catch (error) {
+    addNotification({
+      messageId: 'Notifications.loginErrorMessage',
+      type: 'error',
+      timeOut: 10000,
+    });
+  }
 }
 
-function renderLoginText(currentLanguage, isLoggedIn, resource, t) {
-  if (isLoggedIn || !resource.reservable || resource.authentication === 'unauthenticated') {
+function renderLoginText(
+  addNotification, currentLanguage, isLoggedIn, isStrongAuthSatisfied, resource, t
+) {
+  // login text should never be shown when resource is not reservable
+  if (!resource.reservable) {
     return null;
+  }
+  // login text should be shown if strong auth requirement is not met
+  if (isStrongAuthSatisfied) {
+    if (isLoggedIn || resource.authentication === 'unauthenticated') {
+      return null;
+    }
   }
 
   // fetch login text and split it with given separator
-  const message = t('ReservationInfo.loginMessage');
+  const message = isStrongAuthSatisfied ? t('ReservationInfo.loginMessage') : t('ReservationInfo.loginMessageStrongAuth');
   const messageParts = message.split('<a>');
 
   // if message has three parts e.g. "start of message <a>link text<a> end of message"
@@ -36,7 +53,7 @@ function renderLoginText(currentLanguage, isLoggedIn, resource, t) {
     return (
       <p className="login-text">
         {messageParts[0]}
-        <Button bsStyle="link" className="login-button" onClick={() => handleLoginClick(currentLanguage)}>{messageParts[1]}</Button>
+        <Button bsStyle="link" className="login-button" onClick={() => handleLoginClick(currentLanguage, addNotification)}>{messageParts[1]}</Button>
         {messageParts[2]}
       </p>
     );
@@ -44,7 +61,7 @@ function renderLoginText(currentLanguage, isLoggedIn, resource, t) {
   // else create a button of the whole message
   return (
     <p className="login-text">
-      <Button bsStyle="link" className="login-button" onClick={handleLoginClick}>{message}</Button>
+      <Button bsStyle="link" className="login-button" onClick={() => handleLoginClick(addNotification)}>{message}</Button>
     </p>
   );
 }
@@ -98,7 +115,7 @@ function renderMaxReservationsPerUserText(maxReservationsPerUser, t) {
 }
 
 function ReservationInfo({
-  currentLanguage, isLoggedIn, resource, t
+  addNotification, currentLanguage, isLoggedIn, isStrongAuthSatisfied, resource, t
 }) {
   return (
     <div className="app-ReservationInfo">
@@ -106,14 +123,18 @@ function ReservationInfo({
       {renderEarliestResDay(resource.reservableMinDaysInAdvance, t)}
       {renderMaxPeriodText(resource, t)}
       {renderMaxReservationsPerUserText(resource.maxReservationsPerUser, t)}
-      {renderLoginText(currentLanguage, isLoggedIn, resource, t)}
+      {renderLoginText(
+        addNotification, currentLanguage, isLoggedIn, isStrongAuthSatisfied, resource, t
+      )}
     </div>
   );
 }
 
 ReservationInfo.propTypes = {
+  addNotification: PropTypes.func.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  isStrongAuthSatisfied: PropTypes.bool.isRequired,
   resource: PropTypes.shape({
     maxPeriod: PropTypes.string,
     maxReservationsPerUser: PropTypes.number,

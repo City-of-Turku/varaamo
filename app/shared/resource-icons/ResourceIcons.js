@@ -3,7 +3,7 @@ import React from 'react';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 import { injectT } from 'i18n';
-import { getHumanizedPeriod, getHourlyPrice } from 'utils/resourceUtils';
+import { getHumanizedPeriod, getPrice } from 'utils/resourceUtils';
 
 function renderIcon(glyph, text) {
   if (!text) {
@@ -23,7 +23,7 @@ function ResourceIcons({ resource, t }) {
     <div className="resource-icons">
       {renderIcon('user', resource.peopleCapacity)}
       {renderIcon('time', getHumanizedPeriod(resource.maxPeriod))}
-      {renderIcon('euro', getHourlyPrice(t, resource))}
+      {renderIcon('euro', getPrice(t, resource))}
     </div>
   );
 }

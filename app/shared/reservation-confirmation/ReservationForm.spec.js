@@ -299,6 +299,34 @@ describe('shared/reservation-confirmation/ReservationForm', () => {
       });
     });
 
+    describe('billing info', () => {
+      const billingFields = [
+        'billingFirstName',
+        'billingLastName',
+        'billingPhoneNumber',
+        'billingEmailAddress',
+        'billingAddressStreet',
+        'billingAddressZip',
+        'billingAddressCity'
+      ];
+      test('renders billing info Well when any of the billing fields are given in props', () => {
+        billingFields.forEach((billingField) => {
+          const fields = [billingField];
+          const billingInfoWell = getWrapper({ fields }).find('#billing-info-well');
+          expect(billingInfoWell).toHaveLength(1);
+          const billingInfoHeading = billingInfoWell.find('p');
+          expect(billingInfoHeading).toHaveLength(1);
+          expect(billingInfoHeading.text()).toBe('common.billingAddressLabel');
+        });
+      });
+
+      test('does not render billing info Well when none of the billing fields are given in props', () => {
+        const fields = [];
+        const billingInfoWell = getWrapper({ fields }).find('#billing-info-well');
+        expect(billingInfoWell).toHaveLength(0);
+      });
+    });
+
     describe('terms and conditions', () => {
       describe('when terms and conditions are given in props', () => {
         const termsAndConditions = 'Some terms and conditions text';

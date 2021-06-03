@@ -26,6 +26,15 @@ class Html extends Component {
     } = this.props;
     const initialStateHtml = this.getInitialStateHtml(initialState);
 
+    let ogImage;
+    if (process.env.OG_IMG_URL) {
+      ogImage = process.env.OG_IMG_URL;
+    } else {
+      ogImage = isProduction
+        ? 'https://varaamo.turku.fi/static/images/aurajoki.jpg'
+        : 'https://testivaraamo.turku.fi/static/images/aurajoki.jpg';
+    }
+
     return (
       <html lang="fi">
         <head>
@@ -37,6 +46,13 @@ class Html extends Component {
           <meta content="Turun kaupungin Varaamo-palvelusta voit varata tiloja, laitteita ja palveluita, kun haluat pitää kokouksen, pelata pelejä, harrastaa tai tavata asiantuntijan." name="description" />
           <meta content="Digipoint" name="author" />
           <meta content="x4GUwZEJru1x6OpgxdEMMfLatFyGx5lmxlbD0AMqtbw" name="google-site-verification" />
+          <meta content={ogImage} property="og:image" />
+          <meta content="image/jpeg" property="og:image:type" />
+          <meta content="1200" property="og:image:width" />
+          <meta content="630" property="og:image:height" />
+          <meta content="website" property="og:type" />
+          <meta content="Varaamo" property="og:title" />
+          <meta content="Turun kaupungin Varaamo-palvelusta voit varata tiloja, laitteita ja palveluita, kun haluat pitää kokouksen, pelata pelejä, harrastaa tai tavata asiantuntijan." property="og:description" />
           <link href="https://overpass-30e2.kxcdn.com/overpass.css" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" />
           {this.renderStylesLink(appCssSrc, isProduction)}

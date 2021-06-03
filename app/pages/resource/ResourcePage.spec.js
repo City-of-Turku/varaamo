@@ -54,14 +54,19 @@ describe('pages/resource/ResourcePage', () => {
   const defaultProps = {
     history,
     actions: {
+      addNotification: () => null,
       clearReservations: () => null,
       fetchResource: () => null,
       toggleResourceMap: () => null,
+      fetchResourceOutlookCalendarLinks: () => null,
+      createResourceOutlookCalendarLink: () => null,
+      removeResourceOutlookCalendarLink: () => null,
     },
     date: '2015-10-10',
     id: resource.id,
     isFetchingResource: false,
     isLoggedIn: true,
+    isStrongAuthSatisfied: true,
     location: { search: 'date' },
     match: { params: {} },
     resource: Immutable(resource),
@@ -115,9 +120,12 @@ describe('pages/resource/ResourcePage', () => {
       const resourceInfo = getWrapper().find(ResourceInfo);
       const equipmentList = ['equipment 1', 'equipment 2', 'equipment 3'];
       expect(resourceInfo).toHaveLength(1);
+      expect(resourceInfo.prop('addNotification')).toEqual(defaultProps.actions.addNotification);
       expect(resourceInfo.prop('resource')).toEqual(defaultProps.resource);
       expect(resourceInfo.prop('unit')).toEqual(defaultProps.unit);
       expect(resourceInfo.prop('equipment')).toEqual(equipmentList);
+      expect(resourceInfo.prop('isLoggedIn')).toEqual(defaultProps.isLoggedIn);
+      expect(resourceInfo.prop('isStrongAuthSatisfied')).toEqual(defaultProps.isStrongAuthSatisfied);
       expect(resourceInfo.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
     });
 
@@ -212,7 +220,9 @@ describe('pages/resource/ResourcePage', () => {
     test('calls clearReservations and fetchResource', () => {
       const clearReservations = simple.mock();
       const fetchResource = simple.mock();
-      const instance = getWrapper({ actions: { clearReservations } }).instance();
+      const instance = getWrapper({
+        actions: { ...defaultProps.actions, clearReservations }
+      }).instance();
       instance.fetchResource = fetchResource;
       instance.componentDidMount();
 

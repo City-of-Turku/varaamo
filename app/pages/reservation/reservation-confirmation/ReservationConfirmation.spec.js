@@ -49,15 +49,26 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
     expect(header.text()).toBe('ReservationConfirmation.reservationEditedTitle');
   });
 
-  describe('billing information header', () => {
-    test('renders correct header when billingAddressStreet prop is given', () => {
-      const reservation = Reservation.build({ billingAddressStreet: 'Katukatu 123' });
-      const header = getWrapper({ reservation }).find('#billingInformationHeader');
-      expect(header).toHaveLength(1);
-      expect(header.text()).toBe('common.billingAddressLabel');
+  describe('billing information heading', () => {
+    const billingFields = [
+      { billingFirstName: 'First' },
+      { billingLastName: 'Last' },
+      { billingPhoneNumber: '1234567890' },
+      { billingEmailAddress: 'test.tester123@testing.fi' },
+      { billingAddressStreet: 'street 123' },
+      { billingAddressZip: '123456' },
+      { billingAddressCity: 'city abc' },
+    ];
+    test('renders correct heading when any of the billing field props are given', () => {
+      billingFields.forEach((billingField) => {
+        const reservation = Reservation.build(billingField);
+        const header = getWrapper({ reservation }).find('#billingInformationHeader');
+        expect(header).toHaveLength(1);
+        expect(header.text()).toBe('common.payerInformationLabel');
+      });
     });
 
-    test('renders correct header when billingAddressStreet prop is not given', () => {
+    test('is not rendered when none of the billing field props are given', () => {
       const header = getWrapper().find('#billingInformationHeader');
       expect(header).toHaveLength(0);
     });
@@ -188,6 +199,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
   test('renders reserver details fields', () => {
     const reservation = Reservation.build({
       reserverName: 'reserver name',
+      company: 'company name',
       reserverId: 'reserver id',
       reserverPhoneNumber: '050 1234567',
       reserverEmailAddress: 'reserver email',
@@ -200,15 +212,35 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       reserverAddressStreet: 'reserver address street',
       reserverAddressZip: 'reserver address zip',
       reserverAddressCity: 'reserver address city',
+      billingFirstName: 'billing first name',
+      billingLastName: 'billing last name',
+      billingPhoneNumber: 'billing phone number',
+      billingEmailAddress: 'billing email',
       billingAddressStreet: 'billing address street',
       billingAddressZip: 'billing address zip',
       billingAddressCity: 'billing address city',
       reservationExtraQuestions: 'Extra information',
       homeMunicipality: { id: 'city-id', name: { fi: 'city-fi', en: 'city-en', sv: 'city-sv' } },
       user: User.build(),
+      order: {
+        state: 'confirmed',
+        orderLines: {
+          0: {
+            product: {
+              id: 'testproduct1',
+              type: 'rent',
+              price: {
+                type: 'per_period', taxPercentage: '24', amount: '5.00', period: '01:00:00'
+              }
+            }
+          }
+        },
+        quantity: 1,
+        price: '2.50'
+      }
     });
     const fields = getWrapper({ reservation }).find('.app-ReservationConfirmation__field');
-    expect(fields).toHaveLength(18);
+    expect(fields).toHaveLength(25);
   });
 
   describe('Button onClick', () => {

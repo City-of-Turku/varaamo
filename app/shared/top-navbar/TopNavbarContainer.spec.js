@@ -54,9 +54,9 @@ describe('shared/top-navbar/TopNavbarContainer', () => {
     });
 
     describe('userName', () => {
-      test('returns an empty string if user is not logged in', () => {
+      test('returns correct string if user is not logged in', () => {
         const selected = selector(getState());
-        expect(selected.userName).toBe('');
+        expect(selected.userName).toBe('⠀⠀-⠀⠀');
       });
 
       test('returns user firstName + lastName', () => {

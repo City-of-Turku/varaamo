@@ -22,6 +22,7 @@ class TimeSlots extends Component {
     isEditing: PropTypes.bool.isRequired,
     isFetching: PropTypes.bool.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
+    isStrongAuthSatisfied: PropTypes.bool.isRequired,
     onClear: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
     resource: PropTypes.object.isRequired,
@@ -212,6 +213,7 @@ class TimeSlots extends Component {
       isAdmin,
       isEditing,
       isLoggedIn,
+      isStrongAuthSatisfied,
       onClick,
       resource,
       selected,
@@ -263,6 +265,7 @@ class TimeSlots extends Component {
         isHighlighted={isHighlighted}
         isLoggedIn={isLoggedIn}
         isSelectable={isSelectable}
+        isStrongAuthSatisfied={isStrongAuthSatisfied}
         isUnderMinPeriod={isUnderMinPeriod}
         key={slot.start}
         onClear={this.onClear}

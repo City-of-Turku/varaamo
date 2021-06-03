@@ -201,6 +201,18 @@ describe('state/reducers/notificationReducer', () => {
         const actualNotifications = notificationsReducer(initialState, action);
         expect(actualNotifications[0].message).toEqual('System error');
       });
+
+      test('show correct error when user get error occurs', () => {
+        const userGetErrorAction = createAction(types.API.USER_GET_ERROR);
+        const action = userGetErrorAction();
+        const expectedNotification = {
+          messageId: 'Notifications.userFetchErrorMessage',
+          type: 'error',
+          timeOut: 30000,
+        };
+        const actualNotifications = notificationsReducer(initialState, action);
+        expect(actualNotifications[0]).toMatchObject(expectedNotification);
+      });
     });
   });
 });

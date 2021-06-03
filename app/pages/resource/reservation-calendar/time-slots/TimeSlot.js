@@ -17,6 +17,7 @@ class TimeSlot extends PureComponent {
     showClear: PropTypes.bool.isRequired,
     isHighlighted: PropTypes.bool.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
+    isStrongAuthSatisfied: PropTypes.bool.isRequired,
     // eslint-disable-next-line react/no-unused-prop-types
     isSelectable: PropTypes.bool.isRequired,
     isUnderMinPeriod: PropTypes.bool.isRequired,
@@ -37,18 +38,24 @@ class TimeSlot extends PureComponent {
 
   static getDerivedStateFromProps(prop) {
     const {
-      slot, resource, isAdmin, isDisabled, isSelectable, selected, isLoggedIn
+      slot, resource, isAdmin, isDisabled, isSelectable, selected, isLoggedIn, isStrongAuthSatisfied
     } = prop;
     const isPast = new Date(slot.end) < new Date();
     const isReservable = (resource.reservableAfter
       && moment(slot.start).isBefore(resource.reservableAfter));
-    const disabled = isDisabled
+
+    // if user is not logged in via strong method to resource requiring strong auth
+    // slot should always be disabled. Otherwise proceed to make other disable checks.
+    let disabled = true;
+    if (isStrongAuthSatisfied) {
+      disabled = isDisabled
       || !isLoggedIn
       || (!isSelectable && !selected)
       || !resource.userPermissions.canMakeReservations
       || isReservable
       || (!slot.editing && (slot.reserved || isPast))
       || (slot.onCooldown && !isAdmin);
+    }
 
     return {
       disabled,
@@ -86,9 +93,9 @@ class TimeSlot extends PureComponent {
   }
 
   getSelectButtonStatusLabel(
-    isDisabled, isLoggedIn, isOwnReservation, isReserved, isSelected
+    isDisabled, isLoggedIn, isStrongAuthSatisfied, isOwnReservation, isReserved, isSelected
   ) {
-    const { t } = this.props;
+    const { t, resource } = this.props;
 
     if (isOwnReservation) {
       return `${t('TimeSlot.notSelectable')} - ${t('TimeSlot.ownReservation')}`;
@@ -102,11 +109,19 @@ class TimeSlot extends PureComponent {
       return t('TimeSlot.selected');
     }
 
+    if (!resource.reservable && !resource.userPermissions.canMakeReservations) {
+      return t('TimeSlot.notSelectable');
+    }
+
     // if timeslot is otherwise disabled
     if (isDisabled && !isOwnReservation && !isReserved && !isSelected) {
+      if (!isStrongAuthSatisfied) {
+        return `${t('TimeSlot.notSelectable')} - ${t('TimeSlot.logInFirstStrongAuth')}`;
+      }
       if (!isLoggedIn) {
         return `${t('TimeSlot.notSelectable')} - ${t('TimeSlot.logInFirst')}`;
       }
+
       return t('TimeSlot.notSelectable');
     }
 
@@ -118,11 +133,18 @@ class TimeSlot extends PureComponent {
     return undefined;
   }
 
-  getReservationInfoNotification(isLoggedIn, resource, slot, t) {
+  getReservationInfoNotification(isLoggedIn, isStrongAuthSatisfied, resource, slot, t) {
     if (new Date(slot.end) < new Date() || slot.reserved) {
       return null;
     }
 
+    if (resource.reservable && !isStrongAuthSatisfied) {
+      return {
+        message: t('Notifications.loginToReserveStrongAuth'),
+        type: 'info',
+        timeOut: 10000,
+      };
+    }
     if (!isLoggedIn && resource.reservable) {
       return {
         message: t('Notifications.loginToReserve'),
@@ -131,7 +153,7 @@ class TimeSlot extends PureComponent {
       };
     }
     return {
-      message: resource.reservationInfo,
+      message: t('Notifications.noRightToReserve'),
       type: 'info',
       timeOut: 10000,
     };
@@ -158,11 +180,14 @@ class TimeSlot extends PureComponent {
 
   handleClick = (disabled) => {
     const {
-      addNotification, isLoggedIn, onClick, resource, slot, t, isUnderMinPeriod
+      addNotification, isLoggedIn, isStrongAuthSatisfied, onClick,
+      resource, slot, t, isUnderMinPeriod
     } = this.props;
 
     if (disabled) {
-      const notification = this.getReservationInfoNotification(isLoggedIn, resource, slot, t);
+      const notification = this.getReservationInfoNotification(
+        isLoggedIn, isStrongAuthSatisfied, resource, slot, t
+      );
       if (notification && notification.message) {
         addNotification(notification);
       }
@@ -197,7 +222,8 @@ class TimeSlot extends PureComponent {
       selected,
       slot,
       t,
-      isLoggedIn
+      isLoggedIn,
+      isStrongAuthSatisfied,
     } = this.props;
 
     const { disabled, isPast } = this.state;
@@ -243,7 +269,7 @@ class TimeSlot extends PureComponent {
           <time aria-hidden="true" className="app-TimeSlot__time" dateTime={slot.asISOString}>{startTime}</time>
           <span
             aria-label={`${startTime} ${this.getSelectButtonStatusLabel(
-              disabled, isLoggedIn, isOwnReservation, slot.reserved, selected
+              disabled, isLoggedIn, isStrongAuthSatisfied, isOwnReservation, slot.reserved, selected
             )}`}
             className="app-TimeSlot__status"
           />

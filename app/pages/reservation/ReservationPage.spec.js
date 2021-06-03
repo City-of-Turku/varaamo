@@ -14,6 +14,8 @@ import ReservationInformation from './reservation-information/ReservationInforma
 import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import { UnconnectedReservationPage as ReservationPage } from './ReservationPage';
+import { createOrder } from '../../utils/reservationUtils';
+import userManager from 'utils/userManager';
 
 describe('pages/reservation/ReservationPage', () => {
   const resource = Immutable(Resource.build());
@@ -27,6 +29,7 @@ describe('pages/reservation/ReservationPage', () => {
       closeReservationSuccessModal: simple.mock(),
       fetchResource: simple.mock(),
       handleRedirect: simple.mock(),
+      openResourcePaymentTermsModal: simple.mock(),
       openResourceTermsModal: simple.mock(),
       putReservation: simple.mock(),
       postReservation: simple.mock(),
@@ -57,6 +60,7 @@ describe('pages/reservation/ReservationPage', () => {
         resource: resource.id,
       },
     ],
+    state: {},
     unit: Immutable(Unit.build()),
     user: Immutable(User.build()),
   };
@@ -180,6 +184,8 @@ describe('pages/reservation/ReservationPage', () => {
         expect(reservationInformation.prop('onBack')).toBeDefined();
         expect(reservationInformation.prop('onCancel')).toBeDefined();
         expect(reservationInformation.prop('onConfirm')).toBeDefined();
+        expect(reservationInformation.prop('openResourcePaymentTermsModal'))
+          .toBe(defaultProps.actions.openResourcePaymentTermsModal);
         expect(reservationInformation.prop('openResourceTermsModal')).toBe(defaultProps.actions.openResourceTermsModal);
         expect(reservationInformation.prop('reservation')).toBe(defaultProps.reservationToEdit);
         expect(reservationInformation.prop('resource')).toBe(defaultProps.resource);
@@ -345,9 +351,23 @@ describe('pages/reservation/ReservationPage', () => {
         expect(instance.fetchResource.lastCall.args).toEqual([]);
       });
     });
+
+    test('calls handleSigninRefresh', () => {
+      const loginExpiresAt = 1612788418;
+      const instance = getWrapper({ loginExpiresAt }).instance();
+      const spy = jest.spyOn(instance, 'handleSigninRefresh');
+      instance.componentDidMount();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(defaultProps.isLoggedIn, loginExpiresAt, 20);
+    });
   });
 
   describe('componentWillUpdate', () => {
+    const realLocation = window.location;
+    afterAll(() => {
+      window.location = realLocation;
+    });
+
     test(
       'sets state view confirmation when next props has reservationCreated',
       () => {
@@ -371,6 +391,22 @@ describe('pages/reservation/ReservationPage', () => {
         expect(instance.state.view).toBe('confirmation');
       }
     );
+
+    test('sets window.location to paymentUrl when next props has reservation with order.paymentUrl', () => {
+      delete window.location;
+      window.location = new URL('https://www.current-location.fi');
+
+      const instance = getWrapper().instance();
+      const reservationCreated = Reservation.build();
+      const paymentUrl = 'http://test-payment-url.fi';
+      reservationCreated.order = { paymentUrl };
+      const nextProps = {
+        reservationCreated
+      };
+      instance.componentWillUpdate(nextProps);
+
+      expect(window.location).toBe(paymentUrl);
+    });
   });
   describe('componentWillUnmount when state.view is confirmation', () => {
     const clearReservations = simple.mock();
@@ -503,6 +539,31 @@ describe('pages/reservation/ReservationPage', () => {
     );
   });
 
+  describe('handleSigninRefresh', () => {
+    const signinSilentMock = simple.mock();
+
+    beforeEach(() => {
+      signinSilentMock.reset();
+      simple.mock(userManager, 'signinSilent', signinSilentMock);
+    });
+
+    test('calls userManager.signinSilent if isLoggedIn and loginExpiresAt are truthy', () => {
+      const instance = getWrapper().instance();
+      const isLoggedIn = true;
+      const loginExpiresAt = 1612788418;
+      instance.handleSigninRefresh(isLoggedIn, loginExpiresAt);
+      expect(signinSilentMock.callCount).toBe(1);
+    });
+
+    test('does not call userManager.signinSilent if isLoggedIn or loginExpiresAt is falsy', () => {
+      const instance = getWrapper().instance();
+      const isLoggedIn = false;
+      const loginExpiresAt = 1612788418;
+      instance.handleSigninRefresh(isLoggedIn, loginExpiresAt);
+      expect(signinSilentMock.callCount).toBe(0);
+    });
+  });
+
   describe('handleConfirmTime', () => {
     test('sets state view information when reservationToEdit no empty', () => {
       const instance = getWrapper().instance();
@@ -533,14 +594,17 @@ describe('pages/reservation/ReservationPage', () => {
       expect(postReservation.callCount).toBe(0);
       expect(putReservation.callCount).toBe(1);
       expect(putReservation.lastCall.args[0].preferredLanguage).toEqual('fi');
+      expect('order' in putReservation.lastCall.args[0]).toBe(false);
       expect(putReservation.lastCall.args[0].comments).toEqual('-');
       expect(putReservation.lastCall.args[0].someField).toEqual(values.someField);
     });
 
     test('calls postReservation action when reservationToEdit empty', () => {
+      const products = [{ id: 'test-id', type: 'rent' }];
       postReservation.reset();
       putReservation.reset();
       const instance = getWrapper({
+        resource: Immutable(Resource.build({ products })),
         actions: {
           postReservation,
           putReservation,
@@ -549,6 +613,8 @@ describe('pages/reservation/ReservationPage', () => {
       instance.handleReservation(values);
       expect(postReservation.callCount).toBe(1);
       expect(postReservation.lastCall.args[0].preferredLanguage).toEqual('fi');
+      expect(postReservation.lastCall.args[0].order)
+        .toEqual(createOrder(instance.props.resource.products));
       expect(putReservation.callCount).toBe(0);
     });
   });

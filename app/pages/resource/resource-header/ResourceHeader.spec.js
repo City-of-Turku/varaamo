@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
 import Immutable from 'seamless-immutable';
+import simple from 'simple-mock';
 
 import FavoriteButton from 'shared/favorite-button';
 import Resource from 'utils/fixtures/Resource';
@@ -19,6 +20,7 @@ describe('pages/resource/resource-header/ResourceHeader', () => {
     showBackButton: true,
     showMap: false,
     unit: Immutable(unit),
+    showOutlookCalendarLinkButton: false,
   };
 
   function getWrapper(props) {
@@ -197,6 +199,53 @@ describe('pages/resource/resource-header/ResourceHeader', () => {
 
         expect(favoriteButton.length).toBe(1);
         expect(favoriteButton.prop('resource')).toEqual(defaultProps.resource);
+      });
+    });
+
+    describe('Calendar button', () => {
+      test('should not be present if switched off', () => {
+        // Arrange
+        const component = getWrapper({
+          showOutlookCalendarLinkButton: false,
+        });
+        // Act
+        const linkCreateButton = component.find('.app-ResourceHeader__calendar-link-create-button');
+        const linkRemoveButton = component.find('.app-ResourceHeader__calendar-link-remove-button');
+        // Assert
+        expect(linkCreateButton.length).toBe(0);
+        expect(linkRemoveButton.length).toBe(0);
+      });
+
+      test('should create calendar if link does not exist', () => {
+        // Arrange
+        const createFuncMock = simple.mock();
+        const component = getWrapper({
+          showOutlookCalendarLinkButton: true,
+          outlookLinkExists: false,
+          onOutlookCalendarLinkCreateClick: createFuncMock,
+        });
+        // Act
+        const linkButton = component.find('.calendar-link-button');
+        // Assert
+        expect(linkButton.length).not.toBe(0);
+        linkButton.prop('onClick')();
+        expect(createFuncMock.callCount).toBe(1);
+      });
+
+      test('should remove calendar if link does not exist', () => {
+        // Arrange
+        const removeFuncMock = simple.mock();
+        const component = getWrapper({
+          showOutlookCalendarLinkButton: true,
+          outlookLinkExists: true,
+          onOutlookCalendarLinkRemoveClick: removeFuncMock,
+        });
+        // Act
+        const linkButton = component.find('.calendar-link-button');
+        // Assert
+        expect(linkButton.length).not.toBe(0);
+        linkButton.prop('onClick')();
+        expect(removeFuncMock.callCount).toBe(1);
       });
     });
   });

@@ -13,7 +13,7 @@ import { injectT } from 'i18n';
 import iconClock from 'assets/icons/clock-o.svg';
 import iconMap from 'assets/icons/map.svg';
 import FavoriteButton from 'shared/favorite-button';
-import { getHourlyPrice, getMaxPeriodText } from 'utils/resourceUtils';
+import { getPrice, getMaxPeriodText } from 'utils/resourceUtils';
 
 function ResourceHeader({
   onBackClick,
@@ -25,6 +25,10 @@ function ResourceHeader({
   unit,
   t,
   contrast,
+  showOutlookCalendarLinkButton,
+  outlookLinkExists,
+  onOutlookCalendarLinkCreateClick,
+  onOutlookCalendarLinkRemoveClick,
 }) {
   const formatDistance = (distance) => {
     if (!distance) {
@@ -43,9 +47,30 @@ function ResourceHeader({
 
   const peopleCapacityText = t('ResourceCard.peopleCapacity', { people: resource.peopleCapacity });
   const maxPeriodText = getMaxPeriodText(t, resource);
-  const priceText = getHourlyPrice(t, resource);
+  const priceText = getPrice(t, resource);
   const typeName = resource.type ? resource.type.name : '\u00A0';
   const distance = formatDistance(resource.distance);
+
+  let linkButton;
+  if (outlookLinkExists) {
+    linkButton = (
+      <Button
+        className="calendar-link-button"
+        onClick={onOutlookCalendarLinkRemoveClick}
+      >
+        {t('ResourceHeader.outlookCalendarRemove')}
+      </Button>
+    );
+  } else {
+    linkButton = (
+      <Button
+        className="calendar-link-button"
+        onClick={onOutlookCalendarLinkCreateClick}
+      >
+        {t('ResourceHeader.outlookCalendarCreate')}
+      </Button>
+    );
+  }
 
   return (
     <section aria-label={t('ResourceHeader.title')} className={`app-ResourceHeader ${contrast}`}>
@@ -104,6 +129,8 @@ function ResourceHeader({
                 </Button>
               )}
               {isLoggedIn && <FavoriteButton resource={resource} />}
+              { showOutlookCalendarLinkButton && linkButton }
+
             </div>
           </div>
         </div>
@@ -122,6 +149,10 @@ ResourceHeader.propTypes = {
   t: PropTypes.func.isRequired,
   unit: PropTypes.object.isRequired,
   contrast: PropTypes.string,
+  showOutlookCalendarLinkButton: PropTypes.bool.isRequired,
+  outlookLinkExists: PropTypes.bool,
+  onOutlookCalendarLinkCreateClick: PropTypes.func,
+  onOutlookCalendarLinkRemoveClick: PropTypes.func,
 };
 
 ResourceHeader = injectT(ResourceHeader); // eslint-disable-line

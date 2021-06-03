@@ -88,6 +88,14 @@ describe('pages/resource/resourcePageSelector', () => {
     expect(selected.isLoggedIn).toBeDefined();
   });
 
+  test('returns isStrongAuthSatisfied', () => {
+    const state = getState();
+    const props = getProps();
+    const selected = resourcePageSelector(state, props);
+
+    expect(selected.isStrongAuthSatisfied).toBeDefined();
+  });
+
   test('returns resource', () => {
     const state = getState();
     const props = getProps();
@@ -148,5 +156,22 @@ describe('pages/resource/resourcePageSelector', () => {
     const selected = resourcePageSelector(state, props);
 
     expect(selected.unit).toEqual({});
+  });
+
+  test('returns calendar link that matches to search', () => {
+    const resource = Resource.build();
+    const props = getProps(resource.id);
+    const state = {
+      ...getState([]),
+      resourceOutlookLinks:
+        {
+          [resource.id]: {
+            id: 'link1',
+            resource: resource.id,
+          },
+        },
+    };
+    const selected = resourcePageSelector(state, props);
+    expect(selected.calendarLink).toBeDefined();
   });
 });

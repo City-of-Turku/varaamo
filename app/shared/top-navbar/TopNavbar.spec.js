@@ -12,6 +12,7 @@ import MobileNavbar from './mobile/MobileNavbar';
 
 describe('shared/top-navbar/TopNavbar', () => {
   const defaults = {
+    addNotification: () => null,
     changeLocale: () => null,
     toggleMobileNavbar: () => null,
     handleLanguageChange: () => null,

@@ -10,6 +10,7 @@ import iconHome from 'hel-icons/dist/shapes/home.svg';
 import { injectT } from 'i18n';
 import ReservationDate from 'shared/reservation-date';
 import { getFeedbackLink } from 'utils/languageUtils';
+import { getFormattedProductPrice } from '../../../utils/reservationUtils';
 
 class ReservationConfirmation extends Component {
   static propTypes = {
@@ -112,6 +113,12 @@ class ReservationConfirmation extends Component {
                 t('common.reserverNameLabel'),
                 reservation.reserverName
               )}
+            {reservation.company
+              && this.renderField(
+                'company',
+                t('common.companyLabel'),
+                reservation.company
+              )}
             {reservation.reserverId
               && this.renderField('reserverId', t('common.reserverIdLabel'), reservation.reserverId)}
             {reservation.reserverPhoneNumber
@@ -184,9 +191,52 @@ class ReservationConfirmation extends Component {
                 t('common.homeMunicipality'),
                 reservation.homeMunicipality.name[currentLanguage]
               )}
-            {reservation.billingAddressStreet && (
-              <Col xs={12}><h3 id="billingInformationHeader">{t('common.billingAddressLabel')}</h3></Col>
-            )}
+            {reservation.order
+              && this.renderField(
+                'pricePerPeriod',
+                t('common.priceLabel'),
+                getFormattedProductPrice(reservation.order.orderLines[0].product),
+              )}
+            {reservation.order
+              && this.renderField(
+                'reservationPrice',
+                t('common.priceTotalLabel'),
+                `${reservation.order.price}€`,
+              )}
+            {(reservation.billingFirstName
+              || reservation.billingLastName
+              || reservation.billingPhoneNumber
+              || reservation.billingEmailAddress
+              || reservation.billingAddressStreet
+              || reservation.billingAddressZip
+              || reservation.billingAddressCity)
+              && (
+              <Col xs={12}><h3 id="billingInformationHeader">{t('common.payerInformationLabel')}</h3></Col>
+              )}
+            {reservation.billingFirstName
+              && this.renderField(
+                'billingFirstName',
+                t('common.billingFirstNameLabel'),
+                reservation.billingFirstName,
+              )}
+            {reservation.billingLastName
+              && this.renderField(
+                'billingLastName',
+                t('common.billingLastNameLabel'),
+                reservation.billingLastName,
+              )}
+            {reservation.billingPhoneNumber
+              && this.renderField(
+                'billingPhoneNumber',
+                t('common.billingPhoneNumberLabel'),
+                reservation.billingPhoneNumber,
+              )}
+            {reservation.billingEmailAddress
+              && this.renderField(
+                'billingEmailAddress',
+                t('common.billingEmailAddressLabel'),
+                reservation.billingEmailAddress,
+              )}
             {reservation.billingAddressStreet
               && this.renderField(
                 'billingAddressStreet',
