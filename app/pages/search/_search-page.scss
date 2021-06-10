@@ -18,7 +18,7 @@
   }
 
   .app-MapToggle {
-    background-color: $turku-yellow;
+    background-color: $varaamo-secondary;
     display: block;
     margin: 0;
     position: relative;
@@ -39,8 +39,8 @@
       }
     };
     button {
-      background-color: $turku-yellow;
-      border-color: $turku-yellow;
+      background-color: $varaamo-secondary;
+      border-color: $varaamo-secondary;
       color: $black;
       font-size: 1em;
       @include add-focus($width: 2px, $color: currentColor) {
@@ -48,8 +48,8 @@
     }
     button:hover,
     button:active {
-      background-color: darken($turku-yellow, 5);
-      border-color: darken($turku-yellow, 5);
+      background-color: darken($varaamo-secondary, 5);
+      border-color: darken($varaamo-secondary, 5);
       box-shadow: none;
     }
     .btn.active-tab,

@@ -17,10 +17,10 @@
       .control-label,
       .help-block,
       label{
-        color: $turku-high-contrast-red;
+        color: $varaamo-high-contrast-red;
       }
       .form-control{
-        border-color: $turku-high-contrast-red;
+        border-color: $varaamo-high-contrast-red;
       }
       .terms-checkbox-field-link{
         color: $blue;
@@ -41,7 +41,7 @@
     .select-input {
       border: 2px solid #000000;
       margin-top: 7px;
-  
+
       @media(max-width: $screen-md-min){
         width: 100%;
       }

@@ -1,4 +1,7 @@
-export default {
+import themeConstants from '@city-assets/constants';
+
+
+const constants = {
   API_URL: SETTINGS.API_URL,
   CUSTOMIZATIONS: {
     'varaamo.espoo.fi': 'ESPOO',
@@ -21,6 +24,10 @@ export default {
   MANAGE_RESERVATIONS: {
     PAGE_SIZE: 10,
     MAX_SHOWN_PAGINATION_BUTTONS: 9,
+  },
+  MAP_TILE_URLS: {
+    DEFAULT_TILES: 'https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}.png',
+    HIGH_CONTRAST_TILES: 'https://maptiles.turku.fi/styles/hel-osm-high-contrast/{z}/{x}/{y}.png'
   },
   NAV_ADMIN_URLS: {
     gitbook: 'https://digipoint-turku.gitbook.io/varaamo-turku/',
@@ -118,3 +125,10 @@ export default {
     LARGE: '__font-size-large',
   }
 };
+
+// These values might be city specific so they can be overridden if a theme is installed
+constants.FEEDBACK_URL = { ...constants.FEEDBACK_URL, ...themeConstants.FEEDBACK_URL };
+constants.NAV_ADMIN_URLS = { ...constants.NAV_ADMIN_URLS, ...themeConstants.NAV_ADMIN_URLS };
+constants.MAP_TILE_URLS = { ...constants.MAP_TILE_URLS, ...themeConstants.MAP_TILE_URLS };
+
+export default constants;

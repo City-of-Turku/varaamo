@@ -26,7 +26,7 @@ describe('shared/logo/Logo', () => {
     });
 
     test('renders Turku alt text', () => {
-      expect(logo.props().alt).toBe('Logo.turkuAlt');
+      expect(logo.props().alt).toBe('Logo.cityAlt');
     });
   });
 

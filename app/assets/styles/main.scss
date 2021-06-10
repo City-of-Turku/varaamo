@@ -1,7 +1,9 @@
 @import '~hel-bootstrap-3/src/sass/helsinki-variables';
 @import './application-variables';
 @import '~hel-bootstrap-3/src/sass/theme-bootstrap-variables';
+
 @import './turku-variables';
+@import '@city-assets/sass/variables';
 @import '~bootstrap-sass/assets/stylesheets/bootstrap';
 @import '~hel-bootstrap-3/src/sass/theme-custom-styles';
 @import './turku-custom-styles';
@@ -14,6 +16,7 @@
 
 @import './layout';
 @import './mixins';
+
 
 @import '../../pages/pages';
 @import '../../shared/shared';

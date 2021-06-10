@@ -98,7 +98,7 @@ $purposeCellHeight: 350px;
         flex-direction: column;
         flex: 1;
         justify-content: space-around;
-        background-color: $turku-yellow;
+        background-color: $varaamo-secondary;
         height: 100%;
         position: relative;
         text-decoration: none;
@@ -107,7 +107,7 @@ $purposeCellHeight: 350px;
 
         &:hover, &:active, &:focus {
           color: $black;
-          background-color: $turku-yellow;
+          background-color: $varaamo-secondary;
         }
         @include add-focus(4px);
         img {
