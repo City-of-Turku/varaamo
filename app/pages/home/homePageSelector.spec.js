@@ -55,8 +55,12 @@ describe('pages/home/homePageSelector', () => {
         expect(getPurpose().label).toBe(purpose.name);
       });
 
-      test('does not contain other properties than value and label', () => {
-        const expected = { value: purpose.id, label: purpose.name };
+      test('has purpose.image as its image property', () => {
+        expect(getPurpose().image).toBe(purpose.image);
+      });
+
+      test('does not contain other properties than value, label and image', () => {
+        const expected = { value: purpose.id, label: purpose.name, image: purpose.image };
         expect(getPurpose()).toEqual(expected);
       });
     });
