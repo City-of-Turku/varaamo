@@ -1,11 +1,11 @@
 import moment from 'moment';
 import { updateIntl } from 'react-intl-redux';
 // eslint-disable-next-line import/no-unresolved
-import placeholderFi from '@city-i18n/fi.json';
+import fiMessagesFromTheme from '@city-i18n/fi.json';
 // eslint-disable-next-line import/no-unresolved
-import placeholderSv from '@city-i18n/sv.json';
+import svMessagesFromTheme from '@city-i18n/sv.json';
 // eslint-disable-next-line import/no-unresolved
-import placeholderEn from '@city-i18n/en.json';
+import enMessagesFromTheme from '@city-i18n/en.json';
 
 
 import { savePersistLocale } from 'store/middleware/persistState';
@@ -14,9 +14,9 @@ import fiMessages from 'i18n/messages/fi.json';
 import svMessages from 'i18n/messages/sv.json';
 
 const messages = {
-  fi: { ...fiMessages, ...placeholderFi },
-  en: { ...enMessages, ...placeholderEn },
-  sv: { ...svMessages, ...placeholderSv },
+  fi: { ...fiMessages, ...fiMessagesFromTheme },
+  en: { ...enMessages, ...enMessagesFromTheme },
+  sv: { ...svMessages, ...svMessagesFromTheme },
 };
 
 function changeLocale(language) {

@@ -20,9 +20,7 @@ const defaultPosition = {
 };
 const defaultZoom = 12;
 
-// const defaultTilesUrlz = 'https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}.png';
 const defaultTilesUrl = constants.MAP_TILE_URLS.DEFAULT_TILES;
-// const highContrastTilesUrlz = 'https://maptiles.turku.fi/styles/hel-osm-high-contrast/{z}/{x}/{y}.png';
 const highContrastTilesUrl = constants.MAP_TILE_URLS.HIGH_CONTRAST_TILES;
 
 export class UnconnectedResourceMapContainer extends React.Component {
