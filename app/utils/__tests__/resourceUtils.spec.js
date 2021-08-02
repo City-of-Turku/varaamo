@@ -902,12 +902,20 @@ describe('Utils: resourceUtils', () => {
     });
 
     describe('when only specific terms is specified', () => {
-      const genericTerms = null;
       const specificTerms = 'specific terms';
 
-      test('returns only specific terms', () => {
-        const resource = { genericTerms, specificTerms };
-        expect(getTermsAndConditions(resource)).toBe(specificTerms);
+      describe('returns only specific terms', () => {
+        test('when generic terms is falsy', () => {
+          const genericTerms = null;
+          const resource = { genericTerms, specificTerms };
+          expect(getTermsAndConditions(resource)).toBe(specificTerms);
+        });
+
+        test('when generic terms is empty obj', () => {
+          const genericTerms = {};
+          const resource = { genericTerms, specificTerms };
+          expect(getTermsAndConditions(resource)).toBe(specificTerms);
+        });
       });
     });
 
@@ -915,20 +923,27 @@ describe('Utils: resourceUtils', () => {
       const genericTerms = 'generic terms';
       const specificTerms = null;
 
-      test('returns only specific terms', () => {
+      test('returns only generic terms', () => {
         const resource = { genericTerms, specificTerms };
         expect(getTermsAndConditions(resource)).toBe(genericTerms);
       });
     });
 
     describe('when neither specific or generic terms is specified', () => {
-      const genericTerms = null;
       const specificTerms = null;
 
-      test('returns an empty string', () => {
-        const resource = { genericTerms, specificTerms };
+      describe('returns an empty string', () => {
+        test('when generic terms is falsy', () => {
+          const genericTerms = '';
+          const resource = { genericTerms, specificTerms };
+          expect(getTermsAndConditions(resource)).toBe('');
+        });
 
-        expect(getTermsAndConditions(resource)).toBe('');
+        test('when generic terms is empty obj', () => {
+          const genericTerms = {};
+          const resource = { genericTerms, specificTerms };
+          expect(getTermsAndConditions(resource)).toBe('');
+        });
       });
     });
   });
@@ -939,9 +954,16 @@ describe('Utils: resourceUtils', () => {
       expect(getPaymentTermsAndConditions(resource)).toBe(resource.paymentTerms);
     });
 
-    test('returns empty string if given resource doesnt have payment terms', () => {
-      const resource = { };
-      expect(getPaymentTermsAndConditions(resource)).toBe('');
+    describe('returns empty string', () => {
+      test('when given resource doesnt have payment terms', () => {
+        const resource = { };
+        expect(getPaymentTermsAndConditions(resource)).toBe('');
+      });
+
+      test('when given resource has payment terms as empty obj', () => {
+        const resource = { paymentTerms: {} };
+        expect(getPaymentTermsAndConditions(resource)).toBe('');
+      });
     });
   });
 
