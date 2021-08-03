@@ -251,8 +251,7 @@ function getTermsAndConditions(resource = {}) {
 }
 
 function getPaymentTermsAndConditions(resource = {}) {
-  const paymentTerms = resource.paymentTerms && !isEmpty(resource.paymentTerms) ? resource.paymentTerms : '';
-  return paymentTerms;
+  return resource.paymentTerms && !isEmpty(resource.paymentTerms) ? resource.paymentTerms : '';
 }
 
 function reservingIsRestricted(resource, date) {
