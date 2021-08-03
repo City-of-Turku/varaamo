@@ -15,6 +15,12 @@ import Immutable from 'seamless-immutable';
 export function updateResults(reservation, oldResults, reservationState) {
   const results = [...oldResults];
   const modifiedIndex = results.findIndex((result => result.id === reservation.id));
+
+  // return results as is if modified reservation was not found
+  if (modifiedIndex === -1) {
+    return results;
+  }
+
   const resource = results[modifiedIndex].resource;
 
   const updatedReservation = {
