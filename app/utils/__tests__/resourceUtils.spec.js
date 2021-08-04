@@ -23,6 +23,7 @@ import {
   getResourcePageUrlComponents,
   getMinPeriodText,
   getEquipment,
+  isStaffForResource,
   isStrongAuthSatisfied,
 } from 'utils/resourceUtils';
 
@@ -1074,6 +1075,43 @@ describe('Utils: resourceUtils', () => {
         const resource = { userPermissions: { isAdmin: false }, reservableBefore };
         const isLimited = reservingIsRestricted(resource, date);
         expect(isLimited).toBe(true);
+      });
+    });
+  });
+
+  describe('isStaffForResource', () => {
+    describe('returns false', () => {
+      test('when given resource doesnt contain userPermissions', () => {
+        const resource = Resource.build({ userPermissions: null });
+        expect(isStaffForResource(resource)).toBe(false);
+      });
+
+      test('when none of the userPermissions admin, manager or viewer permission is true', () => {
+        const resource = Resource.build({
+          userPermissions: { isAdmin: false, isManager: false, isViewer: false }
+        });
+        expect(isStaffForResource(resource)).toBe(false);
+      });
+    });
+
+    describe('returns true', () => {
+      test('when any of the userPermissions admin, manager or viewer permission is true', () => {
+        const resourceA = Resource.build({
+          userPermissions: { isAdmin: true, isManager: false, isViewer: false }
+        });
+        const resourceB = Resource.build({
+          userPermissions: { isAdmin: false, isManager: true, isViewer: false }
+        });
+        const resourceC = Resource.build({
+          userPermissions: { isAdmin: false, isManager: false, isViewer: true }
+        });
+        const resourceD = Resource.build({
+          userPermissions: { isAdmin: true, isManager: true, isViewer: true }
+        });
+        expect(isStaffForResource(resourceA)).toBe(true);
+        expect(isStaffForResource(resourceB)).toBe(true);
+        expect(isStaffForResource(resourceC)).toBe(true);
+        expect(isStaffForResource(resourceD)).toBe(true);
       });
     });
   });

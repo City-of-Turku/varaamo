@@ -247,8 +247,17 @@ describe('ManageReservationsFilters', () => {
     });
 
     describe('handleOpenInfoModal', () => {
+      const reservation = Reservation.build({ resource: 'test-id' });
+
+      test('calls handleFetchResource with correct params', () => {
+        const instance = getWrapper().instance();
+        const spy = jest.spyOn(instance, 'handleFetchResource');
+        instance.handleOpenInfoModal(reservation);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith(reservation.resource, reservation.begin);
+      });
+
       test('calls showReservationInfoModal with correct params', () => {
-        const reservation = Reservation.build();
         const instance = getWrapper().instance();
         instance.handleOpenInfoModal(reservation);
         expect(defaultProps.actions.showReservationInfoModal.mock.calls.length).toBe(1);

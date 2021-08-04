@@ -264,6 +264,22 @@ function reservingIsRestricted(resource, date) {
 }
 
 /**
+ * Check whether current user has any of the staff permissions:
+ * admin, manager or viewer for given resource.
+ * @param {object} resource
+ * @returns {boolean} true when user has any of the staff permissions, false if not.
+ */
+function isStaffForResource(resource) {
+  if (resource.userPermissions) {
+    const perms = resource.userPermissions;
+    if (perms.isAdmin || perms.isManager || perms.isViewer) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Checks whether strong auth requirement is satisfied with given resource and
  * strong auth status.
  * @param {object} resource
@@ -293,5 +309,6 @@ export {
   getPrice,
   reservingIsRestricted,
   getMinPeriodText,
+  isStaffForResource,
   isStrongAuthSatisfied,
 };

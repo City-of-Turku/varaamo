@@ -109,6 +109,8 @@ class ManageReservationsPage extends React.Component {
 
   handleOpenInfoModal(reservation) {
     const { actions } = this.props;
+    // fetch resource to get user permission info
+    this.handleFetchResource(reservation.resource, reservation.begin);
     actions.showReservationInfoModal(reservation);
   }
 
