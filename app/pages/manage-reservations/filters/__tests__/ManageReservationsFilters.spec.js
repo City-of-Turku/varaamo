@@ -1,3 +1,5 @@
+import constants from 'constants/AppConstants';
+
 import React from 'react';
 import { Col, Grid, Row } from 'react-bootstrap';
 import { get } from 'lodash';
@@ -6,7 +8,7 @@ import { shallowWithIntl } from 'utils/testUtils';
 import { UnwrappedManageReservationsFilters } from '../ManageReservationsFilters';
 import Unit from 'utils/fixtures/Unit';
 import ButtonGroupField from '../../inputs/ButtonGroupField';
-import { getShowOnlyOptions, getStatusOptions } from '../filterUtils';
+import { getStatusOptions } from '../filterUtils';
 import DateField from '../../inputs/DateField';
 import TextField from '../../inputs/TextField';
 import SelectField from '../../inputs/SelectField';
@@ -119,7 +121,6 @@ describe('ManageReservationsFilters', () => {
         expect(cols).toHaveLength(3);
         expect(cols.at(0).prop('md')).toBe(3);
         expect(cols.at(1).prop('md')).toBe(5);
-        expect(cols.at(2).prop('md')).toBe(4);
       });
 
       test('TextField', () => {
@@ -137,20 +138,26 @@ describe('ManageReservationsFilters', () => {
         expect(textField.prop('value')).toBe(get(defaultProps.filters, 'unit', null));
       });
 
-      test('ButtonGroupField', () => {
-        const btnGroupField = lastRow.find(ButtonGroupField);
-        expect(btnGroupField).toHaveLength(1);
-        expect(btnGroupField.prop('id')).toBe('showOnlyField');
-        expect(btnGroupField.prop('label')).toBe('ManageReservationsFilters.showOnly.title');
-        expect(btnGroupField.prop('onChange')).toBeDefined();
-        expect(btnGroupField.prop('options')).toStrictEqual(getShowOnlyOptions(defaultProps.t));
-        expect(btnGroupField.prop('type')).toBe('checkbox');
-        expect(btnGroupField.prop('value')).toBe(defaultProps.showOnlyFilters);
+      test('favorites toggle', () => {
+        const favoritesToggle = getWrapper().find('#favorite-toggle-field');
+        expect(favoritesToggle).toHaveLength(1);
+        expect(favoritesToggle.prop('label')).toBe('ManageReservationsFilters.favoritesLabel');
+        expect(favoritesToggle.prop('onChange')).toBeDefined();
+        expect(favoritesToggle.prop('value')).toBe(get(defaultProps.filters, 'is_favorite_resource', true) !== 'no');
+      });
+
+      test('can modify toggle', () => {
+        const canModify = constants.RESERVATION_SHOWONLY_FILTERS.CAN_MODIFY;
+        const canModifyToggle = getWrapper().find('#can-modify-toggle-field');
+        expect(canModifyToggle).toHaveLength(1);
+        expect(canModifyToggle.prop('label')).toBe('ManageReservationsFilters.showOnly.canModifyLabel');
+        expect(canModifyToggle.prop('onChange')).toBeDefined();
+        expect(canModifyToggle.prop('value')).toBe(defaultProps.showOnlyFilters.includes(canModify));
       });
 
       describe('reset filter button', () => {
-        test('when there are no filters', () => {
-          const filters = {};
+        test('when there are no active filters', () => {
+          const filters = { is_favorite_resource: 'no' };
           const showOnlyFilters = [];
           const resetButton = getWrapper({ filters, showOnlyFilters }).find('.app-ManageReservationsFilters__resetButton');
           expect(resetButton).toHaveLength(0);
@@ -158,7 +165,7 @@ describe('ManageReservationsFilters', () => {
 
         describe('when there are filters', () => {
           const filters = { test: 'abc' };
-          const showOnlyFilters = ['favorite'];
+          const showOnlyFilters = [constants.RESERVATION_SHOWONLY_FILTERS.CAN_MODIFY];
           const resetButton = getWrapper({ filters, showOnlyFilters }).find('.app-ManageReservationsFilters__resetButton');
 
           test('Button with correct props', () => {

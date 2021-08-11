@@ -43,14 +43,33 @@ export function onFilterChange(filterName, filterValue, filters, onSearchChange)
   onSearchChange(omit(newFilters, 'page'));
 }
 
+/**
+ * Handles adding and removing favorite filter. When filter value is true
+ * favorites filter is removed because the filter works reversely. When the filter
+ * value is false, favorites filter is added with value "no".
+ * @param {boolean} filterValue
+ * @param {object} filters
+ * @param {function} onSearchChange
+ */
+export function onFavoriteFilterChange(filterValue, filters, onSearchChange) {
+  if (filterValue) {
+    onFilterChange('is_favorite_resource', false, filters, onSearchChange);
+  } else {
+    onFilterChange('is_favorite_resource', 'no', filters, onSearchChange);
+  }
+}
+
 export function onReset(onSearchChange, onShowOnlyFiltersChange) {
-  onShowOnlyFiltersChange();
-  // Reset show only filters by giving empty selection
-  onSearchChange({});
+  // Reset filters by giving empty selections
+  onShowOnlyFiltersChange([]);
+  // favorites filter works reversely and expects negative value when not in use
+  onSearchChange({ is_favorite_resource: 'no' });
 }
 
 export function hasFilters(filters, showOnlyFilters) {
-  return !isEmpty(omit(filters, 'page')) || !isEmpty(showOnlyFilters);
+  // favorites work in a reverse way i.e. when it's present it's not in use
+  return !isEmpty(omit(filters, ['page', 'date', 'is_favorite_resource'])) || !isEmpty(showOnlyFilters)
+    || !('is_favorite_resource' in filters);
 }
 
 export function getStatusOptions(t) {

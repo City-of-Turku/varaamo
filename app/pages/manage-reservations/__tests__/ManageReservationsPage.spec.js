@@ -16,6 +16,7 @@ import ReservationCancelModal from 'shared/modals/reservation-cancel';
 import PageWrapper from '../../PageWrapper';
 import Reservation from 'utils/fixtures/Reservation';
 import { getEditReservationUrl } from 'utils/reservationUtils';
+import PageResultsText from '../PageResultsText';
 
 
 describe('ManageReservationsFilters', () => {
@@ -33,7 +34,6 @@ describe('ManageReservationsFilters', () => {
     },
     history: { push: () => {} },
     location: {},
-    userFavoriteResources: ['test123'],
     locale: 'fi',
     units: [],
     reservations: [],
@@ -74,18 +74,14 @@ describe('ManageReservationsFilters', () => {
       expect(filters.prop('units')).toBe(defaultProps.units);
     });
 
-    describe('search results count', () => {
-      test('when there are no search results', () => {
-        const results = getWrapper({ reservationsTotalCount: 0 }).find('.app-ManageReservationsPage__filters').find('span');
-        expect(results).toHaveLength(1);
-        expect(results.text()).toBe('ManageReservationsPage.noSearchResults');
-      });
-
-      test('when there are search results', () => {
-        const results = getWrapper({ reservationsTotalCount: 2 }).find('.app-ManageReservationsPage__filters').find('span');
-        expect(results).toHaveLength(1);
-        expect(results.text()).toBe('ManageReservationsPage.searchResults');
-      });
+    test('PageResultsText', () => {
+      const results = getWrapper().find(PageResultsText);
+      expect(results).toHaveLength(1);
+      expect(results.prop('currentPage')).toBe(1);
+      expect(results.prop('filteredReservations')).toStrictEqual([]);
+      expect(results.prop('pageSize')).toBe(constants.MANAGE_RESERVATIONS.PAGE_SIZE);
+      expect(results.prop('reservations')).toBe(defaultProps.reservations);
+      expect(results.prop('totalReservations')).toBe(defaultProps.reservationsTotalCount);
     });
 
     test('results table wrapping div', () => {
@@ -214,6 +210,7 @@ describe('ManageReservationsFilters', () => {
         const location = { search: '?test=123' };
         const filters = getFiltersFromUrl(location, false);
         const params = {
+          is_favorite_resource: 'true',
           ...filters,
           pageSize: constants.MANAGE_RESERVATIONS.PAGE_SIZE,
           include: 'resource_detail',

@@ -39,3 +39,27 @@ export function getFilteredReservations(filters, reservations, userFavoriteResou
 
   return reservations;
 }
+
+/**
+ * Gets amount of reservations which are filtered out and hidden from original reservation count
+ * @param {array} reservations unfiltered reservation set
+ * @param {array} filteredReservations set of already filtered reservations
+ * @returns {number} amount of reservations filtered out of given reservations
+ */
+export function getHiddenReservationCount(reservations, filteredReservations) {
+  return reservations.length - filteredReservations.length;
+}
+
+/**
+ * Gets formatted current page result numbers text
+ * @param {number} currentPage where page numbering starts from 0
+ * @param {number} resultsPerPage max number of results shown per page
+ * @param {number} currentPageResults how many results are in the current page
+ * @param {number} totalResults number of results in all the pages
+ * @returns {string} results text in the following format: "from - to / total"
+ */
+export function getPageResultsText(currentPage, resultsPerPage, currentPageResults, totalResults) {
+  const from = resultsPerPage * currentPage + 1;
+  const to = resultsPerPage * currentPage + currentPageResults;
+  return `${from} - ${to} / ${totalResults}`;
+}

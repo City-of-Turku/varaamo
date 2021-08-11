@@ -33,6 +33,7 @@ import manageReservationsPageSelector from './manageReservationsPageSelector';
 import { getFilteredReservations } from './manageReservationsPageUtils';
 import ReservationInfoModal from 'shared/modals/reservation-info';
 import ReservationCancelModal from 'shared/modals/reservation-cancel';
+import PageResultsText from './PageResultsText';
 
 
 class ManageReservationsPage extends React.Component {
@@ -72,7 +73,7 @@ class ManageReservationsPage extends React.Component {
     });
   }
 
-  // handles filters which don't affect search url i.e. favorites and can_modify
+  // handles filters which don't affect search url i.e. can_modify
   onShowOnlyFiltersChange(filters) {
     this.setState({
       showOnlyFilters: filters,
@@ -83,6 +84,8 @@ class ManageReservationsPage extends React.Component {
     const { location, actions } = this.props;
     const filters = getFiltersFromUrl(location, false);
     const params = {
+      // add favorites in by default and override it with filters param
+      is_favorite_resource: 'true',
       ...filters,
       pageSize: constants.MANAGE_RESERVATIONS.PAGE_SIZE,
       include: 'resource_detail',
@@ -159,7 +162,6 @@ class ManageReservationsPage extends React.Component {
       reservations,
       reservationsTotalCount,
       locale,
-      userFavoriteResources,
       isFetchingReservations,
       isFetchingUnits,
     } = this.props;
@@ -170,6 +172,9 @@ class ManageReservationsPage extends React.Component {
 
     const filters = getFiltersFromUrl(location, false);
     const title = t('ManageReservationsPage.title');
+    const filteredReservations = getFilteredReservations(showOnlyFilters, reservations, []);
+    const currentPage = filters && filters.page ? Number(filters.page) : 1;
+
     return (
       <div className="app-ManageReservationsPage">
         <div className="app-ManageReservationsPage__filters">
@@ -190,12 +195,13 @@ class ManageReservationsPage extends React.Component {
           <Grid>
             <Row>
               <Col sm={12}>
-                <span>
-                  {reservationsTotalCount > 0
-                    ? t('ManageReservationsPage.searchResults', { count: reservationsTotalCount })
-                    : t('ManageReservationsPage.noSearchResults')
-                  }
-                </span>
+                <PageResultsText
+                  currentPage={currentPage}
+                  filteredReservations={filteredReservations}
+                  pageSize={constants.MANAGE_RESERVATIONS.PAGE_SIZE}
+                  reservations={reservations}
+                  totalReservations={reservationsTotalCount}
+                />
               </Col>
             </Row>
           </Grid>
@@ -210,9 +216,7 @@ class ManageReservationsPage extends React.Component {
                     onEditClick={this.handleEditClick}
                     onEditReservation={this.handleEditReservation}
                     onInfoClick={this.handleOpenInfoModal}
-                    reservations={getFilteredReservations(
-                      showOnlyFilters, reservations, userFavoriteResources
-                    )}
+                    reservations={filteredReservations}
                   />
                 </Loader>
                 <Pagination
@@ -240,7 +244,6 @@ ManageReservationsPage.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object.isRequired,
   actions: PropTypes.object,
-  userFavoriteResources: PropTypes.array,
   locale: PropTypes.string.isRequired,
   units: PropTypes.array,
   reservations: PropTypes.array,

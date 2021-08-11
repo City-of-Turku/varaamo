@@ -4,7 +4,8 @@ import moment from 'moment';
 
 
 import {
-  onDateFilterChange, onFilterChange, onReset, hasFilters, getStatusOptions, getShowOnlyOptions
+  onDateFilterChange, onFilterChange, onReset, hasFilters, getStatusOptions,
+  getShowOnlyOptions, onFavoriteFilterChange
 } from '../filterUtils';
 
 describe('onDateFilterChange', () => {
@@ -51,6 +52,30 @@ describe('onFilterChange', () => {
   });
 });
 
+describe('onFavoriteFilterChange', () => {
+  const filters = {};
+  const onSearchChange = jest.fn();
+  afterEach(() => {
+    onSearchChange.mockClear();
+  });
+
+  test('calls onSearchChange with correct params when given filterValue is truthy', () => {
+    const filterValue = true;
+    const expectedParams = {};
+    onFavoriteFilterChange(filterValue, filters, onSearchChange);
+    expect(onSearchChange.mock.calls.length).toBe(1);
+    expect(onSearchChange.mock.calls[0][0]).toStrictEqual(expectedParams);
+  });
+
+  test('calls onSearchChange with correct params when given filterValue is falsy', () => {
+    const filterValue = false;
+    const expectedParams = { is_favorite_resource: 'no' };
+    onFavoriteFilterChange(filterValue, filters, onSearchChange);
+    expect(onSearchChange.mock.calls.length).toBe(1);
+    expect(onSearchChange.mock.calls[0][0]).toStrictEqual(expectedParams);
+  });
+});
+
 describe('onReset', () => {
   test('calls correct functions', () => {
     const onSearchChange = jest.fn();
@@ -58,8 +83,9 @@ describe('onReset', () => {
     onReset(onSearchChange, onShowOnlyFiltersChange);
 
     expect(onSearchChange.mock.calls.length).toBe(1);
-    expect(onSearchChange.mock.calls[0][0]).toStrictEqual({});
+    expect(onSearchChange.mock.calls[0][0]).toStrictEqual({ is_favorite_resource: 'no' });
     expect(onShowOnlyFiltersChange.mock.calls.length).toBe(1);
+    expect(onShowOnlyFiltersChange.mock.calls[0][0]).toStrictEqual([]);
   });
 });
 
@@ -69,8 +95,13 @@ describe('hasFilters', () => {
     expect(hasFilters(filters)).toBe(true);
   });
 
-  describe('when filters is empty', () => {
+  test('returns true when filters is empty and favorites is missing', () => {
     const filters = {};
+    expect(hasFilters(filters)).toBe(true);
+  });
+
+  describe('when filters has only favorites filter', () => {
+    const filters = { is_favorite_resource: 'no' };
 
     test('returns false when showOnlyFilters is also empty', () => {
       const showOnlyFilters = {};

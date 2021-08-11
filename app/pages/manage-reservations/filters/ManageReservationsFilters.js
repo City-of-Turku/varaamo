@@ -1,3 +1,5 @@
+import constants from 'constants/AppConstants';
+
 import { get } from 'lodash';
 import React from 'react';
 import {
@@ -10,12 +12,14 @@ import moment from 'moment';
 import ButtonGroupField from '../inputs/ButtonGroupField';
 import injectT from '../../../i18n/injectT';
 import {
-  getShowOnlyOptions, getStatusOptions, hasFilters, onDateFilterChange, onFilterChange, onReset
+  getStatusOptions, hasFilters, onDateFilterChange,
+  onFavoriteFilterChange, onFilterChange, onReset
 } from './filterUtils';
 import iconTimes from 'pages/search/controls/images/times.svg';
 import DateField from '../inputs/DateField';
 import TextField from '../inputs/TextField';
 import SelectField from '../inputs/SelectField';
+import ToggleField from '../inputs/ToggleField';
 
 function ManageReservationsFilters({
   t,
@@ -30,6 +34,7 @@ function ManageReservationsFilters({
   const startDate = get(filters, 'start', null);
   const endDate = get(filters, 'end', null);
   const locale = intl.locale;
+  const canModify = constants.RESERVATION_SHOWONLY_FILTERS.CAN_MODIFY;
 
   return (
     <div className="app-ManageReservationsFilters">
@@ -93,17 +98,24 @@ function ManageReservationsFilters({
               value={get(filters, 'unit', null)}
             />
           </Col>
-          <Col md={5}>
-            <ButtonGroupField
-              id="showOnlyField"
-              label={t('ManageReservationsFilters.showOnly.title')}
-              onChange={value => onShowOnlyFiltersChange(value)}
-              options={getShowOnlyOptions(t)}
-              type="checkbox"
-              value={showOnlyFilters}
+          <Col className="app-ManageReservationsFilters__filterToggles" md={5}>
+            <ToggleField
+              id="favorite-toggle-field"
+              label={t('ManageReservationsFilters.favoritesLabel')}
+              onChange={event => onFavoriteFilterChange(
+                event.target.checked, filters, onSearchChange
+              )}
+              // favorites is in use when not present in filters and not when its value is "no"
+              value={get(filters, 'is_favorite_resource', true) !== 'no'}
+            />
+            <ToggleField
+              id="can-modify-toggle-field"
+              label={t('ManageReservationsFilters.showOnly.canModifyLabel')}
+              onChange={event => (onShowOnlyFiltersChange(event.target.checked ? [canModify] : []))}
+              value={showOnlyFilters.includes(canModify)}
             />
           </Col>
-          <Col md={4}>
+          <Col>
             {hasFilters(filters, showOnlyFilters) && (
             <Button
               bsStyle="link"
