@@ -29,13 +29,7 @@ class Html extends Component {
         s.parentNode.insertBefore(g,s);
       })();
     `;
-      return (
-        React.createElement(
-          'script',
-          { type: 'text/javascript' },
-          scriptString,
-        )
-      );
+      return scriptString;
     }
     return null;
   }
@@ -101,7 +95,7 @@ class Html extends Component {
           <link href="https://overpass-30e2.kxcdn.com/overpass.css" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" />
           {this.getConsentScripts()}
-          {this.getCookieScript()}
+          <script dangerouslySetInnerHTML={{ __html: this.getCookieScript() }} type="text/javascript" />
           {this.renderStylesLink(appCssSrc, isProduction)}
           <title>Varaamo</title>
         </head>
