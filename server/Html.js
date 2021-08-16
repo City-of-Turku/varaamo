@@ -42,6 +42,7 @@ class Html extends Component {
 
   getConsentScripts() {
     return (
+      // eslint-disable-next-line react/self-closing-comp
       <script
         data-blockingmode="auto"
         data-cbid="92860cd1-d931-4496-8621-2adb011dafb0"
