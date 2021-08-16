@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { withRouter } from 'react-router-dom';
 
-import { checkCookieConsent } from '../utils/cookieUtils';
-import CookieBar from 'shared/cookiebar/CookieBar';
 import { fetchUser } from 'actions/userActions';
 import Favicon from 'shared/favicon';
 import Footer from 'shared/footer';
@@ -29,11 +27,6 @@ export const selector = createStructuredSelector({
 });
 
 export class UnconnectedAppContainer extends Component {
-  constructor(props) {
-    super(props);
-    checkCookieConsent();
-  }
-
   componentDidMount() {
     this.removeFacebookAppendedHash();
   }
@@ -52,10 +45,9 @@ export class UnconnectedAppContainer extends Component {
   }
 
   render() {
-    const { fontSize, currentLanguage } = this.props;
+    const { fontSize } = this.props;
     return (
       <div className={classNames('app', getCustomizationClassName(), (fontSize))}>
-        <CookieBar currentLanguage={currentLanguage} />
         <SkipLink />
 
         <Helmet htmlAttributes={{ lang: this.props.currentLanguage }} title="Varaamo" />
