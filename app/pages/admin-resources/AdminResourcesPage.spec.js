@@ -26,6 +26,7 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
       openConfirmReservationModal,
       unselectAdminResourceType,
     },
+    areResourcesInSync: true,
     date: '2017-01-10',
     selectedResourceTypes: [],
     isAdmin: true,
@@ -204,6 +205,33 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
       instance.componentWillReceiveProps({ ...defaultProps, location: { id: '321' } });
       expect(instance.fetchResources.callCount).toBe(1);
       expect(instance.fetchResources.lastCall.args).toEqual([defaultProps.date]);
+    });
+  });
+
+  describe('componentDidUpdate', () => {
+    test('calls fetchResources if current resources are not in sync and previous resources were', () => {
+      const areResourcesInSync = false;
+      const instance = getWrapper({ areResourcesInSync }).instance();
+      instance.fetchResources = simple.mock();
+      instance.componentDidUpdate({ ...defaultProps, areResourcesInSync: true });
+      expect(instance.fetchResources.callCount).toBe(1);
+      expect(instance.fetchResources.lastCall.args).toEqual([defaultProps.date]);
+    });
+
+    test('doesnt call fetchResources if current resources are and previous were in sync', () => {
+      const areResourcesInSync = true;
+      const instance = getWrapper({ areResourcesInSync }).instance();
+      instance.fetchResources = simple.mock();
+      instance.componentDidUpdate({ ...defaultProps, areResourcesInSync: true });
+      expect(instance.fetchResources.callCount).toBe(0);
+    });
+
+    test('doesnt call fetchResources if current resources are in sync and previous were not', () => {
+      const areResourcesInSync = true;
+      const instance = getWrapper({ areResourcesInSync }).instance();
+      instance.fetchResources = simple.mock();
+      instance.componentDidUpdate({ ...defaultProps, areResourcesInSync: false });
+      expect(instance.fetchResources.callCount).toBe(0);
     });
   });
 

@@ -42,6 +42,13 @@ class UnconnectedAdminResourcesPage extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (!this.props.areResourcesInSync && prevProps.areResourcesInSync) {
+      //  refetch to sync if current resources went out of sync
+      this.fetchResources(this.props.date);
+    }
+  }
+
   componentWillUnmount() {
     this.props.actions.changeAdminResourcesPageDate(null);
     window.clearInterval(this.updateResourcesTimer);
@@ -112,6 +119,7 @@ class UnconnectedAdminResourcesPage extends Component {
 
 UnconnectedAdminResourcesPage.propTypes = {
   actions: PropTypes.object.isRequired,
+  areResourcesInSync: PropTypes.bool.isRequired,
   date: PropTypes.string.isRequired,
   selectedResourceTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   isAdmin: PropTypes.bool.isRequired,
