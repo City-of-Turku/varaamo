@@ -64,7 +64,6 @@ class Html extends Component {
       isProduction,
     } = this.props;
     const initialStateHtml = this.getInitialStateHtml(initialState);
-
     let ogImage;
     if (process.env.OG_IMG_URL) {
       ogImage = process.env.OG_IMG_URL;
@@ -95,7 +94,7 @@ class Html extends Component {
           <link href="https://overpass-30e2.kxcdn.com/overpass.css" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" />
           {this.getConsentScripts()}
-          <script dangerouslySetInnerHTML={{ __html: this.getCookieScript() }} type="text/javascript" />
+          {Boolean(process.env.PIWIK_SITE_ID) && <script dangerouslySetInnerHTML={{ __html: this.getCookieScript() }} type="text/javascript" />}
           {this.renderStylesLink(appCssSrc, isProduction)}
           <title>Varaamo</title>
         </head>

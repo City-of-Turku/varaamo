@@ -29,12 +29,23 @@ export const selector = createStructuredSelector({
 export class UnconnectedAppContainer extends Component {
   componentDidMount() {
     this.removeFacebookAppendedHash();
+    window.addEventListener('CookiebotOnDialogDisplay', () => {
+      document.getElementById('CybotCookiebotDialogPoweredbyImage').src = '';
+      document.getElementById('CybotCookiebotDialogPoweredbyImage').alt = 'Turku logo';
+    });
   }
 
   componentWillUpdate(nextProps) {
     if (nextProps.user && nextProps.user !== this.props.user) {
       this.props.fetchUser(nextProps.user.profile.sub);
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('CookiebotOnDialogDisplay', () => {
+      document.getElementById('CybotCookiebotDialogPoweredbyImage').src = '';
+      document.getElementById('CybotCookiebotDialogPoweredbyImage').alt = 'Turku logo';
+    });
   }
 
   removeFacebookAppendedHash() {

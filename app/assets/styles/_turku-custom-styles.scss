@@ -34,3 +34,22 @@ a {
   height: 1px;
   overflow: hidden;
 }
+body {
+  #CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper input:focus-visible + span,
+  #CybotCookiebotDialog :focus-visible {
+    outline-offset: 1px;
+  }
+  #CybotCookiebotDialog .CybotCookiebotDialogContentWrapper #CybotCookiebotDialogNav :focus-visible {
+    outline-offset: -5px;
+  }
+  #CybotCookiebotDialogPoweredbyImage {
+    max-height: 6em;
+    content:url("../pictures/cookiebot_logo_turku.png") !important;
+  }
+  #CybotCookiebotDialogHeader {
+    padding: 0.75em;
+  }
+  a#CybotCookiebotDialogPoweredbyCybot {
+    display:none;
+  }
+}
