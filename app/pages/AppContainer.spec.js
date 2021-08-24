@@ -10,6 +10,9 @@ import SkipLink from 'shared/skip-link';
 import { getState } from 'utils/testUtils';
 import * as customizationUtils from 'utils/customizationUtils';
 import { selector, UnconnectedAppContainer as AppContainer } from './AppContainer';
+import { cookieBotAddListener, cookieBotRemoveListener } from '../utils/cookieUtils';
+
+jest.mock('../utils/cookieUtils');
 
 describe('pages/AppContainer', () => {
   function getWrapper(props) {
@@ -148,6 +151,11 @@ describe('pages/AppContainer', () => {
 
       expect(instance.removeFacebookAppendedHash.callCount).toBe(1);
     });
+    test('calls cookieBotAddListener', () => {
+      const instance = getWrapper().instance();
+      instance.componentDidMount();
+      expect(cookieBotAddListener).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('componentWillUpdate', () => {
@@ -189,6 +197,14 @@ describe('pages/AppContainer', () => {
         instance.componentWillUpdate({ user: newUser });
         expect(fetchUser.callCount).toBe(0);
       });
+    });
+  });
+
+  describe('componentWillUnmount', () => {
+    test('calls cookieBotRemoveListener', () => {
+      const instance = getWrapper().instance();
+      instance.componentWillUnmount();
+      expect(cookieBotRemoveListener).toHaveBeenCalledTimes(1);
     });
   });
 

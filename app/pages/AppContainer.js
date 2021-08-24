@@ -16,6 +16,7 @@ import TestSiteMessage from 'shared/test-site-message';
 import Notifications from 'shared/notifications';
 import { getCustomizationClassName } from 'utils/customizationUtils';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
+import { cookieBotAddListener, cookieBotRemoveListener } from '../utils/cookieUtils';
 
 const userSelector = state => state.auth.user;
 const fontSizeSelector = state => state.ui.accessibility.fontSize;
@@ -29,10 +30,7 @@ export const selector = createStructuredSelector({
 export class UnconnectedAppContainer extends Component {
   componentDidMount() {
     this.removeFacebookAppendedHash();
-    window.addEventListener('CookiebotOnDialogDisplay', () => {
-      document.getElementById('CybotCookiebotDialogPoweredbyImage').src = '';
-      document.getElementById('CybotCookiebotDialogPoweredbyImage').alt = 'Turku logo';
-    });
+    cookieBotAddListener();
   }
 
   componentWillUpdate(nextProps) {
@@ -42,10 +40,7 @@ export class UnconnectedAppContainer extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('CookiebotOnDialogDisplay', () => {
-      document.getElementById('CybotCookiebotDialogPoweredbyImage').src = '';
-      document.getElementById('CybotCookiebotDialogPoweredbyImage').alt = 'Turku logo';
-    });
+    cookieBotRemoveListener();
   }
 
   removeFacebookAppendedHash() {
