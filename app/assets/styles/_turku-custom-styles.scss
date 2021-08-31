@@ -46,11 +46,20 @@ body {
     max-height: 4em;
     content:url("https://www.turku.fi/sites/default/files/thumbnails/image/turku_pysty_viiva_black_pelkka_vaakuna_1.png") !important;
   }
-  #CybotCookiebotDialogHeader {
-    padding: 0.75em;
-  }
   a#CybotCookiebotDialogPoweredbyCybot {
     display:none;
+  }
+  #CybotCookiebotDialog.active:not(.CybotEdge) {
+    #CybotCookiebotDialogHeader {
+      display: none;
+    }
+  }
+  #CybotCookiebotDialog.CybotEdge.active {
+    @media (max-width: 1279px) {
+      #CybotCookiebotDialogHeader {
+        display: none;
+      }
+    }
   }
 }
 
