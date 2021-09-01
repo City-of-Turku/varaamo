@@ -35,6 +35,9 @@ a {
   overflow: hidden;
 }
 body {
+  #CybotCookiebotDialog * {
+    font-size: 16px;
+  }
   #CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper input:focus-visible + span,
   #CybotCookiebotDialog :focus-visible {
     outline-offset: 1px;
