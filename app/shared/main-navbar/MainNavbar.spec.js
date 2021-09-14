@@ -70,6 +70,12 @@ describe('shared/main-navbar/MainNavbar', () => {
       expect(myReservationsLink).toHaveLength(0);
     });
 
+    test('does not render a link to manage reservations page', () => {
+      const myReservationsLink = getLoggedInNotAdminWrapper()
+        .find(LinkContainer).filter({ to: '/manage-reservations' });
+      expect(myReservationsLink).toHaveLength(0);
+    });
+
     test('does not render a link to respa admin UI', () => {
       const maintenanceLink = getLoggedInNotAdminWrapper()
         .find(NavItem).filter({ href: 'dev' });
@@ -96,6 +102,12 @@ describe('shared/main-navbar/MainNavbar', () => {
     test('renders a link to admin resources page', () => {
       const myReservationsLink = getLoggedInAdminWrapper()
         .find(LinkContainer).filter({ to: '/admin-resources' });
+      expect(myReservationsLink).toHaveLength(1);
+    });
+
+    test('renders a link to manage reservations page', () => {
+      const myReservationsLink = getLoggedInAdminWrapper()
+        .find(LinkContainer).filter({ to: '/manage-reservations' });
       expect(myReservationsLink).toHaveLength(1);
     });
 

@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { withRouter } from 'react-router-dom';
 
-import { checkCookieConsent } from '../utils/cookieUtils';
-import CookieBar from 'shared/cookiebar/CookieBar';
 import { fetchUser } from 'actions/userActions';
 import Favicon from 'shared/favicon';
 import Footer from 'shared/footer';
@@ -18,6 +16,7 @@ import TestSiteMessage from 'shared/test-site-message';
 import Notifications from 'shared/notifications';
 import { getCustomizationClassName } from 'utils/customizationUtils';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
+import { cookieBotAddListener, cookieBotRemoveListener } from '../utils/cookieUtils';
 
 const userSelector = state => state.auth.user;
 const fontSizeSelector = state => state.ui.accessibility.fontSize;
@@ -29,19 +28,19 @@ export const selector = createStructuredSelector({
 });
 
 export class UnconnectedAppContainer extends Component {
-  constructor(props) {
-    super(props);
-    checkCookieConsent();
-  }
-
   componentDidMount() {
     this.removeFacebookAppendedHash();
+    cookieBotAddListener();
   }
 
   componentWillUpdate(nextProps) {
     if (nextProps.user && nextProps.user !== this.props.user) {
       this.props.fetchUser(nextProps.user.profile.sub);
     }
+  }
+
+  componentWillUnmount() {
+    cookieBotRemoveListener();
   }
 
   removeFacebookAppendedHash() {
@@ -52,10 +51,9 @@ export class UnconnectedAppContainer extends Component {
   }
 
   render() {
-    const { fontSize, currentLanguage } = this.props;
+    const { fontSize } = this.props;
     return (
       <div className={classNames('app', getCustomizationClassName(), (fontSize))}>
-        <CookieBar currentLanguage={currentLanguage} />
         <SkipLink />
 
         <Helmet htmlAttributes={{ lang: this.props.currentLanguage }} title="Varaamo" />

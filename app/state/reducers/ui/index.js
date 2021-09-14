@@ -8,13 +8,15 @@ import resourceMapReducer from './resourceMapReducer';
 import searchReducer from './searchReducer';
 import accessibilityReducer from './accessibilityReducer';
 import favoritesPagesReducer from './favoritesPageReducer';
+import manageReservationsPageReducer from './manageReservationsPageReducer';
 
 const uiReducers = combineReducers({
   modals: modalsReducer,
   pages: combineReducers(
     {
       adminResources: adminResourcesPageReducer,
-      favorites: favoritesPagesReducer
+      favorites: favoritesPagesReducer,
+      manageReservations: manageReservationsPageReducer,
     }
   ),
   reservationInfoModal: reservationInfoModalReducer,

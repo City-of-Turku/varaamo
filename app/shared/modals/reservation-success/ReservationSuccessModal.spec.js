@@ -49,6 +49,7 @@ describe('shared/modals/reservation-success/ReservationSuccessModal', () => {
     test('renders a Modal with correct props', () => {
       const modalComponent = wrapper.find(Modal);
       expect(modalComponent.length).toBe(1);
+      expect(modalComponent.prop('animation')).toBe(false);
       expect(modalComponent.prop('className')).toBe('reservation-success-modal modal-city-theme');
       expect(modalComponent.prop('onHide')).toBe(defaultProps.closeReservationSuccessModal);
       expect(modalComponent.prop('show')).toBe(defaultProps.show);
@@ -153,6 +154,7 @@ describe('shared/modals/reservation-success/ReservationSuccessModal', () => {
     test('renders a Modal with correct props', () => {
       const modalComponent = wrapper.find(Modal);
       expect(modalComponent.length).toBe(1);
+      expect(modalComponent.prop('animation')).toBe(false);
       expect(modalComponent.prop('className')).toBe('reservation-success-modal modal-city-theme');
       expect(modalComponent.prop('onHide')).toBe(defaultProps.closeReservationSuccessModal);
       expect(modalComponent.prop('show')).toBe(defaultProps.show);

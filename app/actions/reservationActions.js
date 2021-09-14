@@ -66,7 +66,7 @@ function denyPreliminaryReservation(reservation) {
 }
 
 function fetchReservations(params = {}) {
-  const fetchParams = Object.assign({}, params, { pageSize: 100 });
+  const fetchParams = Object.assign({}, { pageSize: 100 }, params);
 
   return {
     [RSAA]: {

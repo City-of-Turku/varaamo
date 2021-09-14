@@ -5,10 +5,12 @@ import Col from 'react-bootstrap/lib/Col';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import { Link } from 'react-router-dom';
+// eslint-disable-next-line import/no-unresolved
+import logoFi from '@city-assets/images/logo_footer.png';
+// eslint-disable-next-line import/no-unresolved
+import logoSv from '@city-assets/images/logo_footer_sv.png';
 
 import { injectT } from 'i18n';
-import turkuLogoSrc from 'shared/logo/logo_footer.png';
-import aboLogoSrc from 'shared/logo/logo_footer_sv.png';
 import { getFeedbackLink } from 'utils/languageUtils';
 
 class FooterContent extends React.Component {
@@ -19,7 +21,7 @@ class FooterContent extends React.Component {
 
   render() {
     const { t, currentLang } = this.props;
-    const currentLogo = (currentLang === 'sv') ? aboLogoSrc : turkuLogoSrc;
+    const currentLogo = (currentLang !== 'sv') ? logoFi : logoSv;
     const currentLink = getFeedbackLink(currentLang);
     return (
       <Grid>
@@ -27,16 +29,16 @@ class FooterContent extends React.Component {
           <Col lg={3} md={3}>
             <div className="brand-link">
               <img
-                alt={t('Logo.turkuAlt')}
+                alt={t('Logo.cityAlt')}
                 src={currentLogo}
-                title={t('Logo.turkuAlt')}
+                title={t('Logo.cityAlt')}
               />
             </div>
           </Col>
           <Col lg={6} md={6}>
             <h2>Varaamo</h2>
             <p>
-              <FormattedHTMLMessage id="Footer.turkuText" />
+              <FormattedHTMLMessage id="Footer.addressText" />
               <br />
               <br />
               <Link className="accessibility-info-link" to="/accessibility-info">{t('AccessibilityInfo.title')}</Link>

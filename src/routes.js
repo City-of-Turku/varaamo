@@ -9,6 +9,7 @@ import NotFoundPage from '../app/pages/not-found';
 import LoginCallback from '../app/pages/auth/LoginCallback';
 import LogoutCallback from '../app/pages/auth/LogoutCallback';
 import ReservationPaymentReturnPage from '../app/pages/reservation/payment/ReservationPaymentReturnPage';
+import ManageReservationsPage from '../app/pages/manage-reservations/ManageReservationsPage';
 
 // import non-landing pages dynamically
 const SearchPage = lazy(() => import('../app/pages/search'));
@@ -38,6 +39,11 @@ export default () => (
           component={props => <AdminResourcesPage {...props} />}
           componentName="AdminResources"
           path="/admin-resources"
+        />
+        <PrivateRoute
+          component={props => <ManageReservationsPage {...props} />}
+          componentName="ManageReservations"
+          path="/manage-reservations"
         />
         <PrivateRoute
           component={props => <FavoritesPage {...props} />}

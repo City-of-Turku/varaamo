@@ -7,6 +7,7 @@ import PageWrapper from 'pages/PageWrapper';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedHomePage as HomePage } from './HomePage';
 import HomeSearchBox from './HomeSearchBox';
+import iconEmptyPurpose from './images/calendar.svg';
 
 describe('pages/home/HomePage', () => {
   const history = {
@@ -23,18 +24,22 @@ describe('pages/home/HomePage', () => {
       {
         label: 'Purpose 1',
         value: 'purpose-1',
+        image: 'purpose-1-url',
       },
       {
         label: 'Purpose 2',
         value: 'purpose-2',
+        image: 'purpose-2-url',
       },
       {
         label: 'Purpose 3',
         value: 'purpose-3',
+        image: 'purpose-3-url',
       },
       {
         label: 'Purpose 4',
         value: 'purpose-4',
+        image: null,
       },
     ],
   };
@@ -92,6 +97,21 @@ describe('pages/home/HomePage', () => {
       test(' have at least a Link component', () => {
         expect(wrapper.find(Link)).toHaveLength(defaultProps.purposes.length);
         expect(wrapper.find(Link).first().prop('to')).toContain(defaultProps.purposes[0].value);
+      });
+
+      test('have correct image', () => {
+        const images = wrapper.find('.app-HomePageContent__banner-icon').find('img');
+        expect(images).toHaveLength(defaultProps.purposes.length);
+
+        images.forEach((image, index) => {
+          expect(image.prop('alt')).toBe('');
+          const propImage = defaultProps.purposes[index].image;
+          if (propImage) {
+            expect(image.prop('src')).toBe(defaultProps.purposes[index].image);
+          } else {
+            expect(image.prop('src')).toBe(iconEmptyPurpose);
+          }
+        });
       });
     });
   });

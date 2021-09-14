@@ -9,6 +9,7 @@ import { closeResourceTermsModal, closeResourcePaymentTermsModal } from 'actions
 import { injectT } from 'i18n';
 import WrappedText from 'shared/wrapped-text';
 import reservationTermsModalSelector from './reservationTermsModalSelector';
+import { getPaymentTermsAndConditions, getTermsAndConditions } from 'utils/resourceUtils';
 
 class UnconnectedReservationTermsModal extends Component {
   render() {
@@ -21,8 +22,10 @@ class UnconnectedReservationTermsModal extends Component {
       termsType,
     } = this.props;
 
-    const { genericTerms, name } = resource;
+    const { name } = resource;
     const isPayment = termsType === 'payment';
+    const termsText = isPayment ? getPaymentTermsAndConditions(resource)
+      : getTermsAndConditions(resource);
 
     return (
       <Modal
@@ -46,7 +49,7 @@ class UnconnectedReservationTermsModal extends Component {
               <WrappedText
                 allowNamedLinks
                 openLinksInNewTab
-                text={isPayment ? resource.paymentTerms : genericTerms}
+                text={termsText}
               />
             </span>
           </div>

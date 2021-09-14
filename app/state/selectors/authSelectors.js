@@ -2,6 +2,8 @@ import forIn from 'lodash/forIn';
 import includes from 'lodash/includes';
 import { createSelector } from 'reselect';
 
+import { isStaffForResource } from 'utils/resourceUtils';
+
 const authUserSelector = state => state.auth.user;
 const usersSelector = state => state.data.users;
 const isLoadingUserSelector = state => state.auth.isLoadingUser;
@@ -77,7 +79,7 @@ function createIsStaffSelector(resourceSelector) {
   return createSelector(
     resourceSelector,
     staffUnitsSelector,
-    (resource, staffUnits) => includes(staffUnits, resource.unit)
+    (resource, staffUnits) => includes(staffUnits, resource.unit) || isStaffForResource(resource)
   );
 }
 

@@ -223,6 +223,28 @@ describe('pages/admin-resources/adminResourcesPageSelector', () => {
     }
   );
 
+  test('returns only resources which are found with ids in admin resources id array', () => {
+    const resource1 = {
+      id: 'resourceID01', name: { fi: 'Tatooine' }, type: { name: 'school' }, unit: 'unitID01'
+    };
+    const resource2 = {
+      id: 'resourceID02', name: { fi: 'Dantooine' }, type: { name: 'library' }, unit: 'unitID02'
+    };
+
+    const extraState = {
+      'data.resources': {
+        [resource1.id]: resource1,
+        [resource2.id]: resource2,
+      },
+      'ui.pages.adminResources.resourceIds': [resource1.id, resource2.id, 'test-id-cannot-find'],
+      'data.users.2019token.staffStatus.isManagerFor': ['unitID01', 'unitID02']
+    };
+
+    const selected = getSelected(extraState);
+    const expected = [resource2.id, resource1.id];
+    expect(selected.resources).toEqual(expected);
+  });
+
   test('returns an array of resourceTypes', () => {
     const resource1 = {
       id: 1, name: { fi: 'Tatooine' }, type: { name: 'school' }, unit: 'unitID01'

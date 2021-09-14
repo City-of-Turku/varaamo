@@ -24,6 +24,7 @@ function ReservationSuccessModal({
 
   return (
     <Modal
+      animation={false}
       className="reservation-success-modal modal-city-theme"
       onHide={closeReservationSuccessModal}
       show={show}

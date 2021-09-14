@@ -9,6 +9,45 @@ class Html extends Component {
     return `window.INITIAL_STATE = ${serialize(initialState)};`;
   }
 
+
+  getCookieScript() {
+    if (this.props.piwikSiteId) {
+      const scriptString = `
+      var _paq = _paq || [];
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="https://testivaraamo.turku.fi:8003/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', ${this.props.piwikSiteId}]);
+        _paq.push(['setVisitorCookieTimeout','7776000']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript';
+        g.async=true;
+        g.defer=true;
+        g.src=u+'matomo.js';
+        s.parentNode.insertBefore(g,s);
+      })();
+    `;
+      return scriptString;
+    }
+    return null;
+  }
+
+  getConsentScripts() {
+    return (
+      // eslint-disable-next-line react/self-closing-comp
+      <script
+        data-blockingmode="auto"
+        data-cbid="92860cd1-d931-4496-8621-2adb011dafb0"
+        id="Cookiebot"
+        src="https://consent.cookiebot.com/uc.js"
+        type="text/javascript"
+      >
+      </script>
+    );
+  }
+
   renderStylesLink(appCssSrc, isProduction) {
     if (!isProduction) {
       return null;
@@ -25,7 +64,6 @@ class Html extends Component {
       isProduction,
     } = this.props;
     const initialStateHtml = this.getInitialStateHtml(initialState);
-
     let ogImage;
     if (process.env.OG_IMG_URL) {
       ogImage = process.env.OG_IMG_URL;
@@ -55,6 +93,8 @@ class Html extends Component {
           <meta content="Turun kaupungin Varaamo-palvelusta voit varata tiloja, laitteita ja palveluita, kun haluat pitää kokouksen, pelata pelejä, harrastaa tai tavata asiantuntijan." property="og:description" />
           <link href="https://overpass-30e2.kxcdn.com/overpass.css" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" />
+          {this.getConsentScripts()}
+          {Boolean(process.env.PIWIK_SITE_ID) && <script dangerouslySetInnerHTML={{ __html: this.getCookieScript() }} type="text/javascript" />}
           {this.renderStylesLink(appCssSrc, isProduction)}
           <title>Varaamo</title>
         </head>
@@ -74,6 +114,7 @@ Html.propTypes = {
   appScriptSrc: PropTypes.string.isRequired,
   initialState: PropTypes.object.isRequired,
   isProduction: PropTypes.bool.isRequired,
+  piwikSiteId: PropTypes.string,
 };
 
 export default Html;

@@ -4,35 +4,16 @@ import { Button, Col, Row } from 'react-bootstrap';
 import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import camelCase from 'lodash/camelCase';
 import Link from 'react-router-dom/Link';
 import { FormattedHTMLMessage } from 'react-intl';
-import { faHotTub as iconSauna, faCalendarAlt as iconOrganizeEvents } from '@fortawesome/free-solid-svg-icons';
 
-// TODO: VAR-80 | VAR-81 Replace those icon with designed icon.
 import { fetchPurposes } from 'actions/purposeActions';
 import { injectT } from 'i18n';
 import PageWrapper from 'pages/PageWrapper';
 import HomeSearchBox from './HomeSearchBox';
 import homePageSelector from './homePageSelector';
-import iconManufacturing from './images/frontpage_build.svg';
-import iconPhotoAndAudio from './images/frontpage_music.svg';
-import iconSports from './images/frontpage_sport.svg';
-import iconGuidance from './images/frontpage_guidance.svg';
-import iconMeetingsAndWorking from './images/frontpage_work.svg';
-import iconAdviceServices from './images/frontpage_advice_services.svg';
+import iconEmptyPurpose from './images/calendar.svg';
 import FAIcon from 'shared/fontawesome-icon';
-
-const purposeIcons = {
-  photoAndAudio: iconPhotoAndAudio,
-  sports: iconSports,
-  guidance: iconGuidance,
-  manufacturing: iconManufacturing,
-  meetingsAndWorking: iconMeetingsAndWorking,
-  events: iconOrganizeEvents,
-  sauna: iconSauna,
-  adviceServices: iconAdviceServices
-};
 
 class UnconnectedHomePage extends Component {
   constructor(props) {
@@ -51,15 +32,13 @@ class UnconnectedHomePage extends Component {
 
   renderPurposeBanner(purpose) {
     const { t, contrast } = this.props;
-    const image = purposeIcons[camelCase(purpose.value)];
+    const image = purpose.image || iconEmptyPurpose;
 
     return (
       <Col className="app-HomePageContent__banner" key={purpose.value} md={3} sm={6} xs={12}>
         <Link className={`app-HomePageContent__banner__linkWrapper ${contrast}`} to={`/search?purpose=${purpose.value}`}>
           <div className="app-HomePageContent__banner-icon">
             {typeof image === 'string' ? <img alt="" src={image} />
-            // TODO: VAR-80 | VAR-81 Replace those icon with designed icon.
-
               : <FAIcon icon={image} />}
           </div>
 

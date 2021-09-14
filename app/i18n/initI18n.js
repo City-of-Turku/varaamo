@@ -10,6 +10,12 @@ import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import fi from 'react-intl/locale-data/fi';
 import se from 'react-intl/locale-data/se';
+// eslint-disable-next-line import/no-unresolved
+import fiMessagesFromTheme from '@city-i18n/fi.json';
+// eslint-disable-next-line import/no-unresolved
+import svMessagesFromTheme from '@city-i18n/sv.json';
+// eslint-disable-next-line import/no-unresolved
+import enMessagesFromTheme from '@city-i18n/en.json';
 
 import { loadPersistedLocale } from 'store/middleware/persistState';
 import enMessages from 'i18n/messages/en.json';
@@ -18,9 +24,9 @@ import svMessages from 'i18n/messages/sv.json';
 
 
 const messages = {
-  en: enMessages,
-  fi: fiMessages,
-  se: svMessages,
+  en: { ...enMessages, ...enMessagesFromTheme },
+  fi: { ...fiMessages, ...fiMessagesFromTheme },
+  se: { ...svMessages, ...svMessagesFromTheme },
 };
 
 moment.defineLocale('varaamo-en', {

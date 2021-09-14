@@ -1,60 +1,50 @@
-import { checkCookieConsent, addCookieScript, renderAnalyticsCode } from '../cookieUtils';
+import { cookieBotAddListener, cookieBotRemoveListener, cookieBotImageOverride } from '../cookieUtils';
+
 
 describe('cookieUtils', () => {
-  Object.defineProperty(global, 'SETTINGS', {
-    writable: true,
-    value: {
-      TRACKING: true,
-      TRACKING_ID: '1',
-    }
-  });
-  Object.defineProperty(document, 'cookie', {
-    writable: true,
-    value: 'CookieConsent=true'
-  });
-  afterEach(() => {
-    document.head.innerHTML = '';
-  });
-  describe('checkCookieConsent', () => {
-    test('script is set if SETTINGS.TRACKING is true and CookieConsent=true', () => {
-      // <head> shouldn't have any children at this point
-      let scriptElement = document.getElementsByTagName('head').item(0).firstElementChild;
-      expect(scriptElement).toBe(null);
-      checkCookieConsent();
-      // <head> should now have a child, the <script> element
-      scriptElement = document.getElementsByTagName('head').item(0).firstElementChild;
-      const scriptElementAttributes = scriptElement.getAttributeNames();
-      const values = ['', 'https://testivaraamo.turku.fi:8003/matomo.js', 'text/javascript'];
-
-      scriptElementAttributes.forEach(attr => (
-        expect(values).toContain(scriptElement.getAttribute(attr))
-      ));
+  describe('cookieBotAddListener', () => {
+    afterEach(() => {
+      delete global.SETTINGS;
+      jest.clearAllMocks();
+    });
+    test('calls addEventListener with correct params if SETTINGS.TRACKING', () => {
+      global.SETTINGS = {
+        TRACKING: true,
+      };
+      window.addEventListener = jest.fn();
+      cookieBotAddListener();
+      expect(window.addEventListener).toHaveBeenCalledWith('CookiebotOnDialogDisplay', cookieBotImageOverride);
+    });
+    test('does not call addEventListener if !SETTINGS.TRACKING', () => {
+      global.SETTINGS = {
+        TRACKING: false,
+      };
+      window.addEventListener = jest.fn();
+      cookieBotAddListener();
+      expect(window.addEventListener).not.toBeCalled();
     });
   });
-  describe('addCookieScript', () => {
-    test('adds script element to head', () => {
-      // <head> shouldn't have any children at this point
-      let scriptElement = document.getElementsByTagName('head').item(0).firstElementChild;
-      expect(scriptElement).toBe(null);
-      addCookieScript();
-      // <head> should now have a child, the <script> element
-      scriptElement = document.getElementsByTagName('head').item(0).firstElementChild;
-      const scriptElementAttributes = scriptElement.getAttributeNames();
-      const values = ['', 'https://testivaraamo.turku.fi:8003/matomo.js', 'text/javascript'];
 
-      scriptElementAttributes.forEach(attr => (
-        expect(values).toContain(scriptElement.getAttribute(attr))
-      ));
+  describe('cookiebotRemoveListener', () => {
+    afterEach(() => {
+      delete global.SETTINGS;
+      jest.clearAllMocks();
     });
-  });
-  describe('renderAnalyticsCode', () => {
-    test('returns scriptString with SiteId according to given param', () => {
-      let value = renderAnalyticsCode(2);
-      expect(value).toContain('\'setSiteId\', 2');
-      value = renderAnalyticsCode(4);
-      expect(value).toContain('\'setSiteId\', 4');
-      value = renderAnalyticsCode(6);
-      expect(value).toContain('\'setSiteId\', 6');
+    test('calls removeEventListener with correct params if SETTINGS.TRACKING', () => {
+      global.SETTINGS = {
+        TRACKING: true,
+      };
+      window.removeEventListener = jest.fn();
+      cookieBotRemoveListener();
+      expect(window.removeEventListener).toHaveBeenCalledWith('CookiebotOnDialogDisplay', cookieBotImageOverride);
+    });
+    test('does not call removeEventListener if !SETTINGS.TRACKING', () => {
+      global.SETTINGS = {
+        TRACKING: false,
+      };
+      window.removeEventListener = jest.fn();
+      cookieBotRemoveListener();
+      expect(window.removeEventListener).not.toBeCalled();
     });
   });
 });

@@ -2,6 +2,7 @@ import constants from 'constants/AppConstants';
 
 import filter from 'lodash/filter';
 import find from 'lodash/find';
+import isEmpty from 'lodash/isEmpty';
 import forEach from 'lodash/forEach';
 import moment from 'moment';
 import queryString from 'query-string';
@@ -240,7 +241,7 @@ function getResourcePageUrlComponents(resource, date, time) {
 }
 
 function getTermsAndConditions(resource = {}) {
-  const genericTerms = resource.genericTerms || '';
+  const genericTerms = resource.genericTerms && !isEmpty(resource.genericTerms) ? resource.genericTerms : '';
   const specificTerms = resource.specificTerms || '';
 
   if (genericTerms && specificTerms) {
@@ -250,8 +251,7 @@ function getTermsAndConditions(resource = {}) {
 }
 
 function getPaymentTermsAndConditions(resource = {}) {
-  const paymentTerms = resource.paymentTerms || '';
-  return paymentTerms;
+  return resource.paymentTerms && !isEmpty(resource.paymentTerms) ? resource.paymentTerms : '';
 }
 
 function reservingIsRestricted(resource, date) {
@@ -261,6 +261,22 @@ function reservingIsRestricted(resource, date) {
   const isAdmin = resource.userPermissions && resource.userPermissions.isAdmin;
   const isLimited = resource.reservableBefore && moment(resource.reservableBefore).isBefore(moment(date), 'day');
   return Boolean(isLimited && !isAdmin);
+}
+
+/**
+ * Check whether current user has any of the staff permissions:
+ * admin, manager or viewer for given resource.
+ * @param {object} resource
+ * @returns {boolean} true when user has any of the staff permissions, false if not.
+ */
+function isStaffForResource(resource) {
+  if (resource.userPermissions) {
+    const perms = resource.userPermissions;
+    if (perms.isAdmin || perms.isManager || perms.isViewer) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -293,5 +309,6 @@ export {
   getPrice,
   reservingIsRestricted,
   getMinPeriodText,
+  isStaffForResource,
   isStrongAuthSatisfied,
 };

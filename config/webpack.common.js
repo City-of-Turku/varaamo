@@ -1,4 +1,9 @@
+const path = require('path');
+
 const webpack = require('webpack');
+
+const paths = require('./paths');
+const assetPath = require('./assetPath');
 
 module.exports = {
   module: {
@@ -42,7 +47,11 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.json'],
+    alias: {
+      '@city-assets': assetPath.cityAssets,
+      '@city-i18n': assetPath.cityi18n,
+    },
+    extensions: ['.js', '.json', '.scss'],
     modules: ['node_modules', 'app'],
   },
   plugins: [

@@ -70,6 +70,7 @@ By default the running app can be found at `localhost:3000`.
     OPENID_AUTHORITY
     API_URL
     ADMIN_URL
+    THEME_PKG
     ```
 
     Environment's variable guideline:
@@ -79,6 +80,10 @@ By default the running app can be found at `localhost:3000`.
 
     - `ADMIN_URL`:
       Custom config to replace global application's admin respa URL. Expected value is valid URL string.
+
+    - `THEME_PKG`:
+      Custom config to override global application's styling and texts.
+      Expected value is a valid string that is the name of the theme package, e.g. `THEME_PMG='varaamo-theme'`. Default styles and texts will be used if not set.
 
 
 3. Then, start the development server:
@@ -182,6 +187,39 @@ Styles and Stylesheets
 
 [Sass](http://sass-lang.com/) CSS extension language is used to make writing styles nicer. [Autoprefixer](https://github.com/postcss/autoprefixer) handles CSS vendor prefixes.
 [Bootstrap](http://getbootstrap.com/) is used as the CSS framework for the site and [City of Helsinki Bootstrap theme](https://github.com/City-of-Helsinki/hel-bootstrap-3) is used as the main theme.
+
+Custom themes
+-----
+
+A theme package can be installed to override the default styles and texts. In order to use a theme it must be installed/added locally
+and then the env variable  `THEME_PKG` must be set accordingly `THEME_PKG='varaamo-theme'`.
+
+See [example](https://github.com/codepointtku/varaamo-theme) for further explanation of how a theme package should look,be structured and what values can be overridden etc.
+
+### Installation
+Installation is the same for both development and production. If the theme package is published to npm/yarn then
+this step can be skipped, just remember to set the name of the package as the `THEME_PKG='package-name'`.
+
+For ease of use place the theme folder `varaamo-theme` next to the `varaamo` folder:
+```
+    /varaamo
+    /varaamo-theme
+```
+and then in the `varaamo` project folder run `npm install ../varaamo-theme`.
+
+Set `THEME_PKG='varaamo-theme'` to env variables.
+
+### Development
+
+Install the theme according to the installation instructions and then `npm link` the local theme package to
+the local varaamo project.
+
+```
+cd ~/projects/varaamo-theme
+npm link
+cd ~/projects/varaamo
+npm link varaamo-theme
+```
 
 Testing framework
 -----------------

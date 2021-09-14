@@ -23,6 +23,7 @@ import {
   getResourcePageUrlComponents,
   getMinPeriodText,
   getEquipment,
+  isStaffForResource,
   isStrongAuthSatisfied,
 } from 'utils/resourceUtils';
 
@@ -902,12 +903,20 @@ describe('Utils: resourceUtils', () => {
     });
 
     describe('when only specific terms is specified', () => {
-      const genericTerms = null;
       const specificTerms = 'specific terms';
 
-      test('returns only specific terms', () => {
-        const resource = { genericTerms, specificTerms };
-        expect(getTermsAndConditions(resource)).toBe(specificTerms);
+      describe('returns only specific terms', () => {
+        test('when generic terms is falsy', () => {
+          const genericTerms = null;
+          const resource = { genericTerms, specificTerms };
+          expect(getTermsAndConditions(resource)).toBe(specificTerms);
+        });
+
+        test('when generic terms is empty obj', () => {
+          const genericTerms = {};
+          const resource = { genericTerms, specificTerms };
+          expect(getTermsAndConditions(resource)).toBe(specificTerms);
+        });
       });
     });
 
@@ -915,20 +924,27 @@ describe('Utils: resourceUtils', () => {
       const genericTerms = 'generic terms';
       const specificTerms = null;
 
-      test('returns only specific terms', () => {
+      test('returns only generic terms', () => {
         const resource = { genericTerms, specificTerms };
         expect(getTermsAndConditions(resource)).toBe(genericTerms);
       });
     });
 
     describe('when neither specific or generic terms is specified', () => {
-      const genericTerms = null;
       const specificTerms = null;
 
-      test('returns an empty string', () => {
-        const resource = { genericTerms, specificTerms };
+      describe('returns an empty string', () => {
+        test('when generic terms is falsy', () => {
+          const genericTerms = '';
+          const resource = { genericTerms, specificTerms };
+          expect(getTermsAndConditions(resource)).toBe('');
+        });
 
-        expect(getTermsAndConditions(resource)).toBe('');
+        test('when generic terms is empty obj', () => {
+          const genericTerms = {};
+          const resource = { genericTerms, specificTerms };
+          expect(getTermsAndConditions(resource)).toBe('');
+        });
       });
     });
   });
@@ -939,9 +955,16 @@ describe('Utils: resourceUtils', () => {
       expect(getPaymentTermsAndConditions(resource)).toBe(resource.paymentTerms);
     });
 
-    test('returns empty string if given resource doesnt have payment terms', () => {
-      const resource = { };
-      expect(getPaymentTermsAndConditions(resource)).toBe('');
+    describe('returns empty string', () => {
+      test('when given resource doesnt have payment terms', () => {
+        const resource = { };
+        expect(getPaymentTermsAndConditions(resource)).toBe('');
+      });
+
+      test('when given resource has payment terms as empty obj', () => {
+        const resource = { paymentTerms: {} };
+        expect(getPaymentTermsAndConditions(resource)).toBe('');
+      });
     });
   });
 
@@ -1052,6 +1075,43 @@ describe('Utils: resourceUtils', () => {
         const resource = { userPermissions: { isAdmin: false }, reservableBefore };
         const isLimited = reservingIsRestricted(resource, date);
         expect(isLimited).toBe(true);
+      });
+    });
+  });
+
+  describe('isStaffForResource', () => {
+    describe('returns false', () => {
+      test('when given resource doesnt contain userPermissions', () => {
+        const resource = Resource.build({ userPermissions: null });
+        expect(isStaffForResource(resource)).toBe(false);
+      });
+
+      test('when none of the userPermissions admin, manager or viewer permission is true', () => {
+        const resource = Resource.build({
+          userPermissions: { isAdmin: false, isManager: false, isViewer: false }
+        });
+        expect(isStaffForResource(resource)).toBe(false);
+      });
+    });
+
+    describe('returns true', () => {
+      test('when any of the userPermissions admin, manager or viewer permission is true', () => {
+        const resourceA = Resource.build({
+          userPermissions: { isAdmin: true, isManager: false, isViewer: false }
+        });
+        const resourceB = Resource.build({
+          userPermissions: { isAdmin: false, isManager: true, isViewer: false }
+        });
+        const resourceC = Resource.build({
+          userPermissions: { isAdmin: false, isManager: false, isViewer: true }
+        });
+        const resourceD = Resource.build({
+          userPermissions: { isAdmin: true, isManager: true, isViewer: true }
+        });
+        expect(isStaffForResource(resourceA)).toBe(true);
+        expect(isStaffForResource(resourceB)).toBe(true);
+        expect(isStaffForResource(resourceC)).toBe(true);
+        expect(isStaffForResource(resourceD)).toBe(true);
       });
     });
   });

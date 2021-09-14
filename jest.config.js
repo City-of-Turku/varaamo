@@ -23,6 +23,8 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': '<rootDir>/config/jest/styleMock.js',
     '\\.(gif|ttf|eot|svg|png|ico)$': '<rootDir>/config/jest/fileMock.js',
+    '^@city-assets/(.*)$': '<rootDir>/app/assets/whitelabel/$1',
+    '^@city-i18n/(.*)$': '<rootDir>/app/assets/whitelabel/i18n/$1',
   },
 
   // Same with webpack module resolver

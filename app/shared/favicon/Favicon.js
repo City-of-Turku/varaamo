@@ -1,10 +1,10 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import currentFavicon from '@city-assets/images/favicon.ico';
 
 import { getCurrentCustomization } from 'utils/customizationUtils';
 import espooFavicon from './espoo-favicon.ico';
 import vantaaFavicon from './vantaa-favicon.ico';
-import turkuFavicon from './turku_favicon.ico';
 
 const favicons = {
   ESPOO: espooFavicon,
@@ -13,7 +13,7 @@ const favicons = {
 
 function Favicon() {
   const customization = getCurrentCustomization();
-  const favicon = customization in favicons ? favicons[customization] : turkuFavicon;
+  const favicon = customization in favicons ? favicons[customization] : currentFavicon;
 
   return <Helmet link={[{ href: favicon, rel: 'icon', type: 'image/x-icon' }]} />;
 }

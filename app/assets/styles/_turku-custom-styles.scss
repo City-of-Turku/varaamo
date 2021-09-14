@@ -34,3 +34,35 @@ a {
   height: 1px;
   overflow: hidden;
 }
+body {
+  #CybotCookiebotDialog * {
+    font-size: 16px;
+  }
+  #CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper input:focus-visible + span,
+  #CybotCookiebotDialog :focus-visible {
+    outline-offset: 1px;
+  }
+  #CybotCookiebotDialog .CybotCookiebotDialogContentWrapper #CybotCookiebotDialogNav :focus-visible {
+    outline-offset: -5px;
+  }
+  #CybotCookiebotDialogPoweredbyImage {
+    max-height: 4em;
+    content:url("https://www.turku.fi/sites/default/files/thumbnails/image/turku_pysty_viiva_black_pelkka_vaakuna_1.png") !important;
+  }
+  a#CybotCookiebotDialogPoweredbyCybot {
+    display:none;
+  }
+  #CybotCookiebotDialog.active:not(.CybotEdge) {
+    #CybotCookiebotDialogHeader {
+      display: none;
+    }
+  }
+  #CybotCookiebotDialog.CybotEdge.active {
+    @media (max-width: 1279px) {
+      #CybotCookiebotDialogHeader {
+        display: none;
+      }
+    }
+  }
+}
+

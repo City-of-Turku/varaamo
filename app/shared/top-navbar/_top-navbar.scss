@@ -21,7 +21,7 @@
       @include add-focus;
     }
 
-    .turku-logo {
+    .varaamo-logo {
       background-image: url('../../assets/pictures/logo.png');
       background-size: contain;
       background-repeat: no-repeat;
@@ -36,7 +36,7 @@
       }
     }
 
-    .turku-logo, .turku-logo-sv {
+    .varaamo-logo, .varaamo-logo-sv {
       @media (max-width:$screen-400) {
         display: block;
         height: 40px;

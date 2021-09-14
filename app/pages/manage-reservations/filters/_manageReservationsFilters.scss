@@ -1,0 +1,46 @@
+.app-ManageReservationsFilters {
+  &__datePickers {
+    display: flex;
+
+    @media (max-width: $screen-sm-max) {
+      display: block;
+    }
+
+    .app-DateField {
+      flex: 1;
+    }
+
+    .separator {
+      padding: 4px;
+
+      @media (max-width: $screen-sm-max) {
+        display: none;
+      }
+    }
+  }
+
+  &__filterToggles {
+    align-items: center;
+    display: flex;
+    height: 90px;
+
+    @media (max-width: $screen-sm-max) {
+      height: 40px;
+    }
+  }
+
+  &__resetButton {
+    margin-top: 24px;
+    color: #0065AD !important;
+
+    @media (max-width: $screen-sm-max) {
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    img {
+      margin-left: -8px;
+      width: $line-height-computed;
+    }
+  }
+}

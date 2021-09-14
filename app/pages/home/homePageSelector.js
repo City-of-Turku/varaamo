@@ -17,6 +17,7 @@ const purposeOptionsSelector = createSelector(
       .map(purpose => ({
         value: purpose.id,
         label: purpose.name,
+        image: purpose.image,
       }));
     return sortBy(purposeOptions, 'label');
   }

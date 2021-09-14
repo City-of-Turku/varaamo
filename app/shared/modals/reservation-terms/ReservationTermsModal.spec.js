@@ -91,7 +91,7 @@ describe('shared/modals/reservation-cancel/ReservationTermsModal', () => {
         expect(wrappedText.prop('openLinksInNewTab')).toBe(true);
       });
 
-      test('renders correct WrappedText when terms type is not payment', () => {
+      test('renders correct WrappedText when terms type is payment', () => {
         const resourceWithTerms = Resource.build({
           paymentTerms: 'some payment terms',
         });

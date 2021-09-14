@@ -1,3 +1,5 @@
+import constants from 'constants/AppConstants';
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -10,6 +12,7 @@ import selector from './mapSelector';
 import Marker from './Marker';
 import UserMarker from './UserMarker';
 
+
 const defaultPosition = {
   null: [60.451389, 22.266667],
   ESPOO: [60.205490, 24.755899],
@@ -17,8 +20,8 @@ const defaultPosition = {
 };
 const defaultZoom = 12;
 
-const defaultTilesUrl = 'https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}.png';
-const highContrastTilesUrl = 'https://maptiles.turku.fi/styles/hel-osm-high-contrast/{z}/{x}/{y}.png';
+const defaultTilesUrl = constants.MAP_TILE_URLS.DEFAULT_TILES;
+const highContrastTilesUrl = constants.MAP_TILE_URLS.HIGH_CONTRAST_TILES;
 
 export class UnconnectedResourceMapContainer extends React.Component {
   static propTypes = {

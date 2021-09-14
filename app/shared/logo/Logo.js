@@ -30,7 +30,7 @@ function Logo({ t }) {
     default: {
       return (
         <img
-          alt={t('Logo.turkuAlt')}
+          alt={t('Logo.cityAlt')}
           src={turkuLogoSrc}
           title="Turun vaakuna"
         />

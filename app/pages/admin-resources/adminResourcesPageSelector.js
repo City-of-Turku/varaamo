@@ -44,7 +44,8 @@ const adminResourcesSelectors = createSelector(
   isSuperUserSelector,
   (resourceIds, resources, isSuperUser) => {
     if (isSuperUser) return Object.values(resources);
-    return resourceIds.map(id => resources[id]);
+    // filter undefined i.e. not found resources from results array
+    return resourceIds.map(id => resources[id]).filter(resource => !!resource);
   }
 );
 
@@ -57,6 +58,13 @@ const adminResourcesSelector = createSelector(
   (resources, currentUserPermissions) => resources.filter(
     resource => includes(currentUserPermissions, resource.unit)
   )
+);
+
+// when all resource ids are found in resources data, resources are in sync
+const areResourcesInSyncSelector = createSelector(
+  resourceIdsSelector,
+  resourcesSelector,
+  (resourceIds, resources) => resourceIds.every(id => !!resources[id])
 );
 
 const adminResourceTypesSelector = createSelector(
@@ -81,6 +89,7 @@ const filteredAdminResourcesIdsSelector = createSelector(
 );
 
 const adminResourcesPageSelector = createStructuredSelector({
+  areResourcesInSync: areResourcesInSyncSelector,
   date: dateSelector,
   selectedResourceTypes: selectedResourceTypesSelector,
   isAdmin: isAdminSelector,
