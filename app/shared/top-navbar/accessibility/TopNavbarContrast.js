@@ -7,6 +7,7 @@ class ContrastChanger extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     changeContrast: PropTypes.func,
+    idPrefix: PropTypes.string,
   };
 
 
@@ -33,7 +34,9 @@ class ContrastChanger extends Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { t, idPrefix } = this.props;
+    let buttonId = 'contrastButton';
+    if (idPrefix) { buttonId = `${idPrefix}-${buttonId}`; }
     return (
       <li className="navbar__contrast">
         <div className="accessibility__contrast" role="presentation">
@@ -42,7 +45,7 @@ class ContrastChanger extends Component {
             aria-label={t('Nav.Contrast.button')}
             aria-pressed={this.state.ariaState}
             className="contrast_button"
-            id="contrastButton"
+            id={buttonId}
             onClick={this.handleOnClick}
             tabIndex="0"
             type="button"
