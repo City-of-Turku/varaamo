@@ -1,0 +1,57 @@
+.app-ReservationProducts {
+  .form-controls {
+    text-align: right;
+    margin-bottom: 8px;
+  }
+
+  .btn {
+    margin-left: 15px;
+    @media (max-width: $screen-xs-max) {
+      margin-bottom: 8px;
+    }
+  }
+
+  .quantity-button {
+    padding: 0 4px;
+
+    &.minus {
+      margin-right: 8px;
+    }
+
+    &.plus {
+      margin-left: 8px;
+    }
+  }
+
+  .no-whitespace-wrapping {
+    white-space: nowrap;
+  }
+
+  .extra-products {
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    .form-control {
+      border-width: 1px;
+      padding: 2px 4px;
+      height: initial;
+      width: 70px;
+      @media (max-width: $screen-xs-max) {
+        width: 50px;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .products-summary {
+    .vat-total {
+      margin-bottom: 4px;
+    }
+
+    .complete-total {
+      margin-top: 8px;
+      font-weight: bold;
+    }
+  }
+}
