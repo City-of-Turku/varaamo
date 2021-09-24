@@ -318,6 +318,7 @@
   "ReservationProducts.heading.extra": "Additional services",
   "ReservationProducts.heading.mandatory": "Mandatory reservation fees",
   "ReservationProducts.price.includesVat": "(incl. VAT {vat}%)",
+  "ReservationProducts.staffSkip.mandatory": "Skip mandatory fees with unit staff permissions",
   "ReservationProducts.summary.heading": "Summary",
   "ReservationProducts.summary.total": "Total: {total} €",
   "ReservationProducts.summary.totalForTax": "VAT {vat}% total: {total} €",

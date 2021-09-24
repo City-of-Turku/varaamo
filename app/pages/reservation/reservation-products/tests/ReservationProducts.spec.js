@@ -24,9 +24,11 @@ describe('reservation-products/ProductsSummary', () => {
     changeProductQuantity: () => {},
     currentLanguage: 'fi',
     isEditing: false,
+    isStaff: false,
     onBack: () => {},
     onCancel: () => {},
     onConfirm: () => {},
+    onStaffSkipChange: () => {},
     order: {
       begin: '2021-09-24T11:00:00+03:00',
       end: '2021-09-24T11:30:00+03:00',
@@ -38,6 +40,7 @@ describe('reservation-products/ProductsSummary', () => {
       begin: '2021-09-24T07:00:00.000Z',
       end: '2021-09-24T07:30:00.000Z',
     },
+    skipMandatoryProducts: false,
     unit: Unit.build()
   };
 
@@ -94,7 +97,10 @@ describe('reservation-products/ProductsSummary', () => {
         const mandatoryProducts = getWrapper().find(MandatoryProducts);
         expect(mandatoryProducts).toHaveLength(1);
         expect(mandatoryProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+        expect(mandatoryProducts.prop('isStaff')).toBe(defaultProps.isStaff);
+        expect(mandatoryProducts.prop('onStaffSkipChange')).toBe(defaultProps.onStaffSkipChange);
         expect(mandatoryProducts.prop('orderLines')).toBe(defaultProps.order.order_lines);
+        expect(mandatoryProducts.prop('skipProducts')).toBe(defaultProps.skipMandatoryProducts);
       });
 
       test('ExtraProducts', () => {

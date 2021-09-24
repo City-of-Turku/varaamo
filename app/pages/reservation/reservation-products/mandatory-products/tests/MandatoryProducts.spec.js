@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Checkbox, Table } from 'react-bootstrap';
 
 import { shallowWithIntl } from 'utils/testUtils';
 import OrderLine from 'utils/fixtures/OrderLine';
@@ -10,7 +10,9 @@ import MandatoryProductTableRow from '../MandatoryProductTableRow';
 describe('reservation-products/extra-products/ExtraProducts', () => {
   const defaultProps = {
     currentLanguage: 'fi',
-    changeProductQuantity: () => {},
+    isStaff: false,
+    onStaffSkipChange: () => {},
+    skipProducts: false,
     orderLines: [OrderLine.build({ product: Product.build({ type: 'rent' }) })]
   };
 
@@ -34,6 +36,36 @@ describe('reservation-products/extra-products/ExtraProducts', () => {
       const heading = getWrapper().find('h3');
       expect(heading).toHaveLength(1);
       expect(heading.text()).toBe('ReservationProducts.heading.mandatory');
+    });
+
+    describe('when prop isStaff is true', () => {
+      const wrapper = getWrapper({ isStaff: true });
+
+      test('staff skip Well', () => {
+        const well = wrapper.find('.products-staff-skip');
+        expect(well).toHaveLength(1);
+      });
+
+      test('checkbox', () => {
+        const checkbox = wrapper.find(Checkbox);
+        expect(checkbox).toHaveLength(1);
+        expect(checkbox.prop('checked')).toBe(defaultProps.skipProducts);
+        expect(checkbox.prop('onChange')).toBe(defaultProps.onStaffSkipChange);
+      });
+    });
+
+    describe('when prop isStaff is false', () => {
+      const wrapper = getWrapper({ isStaff: false });
+
+      test('staff skip Well is not rended', () => {
+        const well = wrapper.find('.products-staff-skip');
+        expect(well).toHaveLength(0);
+      });
+
+      test('checkbox is not rendered', () => {
+        const checkbox = wrapper.find(Checkbox);
+        expect(checkbox).toHaveLength(0);
+      });
     });
 
     test('Table', () => {

@@ -13,8 +13,8 @@ import ProductsSummary from './ProductsSummary';
 import ExtraProducts from './extra-products/ExtraProducts';
 
 function ReservationProducts({
-  changeProductQuantity, currentLanguage, isEditing, onBack, onCancel, onConfirm,
-  order, resource, selectedTime, t, unit
+  changeProductQuantity, currentLanguage, isEditing, isStaff, onBack, onCancel, onConfirm,
+  onStaffSkipChange, order, resource, selectedTime, skipMandatoryProducts, t, unit
 }) {
   const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
   const endText = moment(selectedTime.end).format('HH:mm');
@@ -31,7 +31,10 @@ function ReservationProducts({
             <Loader loaded={!order.loadingData}>
               <MandatoryProducts
                 currentLanguage={currentLanguage}
+                isStaff={isStaff}
+                onStaffSkipChange={onStaffSkipChange}
                 orderLines={orderLines}
+                skipProducts={skipMandatoryProducts}
               />
               <ExtraProducts
                 changeProductQuantity={changeProductQuantity}
@@ -102,14 +105,16 @@ function ReservationProducts({
 ReservationProducts.propTypes = {
   changeProductQuantity: PropTypes.func.isRequired,
   currentLanguage: PropTypes.string.isRequired,
-  // isAdmin: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool.isRequired,
+  isStaff: PropTypes.bool.isRequired,
   onBack: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
+  onStaffSkipChange: PropTypes.func.isRequired,
   order: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,
   selectedTime: PropTypes.object.isRequired,
+  skipMandatoryProducts: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
   unit: PropTypes.object.isRequired,
 };
