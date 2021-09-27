@@ -40,6 +40,10 @@ const constants = {
     timeOut: 5000,
     hidden: false,
   },
+  PRODUCT_TYPES: {
+    MANDATORY: 'mandatory',
+    EXTRA: 'extra',
+  },
   RECURRING_RESERVATIONS: {
     maxRecurringReservations: 99,
   },
