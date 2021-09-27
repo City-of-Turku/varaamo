@@ -15,7 +15,8 @@ ReservationPhases.propTypes = {
 function ReservationPhases({
   currentPhase, hasPayment, isEditing, t
 }) {
-  const phases = hasPayment ? ['information', 'payment', 'confirmation'] : ['information', 'confirmation'];
+  const inclucePayments = hasPayment && !isEditing;
+  const phases = inclucePayments ? ['products', 'information', 'payment', 'confirmation'] : ['information', 'confirmation'];
   if (isEditing) {
     phases.splice(0, 0, 'time');
   }
