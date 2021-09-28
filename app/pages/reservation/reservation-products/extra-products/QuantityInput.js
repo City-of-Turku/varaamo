@@ -7,7 +7,6 @@ import injectT from '../../../../i18n/injectT';
 function QuantityInput({
   handleAdd, handleReduce, quantity, maxQuantity, minQuantity, t
 }) {
-  // TODO: handle quantity is only read for sr after buttons are pressed!
   return (
     <React.Fragment>
       <button
