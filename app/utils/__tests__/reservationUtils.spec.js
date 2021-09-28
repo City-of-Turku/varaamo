@@ -14,14 +14,21 @@ import {
   isValidPhoneNumber,
   createOrderLines,
   hasOrder,
+  hasPayment,
   hasProducts,
   createOrder,
   checkOrderPrice,
   getFormattedProductPrice,
   canUserCancelReservation,
   canUserModifyReservation,
+  changeProductQuantity,
+  getExtraProducts,
+  getMandatoryProducts,
+  getNonZeroQuantityProducts,
+  getInitialProducts,
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
+import Product from '../fixtures/Product';
 
 describe('Utils: reservationUtils', () => {
   describe('combine', () => {
@@ -347,6 +354,70 @@ describe('Utils: reservationUtils', () => {
     });
   });
 
+  describe('changeProductQuantity', () => {
+    test('returns correct new product with updated quantity', () => {
+      const product = Product.build();
+      const quantity = 3;
+      const expected = { ...product, quantity };
+      expect(changeProductQuantity(product, quantity)).toStrictEqual(expected);
+    });
+  });
+
+  describe('product filters', () => {
+    const productA = Product.build({ type: 'extra', quantity: 0 });
+    const productB = Product.build({ type: 'rent', quantity: 1 });
+    const productC = Product.build({ type: 'extra', quantity: 1 });
+
+    describe('getExtraProducts', () => {
+      test('returns only type extra products', () => {
+        expect(getExtraProducts([productA, productB, productC]))
+          .toStrictEqual([productA, productC]);
+      });
+    });
+
+    describe('getMandatoryProducts', () => {
+      test('returns only type rent products', () => {
+        expect(getMandatoryProducts([productA, productB, productC])).toStrictEqual([productB]);
+      });
+    });
+
+    describe('getNonZeroQuantityProducts', () => {
+      test('returns only products with more than 0 quantity', () => {
+        expect(getNonZeroQuantityProducts(
+          [productA, productB, productC]
+        )).toStrictEqual([productB, productC]);
+
+        expect(getNonZeroQuantityProducts([])).toStrictEqual([]);
+      });
+    });
+  });
+
+  describe('getInitialProducts', () => {
+    const mandatoryProduct = Product.build({ type: 'rent' });
+    const extraProduct = Product.build({ type: 'extra' });
+    describe('returns an empty array', () => {
+      test('when given resource does not have any products', () => {
+        const resource = {};
+        expect(getInitialProducts(resource)).toStrictEqual([]);
+      });
+
+      test('when given resource does not have any products of given type', () => {
+        const resourceA = { products: [mandatoryProduct] };
+        const resourceB = { products: [extraProduct] };
+        expect(getInitialProducts(resourceB, 'mandatory')).toStrictEqual([]);
+        expect(getInitialProducts(resourceA, 'extra')).toStrictEqual([]);
+      });
+    });
+
+    describe('returns correct products', () => {
+      test('when given resource contains products of given type', () => {
+        const resource = { products: [mandatoryProduct, extraProduct] };
+        expect(getInitialProducts(resource, 'mandatory')).toStrictEqual([{ ...mandatoryProduct, quantity: 1 }]);
+        expect(getInitialProducts(resource, 'extra')).toStrictEqual([{ ...extraProduct, quantity: 0 }]);
+      });
+    });
+  });
+
   describe('hasOrder', () => {
     test('returns true if given reservation has an order', () => {
       const reservation = { id: 'abc123', order: { id: 'fgh456' } };
@@ -356,6 +427,40 @@ describe('Utils: reservationUtils', () => {
     test('returns false if given reservation does not have an order', () => {
       const reservation = { id: 'abc123', order: null };
       expect(hasOrder(reservation)).toBe(false);
+    });
+  });
+
+  describe('hasPayment', () => {
+    test('returns true if given order has price of over zero', () => {
+      const orderA = { price: 2.50 };
+      const orderB = { price: '2.50' };
+      const orderC = { price: 0.01 };
+      const orderD = { price: 1 };
+      expect(hasPayment(orderA)).toBe(true);
+      expect(hasPayment(orderB)).toBe(true);
+      expect(hasPayment(orderC)).toBe(true);
+      expect(hasPayment(orderD)).toBe(true);
+    });
+
+    test('returns false if given order has price of zero or less', () => {
+      const orderA = { price: 0.00 };
+      const orderB = { price: '0.00' };
+      const orderC = { price: -0.01 };
+      const orderD = { price: '-1' };
+      expect(hasPayment(orderA)).toBe(false);
+      expect(hasPayment(orderB)).toBe(false);
+      expect(hasPayment(orderC)).toBe(false);
+      expect(hasPayment(orderD)).toBe(false);
+    });
+
+    test('returns false if given order does not have a price', () => {
+      const order = { id: '123' };
+      expect(hasPayment(order)).toBe(false);
+    });
+
+    test('returns false if given order does not exist', () => {
+      const order = null;
+      expect(hasPayment(order)).toBe(false);
     });
   });
 
@@ -372,9 +477,14 @@ describe('Utils: reservationUtils', () => {
   });
 
   describe('createOrderLines', () => {
-    test('returns an array of objects with product and quantity if products is not empty', () => {
-      const products = [{ id: 'test1' }, { id: 'test2' }];
-      const expected = [{ product: 'test1', quantity: 1 }, { product: 'test2', quantity: 1 }];
+    test('returns an array of objects with product id and quantity if products is not empty', () => {
+      const productA = Product.build({ quantity: 2 });
+      const productB = Product.build();
+      const products = [productA, productB];
+      const expected = [
+        { product: productA.id, quantity: 2 },
+        { product: productB.id, quantity: 0 }
+      ];
       expect(createOrderLines(products)).toStrictEqual(expected);
     });
 
@@ -403,6 +513,7 @@ describe('Utils: reservationUtils', () => {
   describe('checkOrderPrice', () => {
     const testResult = { price: 'test' };
     global.fetch = jest.fn(() => Promise.resolve({
+      ok: true,
       json: () => Promise.resolve(testResult),
     }));
     afterAll(() => {

@@ -113,12 +113,83 @@ function isValidPhoneNumber(number) {
 }
 
 /**
+ * Changes given product's quantity with given value and returns a new updated
+ * product object
+ * @param {object} product
+ * @param {number} quantity
+ * @returns {object} new updated product
+ */
+function changeProductQuantity(product, quantity) {
+  return { ...product, quantity };
+}
+
+/**
+ * Filters and returns only type extra products from given resource products
+ * @param {array} products resource's products
+ * @returns {array} resource's products which are type extra
+ */
+function getExtraProducts(products) {
+  return products.filter(product => product.type === constants.PRODUCT_TYPES.EXTRA);
+}
+
+/**
+ * Filters and returns only type rent (mandatory) products from given resource products
+ * @param {array} products resource's products
+ * @returns {array} resource's products which are type rent i.e. mandatory
+ */
+function getMandatoryProducts(products) {
+  return products.filter(product => product.type === 'rent');
+}
+
+/**
+ * Filters and returns only products with more than 0 quantity
+ * @param {array} products
+ * @returns {array} products with more than 0 quantity
+ */
+function getNonZeroQuantityProducts(products) {
+  return products.filter(product => product.quantity > 0);
+}
+
+/**
+ * Returns products of given type and sets their initial quantity value.
+ * @param {object} resource with products info
+ * @param {string} type i.e. mandatory or extra
+ * @returns {array} products of given type with initial quantity set to 1 for
+ * mandatory products and 0 for extra products
+ */
+function getInitialProducts(resource, type) {
+  if (hasProducts(resource)) {
+    if (type === constants.PRODUCT_TYPES.MANDATORY) {
+      return getMandatoryProducts(resource.products)
+        .map(product => changeProductQuantity(product, 1));
+    }
+    if (type === constants.PRODUCT_TYPES.EXTRA) {
+      return getExtraProducts(resource.products)
+        .map(product => changeProductQuantity(product, 0));
+    }
+  }
+  return [];
+}
+
+/**
  * Checks if given reservation has an order.
  * @param {object} reservation
  * @returns {boolean} true if reservation has order, and false if not
  */
 function hasOrder(reservation) {
   return 'order' in reservation && !!reservation.order;
+}
+
+/**
+ * Checks if given order's price is over 0
+ * @param {object} order containing price info
+ * @returns {boolean} true when order exists and has price over 0, false otherwise
+ */
+function hasPayment(order) {
+  if (order) {
+    return 'price' in order && (Number(order.price) > 0);
+  }
+  return false;
 }
 
 /**
@@ -138,7 +209,7 @@ function hasProducts(resource) {
  */
 function createOrderLines(products) {
   if (products && products.length > 0) {
-    return products.map(product => ({ product: product.id, quantity: 1 }));
+    return products.map(product => ({ product: product.id, quantity: product.quantity || 0 }));
   }
 
   return null;
@@ -183,6 +254,9 @@ async function checkOrderPrice(begin, end, orderLines, state) {
     headers: getHeadersCreator()(state),
     body: JSON.stringify(payload)
   });
+  if (!response.ok) {
+    throw new Error('order_price_fetch_error');
+  }
   const data = await response.json();
   return data;
 }
@@ -251,7 +325,13 @@ export {
   getNextAvailableTime,
   getNextReservation,
   isValidPhoneNumber,
+  changeProductQuantity,
+  getExtraProducts,
+  getMandatoryProducts,
+  getNonZeroQuantityProducts,
+  getInitialProducts,
   hasOrder,
+  hasPayment,
   hasProducts,
   createOrderLines,
   createOrder,
