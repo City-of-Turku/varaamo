@@ -9,9 +9,7 @@ import Well from 'react-bootstrap/lib/Well';
 import moment from 'moment';
 
 import { injectT } from 'i18n';
-import {
-  isStaffEvent, checkOrderPrice, createOrderLines, hasProducts, getFormattedProductPrice
-} from 'utils/reservationUtils';
+import { isStaffEvent, hasPayment, hasProducts } from 'utils/reservationUtils';
 import { getTermsAndConditions, getPaymentTermsAndConditions } from 'utils/resourceUtils';
 import ReservationInformationForm from './ReservationInformationForm';
 
@@ -26,36 +24,14 @@ class ReservationInformation extends Component {
     onConfirm: PropTypes.func.isRequired,
     openResourceTermsModal: PropTypes.func.isRequired,
     openResourcePaymentTermsModal: PropTypes.func.isRequired,
+    order: PropTypes.object.isRequired,
     reservation: PropTypes.object,
     resource: PropTypes.object.isRequired,
     selectedTime: PropTypes.object.isRequired,
-    state: PropTypes.object,
     t: PropTypes.func.isRequired,
     unit: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = { order: null };
-  }
-
-  componentDidMount() {
-    if (!hasProducts(this.props.resource)) {
-      return;
-    }
-
-    const products = this.props.resource.products;
-    const {
-      begin,
-      end,
-    } = this.props.selectedTime;
-
-    checkOrderPrice(begin, end, createOrderLines(products), this.props.state)
-      .then(order => this.setState({ order }))
-      .catch(() => this.setState({ order: null }));
-  }
 
   onConfirm = (values) => {
     const { onConfirm } = this.props;
@@ -176,13 +152,14 @@ class ReservationInformation extends Component {
       onCancel,
       openResourceTermsModal,
       openResourcePaymentTermsModal,
+      order,
       resource,
       selectedTime,
       t,
       unit,
       user,
     } = this.props;
-    const { order } = this.state;
+
     const termsAndConditions = getTermsAndConditions(resource);
     const paymentTermsAndConditions = getPaymentTermsAndConditions(resource);
     const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
@@ -196,6 +173,7 @@ class ReservationInformation extends Component {
           {this.renderInfoTexts()}
           <ReservationInformationForm
             fields={this.getFormFields(termsAndConditions)}
+            hasPayment={!isEditing && hasPayment(order)}
             initialValues={this.getFormInitialValues()}
             isEditing={isEditing}
             isMakingReservations={isMakingReservations}
@@ -224,20 +202,8 @@ class ReservationInformation extends Component {
                 {unit.name}
               </Col>
             </Row>
-            {hasProducts(resource) && order && (
+            {(hasProducts(resource) && order && order.price) && (
               <React.Fragment>
-                <Row>
-                  <Col md={4}>
-                    <span className="app-ReservationDetails__name">
-                      {t('common.priceLabel')}
-                    </span>
-                  </Col>
-                  <Col md={8}>
-                    <span className="app-ReservationDetails__value">
-                      {getFormattedProductPrice(order.order_lines[0].product)}
-                    </span>
-                  </Col>
-                </Row>
                 <Row>
                   <Col md={4}>
                     <span className="app-ReservationDetails__name">
@@ -246,7 +212,7 @@ class ReservationInformation extends Component {
                   </Col>
                   <Col md={8}>
                     <span className="app-ReservationDetails__value">
-                      {t('common.priceWithVAT', { price: order.price, vat: order.order_lines[0].product.price.tax_percentage })}
+                      {`${order.price} €`}
                     </span>
                   </Col>
                 </Row>

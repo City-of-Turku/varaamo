@@ -8,13 +8,14 @@ import simple from 'simple-mock';
 
 import TermsField from 'shared/form-fields/TermsField';
 import { shallowWithIntl } from 'utils/testUtils';
+import Product from 'utils/fixtures/Product';
 import Resource from 'utils/fixtures/Resource';
 import {
   UnconnectedReservationInformationForm as ReservationInformationForm,
   validate,
 } from './ReservationInformationForm';
 import ReservationSubmitButton from './ReservationSubmitButton';
-import { hasProducts } from '../../../utils/reservationUtils';
+import { hasProducts } from 'utils/reservationUtils';
 
 describe('pages/reservation/reservation-information/ReservationInformationForm', () => {
   describe('validation', () => {
@@ -245,6 +246,7 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
   describe('rendering', () => {
     const defaultProps = {
       fields: [],
+      hasPayment: false,
       handleSubmit: simple.mock(),
       isEditing: false,
       isMakingReservations: false,
@@ -446,18 +448,28 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
 
     describe('payment terms', () => {
       describe('when payment terms are given in props', () => {
-        test('renders payment terms input wrapper', () => {
-          const paymentTermsAndConditions = 'Some payment terms text';
-          const wrapper = getWrapper({ paymentTermsAndConditions });
-          const field = wrapper.find(Field).filter({ component: TermsField });
-          const isRequired = 'paymentTermsAndConditions' in defaultProps.requiredFields;
+        describe('when reservation has payment', () => {
+          test('renders payment terms input wrapper', () => {
+            const paymentTermsAndConditions = 'Some payment terms text';
+            const wrapper = getWrapper({ paymentTermsAndConditions, hasPayment: true });
+            const field = wrapper.find(Field).filter({ component: TermsField });
+            const isRequired = 'paymentTermsAndConditions' in defaultProps.requiredFields;
 
-          expect(field.length).toBe(1);
-          expect(field.prop('isRequired')).toBe(isRequired);
-          expect(field.prop('label')).toBe('ReservationInformationForm.termsAndConditionsLabel');
-          expect(field.prop('labelLink')).toBe('ReservationInformationForm.paymentTermsAndConditionsLink');
-          expect(field.prop('name')).toBe('paymentTermsAndConditions');
-          expect(field.prop('onClick')).toBe(defaultProps.openResourcePaymentTermsModal);
+            expect(field.length).toBe(1);
+            expect(field.prop('isRequired')).toBe(isRequired);
+            expect(field.prop('label')).toBe('ReservationInformationForm.termsAndConditionsLabel');
+            expect(field.prop('labelLink')).toBe('ReservationInformationForm.paymentTermsAndConditionsLink');
+            expect(field.prop('name')).toBe('paymentTermsAndConditions');
+            expect(field.prop('onClick')).toBe(defaultProps.openResourcePaymentTermsModal);
+          });
+        });
+        describe('when reservation does not have payment', () => {
+          test('does not render payment terms input wrapper', () => {
+            const paymentTermsAndConditions = 'Some payment terms text';
+            const wrapper = getWrapper({ paymentTermsAndConditions, hasPayment: false });
+            const field = wrapper.find(Field).filter({ component: TermsField });
+            expect(field.length).toBe(0);
+          });
         });
       });
 
@@ -497,6 +509,17 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           expect(submitButton.prop('hasPayment')).toBe(hasProducts(defaultProps.resource));
           expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
           expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
+        });
+      });
+
+      describe('when resource has products and is editing is false', () => {
+        test('renders back button', () => {
+          const resource = Resource.build({ products: [Product.build()] });
+          const buttons = getWrapper({ isEditing: false, resource }).find(Button);
+          const backButton = buttons.at(1);
+          expect(backButton.prop('bsStyle')).toBe('default');
+          expect(backButton.prop('onClick')).toBe(defaultProps.onBack);
+          expect(backButton.props().children).toBe('common.previous');
         });
       });
 
@@ -540,7 +563,7 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           const submitButton = getWrapper({ isEditing: true }).find(ReservationSubmitButton);
           expect(submitButton).toHaveLength(1);
           expect(submitButton.prop('handleSubmit')).toBe(defaultProps.handleSubmit);
-          expect(submitButton.prop('hasPayment')).toBe(hasProducts(defaultProps.resource));
+          expect(submitButton.prop('hasPayment')).toBe(defaultProps.hasPayment);
           expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
           expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
         });

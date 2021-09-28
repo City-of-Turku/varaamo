@@ -178,6 +178,7 @@ class UnconnectedReservationInformationForm extends Component {
 
   render() {
     const {
+      hasPayment,
       isEditing,
       isMakingReservations,
       handleSubmit,
@@ -438,7 +439,7 @@ class UnconnectedReservationInformationForm extends Component {
           {termsAndConditions
             && this.renderTermsField('termsAndConditions')
           }
-          {paymentTermsAndConditions
+          {(paymentTermsAndConditions && hasPayment)
             && this.renderTermsField('paymentTermsAndConditions', true)
           }
           <div className="form-controls">
@@ -448,7 +449,7 @@ class UnconnectedReservationInformationForm extends Component {
             >
               {isEditing ? t('ReservationInformationForm.cancelEdit') : t('common.cancel')}
             </Button>
-            {isEditing
+            {(isEditing || hasProducts(resource))
               && (
               <Button
                 bsStyle="default"
@@ -460,7 +461,7 @@ class UnconnectedReservationInformationForm extends Component {
             }
             <ReservationSubmitButton
               handleSubmit={handleSubmit}
-              hasPayment={hasProducts(resource)}
+              hasPayment={hasPayment}
               isMakingReservations={isMakingReservations}
               onConfirm={onConfirm}
             />
@@ -475,6 +476,7 @@ class UnconnectedReservationInformationForm extends Component {
 
 UnconnectedReservationInformationForm.propTypes = {
   fields: PropTypes.array.isRequired,
+  hasPayment: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   isEditing: PropTypes.bool.isRequired,
   isMakingReservations: PropTypes.bool.isRequired,
