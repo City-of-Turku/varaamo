@@ -30,7 +30,7 @@ function ExtraProducts({
       {extraProducts.length > 0 ? (
         <div className="extra-products">
           <h3>{t('ReservationProducts.heading.extra')}</h3>
-          <Table>
+          <Table responsive>
             <thead>
               <tr>
                 <th>{t('ReservationProducts.table.heading.name')}</th>

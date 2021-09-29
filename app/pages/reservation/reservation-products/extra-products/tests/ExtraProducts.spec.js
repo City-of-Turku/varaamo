@@ -37,8 +37,9 @@ describe('reservation-products/extra-products/ExtraProducts', () => {
     });
 
     test('Table', () => {
-      const heading = getWrapper().find(Table);
-      expect(heading).toHaveLength(1);
+      const table = getWrapper().find(Table);
+      expect(table).toHaveLength(1);
+      expect(table.prop('responsive')).toBe(true);
     });
 
     test('thead', () => {
