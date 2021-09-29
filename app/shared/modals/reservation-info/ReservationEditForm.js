@@ -18,7 +18,7 @@ import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import ReservationTimeControls from 'shared/form-fields/ReservationTimeControls';
 import TimeRange from 'shared/time-range';
 import { injectT } from 'i18n';
-import { getFormattedProductPrice } from '../../../utils/reservationUtils';
+import ReservationOrderInfo from './ReservationOrderInfo';
 
 class UnconnectedReservationEditForm extends Component {
   constructor(props) {
@@ -134,6 +134,7 @@ class UnconnectedReservationEditForm extends Component {
 
   render() {
     const {
+      currentLanguage,
       handleSubmit,
       isAdmin,
       isEditing,
@@ -189,15 +190,12 @@ class UnconnectedReservationEditForm extends Component {
         {this.renderInfoRow(t('common.additionalInfo.label'), reservation.reservationExtraQuestions)}
         {isAdmin && !reservationIsEditable && this.renderStaticInfoRow('comments')}
         {(orderLine && price) && (
-          <Well>
-            {this.renderHeading(t('common.orderDetailsLabel'))}
-            {this.renderInfoRow(t('common.priceLabel'), getFormattedProductPrice(orderLine.product))}
-            {this.renderInfoRow(t('common.priceTotalLabel'),
-              t('common.priceWithVAT', {
-                price,
-                vat: orderLine.product.price.taxPercentage
-              }))}
-          </Well>
+          <ReservationOrderInfo
+            currentLanguage={currentLanguage}
+            order={order}
+            renderHeading={this.renderHeading}
+            renderInfoRow={this.renderInfoRow}
+          />
         )}
         {isAdmin && reservationIsEditable && (
           <div className="form-controls">
@@ -236,6 +234,7 @@ class UnconnectedReservationEditForm extends Component {
 }
 
 UnconnectedReservationEditForm.propTypes = {
+  currentLanguage: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool.isRequired,

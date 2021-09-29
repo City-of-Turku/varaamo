@@ -39,6 +39,7 @@ class ReservationInfoModal extends Component {
 
   render() {
     const {
+      currentLanguage,
       hideReservationInfoModal,
       isAdmin,
       isEditing,
@@ -78,6 +79,7 @@ class ReservationInfoModal extends Component {
             <div>
               <ReservationStateLabel reservation={reservation} />
               <ReservationEditForm
+                currentLanguage={currentLanguage}
                 enableReinitialize
                 initialValues={reservation}
                 isAdmin={isAdmin}
@@ -167,6 +169,7 @@ class ReservationInfoModal extends Component {
 }
 
 ReservationInfoModal.propTypes = {
+  currentLanguage: PropTypes.string.isRequired,
   hideReservationInfoModal: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool.isRequired,

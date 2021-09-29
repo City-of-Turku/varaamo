@@ -11,6 +11,10 @@ describe('shared/modals/reservation-info/reservationInfoModalSelector', () => {
     return reservationInfoModalSelector(state);
   }
 
+  test('returns currentLanguage', () => {
+    expect(getSelected().currentLanguage).toBeDefined();
+  });
+
   test('returns isAdmin', () => {
     expect(getSelected().isAdmin).toBeDefined();
   });

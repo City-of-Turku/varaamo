@@ -9,6 +9,7 @@ import Resource from 'utils/fixtures/Resource';
 import User from 'utils/fixtures/User';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedReservationEditForm as ReservationEditForm } from './ReservationEditForm';
+import ReservationOrderInfo from './ReservationOrderInfo';
 
 describe('shared/modals/reservation-info/ReservationEditForm', () => {
   const resource = Resource.build();
@@ -34,6 +35,7 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
     reservationExtraQuestions: undefined,
   });
   const defaultProps = {
+    currentLanguage: 'fi',
     handleSubmit: () => null,
     isAdmin: true,
     isEditing: false,
@@ -227,8 +229,8 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
         });
       });
 
-      describe('order details', () => {
-        describe('when reservation has order with price info', () => {
+      describe('ReservationOrderInfo', () => {
+        test('when reservation has order with price info', () => {
           const userReservation = Reservation.build({
             order: {
               orderLines: [{
@@ -242,33 +244,22 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
             }
           });
 
-          test('heading is rendered', () => {
-            expect(getData({ reservation: userReservation }))
-              .toContain('common.orderDetailsLabel');
-          });
-          test('price is rendered', () => {
-            expect(getData({ reservation: userReservation }))
-              .toContain('common.priceLabel');
-          });
-          test('total price is rendered', () => {
-            expect(getData({ reservation: userReservation }))
-              .toContain('common.priceTotalLabel');
-          });
+          const wrapper = getWrapper({ reservation: userReservation });
+          const instance = wrapper.instance();
+          const orderInfo = wrapper.find(ReservationOrderInfo);
+          expect(orderInfo).toHaveLength(1);
+          expect(orderInfo.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+          expect(orderInfo.prop('order')).toBe(userReservation.order);
+          expect(orderInfo.prop('renderHeading')).toBe(instance.renderHeading);
+          expect(orderInfo.prop('renderInfoRow')).toBe(instance.renderInfoRow);
         });
 
         describe('when reservation does not have an order', () => {
           const userReservation = Reservation.build({ order: null });
-          test('heading is not rendered', () => {
-            expect(getData({ reservation: userReservation }))
-              .not.toContain('common.orderDetailsLabel');
-          });
-          test('price is not rendered', () => {
-            expect(getData({ reservation: userReservation }))
-              .not.toContain('common.priceLabel');
-          });
-          test('total price is not rendered', () => {
-            expect(getData({ reservation: userReservation }))
-              .not.toContain('common.priceTotalLabel');
+          test('ReservationOrderInfo is not rendered', () => {
+            const orderInfo = getWrapper({ reservation: userReservation })
+              .find(ReservationOrderInfo);
+            expect(orderInfo).toHaveLength(0);
           });
         });
       });

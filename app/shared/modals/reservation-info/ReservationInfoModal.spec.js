@@ -31,6 +31,7 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
     resource: resource.id,
   });
   const defaultProps = {
+    currentLanguage: 'fi',
     hideReservationInfoModal: () => null,
     isAdmin: false,
     isEditing: false,
@@ -92,7 +93,23 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
       });
 
       test('renders ReservationEditForm component', () => {
-        expect(getWrapper().find(ReservationEditForm)).toHaveLength(1);
+        const wrapper = getWrapper();
+        const instance = wrapper.instance();
+        const editForm = wrapper.find(ReservationEditForm);
+        expect(editForm).toHaveLength(1);
+        expect(editForm.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+        expect(editForm.prop('enableReinitialize')).toBe(true);
+        expect(editForm.prop('initialValues')).toBe(defaultProps.reservation);
+        expect(editForm.prop('isAdmin')).toBe(defaultProps.isAdmin);
+        expect(editForm.prop('isEditing')).toBe(defaultProps.isEditing);
+        expect(editForm.prop('isSaving')).toBe(defaultProps.isSaving);
+        expect(editForm.prop('isStaff')).toBe(defaultProps.isStaff);
+        expect(editForm.prop('onCancelEditClick')).toBe(defaultProps.onCancelEditClick);
+        expect(editForm.prop('onStartEditClick')).toBe(defaultProps.onStartEditClick);
+        expect(editForm.prop('onSubmit')).toBe(instance.handleEditFormSubmit);
+        expect(editForm.prop('reservation')).toBe(defaultProps.reservation);
+        expect(editForm.prop('reservationIsEditable')).toBe(defaultProps.reservationIsEditable);
+        expect(editForm.prop('resource')).toBe(defaultProps.resource);
       });
 
       describe('comments form', () => {

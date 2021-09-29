@@ -6,6 +6,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { createIsStaffSelector, isAdminSelector } from 'state/selectors/authSelectors';
 import { createResourceSelector } from 'state/selectors/dataSelectors';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
+import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 
 function reservationSelector(state) {
   return state.ui.reservationInfoModal.reservation || {};
@@ -27,6 +28,7 @@ const resourceIdSelector = createSelector(
 const resourceSelector = createResourceSelector(resourceIdSelector);
 
 const reservationInfoModalSelector = createStructuredSelector({
+  currentLanguage: currentLanguageSelector,
   isAdmin: isAdminSelector,
   isEditing: state => state.ui.reservationInfoModal.isEditing,
   isSaving: requestIsActiveSelectorFactory(ActionTypes.API.RESERVATION_PUT_REQUEST),

@@ -58,4 +58,11 @@
   .form-controls {
     text-align: right;
   }
+
+  #reservation-order-info {
+    hr {
+      border-style: solid;
+      border-width: 1px;
+    }
+  }
 }
