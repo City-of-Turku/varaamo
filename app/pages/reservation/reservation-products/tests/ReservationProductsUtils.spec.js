@@ -19,6 +19,7 @@ describe('reservation-products/ReservationProductsUtils', () => {
       expect(roundPriceToTwoDecimals(3.333333)).toBe('3.33');
       expect(roundPriceToTwoDecimals(142.236)).toBe('142.24');
       expect(roundPriceToTwoDecimals(1)).toBe('1.00');
+      expect(roundPriceToTwoDecimals('1')).toBe('1.00');
     });
   });
 
