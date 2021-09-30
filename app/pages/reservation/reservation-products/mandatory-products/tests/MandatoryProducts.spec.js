@@ -69,8 +69,8 @@ describe('reservation-products/extra-products/ExtraProducts', () => {
     });
 
     test('Table', () => {
-      const heading = getWrapper().find(Table);
-      expect(heading).toHaveLength(1);
+      const table = getWrapper().find(Table);
+      expect(table).toHaveLength(1);
     });
 
     test('thead', () => {
@@ -108,7 +108,7 @@ describe('reservation-products/extra-products/ExtraProducts', () => {
       expect(tbody).toHaveLength(1);
     });
 
-    test('ExtraProductTableRow', () => {
+    test('MandatoryProductTableRow', () => {
       const mandatoryProductTableRow = getWrapper().find(MandatoryProductTableRow);
       expect(mandatoryProductTableRow).toHaveLength(1);
       expect(mandatoryProductTableRow.prop('currentLanguage')).toBe(defaultProps.currentLanguage);

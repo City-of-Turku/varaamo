@@ -106,7 +106,7 @@ export function compareTaxPercentages(taxA, taxB) {
 }
 
 /**
- * Sorts and returns given tax percentages from smallert to largest
+ * Sorts and returns given tax percentages from smallest to largest
  * @param {array} taxPercentages percentage info including tax percentage itself
  * @returns {array} sorted tax percentages
  */

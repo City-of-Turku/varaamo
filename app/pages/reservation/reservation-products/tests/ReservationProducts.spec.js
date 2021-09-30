@@ -221,9 +221,9 @@ describe('reservation-products/ProductsSummary', () => {
       });
 
       describe('second sub row', () => {
-        const firstRow = detailRows.at(1);
+        const secondRow = detailRows.at(1);
         test('label Col', () => {
-          const label = firstRow.find('.app-ReservationDetails__label');
+          const label = secondRow.find('.app-ReservationDetails__label');
           expect(label).toHaveLength(1);
           expect(label.prop('md')).toBe(4);
           expect(label.prop('children')).toBe('ReservationPage.detailsTime');
@@ -234,7 +234,7 @@ describe('reservation-products/ProductsSummary', () => {
           const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
           const endText = moment(selectedTime.end).format('HH:mm');
           const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
-          const label = firstRow.find('.app-ReservationDetails__value');
+          const label = secondRow.find('.app-ReservationDetails__value');
           expect(label).toHaveLength(1);
           expect(label.prop('md')).toBe(8);
           expect(label.prop('children')).toBe(`${beginText}–${endText} (${hours} h)`);
