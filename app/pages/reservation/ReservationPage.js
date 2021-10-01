@@ -90,8 +90,11 @@ class UnconnectedReservationPage extends Component {
       }
     } else {
       // handle price ops only when reservation info exists
+      const isEditing = !isEmpty(reservationToEdit);
       const { mandatoryProducts, extraProducts } = this.state;
-      this.handleCheckOrderPrice(this.props.resource, selected, mandatoryProducts, extraProducts);
+      this.handleCheckOrderPrice(
+        this.props.resource, selected, mandatoryProducts, extraProducts, isEditing
+      );
     }
 
     if (
@@ -254,8 +257,10 @@ class UnconnectedReservationPage extends Component {
     });
   }
 
-  handleCheckOrderPrice(resource, selectedTime, mandatoryProducts, extraProducts) {
-    if (!hasProducts(resource)) {
+  handleCheckOrderPrice(
+    resource, selectedTime, mandatoryProducts, extraProducts, isEditing = false
+  ) {
+    if (!hasProducts(resource) || isEditing) {
       return;
     }
 

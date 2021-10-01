@@ -430,13 +430,15 @@ describe('pages/reservation/ReservationPage', () => {
       });
 
       test('calls handleCheckOrderPrice', () => {
-        const { selected } = instance.props;
+        const { selected, reservationToEdit } = instance.props;
         const { mandatoryProducts, extraProducts } = instance.state;
         expect(instance.handleCheckOrderPrice.callCount).toBe(1);
         expect(instance.handleCheckOrderPrice.lastCall.args[0]).toStrictEqual(resource);
         expect(instance.handleCheckOrderPrice.lastCall.args[1]).toStrictEqual(selected);
         expect(instance.handleCheckOrderPrice.lastCall.args[2]).toStrictEqual(mandatoryProducts);
         expect(instance.handleCheckOrderPrice.lastCall.args[3]).toStrictEqual(extraProducts);
+        expect(instance.handleCheckOrderPrice.lastCall.args[4])
+          .toStrictEqual(!isEmpty(reservationToEdit));
       });
     });
 
@@ -798,12 +800,29 @@ describe('pages/reservation/ReservationPage', () => {
   });
 
   describe('handleCheckOrderPrice', () => {
-    test('returns undefined when resource has no products', () => {
-      const instance = getWrapper().instance();
-      const resourceA = Resource.build({ products: [] });
-      expect(instance.handleCheckOrderPrice(
-        resourceA, defaultProps.selected, [], []
-      )).toBe(undefined);
+    describe('returns undefined and doesnt call checkOrderPrice', () => {
+      afterEach(() => {
+        checkOrderPrice.mockClear();
+      });
+
+      test('when resource has no products', () => {
+        const instance = getWrapper().instance();
+        const resourceA = Resource.build({ products: [] });
+        expect(instance.handleCheckOrderPrice(
+          resourceA, defaultProps.selected, [], []
+        )).toBe(undefined);
+        expect(checkOrderPrice).toHaveBeenCalledTimes(0);
+      });
+
+      test('when editing reservation', () => {
+        const instance = getWrapper().instance();
+        const resourceA = Resource.build({ products: [Product.build()] });
+        const isEditing = true;
+        expect(instance.handleCheckOrderPrice(
+          resourceA, defaultProps.selected, [], [], isEditing
+        )).toBe(undefined);
+        expect(checkOrderPrice).toHaveBeenCalledTimes(0);
+      });
     });
 
     describe('when resource has products', () => {
