@@ -48,7 +48,6 @@ class TopNavbar extends Component {
   componentDidUpdate(prevState) {
     if (!prevState.expandMobileNavbar && this.state.expandMobileNavbar) {
       document.getElementById('mobile-contrastButton').focus();
-      event.preventDefault();
     }
   }
 
