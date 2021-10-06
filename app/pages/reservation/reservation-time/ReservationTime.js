@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
-import Well from 'react-bootstrap/lib/Well';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
 
 import { injectT } from 'i18n';
 import ReservationCalendar from 'pages/resource/reservation-calendar';
 import ResourceCalendar from 'shared/resource-calendar';
+import ReservationDetails from '../reservation-details/ReservationDetails';
 
 class ReservationTime extends Component {
   static propTypes = {
@@ -88,19 +88,10 @@ class ReservationTime extends Component {
             </div>
           </Col>
           <Col lg={4} sm={12}>
-            <Well className="app-ReservationDetails">
-              <h2>{t('ReservationPage.detailsTitle')}</h2>
-              <Row>
-                <Col className="app-ReservationDetails__label" md={4}>
-                  {t('common.resourceLabel')}
-                </Col>
-                <Col className="app-ReservationDetails__value" md={8}>
-                  {resource.name}
-                  <br />
-                  {unit.name}
-                </Col>
-              </Row>
-            </Well>
+            <ReservationDetails
+              resourceName={resource.name}
+              unitName={unit.name}
+            />
           </Col>
         </Row>
       </div>

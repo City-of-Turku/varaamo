@@ -1,8 +1,6 @@
 import React from 'react';
 import Immutable from 'seamless-immutable';
-import {
-  Button, Col, Row, Well
-} from 'react-bootstrap';
+import { Button, Col } from 'react-bootstrap';
 import Loader from 'react-loader';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
@@ -16,6 +14,7 @@ import ReservationProducts from '../ReservationProducts';
 import MandatoryProducts from '../mandatory-products/MandatoryProducts';
 import ExtraProducts from '../extra-products/ExtraProducts';
 import ProductsSummary from '../ProductsSummary';
+import ReservationDetails from '../../reservation-details/ReservationDetails';
 
 describe('reservation-products/ProductsSummary', () => {
   const resource = Immutable(Resource.build());
@@ -68,7 +67,7 @@ describe('reservation-products/ProductsSummary', () => {
 
     const cols = productsSection.find(Col);
     test('correct amount of Cols', () => {
-      expect(cols).toHaveLength(6);
+      expect(cols).toHaveLength(2);
     });
 
     test('products section first Col', () => {
@@ -180,66 +179,16 @@ describe('reservation-products/ProductsSummary', () => {
       });
     });
 
-    describe('reservation details', () => {
-      test('container Col', () => {
-        const col = getWrapper().find(Col).at(1);
-        expect(col.prop('lg')).toBe(4);
-        expect(col.prop('sm')).toBe(12);
-      });
-
-      const details = getWrapper().find(Well);
-      test('details Well', () => {
-        expect(details).toHaveLength(1);
-      });
-
-      test('heading', () => {
-        const heading = details.find('h2');
-        expect(heading).toHaveLength(1);
-        expect(heading.text()).toBe('ReservationPage.detailsTitle');
-      });
-
-      const detailRows = details.find(Row);
-      test('correct amount of sub Rows', () => {
-        expect(detailRows).toHaveLength(2);
-      });
-
-      describe('first sub row', () => {
-        const firstRow = detailRows.at(0);
-        test('label Col', () => {
-          const label = firstRow.find('.app-ReservationDetails__label');
-          expect(label).toHaveLength(1);
-          expect(label.prop('md')).toBe(4);
-          expect(label.prop('children')).toBe('common.resourceLabel');
-        });
-
-        test('value Col', () => {
-          const label = firstRow.find('.app-ReservationDetails__value');
-          expect(label).toHaveLength(1);
-          expect(label.prop('md')).toBe(8);
-          expect(label.prop('children')).toStrictEqual([defaultProps.resource.name, <br />, defaultProps.unit.name]);
-        });
-      });
-
-      describe('second sub row', () => {
-        const secondRow = detailRows.at(1);
-        test('label Col', () => {
-          const label = secondRow.find('.app-ReservationDetails__label');
-          expect(label).toHaveLength(1);
-          expect(label.prop('md')).toBe(4);
-          expect(label.prop('children')).toBe('ReservationPage.detailsTime');
-        });
-
-        test('value Col', () => {
-          const { selectedTime } = defaultProps;
-          const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
-          const endText = moment(selectedTime.end).format('HH:mm');
-          const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
-          const label = secondRow.find('.app-ReservationDetails__value');
-          expect(label).toHaveLength(1);
-          expect(label.prop('md')).toBe(8);
-          expect(label.prop('children')).toBe(`${beginText}–${endText} (${hours} h)`);
-        });
-      });
+    test('reservation details', () => {
+      const { selectedTime } = defaultProps;
+      const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
+      const endText = moment(selectedTime.end).format('HH:mm');
+      const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
+      const details = getWrapper().find(ReservationDetails);
+      expect(details).toHaveLength(1);
+      expect(details.prop('reservationTime')).toBe(`${beginText}–${endText} (${hours} h)`);
+      expect(details.prop('resourceName')).toBe(defaultProps.resource.name);
+      expect(details.prop('unitName')).toBe(defaultProps.unit.name);
     });
   });
 });

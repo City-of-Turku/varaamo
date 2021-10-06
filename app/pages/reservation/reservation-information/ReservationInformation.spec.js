@@ -11,6 +11,7 @@ import { hasPayment } from 'utils/reservationUtils';
 import ReservationInformation from './ReservationInformation';
 import ReservationInformationForm from './ReservationInformationForm';
 import { getPaymentTermsAndConditions } from 'utils/resourceUtils';
+import ReservationDetails from '../reservation-details/ReservationDetails';
 
 describe('pages/reservation/reservation-information/ReservationInformation', () => {
   const defaultProps = {
@@ -79,26 +80,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     expect(header.text()).toBe('ReservationPhase.informationTitle');
   });
 
-  test('renders correct reservation details and time when reservation is free', () => {
-    const order = {
-      order_lines: [{
-        product: {
-          price: { amount: '3.50', period: '01:00:00', type: 'per_period' },
-          quantity: 0,
-          type: 'extra'
-        }
-      }],
-      price: '0.00'
-    };
-    const details = getWrapper({ order }).find('.app-ReservationDetails__value');
-    expect(details).toHaveLength(2);
-    expect(details.at(0).props().children).toContain(defaultProps.resource.name);
-    expect(details.at(0).props().children).toContain(defaultProps.unit.name);
-    expect(details.at(1).props().children).toContain('10.10.2016');
-    expect(details.at(1).props().children).toContain('(1 h)');
-  });
-
-  test('renders correct reservation details and time when reservation has products', () => {
+  test('renders ReservationDetails', () => {
     const resource = Resource.build({
       products: [{ id: 'test1' }, { id: 'test2' }]
     });
@@ -112,15 +94,13 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }],
       price: '3.50'
     };
-    const wrapper = getWrapper({ resource, order });
-    const details = wrapper.find('.app-ReservationDetails__value');
 
-    expect(details).toHaveLength(3);
-    expect(details.at(0).props().children).toContain(resource.name);
-    expect(details.at(0).props().children).toContain(defaultProps.unit.name);
-    expect(details.at(1).props().children).toContain(`${order.price} €`);
-    expect(details.at(2).props().children).toContain('10.10.2016');
-    expect(details.at(2).props().children).toContain('(1 h)');
+    const details = getWrapper({ resource, order }).find(ReservationDetails);
+    expect(details).toHaveLength(1);
+    expect(details.prop('orderPrice')).toBe(`${order.price} €`);
+    expect(details.prop('reservationTime')).toBe('10.10.2016 10:00–11:00 (1 h)');
+    expect(details.prop('resourceName')).toBe(resource.name);
+    expect(details.prop('unitName')).toBe(defaultProps.unit.name);
   });
 
   describe('onConfirm', () => {

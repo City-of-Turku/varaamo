@@ -204,7 +204,9 @@ class ReservationConfirmation extends Component {
               || reservation.billingAddressZip
               || reservation.billingAddressCity)
               && (
-              <Col xs={12}><h3 id="billingInformationHeader">{t('common.payerInformationLabel')}</h3></Col>
+              <Col className="details-heading" xs={12}>
+                <h3 id="billingInformationHeader">{t('common.payerInformationLabel')}</h3>
+              </Col>
               )}
             {reservation.billingFirstName
               && this.renderField(
@@ -249,7 +251,9 @@ class ReservationConfirmation extends Component {
                 reservation.billingAddressCity
               )}
             {reservation.reservationExtraQuestions && (
-            <Col xs={12}><h3 id="reservationExtraQuestionsHeader">{t('common.additionalInfo.heading')}</h3></Col>
+            <Col className="details-heading" xs={12}>
+              <h3 id="reservationExtraQuestionsHeader">{t('common.additionalInfo.heading')}</h3>
+            </Col>
             )}
             {reservation.reservationExtraQuestions
             && this.renderField(

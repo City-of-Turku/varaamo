@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Col, Row, Well
+  Button, Col, Row
 } from 'react-bootstrap';
 import moment from 'moment';
 import { isEmpty } from 'lodash';
@@ -11,6 +11,7 @@ import injectT from '../../../i18n/injectT';
 import MandatoryProducts from './mandatory-products/MandatoryProducts';
 import ProductsSummary from './ProductsSummary';
 import ExtraProducts from './extra-products/ExtraProducts';
+import ReservationDetails from '../reservation-details/ReservationDetails';
 
 function ReservationProducts({
   changeProductQuantity, currentLanguage, isEditing, isStaff, onBack, onCancel, onConfirm,
@@ -75,27 +76,11 @@ function ReservationProducts({
         </Col>
 
         <Col lg={4} sm={12}>
-          <Well className="app-ReservationDetails">
-            <h2>{t('ReservationPage.detailsTitle')}</h2>
-            <Row>
-              <Col className="app-ReservationDetails__label" md={4}>
-                {t('common.resourceLabel')}
-              </Col>
-              <Col className="app-ReservationDetails__value" md={8}>
-                {resource.name}
-                <br />
-                {unit.name}
-              </Col>
-            </Row>
-            <Row>
-              <Col className="app-ReservationDetails__label" md={4}>
-                {t('ReservationPage.detailsTime')}
-              </Col>
-              <Col className="app-ReservationDetails__value" md={8}>
-                {`${beginText}–${endText} (${hours} h)`}
-              </Col>
-            </Row>
-          </Well>
+          <ReservationDetails
+            reservationTime={`${beginText}–${endText} (${hours} h)`}
+            resourceName={resource.name}
+            unitName={unit.name}
+          />
         </Col>
       </Row>
     </div>

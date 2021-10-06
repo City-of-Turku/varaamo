@@ -4,14 +4,13 @@ import camelCase from 'lodash/camelCase';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/lib/Col';
-import Row from 'react-bootstrap/lib/Row';
-import Well from 'react-bootstrap/lib/Well';
 import moment from 'moment';
 
 import { injectT } from 'i18n';
 import { isStaffEvent, hasPayment, hasProducts } from 'utils/reservationUtils';
 import { getTermsAndConditions, getPaymentTermsAndConditions } from 'utils/resourceUtils';
 import ReservationInformationForm from './ReservationInformationForm';
+import ReservationDetails from '../reservation-details/ReservationDetails';
 
 class ReservationInformation extends Component {
   static propTypes = {
@@ -190,43 +189,12 @@ class ReservationInformation extends Component {
           />
         </Col>
         <Col lg={4} sm={12}>
-          <Well className="app-ReservationDetails">
-            <h2>{t('ReservationPage.detailsTitle')}</h2>
-            <Row>
-              <Col className="app-ReservationDetails__label" md={4}>
-                {t('common.resourceLabel')}
-              </Col>
-              <Col className="app-ReservationDetails__value" md={8}>
-                {resource.name}
-                <br />
-                {unit.name}
-              </Col>
-            </Row>
-            {(hasProducts(resource) && order && order.price) && (
-              <React.Fragment>
-                <Row>
-                  <Col md={4}>
-                    <span className="app-ReservationDetails__name">
-                      {t('common.priceTotalLabel')}
-                    </span>
-                  </Col>
-                  <Col md={8}>
-                    <span className="app-ReservationDetails__value">
-                      {`${order.price} €`}
-                    </span>
-                  </Col>
-                </Row>
-              </React.Fragment>
-            )}
-            <Row>
-              <Col className="app-ReservationDetails__label" md={4}>
-                {t('ReservationPage.detailsTime')}
-              </Col>
-              <Col className="app-ReservationDetails__value" md={8}>
-                {`${beginText}–${endText} (${hours} h)`}
-              </Col>
-            </Row>
-          </Well>
+          <ReservationDetails
+            orderPrice={(hasProducts(resource) && order && order.price) ? `${order.price} €` : ''}
+            reservationTime={`${beginText}–${endText} (${hours} h)`}
+            resourceName={resource.name}
+            unitName={unit.name}
+          />
         </Col>
       </div>
     );

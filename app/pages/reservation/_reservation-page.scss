@@ -24,4 +24,15 @@
      }
    }
  }
+
+ .app-ReservationDetails {
+  &__label {
+    font-weight: bold;
+    margin-bottom: 0px;
+  }
+
+  &__value {
+    margin-bottom: 8px;
+  }
+ }
 }

@@ -270,6 +270,8 @@
   "ReservationControls.deny": "Avvisa",
   "ReservationControls.edit": "Redigera",
   "ReservationControls.info": "Uppgifter",
+  "ReservationDetails.resourceLabel": "Utrymme",
+  "ReservationDetails.unitLabel": "Lokal",
   "ReservationEditForm.cancelEdit": "Avbryta",
   "ReservationEditForm.saveChanges": "Spara ändringar",
   "ReservationEditForm.startEdit": "Ändra bokningstiden",

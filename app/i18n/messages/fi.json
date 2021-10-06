@@ -268,6 +268,8 @@
   "ReservationControls.deny": "Hylkää",
   "ReservationControls.edit": "Muokkaa",
   "ReservationControls.info": "Tiedot",
+  "ReservationDetails.resourceLabel": "Tila",
+  "ReservationDetails.unitLabel": "Toimipiste",
   "ReservationEditForm.cancelEdit": "Peruuta muokkaus",
   "ReservationEditForm.saveChanges": "Tallenna muutokset",
   "ReservationEditForm.startEdit": "Muokkaa tapahtumaa",
