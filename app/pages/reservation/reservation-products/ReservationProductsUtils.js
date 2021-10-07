@@ -30,9 +30,9 @@ export function getProductsOfType(orderLines, type) {
  * @returns {number} tax portion of the price
  */
 export function calculateTax(price, taxPercentage) {
-  const numPrice = parseInt(price, 10);
+  const numPrice = Number(price);
   const numTaxPercentage = parseInt(taxPercentage, 10);
-  return numPrice * numTaxPercentage / 100;
+  return numPrice - (numPrice / ((100 + numTaxPercentage) / 100));
 }
 
 /**

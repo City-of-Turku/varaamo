@@ -37,12 +37,13 @@ describe('reservation-products/ReservationProductsUtils', () => {
 
   describe('calculateTax', () => {
     test('returns the tax portion of the given price with given tax percentage', () => {
-      expect(calculateTax(10, 50)).toBe(5);
-      expect(calculateTax(10, 100)).toBe(10);
+      expect(calculateTax(10, 50)).toBe(10 - (10 / 1.5));
+      expect(calculateTax(10, 100)).toBe(10 - (10 / 2));
       expect(calculateTax(10, 0)).toBe(0);
-      expect(calculateTax(10, 10)).toBe(1);
-      expect(calculateTax(10, 5)).toBe(0.5);
-      expect(calculateTax(20, 5)).toBe(1);
+      expect(calculateTax(10, 10)).toBe(10 - (10 / 1.1));
+      expect(calculateTax(10, 5)).toBe(10 - (10 / 1.05));
+      expect(calculateTax(20, 5)).toBe(20 - (20 / 1.05));
+      expect(calculateTax(8, 24)).toBe(8 - (8 / 1.24));
     });
   });
 
@@ -73,16 +74,19 @@ describe('reservation-products/ReservationProductsUtils', () => {
           price: productB.price.amount
         });
 
+        const totalPriceWithTax = Number(orderLineA.price) + Number(orderLineB.price);
+        const taxes = calculateTax(totalPriceWithTax, 24).toFixed(2);
+
         const expected = {
           nonZeroTaxes: {
             '24.00': {
               taxPercentage: '24.00',
-              totalPrice: '6.00',
+              totalPrice: taxes,
             },
           },
           zeroTax: {
             taxPercentage: 0,
-            totalPrice: '19.00',
+            totalPrice: (totalPriceWithTax - taxes).toFixed(2),
           },
         };
         expect(getOrderTaxTotals([orderLineA, orderLineB])).toStrictEqual(expected);
@@ -107,20 +111,26 @@ describe('reservation-products/ReservationProductsUtils', () => {
           price: productC.price.amount
         });
 
+        const totalPriceWithTax14 = Number(orderLineC.price);
+        const taxes14 = calculateTax(totalPriceWithTax14, 14).toFixed(2);
+
+        const totalPriceWithTax24 = Number(orderLineA.price) + Number(orderLineB.price);
+        const taxes24 = calculateTax(totalPriceWithTax24, 24).toFixed(2);
+
         const expected = {
           nonZeroTaxes: {
             '14.00': {
               taxPercentage: '14.00',
-              totalPrice: '1.96',
+              totalPrice: taxes14,
             },
             '24.00': {
               taxPercentage: '24.00',
-              totalPrice: '6.00',
+              totalPrice: taxes24,
             },
           },
           zeroTax: {
             taxPercentage: 0,
-            totalPrice: '31.04',
+            totalPrice: (totalPriceWithTax14 - taxes14 + totalPriceWithTax24 - taxes24).toFixed(2),
           },
         };
         expect(getOrderTaxTotals([orderLineA, orderLineB, orderLineC])).toStrictEqual(expected);
