@@ -20,6 +20,7 @@ describe('shared/modals/reservation-cancel/ReservationCancelModalContainer', () 
       deleteReservation: () => null,
     },
     cancelAllowed: false,
+    fontSize: 'test-large',
     isCancellingReservations: false,
     reservation,
     resource,
@@ -34,6 +35,9 @@ describe('shared/modals/reservation-cancel/ReservationCancelModalContainer', () 
     test('renders a Modal component', () => {
       const modalComponent = getWrapper().find(Modal);
       expect(modalComponent.length).toBe(1);
+      expect(modalComponent.prop('className')).toBe(defaultProps.fontSize);
+      expect(modalComponent.prop('onHide')).toBe(defaultProps.actions.closeReservationCancelModal);
+      expect(modalComponent.prop('show')).toBe(defaultProps.show);
     });
 
     describe('Modal header', () => {
@@ -61,6 +65,7 @@ describe('shared/modals/reservation-cancel/ReservationCancelModalContainer', () 
           const modalTitle = getModalHeaderWrapper({ cancelAllowed: false }).find(Modal.Title);
           expect(modalTitle.length).toBe(1);
           expect(modalTitle.prop('children')).toBe('ReservationCancelModal.cancelNotAllowedTitle');
+          expect(modalTitle.prop('componentClass')).toBe('h3');
         });
       });
     });
@@ -117,10 +122,15 @@ describe('shared/modals/reservation-cancel/ReservationCancelModalContainer', () 
         const buttons = getFooterButtonsWrapper({ cancelAllowed });
 
         test('renders cancel button', () => {
+          expect(buttons.at(0).prop('bsStyle')).toBe('default');
+          expect(buttons.at(0).prop('className')).toBe(defaultProps.fontSize);
           expect(buttons.at(0).props().children).toBe('ReservationCancelModal.cancelAllowedCancel');
         });
 
         test('renders confirm button', () => {
+          expect(buttons.at(1).prop('bsStyle')).toBe('danger');
+          expect(buttons.at(1).prop('className')).toBe(defaultProps.fontSize);
+          expect(buttons.at(1).prop('disabled')).toBe(defaultProps.isCancellingReservations);
           expect(buttons.at(1).props().children).toBe('ReservationCancelModal.cancelAllowedConfirm');
         });
       });

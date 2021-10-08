@@ -6,6 +6,7 @@ import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Modal from 'react-bootstrap/lib/Modal';
+import classNames from 'classnames';
 
 import { injectT } from 'i18n';
 import ReservationCancelModal from 'shared/modals/reservation-cancel';
@@ -39,10 +40,13 @@ class ReservationInfoModal extends Component {
 
   render() {
     const {
+      contrast,
       currentLanguage,
+      fontSize,
       hideReservationInfoModal,
       isAdmin,
       isEditing,
+      isLargerFontSize,
       isSaving,
       isStaff,
       onCancelClick,
@@ -65,12 +69,14 @@ class ReservationInfoModal extends Component {
 
     return (
       <Modal
-        className="reservation-info-modal"
+        className={classNames('reservation-info-modal', fontSize, contrast)}
         onHide={hideReservationInfoModal}
         show={show}
       >
         <Modal.Header closeButton closeLabel={t('ModalHeader.closeButtonText')}>
-          <Modal.Title>{t('ReservationInfoModal.title')}</Modal.Title>
+          <Modal.Title componentClass="h3">
+            {t('ReservationInfoModal.title')}
+          </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -84,6 +90,7 @@ class ReservationInfoModal extends Component {
                 initialValues={reservation}
                 isAdmin={isAdmin}
                 isEditing={isEditing}
+                isLargerFontSize={isLargerFontSize}
                 isSaving={isSaving}
                 isStaff={isStaff}
                 onCancelEditClick={onCancelEditClick}
@@ -130,6 +137,7 @@ class ReservationInfoModal extends Component {
         <Modal.Footer>
           <Button
             bsStyle="default"
+            className={fontSize}
             onClick={hideReservationInfoModal}
           >
             {t('common.back')}
@@ -137,6 +145,7 @@ class ReservationInfoModal extends Component {
           {isStaff && reservationIsEditable && reservation.state === 'requested' && (
             <Button
               bsStyle="danger"
+              className={fontSize}
               disabled={disabled}
               onClick={onDenyClick}
             >
@@ -146,6 +155,7 @@ class ReservationInfoModal extends Component {
           {isStaff && reservationIsEditable && reservation.state === 'requested' && (
             <Button
               bsStyle="success"
+              className={fontSize}
               disabled={disabled}
               onClick={onConfirmClick}
             >
@@ -155,6 +165,7 @@ class ReservationInfoModal extends Component {
           {showCancelButton && (
             <Button
               bsStyle="danger"
+              className={fontSize}
               disabled={disabled}
               onClick={onCancelClick}
             >
@@ -169,10 +180,13 @@ class ReservationInfoModal extends Component {
 }
 
 ReservationInfoModal.propTypes = {
+  contrast: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
+  fontSize: PropTypes.string.isRequired,
   hideReservationInfoModal: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool.isRequired,
+  isLargerFontSize: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   isStaff: PropTypes.bool.isRequired,
   onCancelClick: PropTypes.func.isRequired,

@@ -39,6 +39,7 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
     handleSubmit: () => null,
     isAdmin: true,
     isEditing: false,
+    isLargerFontSize: false,
     isSaving: false,
     isStaff: false,
     onCancelEditClick: () => null,

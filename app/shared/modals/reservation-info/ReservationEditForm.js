@@ -25,6 +25,7 @@ class UnconnectedReservationEditForm extends Component {
     super(props);
     this.renderAddressRow = this.renderAddressRow.bind(this);
     this.renderEditableInfoRow = this.renderEditableInfoRow.bind(this);
+    this.renderHeading = this.renderHeading.bind(this);
     this.renderInfoRow = this.renderInfoRow.bind(this);
     this.renderReservationTime = this.renderReservationTime.bind(this);
   }
@@ -53,9 +54,10 @@ class UnconnectedReservationEditForm extends Component {
   }
 
   renderHeading(label) {
+    const { isLargerFontSize } = this.props;
     return (
       <Row>
-        <Col sm={3}>
+        <Col sm={isLargerFontSize ? 12 : 3}>
           <h4 className="reservation-edit-form-heading">{label}</h4>
         </Col>
       </Row>
@@ -63,13 +65,14 @@ class UnconnectedReservationEditForm extends Component {
   }
 
   renderInfoRow(label, value) {
+    const { isLargerFontSize } = this.props;
     if (!value && value !== '') return null;
     return (
       <FormGroup>
-        <Col sm={3}>
+        <Col sm={isLargerFontSize ? 12 : 3}>
           <ControlLabel>{label}</ControlLabel>
         </Col>
-        <Col sm={9}>
+        <Col sm={isLargerFontSize ? 12 : 9}>
           <FormControl.Static>{value}</FormControl.Static>
         </Col>
       </FormGroup>
@@ -238,6 +241,7 @@ UnconnectedReservationEditForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool.isRequired,
+  isLargerFontSize: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   isStaff: PropTypes.bool.isRequired,
   onCancelEditClick: PropTypes.func.isRequired,
