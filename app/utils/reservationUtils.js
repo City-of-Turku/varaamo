@@ -35,9 +35,13 @@ function isStaffEvent(reservation, resource) {
   if (!resource || !resource.requiredReservationExtraFields) {
     return false;
   }
-  return some(resource.requiredReservationExtraFields, field => (
-    !reservation[camelCase(field)]
-  ));
+  return some(resource.requiredReservationExtraFields, (field) => {
+    // billing fields can be left empty when no payment is made
+    if (constants.RESERVATION_BILLING_FIELDS.includes(field)) {
+      return false;
+    }
+    return !reservation[camelCase(field)];
+  });
 }
 
 function getCurrentReservation(reservations) {

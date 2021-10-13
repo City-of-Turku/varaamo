@@ -137,6 +137,12 @@ describe('Utils: reservationUtils', () => {
       }
     );
 
+    test('returns false if reservation is only missing required billing fields', () => {
+      const reservation = { reserverName: 'Luke' };
+      const resource = { requiredReservationExtraFields: [...constants.RESERVATION_BILLING_FIELDS, 'reserver_name'] };
+      expect(isStaffEvent(reservation, resource)).toBe(false);
+    });
+
     test(
       'returns true if reservation is missing values for requiredReservationExtraFields',
       () => {

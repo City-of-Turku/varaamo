@@ -1,3 +1,5 @@
+import constants from 'constants/AppConstants';
+
 import pick from 'lodash/pick';
 import uniq from 'lodash/uniq';
 import camelCase from 'lodash/camelCase';
@@ -42,8 +44,23 @@ class ReservationInformation extends Component {
       isAdmin,
       isStaff,
       resource,
+      order,
     } = this.props;
-    const formFields = [...resource.supportedReservationExtraFields].map(value => camelCase(value));
+
+    /*
+      When reservation has no payment i.e. order total is 0e, remove billing fields.
+      Respa doesn't require billing fields when reservation doesn't contain an order
+      even if billing fields are marked as required for the resource.
+    */
+    const filtered = [...resource.supportedReservationExtraFields].filter((field) => {
+      if (!hasPayment(order)) {
+        return !constants.RESERVATION_BILLING_FIELDS.includes(field);
+      }
+      return true;
+    });
+
+    const formFields = filtered.map(value => camelCase(value));
+
 
     if (isAdmin) {
       formFields.push('comments');

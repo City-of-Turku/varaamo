@@ -1,6 +1,9 @@
+import constants from 'constants/AppConstants';
+
 import React from 'react';
 import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
+import { camelCase } from 'lodash';
 
 import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
@@ -163,6 +166,38 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       const actual = instance.getFormFields(termsAndConditions);
 
       expect(actual).toEqual([...supportedFields, 'termsAndConditions']);
+    });
+
+    test('doesnt return billing fields when reservation has no payment', () => {
+      const resourceWithBilling = Resource.build({
+        needManualConfirmation: true,
+        supportedReservationExtraFields: [...constants.RESERVATION_BILLING_FIELDS, 'some_field_1', 'some_field_2'],
+      });
+      const expectedFields = ['someField1', 'someField2'];
+      const wrapper = getWrapper({ resource: resourceWithBilling });
+      const instance = wrapper.instance();
+      const actual = instance.getFormFields();
+
+      expect(actual).toEqual(expectedFields);
+    });
+
+    test('returns billing fields when reservation has a payment', () => {
+      const order = {
+        quantity: 1,
+        price: 3.50,
+      };
+      const resourceWithBilling = Resource.build({
+        needManualConfirmation: true,
+        supportedReservationExtraFields: [...constants.RESERVATION_BILLING_FIELDS, 'some_field_1', 'some_field_2'],
+      });
+
+      const billingFields = constants.RESERVATION_BILLING_FIELDS.map(value => camelCase(value));
+      const expectedFields = [...billingFields, 'someField1', 'someField2'];
+      const wrapper = getWrapper({ resource: resourceWithBilling, order });
+      const instance = wrapper.instance();
+      const actual = instance.getFormFields();
+
+      expect(actual).toEqual(expectedFields);
     });
   });
 
