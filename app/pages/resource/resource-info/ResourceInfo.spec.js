@@ -140,6 +140,30 @@ describe('pages/resource/resource-info/ResourceInfo', () => {
     expect(link.text()).toBe('ResourceInfo.webSiteLink');
   });
 
+  describe('does not render web address', () => {
+    test('when address is not a string', () => {
+      const unit = Unit.build({
+        wwwUrl: {},
+      });
+      const link = getWrapper({ unit })
+        .find('.app-ResourceInfo__www')
+        .find('a');
+
+      expect(link).toHaveLength(0);
+    });
+
+    test('when address is falsy', () => {
+      const unit = Unit.build({
+        wwwUrl: '',
+      });
+      const link = getWrapper({ unit })
+        .find('.app-ResourceInfo__www')
+        .find('a');
+
+      expect(link).toHaveLength(0);
+    });
+  });
+
   test('renders service map link', () => {
     const unit = Unit.build({
       id: 'abc',
