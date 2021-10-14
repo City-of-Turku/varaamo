@@ -8,10 +8,11 @@ import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
 import { shallowWithIntl } from 'utils/testUtils';
 import ResourceHeader from './ResourceHeader';
+import { getMaxPeriodText } from 'utils/resourceUtils';
 
 describe('pages/resource/resource-header/ResourceHeader', () => {
   const unit = Unit.build({ name: 'Test Unit' });
-  const resource = Resource.build({ unit: Unit.id });
+  const resource = Resource.build({ unit: Unit.id, maxPeriod: '01:00:00' });
   const defaultProps = {
     onBackClick: () => null,
     onMapClick: () => null,
@@ -76,14 +77,30 @@ describe('pages/resource/resource-header/ResourceHeader', () => {
       });
     });
 
-    describe('MaxTime info', () => {
-      test('renders type image with correct props', () => {
-        const infos = getWrapper().find('.app-ResourceHeader__info');
-        const images = infos.find('img');
+    describe('Max time info', () => {
+      const t = value => value;
 
-        expect(images).toHaveLength(5);
+      describe('when max time exists', () => {
+        const resourceA = Resource.build({ maxPeriod: '01:30:00' });
+        const timeInfo = getWrapper({ resource: resourceA }).find('#resource-header-max-period');
+        test('renders type image with correct props', () => {
+          const image = timeInfo.find('img');
+          expect(image.prop('alt')).toBe('ResourceHeader.maxTime');
+        });
 
-        expect(images.at(2).prop('alt')).toBe('ResourceHeader.maxTime');
+        test('renders type span text', () => {
+          const span = timeInfo.find('.app-ResourceHeader__info-label');
+          expect(span.text()).toBe(`Max ${getMaxPeriodText(t, resourceA)}`);
+        });
+      });
+
+      test('is not rendered when max time does not exist', () => {
+        const resourceA = Resource.build({ maxPeriod: '' });
+        const resourceB = Resource.build({ maxPeriod: '00:00:00' });
+        const timeInfoA = getWrapper({ resource: resourceA }).find('#resource-header-max-period');
+        const timeInfoB = getWrapper({ resource: resourceB }).find('#resource-header-max-period');
+        expect(timeInfoA).toHaveLength(0);
+        expect(timeInfoB).toHaveLength(0);
       });
     });
 
@@ -102,7 +119,7 @@ describe('pages/resource/resource-header/ResourceHeader', () => {
     describe('Unit info', () => {
       function createProps(resourceProps) {
         return {
-          resource: Immutable(Resource.build(resourceProps)),
+          resource: Immutable(Resource.build({ maxPeriod: '01:00:00', ...resourceProps })),
         };
       }
 

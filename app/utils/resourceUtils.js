@@ -8,6 +8,7 @@ import moment from 'moment';
 import queryString from 'query-string';
 
 import { getCurrentReservation, getNextAvailableTime } from 'utils/reservationUtils';
+import { getPrettifiedPeriodUnits } from './timeUtils';
 
 function hasMaxReservations(resource) {
   let isMaxReservations = false;
@@ -176,21 +177,19 @@ function getHumanizedPeriod(period) {
 }
 
 function getMaxPeriodText(t, { maxPeriod }) {
-  const hours = moment.duration(maxPeriod).asHours();
   const days = parseInt(moment.duration(maxPeriod).asDays(), 10);
   if (days > 0) {
     return t('ResourceHeader.maxPeriodDays', { days });
   }
-  return t('ResourceHeader.maxPeriodHours', { hours });
+  return getPrettifiedPeriodUnits(maxPeriod);
 }
 
 function getMinPeriodText(t, { minPeriod }) {
-  const hours = moment.duration(minPeriod).asHours();
   const days = parseInt(moment.duration(minPeriod).asDays(), 10);
   if (days > 0) {
     return t('ResourceHeader.minPeriodDays', { days });
   }
-  return t('ResourceHeader.minPeriodHours', { hours });
+  return getPrettifiedPeriodUnits(minPeriod);
 }
 
 function getOpeningHours(resource, selectedDate) {

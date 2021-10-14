@@ -232,6 +232,23 @@ function isValidDateString(dateString) {
   return false;
 }
 
+/**
+ * Formats given period into hours and/or minutes
+ * @param {string} period e.g. 1:30:00
+ * @returns {string} e.g. '1h 30min', '2h' or '45min'
+ */
+function getPrettifiedPeriodUnits(period) {
+  const duration = moment.duration(period);
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+
+  const hoursText = hours > 0 ? `${hours}h` : '';
+  const minutesText = minutes > 0 ? `${minutes}min` : '';
+  const spacer = hoursText && minutesText ? ' ' : '';
+
+  return `${hoursText}${spacer}${minutesText}`;
+}
+
 function prettifyHours(hours, showMinutes = false) {
   if (showMinutes && hours < 0.5) {
     const minutes = moment.duration(hours, 'hours').minutes();
@@ -296,6 +313,7 @@ export {
   getDuration,
   getDurationHours,
   getEndTimeString,
+  getPrettifiedPeriodUnits,
   getStartTimeString,
   getTimeSlots,
   isPastDate,

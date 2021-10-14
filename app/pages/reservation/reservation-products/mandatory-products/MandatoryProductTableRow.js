@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import injectT from '../../../../i18n/injectT';
-import { getPrettifiedPeriodUnits, getRoundedVat } from '../ReservationProductsUtils';
+import { getRoundedVat } from '../ReservationProductsUtils';
+import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
 
 function MandatoryProductTableRow({ currentLanguage, orderLine, t }) {

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import injectT from '../../../../i18n/injectT';
 import QuantityInput from './QuantityInput';
-import { getPrettifiedPeriodUnits, getRoundedVat } from '../ReservationProductsUtils';
+import { getRoundedVat } from '../ReservationProductsUtils';
+import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
 
 function ExtraProductTableRow({

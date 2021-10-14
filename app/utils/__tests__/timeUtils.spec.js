@@ -20,6 +20,7 @@ import {
   isPastDate,
   isValidDateString,
   padLeft,
+  getPrettifiedPeriodUnits,
   prettifyHours,
   periodToMinute,
   getEndTimeSlotWithMinPeriod
@@ -692,6 +693,15 @@ describe('Utils: timeUtils', () => {
       expect(isValidDateString(dateOne)).toBe(false);
       expect(isValidDateString(dateTwo)).toBe(false);
       expect(isValidDateString(dateThree)).toBe(false);
+    });
+  });
+
+  describe('getPrettifiedPeriodUnits', () => {
+    test('returns correct string', () => {
+      expect(getPrettifiedPeriodUnits('1:30:00')).toBe('1h 30min');
+      expect(getPrettifiedPeriodUnits('2:00:00')).toBe('2h');
+      expect(getPrettifiedPeriodUnits('0:25:00')).toBe('25min');
+      expect(getPrettifiedPeriodUnits('0:00:00')).toBe('');
     });
   });
 

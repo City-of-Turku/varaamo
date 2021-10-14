@@ -26,6 +26,7 @@ import {
   isStaffForResource,
   isStrongAuthSatisfied,
 } from 'utils/resourceUtils';
+import { getPrettifiedPeriodUnits } from '../timeUtils';
 
 describe('Utils: resourceUtils', () => {
   describe('hasMaxReservations', () => {
@@ -656,15 +657,11 @@ describe('Utils: resourceUtils', () => {
       expect(result).toBe('days');
     });
 
-    test('returns max period as hours', () => {
-      const t = simple.stub().returnWith('hours');
+    test('returns correct time string when period is less than 1 day ', () => {
+      const t = value => value;
       const resource = { maxPeriod: '02:00:00' };
-      const result = getMaxPeriodText(t, resource);
-
-      expect(t.callCount).toBe(1);
-      expect(t.lastCall.args[0]).toEqual('ResourceHeader.maxPeriodHours');
-      expect(t.lastCall.args[1]).toEqual({ hours: 2 });
-      expect(result).toBe('hours');
+      const expectedResult = getPrettifiedPeriodUnits(resource.maxPeriod);
+      expect(getMaxPeriodText(t, resource)).toBe(expectedResult);
     });
   });
 
@@ -680,15 +677,11 @@ describe('Utils: resourceUtils', () => {
       expect(result).toBe('days');
     });
 
-    test('returns min period as hours', () => {
-      const t = simple.stub().returnWith('hours');
-      const resource = { minPeriod: '02:00:00' };
-      const result = getMinPeriodText(t, resource);
-
-      expect(t.callCount).toBe(1);
-      expect(t.lastCall.args[0]).toEqual('ResourceHeader.minPeriodHours');
-      expect(t.lastCall.args[1]).toEqual({ hours: 2 });
-      expect(result).toBe('hours');
+    test('returns correct time string when period is less than 1 day ', () => {
+      const t = value => value;
+      const resource = { maxPeriod: '02:40:00' };
+      const expectedResult = getPrettifiedPeriodUnits(resource.maxPeriod);
+      expect(getMaxPeriodText(t, resource)).toBe(expectedResult);
     });
   });
 

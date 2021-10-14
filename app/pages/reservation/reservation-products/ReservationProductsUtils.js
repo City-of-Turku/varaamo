@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export const PRODUCT_TYPES = {
   MANDATORY: 'rent',
   EXTRA: 'extra'
@@ -112,21 +110,4 @@ export function compareTaxPercentages(taxA, taxB) {
  */
 export function getSortedTaxPercentages(taxPercentages) {
   return taxPercentages.sort(compareTaxPercentages);
-}
-
-/**
- * Formats given period into hours and/or minutes
- * @param {string} pricePeriod e.g. 1:30:00
- * @returns {string} e.g. '1h 30min', '2h' or '45min'
- */
-export function getPrettifiedPeriodUnits(pricePeriod) {
-  const duration = moment.duration(pricePeriod);
-  const hours = duration.hours();
-  const minutes = duration.minutes();
-
-  const hoursText = hours > 0 ? `${hours}h` : '';
-  const minutesText = minutes > 0 ? `${minutes}min` : '';
-  const spacer = hoursText && minutesText ? ' ' : '';
-
-  return `${hoursText}${spacer}${minutesText}`;
 }
