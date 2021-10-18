@@ -324,6 +324,7 @@
   "ReservationProducts.heading.extra": "Lisäpalvelut",
   "ReservationProducts.heading.mandatory": "Varaukseen liittyvät pakolliset maksut",
   "ReservationProducts.price.includesVat": "(sis. ALV {vat}%)",
+  "ReservationProducts.select.clientGroup.label": "Asiakasryhmäsi",
   "ReservationProducts.staffSkip.mandatory": "Ohita pakolliset maksut toimipisteen henkilökunnan oikeuksilla",
   "ReservationProducts.summary.heading": "Yhteenveto",
   "ReservationProducts.summary.total": "Yhteensä: {total} €",

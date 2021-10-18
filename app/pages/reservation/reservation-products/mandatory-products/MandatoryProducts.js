@@ -7,11 +7,12 @@ import MandatoryProductTableRow from './MandatoryProductTableRow';
 import { getProductsOfType, PRODUCT_TYPES } from '../ReservationProductsUtils';
 
 function MandatoryProducts({
-  currentLanguage, isStaff, onStaffSkipChange, orderLines, skipProducts, t
+  currentCustomerGroupId, currentLanguage, isStaff, onStaffSkipChange, orderLines, skipProducts, t
 }) {
   const mandatoryProducts = getProductsOfType(orderLines, PRODUCT_TYPES.MANDATORY)
     .map(orderLine => (
       <MandatoryProductTableRow
+        currentCustomerGroupId={currentCustomerGroupId}
         currentLanguage={currentLanguage}
         key={orderLine.product.id}
         orderLine={orderLine}
@@ -52,6 +53,7 @@ function MandatoryProducts({
 }
 
 MandatoryProducts.propTypes = {
+  currentCustomerGroupId: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   isStaff: PropTypes.bool.isRequired,
   onStaffSkipChange: PropTypes.func.isRequired,

@@ -2,13 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import injectT from '../../../../i18n/injectT';
-import { getRoundedVat } from '../ReservationProductsUtils';
+import { getCustomerGroupPrice, getRoundedVat } from '../ReservationProductsUtils';
 import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
 
-function MandatoryProductTableRow({ currentLanguage, orderLine, t }) {
+function MandatoryProductTableRow({
+  currentCustomerGroupId, currentLanguage, orderLine, t
+}) {
   const name = getLocalizedFieldValue(orderLine.product.name, currentLanguage, true);
-  const basePrice = orderLine.product.price.amount;
+
+  // if customer group is chosen, try to use its price, otherwise use base/default price
+  const customerGroupPrice = getCustomerGroupPrice(
+    currentCustomerGroupId, orderLine.product.customer_groups
+  );
+
+  const basePrice = customerGroupPrice || orderLine.product.price.amount;
   const totalPrice = orderLine.price;
 
   const type = orderLine.product.price.type;
@@ -28,6 +36,7 @@ function MandatoryProductTableRow({ currentLanguage, orderLine, t }) {
 }
 
 MandatoryProductTableRow.propTypes = {
+  currentCustomerGroupId: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   orderLine: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,

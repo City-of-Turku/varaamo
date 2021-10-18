@@ -111,3 +111,34 @@ export function compareTaxPercentages(taxA, taxB) {
 export function getSortedTaxPercentages(taxPercentages) {
   return taxPercentages.sort(compareTaxPercentages);
 }
+
+/**
+ * Returns price for given current customer group or undefined when given
+ * customer group doesn't have a price in given customer groups array.
+ * @param {string} currentCustomerGroupId
+ * @param {array} customerGroups
+ * @returns {string|undefined} found customer group price or undefined
+ */
+export function getCustomerGroupPrice(currentCustomerGroupId, customerGroups) {
+  const found = customerGroups.find(group => group.id === currentCustomerGroupId);
+  return found ? found.price : undefined;
+}
+
+/**
+ * Returns unique customer groups (names and id) from given resource
+ * and its products
+ * @param {object} resource
+ * @returns {array} array of unique customer group objects
+ */
+export function getUniqueCustomerGroups(resource) {
+  const customerGroups = {};
+  const products = resource.products;
+  products.forEach((product) => {
+    const productGroups = product.customerGroups;
+    productGroups.forEach((group) => {
+      customerGroups[group.id] = { ...group };
+    });
+  });
+
+  return Object.values(customerGroups);
+}

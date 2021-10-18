@@ -8,7 +8,7 @@ import ExtraProductTableRow from './ExtraProductTableRow';
 
 
 function ExtraProducts({
-  changeProductQuantity, currentLanguage, orderLines, t
+  changeProductQuantity, currentCustomerGroupId, currentLanguage, orderLines, t
 }) {
   const quantityHeadingId = 'extra-products-product-quantity';
   const handleQuantityChange = (newQuantity, orderLine) => {
@@ -18,6 +18,7 @@ function ExtraProducts({
   const extraProducts = getProductsOfType(orderLines, PRODUCT_TYPES.EXTRA)
     .map(orderLine => (
       <ExtraProductTableRow
+        currentCustomerGroupId={currentCustomerGroupId}
         currentLanguage={currentLanguage}
         handleQuantityChange={handleQuantityChange}
         key={orderLine.product.id}
@@ -52,6 +53,7 @@ function ExtraProducts({
 
 ExtraProducts.propTypes = {
   changeProductQuantity: PropTypes.func.isRequired,
+  currentCustomerGroupId: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   orderLines: PropTypes.array.isRequired,
   t: PropTypes.func.isRequired,

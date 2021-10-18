@@ -326,6 +326,7 @@
   "ReservationProducts.heading.extra": "Tilläggstjänster",
   "ReservationProducts.heading.mandatory": "Obligatoriska bokningsavgifter",
   "ReservationProducts.price.includesVat": "(inkl. MOMS {vat}%)",
+  "ReservationProducts.select.clientGroup.label": "Din kundgrupp",
   "ReservationProducts.staffSkip.mandatory": "Förbigå obligatoriska avgifter med filialpersonalens rättigheter",
   "ReservationProducts.summary.heading": "Sammanfattning",
   "ReservationProducts.summary.total": "Totalt: {total} €",
