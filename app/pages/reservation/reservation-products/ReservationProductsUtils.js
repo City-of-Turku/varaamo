@@ -120,7 +120,7 @@ export function getSortedTaxPercentages(taxPercentages) {
  * @returns {string|undefined} found customer group price or undefined
  */
 export function getCustomerGroupPrice(currentCustomerGroupId, customerGroups) {
-  const found = customerGroups.find(group => group.id === currentCustomerGroupId);
+  const found = customerGroups.find(group => group.customer_group.id === currentCustomerGroupId);
   return found ? found.price : undefined;
 }
 
@@ -134,9 +134,10 @@ export function getUniqueCustomerGroups(resource) {
   const customerGroups = {};
   const products = resource.products;
   products.forEach((product) => {
-    const productGroups = product.customerGroups;
-    productGroups.forEach((group) => {
-      customerGroups[group.id] = { ...group };
+    const { productCustomerGroups } = product.productCustomerGroups;
+    productCustomerGroups.forEach((group) => {
+      const { customerGroup } = group;
+      customerGroups[customerGroup.id] = { ...customerGroup };
     });
   });
 

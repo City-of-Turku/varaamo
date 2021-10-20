@@ -13,7 +13,7 @@ function MandatoryProductTableRow({
 
   // if customer group is chosen, try to use its price, otherwise use base/default price
   const customerGroupPrice = getCustomerGroupPrice(
-    currentCustomerGroupId, orderLine.product.customer_groups
+    currentCustomerGroupId, orderLine.product.product_customer_groups
   );
 
   const basePrice = customerGroupPrice || orderLine.product.price.amount;
