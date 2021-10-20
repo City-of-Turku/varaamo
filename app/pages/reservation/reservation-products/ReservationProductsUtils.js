@@ -134,7 +134,7 @@ export function getUniqueCustomerGroups(resource) {
   const customerGroups = {};
   const products = resource.products;
   products.forEach((product) => {
-    const { productCustomerGroups } = product.productCustomerGroups;
+    const { productCustomerGroups } = product;
     productCustomerGroups.forEach((group) => {
       const { customerGroup } = group;
       customerGroups[customerGroup.id] = { ...customerGroup };

@@ -305,10 +305,10 @@ class UnconnectedReservationPage extends Component {
   }
 
   handleChangeProductQuantity(product, quantity, type = constants.PRODUCT_TYPES.EXTRA) {
-    const { resource } = this.props;
+    const { resource, selected } = this.props;
+    const { mandatoryProducts, extraProducts, currentCustomerGroup } = this.state;
     if (hasProducts(resource)) {
       if (type === constants.PRODUCT_TYPES.MANDATORY) {
-        const { mandatoryProducts } = this.state;
         const updatedMandatoryProducts = mandatoryProducts.map((mandatoryProduct) => {
           if (mandatoryProduct.id === product.id) {
             return changeProductQuantity(product, quantity);
@@ -317,11 +317,10 @@ class UnconnectedReservationPage extends Component {
         });
         this.setState({ mandatoryProducts: updatedMandatoryProducts });
         this.handleCheckOrderPrice(
-          resource, this.props.selected, updatedMandatoryProducts, this.state.extraProducts
+          resource, selected, updatedMandatoryProducts, extraProducts, false, currentCustomerGroup
         );
       }
       if (type === constants.PRODUCT_TYPES.EXTRA) {
-        const { extraProducts } = this.state;
         const updatedExtraProducts = extraProducts.map((extraProduct) => {
           if (extraProduct.id === product.id) {
             return changeProductQuantity(product, quantity);
@@ -330,7 +329,7 @@ class UnconnectedReservationPage extends Component {
         });
         this.setState({ extraProducts: updatedExtraProducts });
         this.handleCheckOrderPrice(
-          resource, this.props.selected, this.state.mandatoryProducts, updatedExtraProducts
+          resource, selected, mandatoryProducts, updatedExtraProducts, false, currentCustomerGroup
         );
       }
     }
