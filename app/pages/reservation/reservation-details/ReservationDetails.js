@@ -1,12 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Well } from 'react-bootstrap';
+import moment from 'moment';
 
 import injectT from '../../../i18n/injectT';
+import { getPrettifiedDuration } from 'utils/timeUtils';
 
 function ReservationDetails({
-  orderPrice, reservationTime, resourceName, unitName, t
+  orderPrice, resourceName, selectedTime, unitName, t
 }) {
+  let reservationTime = '';
+  if (selectedTime) {
+    const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
+    const endText = moment(selectedTime.end).format('HH:mm');
+    const duration = getPrettifiedDuration(selectedTime.begin, selectedTime.end);
+    reservationTime = `${beginText}–${endText} (${duration})`;
+  }
+
   return (
     <Well className="app-ReservationDetails">
       <h2>{t('ReservationPage.detailsTitle')}</h2>
@@ -51,13 +61,13 @@ function ReservationDetails({
 
 ReservationDetails.defaultProps = {
   orderPrice: '',
-  reservationTime: '',
+  selectedTime: null,
 };
 
 ReservationDetails.propTypes = {
   orderPrice: PropTypes.string,
-  reservationTime: PropTypes.string,
   resourceName: PropTypes.string.isRequired,
+  selectedTime: PropTypes.object,
   t: PropTypes.func.isRequired,
   unitName: PropTypes.string.isRequired,
 };

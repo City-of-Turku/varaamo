@@ -233,6 +233,17 @@ function isValidDateString(dateString) {
 }
 
 /**
+ * Formats and returns given begin and end time into hours and/or minutes period
+ * @param {string|object} begin time parsable by moment
+ * @param {string|object} end time parsable by moment
+ * @returns {string} e.g. '1h 30min', '2h' or '45min'
+ */
+function getPrettifiedDuration(begin, end) {
+  const duration = moment.duration(moment(end).diff(moment(begin)));
+  return getPrettifiedPeriodUnits(duration);
+}
+
+/**
  * Formats given period into hours and/or minutes
  * @param {string} period e.g. 1:30:00
  * @returns {string} e.g. '1h 30min', '2h' or '45min'
@@ -313,6 +324,7 @@ export {
   getDuration,
   getDurationHours,
   getEndTimeString,
+  getPrettifiedDuration,
   getPrettifiedPeriodUnits,
   getStartTimeString,
   getTimeSlots,

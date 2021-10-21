@@ -3,7 +3,6 @@ import Immutable from 'seamless-immutable';
 import { Button, Col } from 'react-bootstrap';
 import Loader from 'react-loader';
 import { isEmpty } from 'lodash';
-import moment from 'moment';
 
 import { shallowWithIntl } from 'utils/testUtils';
 import OrderLine from 'utils/fixtures/OrderLine';
@@ -180,13 +179,9 @@ describe('reservation-products/ProductsSummary', () => {
     });
 
     test('reservation details', () => {
-      const { selectedTime } = defaultProps;
-      const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
-      const endText = moment(selectedTime.end).format('HH:mm');
-      const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
       const details = getWrapper().find(ReservationDetails);
       expect(details).toHaveLength(1);
-      expect(details.prop('reservationTime')).toBe(`${beginText}–${endText} (${hours} h)`);
+      expect(details.prop('selectedTime')).toBe(defaultProps.selectedTime);
       expect(details.prop('resourceName')).toBe(defaultProps.resource.name);
       expect(details.prop('unitName')).toBe(defaultProps.unit.name);
     });

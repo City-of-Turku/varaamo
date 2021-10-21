@@ -3,6 +3,7 @@ import React from 'react';
 import moment from 'moment';
 
 import iconClock from 'assets/icons/clock-o.svg';
+import { getPrettifiedDuration } from 'utils/timeUtils';
 
 function ReservationDate({ beginDate, endDate }) {
   if (!beginDate || !endDate) {
@@ -15,7 +16,7 @@ function ReservationDate({ beginDate, endDate }) {
   const month = reservationBegin.format('MMMM');
   const beginTime = reservationBegin.format('HH:mm');
   const endTime = reservationEnd.format('HH:mm');
-  const hours = reservationEnd.diff(reservationBegin, 'hours', true);
+  const duration = getPrettifiedDuration(reservationBegin, reservationEnd);
 
   return (
     <div className="reservation-date">
@@ -26,7 +27,7 @@ function ReservationDate({ beginDate, endDate }) {
       </div>
       <p className="reservation-date__time">
         <img alt="" className="reservation-date__icon" src={iconClock} />
-        {` ${beginTime} \u2013 ${endTime} (${hours}h)`}
+        {` ${beginTime} \u2013 ${endTime} (${duration})`}
       </p>
     </div>
   );

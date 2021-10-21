@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Button, Col, Row
 } from 'react-bootstrap';
-import moment from 'moment';
 import { isEmpty } from 'lodash';
 import Loader from 'react-loader';
 
@@ -17,10 +16,6 @@ function ReservationProducts({
   changeProductQuantity, currentLanguage, isEditing, isStaff, onBack, onCancel, onConfirm,
   onStaffSkipChange, order, resource, selectedTime, skipMandatoryProducts, t, unit
 }) {
-  const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
-  const endText = moment(selectedTime.end).format('HH:mm');
-  const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
-
   const orderLines = order.order_lines || [];
 
   return (
@@ -77,8 +72,8 @@ function ReservationProducts({
 
         <Col lg={4} sm={12}>
           <ReservationDetails
-            reservationTime={`${beginText}–${endText} (${hours} h)`}
             resourceName={resource.name}
+            selectedTime={selectedTime}
             unitName={unit.name}
           />
         </Col>
