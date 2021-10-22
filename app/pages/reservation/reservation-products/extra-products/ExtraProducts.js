@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 
 import injectT from '../../../../i18n/injectT';
-import { getProductsOfType, PRODUCT_TYPES } from '../ReservationProductsUtils';
+import { PRODUCT_TYPES } from '../ReservationProductsUtils';
 import ExtraProductTableRow from './ExtraProductTableRow';
+import MobileProduct from '../MobileProduct';
 
 
 function ExtraProducts({
@@ -15,15 +16,26 @@ function ExtraProducts({
     changeProductQuantity(orderLine.product, newQuantity, PRODUCT_TYPES.EXTRA);
   };
 
-  const extraProducts = getProductsOfType(orderLines, PRODUCT_TYPES.EXTRA)
-    .map(orderLine => (
+  const extraProducts = [];
+  const mobileProducts = orderLines.reduce((acc, order) => {
+    acc.push(
+      <MobileProduct
+        currentLanguage={currentLanguage}
+        handleChange={handleQuantityChange}
+        key={order.product.id}
+        order={order}
+      />
+    );
+    extraProducts.push(
       <ExtraProductTableRow
         currentLanguage={currentLanguage}
         handleQuantityChange={handleQuantityChange}
-        key={orderLine.product.id}
-        orderLine={orderLine}
+        key={order.product.id}
+        orderLine={order}
       />
-    ));
+    );
+    return acc;
+  }, []);
 
   return (
     <React.Fragment>
@@ -43,6 +55,13 @@ function ExtraProducts({
               {extraProducts}
             </tbody>
           </Table>
+        </div>
+      ) : null}
+      {mobileProducts.length > 0 ? (
+        <div className="extra-mobile-list">
+          <ul>
+            {mobileProducts}
+          </ul>
         </div>
       ) : null}
     </React.Fragment>

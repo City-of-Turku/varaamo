@@ -6,14 +6,18 @@ import OrderLine from 'utils/fixtures/OrderLine';
 import Product from 'utils/fixtures/Product';
 import MandatoryProducts from '../MandatoryProducts';
 import MandatoryProductTableRow from '../MandatoryProductTableRow';
+import MobileProduct from '../../MobileProduct';
 
-describe('reservation-products/extra-products/ExtraProducts', () => {
+describe('reservation-products/mandatory-products/MandatoryProducts', () => {
   const defaultProps = {
     currentLanguage: 'fi',
     isStaff: false,
     onStaffSkipChange: () => {},
     skipProducts: false,
-    orderLines: [OrderLine.build({ product: Product.build({ type: 'rent' }) })]
+    orderLines: [
+      OrderLine.build({ product: Product.build({ type: 'rent' }) }),
+      OrderLine.build({ product: Product.build({ type: 'rent' }) })
+    ]
   };
 
   function getWrapper(extraProps) {
@@ -110,9 +114,34 @@ describe('reservation-products/extra-products/ExtraProducts', () => {
 
     test('MandatoryProductTableRow', () => {
       const mandatoryProductTableRow = getWrapper().find(MandatoryProductTableRow);
-      expect(mandatoryProductTableRow).toHaveLength(1);
-      expect(mandatoryProductTableRow.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
-      expect(mandatoryProductTableRow.prop('orderLine')).toBe(defaultProps.orderLines[0]);
+      expect(mandatoryProductTableRow).toHaveLength(2);
+      mandatoryProductTableRow.forEach((element, index) => {
+        expect(element.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+        expect(element.prop('orderLine')).toEqual(defaultProps.orderLines[index]);
+      });
+    });
+
+    describe('MobileProducts', () => {
+      test('container div exists', () => {
+        const element = getWrapper().find('div.mandatory-mobile-list');
+        expect(element).toHaveLength(1);
+      });
+
+      test('ul element exists', () => {
+        const element = getWrapper().find('ul');
+        expect(element).toHaveLength(1);
+        // 1 child per product so in this case 2.
+        expect(element.children()).toHaveLength(2);
+      });
+
+      test('MobileProduct for each product', () => {
+        const elements = getWrapper().find(MobileProduct);
+        expect(elements).toHaveLength(2);
+        elements.forEach((element, index) => {
+          expect(element.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+          expect(element.prop('order')).toEqual(defaultProps.orderLines[index]);
+        });
+      });
     });
   });
 });

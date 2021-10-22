@@ -11,6 +11,7 @@ describe('reservation-products/extra-products/QuantityInput', () => {
     maxQuantity: 10,
     minQuantity: 0,
     quantity: 2,
+    mobileProduct: false,
   };
 
   function getWrapper(extraProps) {
@@ -52,12 +53,18 @@ describe('reservation-products/extra-products/QuantityInput', () => {
       expect(glyph.prop('glyph')).toBe('plus');
     });
 
-    test('quantity span', () => {
+    test('quantity span default', () => {
       const span = getWrapper().find('span');
       expect(span).toHaveLength(1);
       expect(span.prop('aria-live')).toBe('polite');
       expect(span.prop('role')).toBe('status');
       expect(span.text()).toBe(defaultProps.quantity.toString());
+    });
+
+    test('quantity span with correct text when mobileProduct is true', () => {
+      const span = getWrapper({ mobileProduct: true }).find('span');
+      expect(span).toHaveLength(1);
+      expect(span.text()).toBe(`ReservationProducts.table.heading.quantity: ${defaultProps.quantity}`);
     });
   });
 });

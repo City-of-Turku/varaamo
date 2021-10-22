@@ -11,12 +11,15 @@ import MandatoryProducts from './mandatory-products/MandatoryProducts';
 import ProductsSummary from './ProductsSummary';
 import ExtraProducts from './extra-products/ExtraProducts';
 import ReservationDetails from '../reservation-details/ReservationDetails';
+import { getProductsOfType, PRODUCT_TYPES } from './ReservationProductsUtils';
 
 function ReservationProducts({
   changeProductQuantity, currentLanguage, isEditing, isStaff, onBack, onCancel, onConfirm,
   onStaffSkipChange, order, resource, selectedTime, skipMandatoryProducts, t, unit
 }) {
   const orderLines = order.order_lines || [];
+  const mandatoryOrders = getProductsOfType(orderLines, PRODUCT_TYPES.MANDATORY);
+  const extraOrders = getProductsOfType(orderLines, PRODUCT_TYPES.EXTRA);
 
   return (
     <div className="app-ReservationProducts">
@@ -29,13 +32,13 @@ function ReservationProducts({
                 currentLanguage={currentLanguage}
                 isStaff={isStaff}
                 onStaffSkipChange={onStaffSkipChange}
-                orderLines={orderLines}
+                orderLines={mandatoryOrders}
                 skipProducts={skipMandatoryProducts}
               />
               <ExtraProducts
                 changeProductQuantity={changeProductQuantity}
                 currentLanguage={currentLanguage}
-                orderLines={orderLines}
+                orderLines={extraOrders}
               />
               <ProductsSummary order={order} />
             </Loader>

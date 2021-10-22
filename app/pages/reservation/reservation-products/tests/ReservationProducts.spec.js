@@ -17,7 +17,31 @@ import ReservationDetails from '../../reservation-details/ReservationDetails';
 
 describe('reservation-products/ProductsSummary', () => {
   const resource = Immutable(Resource.build());
-
+  const rentProduct = Product.build({
+    type: 'rent',
+    price: {
+      type: 'fixed', tax_percentage: '24.00', amount: '8.00'
+    }
+  });
+  const extraProductOne = Product.build({
+    type: 'extra',
+    price: {
+      type: 'fixed', tax_percentage: '20.00', amount: '15.00'
+    },
+    max_quantity: 10,
+  });
+  const extraProductTwo = Product.build({
+    type: 'extra',
+    price: {
+      type: 'fixed', tax_percentage: '0.00', amount: '55.00'
+    },
+    max_quantity: 1,
+  });
+  const orderLines = [
+    OrderLine.build({ product: rentProduct, quantity: 1, price: '8.00' }),
+    OrderLine.build({ product: extraProductOne, quantity: 3, price: '45.00' }),
+    OrderLine.build({ product: extraProductTwo, quantity: 1, price: '55.00' }),
+  ];
   const defaultProps = {
     changeProductQuantity: () => {},
     currentLanguage: 'fi',
@@ -30,7 +54,7 @@ describe('reservation-products/ProductsSummary', () => {
     order: {
       begin: '2021-09-24T11:00:00+03:00',
       end: '2021-09-24T11:30:00+03:00',
-      order_lines: [OrderLine.build({ product: Product.build(), quantity: 1 })],
+      order_lines: orderLines,
       price: '5.00'
     },
     resource,
@@ -97,7 +121,7 @@ describe('reservation-products/ProductsSummary', () => {
         expect(mandatoryProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
         expect(mandatoryProducts.prop('isStaff')).toBe(defaultProps.isStaff);
         expect(mandatoryProducts.prop('onStaffSkipChange')).toBe(defaultProps.onStaffSkipChange);
-        expect(mandatoryProducts.prop('orderLines')).toBe(defaultProps.order.order_lines);
+        expect(mandatoryProducts.prop('orderLines')).toEqual([orderLines[0]]);
         expect(mandatoryProducts.prop('skipProducts')).toBe(defaultProps.skipMandatoryProducts);
       });
 
@@ -106,7 +130,7 @@ describe('reservation-products/ProductsSummary', () => {
         expect(extraProducts).toHaveLength(1);
         expect(extraProducts.prop('changeProductQuantity')).toBe(defaultProps.changeProductQuantity);
         expect(extraProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
-        expect(extraProducts.prop('orderLines')).toBe(defaultProps.order.order_lines);
+        expect(extraProducts.prop('orderLines')).toEqual([orderLines[1], orderLines[2]]);
       });
 
       test('ProductsSummary', () => {
