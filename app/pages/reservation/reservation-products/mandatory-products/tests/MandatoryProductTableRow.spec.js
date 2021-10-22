@@ -2,7 +2,7 @@ import React from 'react';
 
 import { shallowWithIntl } from 'utils/testUtils';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
-import { getPrettifiedPeriodUnits } from '../../ReservationProductsUtils';
+import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import MandatoryProductTableRow from '../MandatoryProductTableRow';
 import OrderLine from 'utils/fixtures/OrderLine';
 import Product from 'utils/fixtures/Product';

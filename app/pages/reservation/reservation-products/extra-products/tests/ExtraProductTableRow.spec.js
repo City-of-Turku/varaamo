@@ -4,7 +4,7 @@ import { shallowWithIntl } from 'utils/testUtils';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
 import ExtraProductTableRow from '../ExtraProductTableRow';
 import QuantityInput from '../QuantityInput';
-import { getPrettifiedPeriodUnits } from '../../ReservationProductsUtils';
+import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import Product from 'utils/fixtures/Product';
 import OrderLine from 'utils/fixtures/OrderLine';
 

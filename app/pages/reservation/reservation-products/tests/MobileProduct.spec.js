@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { shallowWithIntl } from '../../../../utils/testUtils';
-import MobileProduct, { ExtraProduct, MandatoryProduct } from '../MobileProduct';
+import MobileProduct from '../MobileProduct';
 import OrderLine from 'utils/fixtures/OrderLine';
 import Product from 'utils/fixtures/Product';
 import { getPrettifiedPeriodUnits } from '../../../../utils/timeUtils';
