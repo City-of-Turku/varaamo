@@ -5,8 +5,9 @@ import { Glyphicon } from 'react-bootstrap';
 import injectT from '../../../../i18n/injectT';
 
 function QuantityInput({
-  handleAdd, handleReduce, quantity, maxQuantity, minQuantity, t
+  handleAdd, handleReduce, quantity, maxQuantity, minQuantity, t, mobileProduct
 }) {
+  const textValue = mobileProduct ? `${t('ReservationProducts.table.heading.quantity')}: ${quantity}` : quantity;
   return (
     <React.Fragment>
       <button
@@ -18,7 +19,7 @@ function QuantityInput({
       >
         <Glyphicon aria-hidden="true" glyph="minus" />
       </button>
-      <span aria-live="polite" role="status">{quantity}</span>
+      <span aria-live="polite" role="status">{textValue}</span>
       <button
         aria-label={t('ReservationProducts.button.addOne')}
         className="quantity-button plus"
@@ -35,6 +36,7 @@ function QuantityInput({
 QuantityInput.defaultProps = {
   maxQuantity: 0,
   minQuantity: 0,
+  mobileProduct: false,
 };
 
 QuantityInput.propTypes = {
@@ -42,6 +44,7 @@ QuantityInput.propTypes = {
   handleReduce: PropTypes.func.isRequired,
   maxQuantity: PropTypes.number,
   minQuantity: PropTypes.number,
+  mobileProduct: PropTypes.bool,
   quantity: PropTypes.number.isRequired,
   t: PropTypes.func.isRequired,
 };

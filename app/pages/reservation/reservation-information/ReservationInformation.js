@@ -6,7 +6,6 @@ import camelCase from 'lodash/camelCase';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/lib/Col';
-import moment from 'moment';
 
 import { injectT } from 'i18n';
 import { isStaffEvent, hasPayment, hasProducts } from 'utils/reservationUtils';
@@ -178,9 +177,6 @@ class ReservationInformation extends Component {
 
     const termsAndConditions = getTermsAndConditions(resource);
     const paymentTermsAndConditions = getPaymentTermsAndConditions(resource);
-    const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
-    const endText = moment(selectedTime.end).format('HH:mm');
-    const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
 
     return (
       <div className="app-ReservationInformation">
@@ -208,8 +204,8 @@ class ReservationInformation extends Component {
         <Col lg={4} sm={12}>
           <ReservationDetails
             orderPrice={(hasProducts(resource) && order && order.price) ? `${order.price} €` : ''}
-            reservationTime={`${beginText}–${endText} (${hours} h)`}
             resourceName={resource.name}
+            selectedTime={selectedTime}
             unitName={unit.name}
           />
         </Col>

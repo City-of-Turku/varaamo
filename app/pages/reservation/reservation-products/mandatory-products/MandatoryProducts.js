@@ -4,20 +4,30 @@ import { Checkbox, Table, Well } from 'react-bootstrap';
 
 import injectT from '../../../../i18n/injectT';
 import MandatoryProductTableRow from './MandatoryProductTableRow';
-import { getProductsOfType, PRODUCT_TYPES } from '../ReservationProductsUtils';
+import MobileProduct from '../MobileProduct';
 
 function MandatoryProducts({
   currentCustomerGroupId, currentLanguage, isStaff, onStaffSkipChange, orderLines, skipProducts, t
 }) {
-  const mandatoryProducts = getProductsOfType(orderLines, PRODUCT_TYPES.MANDATORY)
-    .map(orderLine => (
+  const mandatoryProducts = [];
+  const mobileProducts = orderLines.reduce((acc, order) => {
+    acc.push(
+      <MobileProduct
+        currentLanguage={currentLanguage}
+        key={order.product.id}
+        order={order}
+      />
+    );
+    mandatoryProducts.push(
       <MandatoryProductTableRow
         currentCustomerGroupId={currentCustomerGroupId}
         currentLanguage={currentLanguage}
-        key={orderLine.product.id}
-        orderLine={orderLine}
+        key={order.product.id}
+        orderLine={order}
       />
-    ));
+    );
+    return acc;
+  }, []);
 
   return (
     <React.Fragment>
@@ -46,6 +56,13 @@ function MandatoryProducts({
               {mandatoryProducts}
             </tbody>
           </Table>
+          {mobileProducts.length > 0 ? (
+            <div className="mandatory-mobile-list">
+              <ul>
+                {mobileProducts}
+              </ul>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </React.Fragment>

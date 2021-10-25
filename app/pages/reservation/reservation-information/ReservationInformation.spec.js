@@ -101,7 +101,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     const details = getWrapper({ resource, order }).find(ReservationDetails);
     expect(details).toHaveLength(1);
     expect(details.prop('orderPrice')).toBe(`${order.price} €`);
-    expect(details.prop('reservationTime')).toBe('10.10.2016 10:00–11:00 (1 h)');
+    expect(details.prop('selectedTime')).toBe(defaultProps.selectedTime);
     expect(details.prop('resourceName')).toBe(resource.name);
     expect(details.prop('unitName')).toBe(defaultProps.unit.name);
   });

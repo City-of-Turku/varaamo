@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Button, Col, Row
 } from 'react-bootstrap';
-import moment from 'moment';
 import { isEmpty } from 'lodash';
 import Loader from 'react-loader';
 
@@ -13,19 +12,17 @@ import ProductsSummary from './ProductsSummary';
 import ExtraProducts from './extra-products/ExtraProducts';
 import ReservationDetails from '../reservation-details/ReservationDetails';
 import CustomerGroupSelect from './CustomerGroupSelect';
-import { getUniqueCustomerGroups } from './ReservationProductsUtils';
+import { getProductsOfType, PRODUCT_TYPES, getUniqueCustomerGroups } from './ReservationProductsUtils';
 
 function ReservationProducts({
   changeProductQuantity, currentCustomerGroup, currentLanguage, isEditing,
   isStaff, onBack, onCancel, onConfirm, onCustomerGroupChange,
   onStaffSkipChange, order, resource, selectedTime, skipMandatoryProducts, t, unit
 }) {
-  const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
-  const endText = moment(selectedTime.end).format('HH:mm');
-  const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
-
   const orderLines = order.order_lines || [];
   const uniqueCustomerGroups = getUniqueCustomerGroups(resource);
+  const mandatoryOrders = getProductsOfType(orderLines, PRODUCT_TYPES.MANDATORY);
+  const extraOrders = getProductsOfType(orderLines, PRODUCT_TYPES.EXTRA);
 
   return (
     <div className="app-ReservationProducts">
@@ -46,14 +43,14 @@ function ReservationProducts({
                 currentLanguage={currentLanguage}
                 isStaff={isStaff}
                 onStaffSkipChange={onStaffSkipChange}
-                orderLines={orderLines}
+                orderLines={mandatoryOrders}
                 skipProducts={skipMandatoryProducts}
               />
               <ExtraProducts
                 changeProductQuantity={changeProductQuantity}
                 currentCustomerGroupId={currentCustomerGroup}
                 currentLanguage={currentLanguage}
-                orderLines={orderLines}
+                orderLines={extraOrders}
               />
               <ProductsSummary order={order} />
             </Loader>
@@ -90,8 +87,8 @@ function ReservationProducts({
 
         <Col lg={4} sm={12}>
           <ReservationDetails
-            reservationTime={`${beginText}–${endText} (${hours} h)`}
             resourceName={resource.name}
+            selectedTime={selectedTime}
             unitName={unit.name}
           />
         </Col>

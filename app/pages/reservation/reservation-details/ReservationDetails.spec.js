@@ -6,7 +6,6 @@ import ReservationDetails from './ReservationDetails';
 describe('pages/reservation/reservation-details/ReservationDetails', () => {
   const defaultProps = {
     orderPrice: '',
-    reservationTime: '',
     resourceName: 'test-resource-name',
     unitName: 'test-unit-name',
   };
@@ -29,9 +28,13 @@ describe('pages/reservation/reservation-details/ReservationDetails', () => {
 
     describe('correct details fields', () => {
       const orderPrice = '3.50 €';
-      const reservationTime = '13.11.2021 13:00-14:00 (1h)';
+      const selectedTime = {
+        begin: '2021-10-21T08:35:00.000Z',
+        end: '2021-10-21T09:45:00.000Z',
+      };
+      const reservationTime = '21.10.2021 11:35–12:45 (1h 10min)';
 
-      test('when orderPrice and reservationTime are not defined', () => {
+      test('when orderPrice and selectedTime are not defined', () => {
         const wrapper = getWrapper();
         const labels = wrapper.find('.app-ReservationDetails__label');
         const values = wrapper.find('.app-ReservationDetails__value');
@@ -46,7 +49,7 @@ describe('pages/reservation/reservation-details/ReservationDetails', () => {
         expect(values.at(1).text()).toBe(defaultProps.unitName);
       });
 
-      test('when orderPrice is defined and reservationTime is not defined', () => {
+      test('when orderPrice is defined and selectedTime is not defined', () => {
         const wrapper = getWrapper({ orderPrice });
         const labels = wrapper.find('.app-ReservationDetails__label');
         const values = wrapper.find('.app-ReservationDetails__value');
@@ -63,8 +66,8 @@ describe('pages/reservation/reservation-details/ReservationDetails', () => {
         expect(values.at(2).text()).toBe(orderPrice);
       });
 
-      test('when orderPrice is not defined and reservationTime is defined', () => {
-        const wrapper = getWrapper({ reservationTime });
+      test('when orderPrice is not defined and selectedTime is defined', () => {
+        const wrapper = getWrapper({ selectedTime });
         const labels = wrapper.find('.app-ReservationDetails__label');
         const values = wrapper.find('.app-ReservationDetails__value');
 
@@ -80,8 +83,8 @@ describe('pages/reservation/reservation-details/ReservationDetails', () => {
         expect(values.at(2).text()).toBe(reservationTime);
       });
 
-      test('when orderPrice and reservationTime are defined', () => {
-        const wrapper = getWrapper({ orderPrice, reservationTime });
+      test('when orderPrice and selectedTime are defined', () => {
+        const wrapper = getWrapper({ orderPrice, selectedTime });
         const labels = wrapper.find('.app-ReservationDetails__label');
         const values = wrapper.find('.app-ReservationDetails__value');
 
