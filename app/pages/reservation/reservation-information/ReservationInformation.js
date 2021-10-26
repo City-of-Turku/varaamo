@@ -1,19 +1,17 @@
+import constants from 'constants/AppConstants';
+
 import pick from 'lodash/pick';
 import uniq from 'lodash/uniq';
 import camelCase from 'lodash/camelCase';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/lib/Col';
-import Row from 'react-bootstrap/lib/Row';
-import Well from 'react-bootstrap/lib/Well';
-import moment from 'moment';
 
 import { injectT } from 'i18n';
-import {
-  isStaffEvent, checkOrderPrice, createOrderLines, hasProducts, getFormattedProductPrice
-} from 'utils/reservationUtils';
+import { isStaffEvent, hasPayment, hasProducts } from 'utils/reservationUtils';
 import { getTermsAndConditions, getPaymentTermsAndConditions } from 'utils/resourceUtils';
 import ReservationInformationForm from './ReservationInformationForm';
+import ReservationDetails from '../reservation-details/ReservationDetails';
 
 class ReservationInformation extends Component {
   static propTypes = {
@@ -26,36 +24,14 @@ class ReservationInformation extends Component {
     onConfirm: PropTypes.func.isRequired,
     openResourceTermsModal: PropTypes.func.isRequired,
     openResourcePaymentTermsModal: PropTypes.func.isRequired,
+    order: PropTypes.object.isRequired,
     reservation: PropTypes.object,
     resource: PropTypes.object.isRequired,
     selectedTime: PropTypes.object.isRequired,
-    state: PropTypes.object,
     t: PropTypes.func.isRequired,
     unit: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = { order: null };
-  }
-
-  componentDidMount() {
-    if (!hasProducts(this.props.resource)) {
-      return;
-    }
-
-    const products = this.props.resource.products;
-    const {
-      begin,
-      end,
-    } = this.props.selectedTime;
-
-    checkOrderPrice(begin, end, createOrderLines(products), this.props.state)
-      .then(order => this.setState({ order }))
-      .catch(() => this.setState({ order: null }));
-  }
 
   onConfirm = (values) => {
     const { onConfirm } = this.props;
@@ -67,8 +43,23 @@ class ReservationInformation extends Component {
       isAdmin,
       isStaff,
       resource,
+      order,
     } = this.props;
-    const formFields = [...resource.supportedReservationExtraFields].map(value => camelCase(value));
+
+    /*
+      When reservation has no payment i.e. order total is 0e, remove billing fields.
+      Respa doesn't require billing fields when reservation doesn't contain an order
+      even if billing fields are marked as required for the resource.
+    */
+    const filtered = [...resource.supportedReservationExtraFields].filter((field) => {
+      if (!hasPayment(order)) {
+        return !constants.RESERVATION_BILLING_FIELDS.includes(field);
+      }
+      return true;
+    });
+
+    const formFields = filtered.map(value => camelCase(value));
+
 
     if (isAdmin) {
       formFields.push('comments');
@@ -176,18 +167,16 @@ class ReservationInformation extends Component {
       onCancel,
       openResourceTermsModal,
       openResourcePaymentTermsModal,
+      order,
       resource,
       selectedTime,
       t,
       unit,
       user,
     } = this.props;
-    const { order } = this.state;
+
     const termsAndConditions = getTermsAndConditions(resource);
     const paymentTermsAndConditions = getPaymentTermsAndConditions(resource);
-    const beginText = moment(selectedTime.begin).format('D.M.YYYY HH:mm');
-    const endText = moment(selectedTime.end).format('HH:mm');
-    const hours = moment(selectedTime.end).diff(selectedTime.begin, 'minutes') / 60;
 
     return (
       <div className="app-ReservationInformation">
@@ -196,6 +185,7 @@ class ReservationInformation extends Component {
           {this.renderInfoTexts()}
           <ReservationInformationForm
             fields={this.getFormFields(termsAndConditions)}
+            hasPayment={!isEditing && hasPayment(order)}
             initialValues={this.getFormInitialValues()}
             isEditing={isEditing}
             isMakingReservations={isMakingReservations}
@@ -212,55 +202,12 @@ class ReservationInformation extends Component {
           />
         </Col>
         <Col lg={4} sm={12}>
-          <Well className="app-ReservationDetails">
-            <h2>{t('ReservationPage.detailsTitle')}</h2>
-            <Row>
-              <Col className="app-ReservationDetails__label" md={4}>
-                {t('common.resourceLabel')}
-              </Col>
-              <Col className="app-ReservationDetails__value" md={8}>
-                {resource.name}
-                <br />
-                {unit.name}
-              </Col>
-            </Row>
-            {hasProducts(resource) && order && (
-              <React.Fragment>
-                <Row>
-                  <Col md={4}>
-                    <span className="app-ReservationDetails__name">
-                      {t('common.priceLabel')}
-                    </span>
-                  </Col>
-                  <Col md={8}>
-                    <span className="app-ReservationDetails__value">
-                      {getFormattedProductPrice(order.order_lines[0].product)}
-                    </span>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={4}>
-                    <span className="app-ReservationDetails__name">
-                      {t('common.priceTotalLabel')}
-                    </span>
-                  </Col>
-                  <Col md={8}>
-                    <span className="app-ReservationDetails__value">
-                      {t('common.priceWithVAT', { price: order.price, vat: order.order_lines[0].product.price.tax_percentage })}
-                    </span>
-                  </Col>
-                </Row>
-              </React.Fragment>
-            )}
-            <Row>
-              <Col className="app-ReservationDetails__label" md={4}>
-                {t('ReservationPage.detailsTime')}
-              </Col>
-              <Col className="app-ReservationDetails__value" md={8}>
-                {`${beginText}–${endText} (${hours} h)`}
-              </Col>
-            </Row>
-          </Well>
+          <ReservationDetails
+            orderPrice={(hasProducts(resource) && order && order.price) ? `${order.price} €` : ''}
+            resourceName={resource.name}
+            selectedTime={selectedTime}
+            unitName={unit.name}
+          />
         </Col>
       </div>
     );

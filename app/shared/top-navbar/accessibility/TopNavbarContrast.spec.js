@@ -61,5 +61,12 @@ describe('shared/top-navbar/accessibility/TopNavbarContrast', () => {
       expect(element.prop('tabIndex')).toBe('0');
       expect(element.prop('type')).toBe('button');
     });
+    test('has correct id based on props', () => {
+      let element = content.find('button').last();
+      expect(element.prop('id')).toBe('contrastButton');
+      content.setProps({ idPrefix: 'mobile' });
+      element = content.find('button').last();
+      expect(element.prop('id')).toBe('mobile-contrastButton');
+    });
   });
 });

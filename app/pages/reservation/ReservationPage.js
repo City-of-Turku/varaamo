@@ -1,3 +1,5 @@
+import constants from 'constants/AppConstants';
+
 import first from 'lodash/first';
 import isEmpty from 'lodash/isEmpty';
 import last from 'lodash/last';
@@ -19,6 +21,7 @@ import {
   openResourceTermsModal,
   openResourcePaymentTermsModal,
 } from 'actions/uiActions';
+import { addNotification } from 'actions/notificationsActions';
 import PageWrapper from 'pages/PageWrapper';
 import { injectT } from 'i18n';
 import ReservationConfirmation from './reservation-confirmation/ReservationConfirmation';
@@ -26,17 +29,31 @@ import ReservationInformation from './reservation-information/ReservationInforma
 import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import reservationPageSelector from './reservationPageSelector';
-import { createOrder, hasProducts } from '../../utils/reservationUtils';
+import {
+  changeProductQuantity, checkOrderPrice, createOrder, createOrderLines,
+  getInitialProducts, getNonZeroQuantityProducts, hasProducts
+} from '../../utils/reservationUtils';
 import userManager from 'utils/userManager';
+import ReservationProducts from './reservation-products/ReservationProducts';
 
 class UnconnectedReservationPage extends Component {
   constructor(props) {
     super(props);
     this.fetchResource = this.fetchResource.bind(this);
     this.handleRedirect = this.handleRedirect.bind(this);
-    const { reservationToEdit } = this.props;
+    this.handleChangeProductQuantity = this.handleChangeProductQuantity.bind(this);
+    this.handleCheckOrderPrice = this.handleCheckOrderPrice.bind(this);
+    this.handleCreateErrorNotification = this.handleCreateErrorNotification.bind(this);
+    this.HandleToggleMandatoryProducts = this.HandleToggleMandatoryProducts.bind(this);
+
+    const { reservationToEdit, resource } = this.props;
+
     this.state = {
-      view: !isEmpty(reservationToEdit) ? 'time' : 'information',
+      view: this.getInitialView(resource, reservationToEdit),
+      mandatoryProducts: getInitialProducts(resource, constants.PRODUCT_TYPES.MANDATORY),
+      extraProducts: getInitialProducts(resource, constants.PRODUCT_TYPES.EXTRA),
+      order: { loadingData: true },
+      skipMandatoryProducts: false,
     };
   }
 
@@ -71,7 +88,15 @@ class UnconnectedReservationPage extends Component {
       } else {
         history.replace('/my-reservations');
       }
+    } else {
+      // handle price ops only when reservation info exists
+      const isEditing = !isEmpty(reservationToEdit);
+      const { mandatoryProducts, extraProducts } = this.state;
+      this.handleCheckOrderPrice(
+        this.props.resource, selected, mandatoryProducts, extraProducts, isEditing
+      );
     }
+
     if (
       this.state.view === 'information'
       && (!isEmpty(reservationCreated) || !isEmpty(reservationEdited))
@@ -116,14 +141,39 @@ class UnconnectedReservationPage extends Component {
     this.props.actions.closeReservationSuccessModal();
   }
 
+  getInitialView(resource, reservationToEdit) {
+    if (!isEmpty(reservationToEdit)) {
+      return 'time';
+    }
+    if (hasProducts(resource)) {
+      return 'products';
+    }
+
+    return 'information';
+  }
+
   handleBack = () => {
-    if (!isEmpty(this.props.reservationToEdit)) {
+    const { resource, reservationToEdit } = this.props;
+    const includeProducts = hasProducts(resource) && isEmpty(reservationToEdit);
+
+    if (this.state.view === 'information' && includeProducts) {
+      this.setState({ view: 'products' });
+      window.scrollTo(0, 0);
+    } else if (!isEmpty(reservationToEdit)) {
       this.setState({ view: 'time' });
       window.scrollTo(0, 0);
     }
   };
 
   handleConfirmTime = () => {
+    const { resource, reservationToEdit } = this.props;
+    // when editing reservation with products, dont include products page
+    const includeProducts = hasProducts(resource) && isEmpty(reservationToEdit);
+    this.setState({ view: includeProducts ? 'products' : 'information' });
+    window.scrollTo(0, 0);
+  };
+
+  handleProductsConfirm = () => {
     this.setState({ view: 'information' });
     window.scrollTo(0, 0);
   };
@@ -142,7 +192,11 @@ class UnconnectedReservationPage extends Component {
       const { begin } = first(selected);
       const { end } = last(selected);
       const preferredLanguage = currentLanguage;
-      const order = createOrder(resource.products);
+      const { mandatoryProducts, extraProducts } = this.state;
+
+      // order with only zero quantity products won't go through payment process
+      const products = getNonZeroQuantityProducts([...mandatoryProducts, ...extraProducts]);
+      const order = createOrder(products);
 
       if (!isEmpty(reservationToEdit)) {
         // old reservation values before editing
@@ -191,6 +245,82 @@ class UnconnectedReservationPage extends Component {
       }
     } else {
       history.replace(`/resources/${resource.id}`);
+    }
+  }
+
+  handleCreateErrorNotification() {
+    const { actions, t } = this.props;
+    actions.addNotification({
+      message: t('Notifications.errorMessage'),
+      type: 'error',
+      timeOut: 10000,
+    });
+  }
+
+  handleCheckOrderPrice(
+    resource, selectedTime, mandatoryProducts, extraProducts, isEditing = false
+  ) {
+    if (!hasProducts(resource) || isEditing) {
+      return;
+    }
+
+    const begin = !isEmpty(selectedTime) ? first(selectedTime).begin : null;
+    const end = !isEmpty(selectedTime) ? last(selectedTime).end : null;
+    const products = [...mandatoryProducts, ...extraProducts];
+
+    checkOrderPrice(begin, end, createOrderLines(products), this.props.state)
+      .then(order => this.setState({ order }))
+      .catch(() => {
+        this.handleCreateErrorNotification();
+        this.setState({ order: { error: true } });
+      });
+  }
+
+  HandleToggleMandatoryProducts() {
+    const { skipMandatoryProducts, mandatoryProducts, extraProducts } = this.state;
+    const { resource, selected } = this.props;
+    const quantity = skipMandatoryProducts ? 1 : 0;
+    const updatedMandatoryProducts = mandatoryProducts.map(
+      mandatoryProduct => changeProductQuantity(mandatoryProduct, quantity)
+    );
+    this.setState(prevState => ({
+      mandatoryProducts: updatedMandatoryProducts,
+      skipMandatoryProducts: !prevState.skipMandatoryProducts,
+    }));
+    this.handleCheckOrderPrice(
+      resource, selected, updatedMandatoryProducts, extraProducts
+    );
+  }
+
+  handleChangeProductQuantity(product, quantity, type = constants.PRODUCT_TYPES.EXTRA) {
+    const { resource } = this.props;
+    if (hasProducts(resource)) {
+      if (type === constants.PRODUCT_TYPES.MANDATORY) {
+        const { mandatoryProducts } = this.state;
+        const updatedMandatoryProducts = mandatoryProducts.map((mandatoryProduct) => {
+          if (mandatoryProduct.id === product.id) {
+            return changeProductQuantity(product, quantity);
+          }
+          return mandatoryProduct;
+        });
+        this.setState({ mandatoryProducts: updatedMandatoryProducts });
+        this.handleCheckOrderPrice(
+          resource, this.props.selected, updatedMandatoryProducts, this.state.extraProducts
+        );
+      }
+      if (type === constants.PRODUCT_TYPES.EXTRA) {
+        const { extraProducts } = this.state;
+        const updatedExtraProducts = extraProducts.map((extraProduct) => {
+          if (extraProduct.id === product.id) {
+            return changeProductQuantity(product, quantity);
+          }
+          return extraProduct;
+        });
+        this.setState({ extraProducts: updatedExtraProducts });
+        this.handleCheckOrderPrice(
+          resource, this.props.selected, this.state.mandatoryProducts, updatedExtraProducts
+        );
+      }
     }
   }
 
@@ -251,7 +381,7 @@ class UnconnectedReservationPage extends Component {
       user,
       history,
     } = this.props;
-    const { view } = this.state;
+    const { order, skipMandatoryProducts, view } = this.state;
 
     if (
       isEmpty(resource)
@@ -300,6 +430,23 @@ class UnconnectedReservationPage extends Component {
                     unit={unit}
                   />
                 )}
+                {view === 'products' && selectedTime && (
+                  <ReservationProducts
+                    changeProductQuantity={this.handleChangeProductQuantity}
+                    currentLanguage={currentLanguage}
+                    isEditing={isEditing}
+                    isStaff={isStaff}
+                    onBack={this.handleBack}
+                    onCancel={this.handleCancel}
+                    onConfirm={this.handleProductsConfirm}
+                    onStaffSkipChange={this.HandleToggleMandatoryProducts}
+                    order={order}
+                    resource={resource}
+                    selectedTime={selectedTime}
+                    skipMandatoryProducts={skipMandatoryProducts}
+                    unit={unit}
+                  />
+                )}
                 {view === 'information' && selectedTime && (
                   <ReservationInformation
                     isAdmin={isAdmin}
@@ -311,6 +458,7 @@ class UnconnectedReservationPage extends Component {
                     onConfirm={this.handleReservation}
                     openResourcePaymentTermsModal={actions.openResourcePaymentTermsModal}
                     openResourceTermsModal={actions.openResourceTermsModal}
+                    order={order}
                     reservation={reservationToEdit}
                     resource={resource}
                     selectedTime={selectedTime}
@@ -367,6 +515,7 @@ UnconnectedReservationPage = injectT(UnconnectedReservationPage); // eslint-disa
 
 function mapDispatchToProps(dispatch) {
   const actionCreators = {
+    addNotification,
     clearReservations,
     closeReservationSuccessModal,
     fetchResource,

@@ -112,26 +112,26 @@ describe('pages/reservation/reservation-phases/ReservationPhases', () => {
   });
 
   describe('when hasPayment is true and isEditing is true', () => {
-    test('renders four phases', () => {
+    test('renders three phases', () => {
       const phases = getWrapper({
         currentPhase: 'confirmation',
         isEditing: true,
         hasPayment: true
       }).find(ReservationPhase);
-      expect(phases).toHaveLength(4);
-      expect(phases.at(2).prop('title')).toBe('ReservationPhase.paymentTitle');
+      expect(phases).toHaveLength(3);
     });
   });
 
   describe('when hasPayment is true and isEditing is false', () => {
-    test('renders three phases', () => {
+    test('renders four phases', () => {
       const phases = getWrapper({
         currentPhase: 'confirmation',
         isEditing: false,
         hasPayment: true
       }).find(ReservationPhase);
-      expect(phases).toHaveLength(3);
-      expect(phases.at(1).prop('title')).toBe('ReservationPhase.paymentTitle');
+      expect(phases).toHaveLength(4);
+      expect(phases.at(0).prop('title')).toBe('ReservationPhase.productsTitle');
+      expect(phases.at(2).prop('title')).toBe('ReservationPhase.paymentTitle');
     });
   });
 });

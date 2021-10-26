@@ -44,7 +44,7 @@ function LanguageDropdown(props) {
           aria-label={t('Navbar.language.active')}
           className={`${props.classNameOptional ? props.classNameOptional : 'langDrop'}`}
           href="#"
-          id="langdropdown"
+          id={`${id}-langdropdown`}
           onClick={toggleDropdown}
           ref={ref}
         >

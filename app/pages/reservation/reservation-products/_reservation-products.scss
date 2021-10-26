@@ -1,0 +1,125 @@
+.app-ReservationProducts {
+  .form-controls {
+    text-align: right;
+    margin-bottom: 8px;
+  }
+
+  .btn {
+    margin-left: 15px;
+    @media (max-width: $screen-xs-max) {
+      margin-bottom: 8px;
+    }
+  }
+
+  #products-error-message {
+    font-weight: bold;
+    margin: 64px 0;
+  }
+
+  .quantity-button {
+    padding: 0 4px;
+
+    &.minus {
+      margin-right: 8px;
+    }
+
+    &.plus {
+      margin-left: 8px;
+    }
+  }
+
+  .no-whitespace-wrapping {
+    white-space: nowrap;
+  }
+
+  .mandatory-mobile-list, .extra-mobile-list {
+    @media (max-width: $screen-xs-max) {
+      display: block;
+    }
+    display: none;
+    >ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      border-top: 1px solid #525a65;
+      >div {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        p:first-of-type {
+          margin-top: 0.5em;
+        }
+        p:first-of-type, p:last-of-type {
+          font-weight: bold;
+        }
+      }
+    }
+    li:last-of-type {
+      border-bottom: 2px solid #525a65;
+    }
+    li:first-of-type {
+      border-top: 2px solid #525a65;
+    }
+    p {
+      margin: 0 0 0.5em;
+    }
+    .extra-mobile-quantity-input {
+      display: flex;
+      justify-content: center;
+      >span {
+        padding: 5px 0;
+      }
+      button {
+        height: 2.25em;
+        width: 2.25em;
+      }
+    }
+    .extra-mobile-total {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+  }
+
+  .mandatory-products {
+    table {
+      @media (max-width: $screen-xs-max) {
+        display: none;
+      }
+    }
+
+  }
+  .extra-products {
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    .table-responsive {
+      @media (max-width: $screen-xs-max) {
+        display: none;
+      }
+    }
+
+    .form-control {
+      border-width: 1px;
+      padding: 2px 4px;
+      height: initial;
+      width: 70px;
+      @media (max-width: $screen-xs-max) {
+        width: 50px;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .products-summary {
+    .vat-total {
+      margin-bottom: 4px;
+    }
+
+    .complete-total {
+      margin-top: 8px;
+      font-weight: bold;
+    }
+  }
+}

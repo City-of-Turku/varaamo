@@ -1,7 +1,7 @@
 import APP from 'constants/AppConstants';
 
 import { getState } from 'utils/testUtils';
-import { isLargerFontSizeSelector, contrastSelector } from './accessibilitySelectors';
+import { isLargerFontSizeSelector, contrastSelector, fontSizeSelector } from './accessibilitySelectors';
 
 describe('state/selectors/accessibilitySelectors', () => {
   describe('isLargerFontSizeSelector', () => {
@@ -22,6 +22,20 @@ describe('state/selectors/accessibilitySelectors', () => {
 
     test('returns true if font size is large', () => {
       expect(getSelected(APP.FONT_SIZES.LARGE)).toBe(true);
+    });
+  });
+
+  describe('fontSizeSelector', () => {
+    function getSelected(fontSize = APP.FONT_SIZES.SMALL) {
+      const state = getState({
+        'ui.accessibility': { fontSize }
+      });
+      return fontSizeSelector(state);
+    }
+    test('returns current font size css className', () => {
+      expect(getSelected()).toBe(APP.FONT_SIZES.SMALL);
+      expect(getSelected(APP.FONT_SIZES.MEDIUM)).toBe(APP.FONT_SIZES.MEDIUM);
+      expect(getSelected(APP.FONT_SIZES.LARGE)).toBe(APP.FONT_SIZES.LARGE);
     });
   });
 

@@ -1,7 +1,10 @@
+import constants from 'constants/AppConstants';
+
 import React from 'react';
 import Loader from 'react-loader';
 import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
+import { first, isEmpty, last } from 'lodash';
 
 import PageWrapper from 'pages/PageWrapper';
 import { shallowWithIntl } from 'utils/testUtils';
@@ -14,8 +17,23 @@ import ReservationInformation from './reservation-information/ReservationInforma
 import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import { UnconnectedReservationPage as ReservationPage } from './ReservationPage';
-import { createOrder } from '../../utils/reservationUtils';
+import {
+  checkOrderPrice, createOrder, getInitialProducts, createOrderLines
+} from 'utils/reservationUtils';
 import userManager from 'utils/userManager';
+import ReservationProducts from './reservation-products/ReservationProducts';
+import Product from '../../utils/fixtures/Product';
+
+jest.mock('utils/reservationUtils', () => {
+  const originalModule = jest.requireActual('utils/reservationUtils');
+  return {
+    __esModule: true,
+    ...originalModule,
+    checkOrderPrice: jest.fn(() => Promise.resolve({
+      id: 'test',
+    })),
+  };
+});
 
 describe('pages/reservation/ReservationPage', () => {
   const resource = Immutable(Resource.build());
@@ -25,6 +43,7 @@ describe('pages/reservation/ReservationPage', () => {
   const defaultProps = {
     history,
     actions: {
+      addNotification: jest.fn(),
       clearReservations: simple.mock(),
       closeReservationSuccessModal: simple.mock(),
       fetchResource: simple.mock(),
@@ -171,11 +190,40 @@ describe('pages/reservation/ReservationPage', () => {
     });
   });
 
+  describe('ReservationProducts', () => {
+    test('renders when view is products and selected time is not empty', () => {
+      const wrapper = getWrapper();
+      const instance = wrapper.instance();
+      wrapper.setState({ view: 'products' });
+      const { selected } = defaultProps;
+      const begin = !isEmpty(selected) ? first(selected).begin : null;
+      const end = !isEmpty(selected) ? last(selected).end : null;
+      const expectedSelectedTime = begin && end ? { begin, end } : null;
+      const reservationProducts = wrapper.find(ReservationProducts);
+      expect(reservationProducts).toHaveLength(1);
+      expect(reservationProducts.prop('changeProductQuantity')).toBe(instance.handleChangeProductQuantity);
+      expect(reservationProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+      expect(reservationProducts.prop('isEditing')).toBe(!isEmpty(defaultProps.reservationToEdit));
+      expect(reservationProducts.prop('isStaff')).toBe(defaultProps.isStaff);
+      expect(reservationProducts.prop('onBack')).toBe(instance.handleBack);
+      expect(reservationProducts.prop('onCancel')).toBe(instance.handleCancel);
+      expect(reservationProducts.prop('onConfirm')).toBe(instance.handleProductsConfirm);
+      expect(reservationProducts.prop('onStaffSkipChange')).toBe(instance.HandleToggleMandatoryProducts);
+      expect(reservationProducts.prop('order')).toBe(instance.state.order);
+      expect(reservationProducts.prop('resource')).toBe(defaultProps.resource);
+      expect(reservationProducts.prop('selectedTime')).toStrictEqual(expectedSelectedTime);
+      expect(reservationProducts.prop('skipMandatoryProducts')).toBe(instance.state.skipMandatoryProducts);
+      expect(reservationProducts.prop('unit')).toBe(defaultProps.unit);
+    });
+  });
+
   describe('ReservationInformation', () => {
     test(
       'renders ReservationInformation when view is information and selected not empty',
       () => {
-        const reservationInformation = getWrapper().find(ReservationInformation);
+        const wrapper = getWrapper();
+        const instance = wrapper.instance();
+        const reservationInformation = wrapper.find(ReservationInformation);
         expect(reservationInformation).toHaveLength(1);
         expect(reservationInformation.prop('isAdmin')).toBe(defaultProps.isAdmin);
         expect(reservationInformation.prop('isEditing')).toBeDefined();
@@ -187,6 +235,7 @@ describe('pages/reservation/ReservationPage', () => {
         expect(reservationInformation.prop('openResourcePaymentTermsModal'))
           .toBe(defaultProps.actions.openResourcePaymentTermsModal);
         expect(reservationInformation.prop('openResourceTermsModal')).toBe(defaultProps.actions.openResourceTermsModal);
+        expect(reservationInformation.prop('order')).toBe(instance.state.order);
         expect(reservationInformation.prop('reservation')).toBe(defaultProps.reservationToEdit);
         expect(reservationInformation.prop('resource')).toBe(defaultProps.resource);
         expect(reservationInformation.prop('selectedTime')).toBeDefined();
@@ -367,6 +416,7 @@ describe('pages/reservation/ReservationPage', () => {
           selected: defaultProps.selected,
         }).instance();
         instance.fetchResource = simple.mock();
+        instance.handleCheckOrderPrice = simple.mock();
         instance.componentDidMount();
       });
 
@@ -377,6 +427,18 @@ describe('pages/reservation/ReservationPage', () => {
       test('calls fetch resource', () => {
         expect(instance.fetchResource.callCount).toBe(1);
         expect(instance.fetchResource.lastCall.args).toEqual([]);
+      });
+
+      test('calls handleCheckOrderPrice', () => {
+        const { selected, reservationToEdit } = instance.props;
+        const { mandatoryProducts, extraProducts } = instance.state;
+        expect(instance.handleCheckOrderPrice.callCount).toBe(1);
+        expect(instance.handleCheckOrderPrice.lastCall.args[0]).toStrictEqual(resource);
+        expect(instance.handleCheckOrderPrice.lastCall.args[1]).toStrictEqual(selected);
+        expect(instance.handleCheckOrderPrice.lastCall.args[2]).toStrictEqual(mandatoryProducts);
+        expect(instance.handleCheckOrderPrice.lastCall.args[3]).toStrictEqual(extraProducts);
+        expect(instance.handleCheckOrderPrice.lastCall.args[4])
+          .toStrictEqual(!isEmpty(reservationToEdit));
       });
     });
 
@@ -514,14 +576,65 @@ describe('pages/reservation/ReservationPage', () => {
       expect(fetchResource.lastCall.args[0]).toEqual(resource.id);
     });
   });
+  /*
+  getInitialView(resource, reservationToEdit) {
+    if (!isEmpty(reservationToEdit)) {
+      return 'time';
+    }
+    if (hasProducts(resource)) {
+      return 'products';
+    }
+
+    return 'information';
+  }
+  */
+  describe('getInitialView', () => {
+    test('returns string time when reservation to edit is not empty', () => {
+      const instance = getWrapper().instance();
+      const reservationToEdit = Reservation.build();
+      expect(instance.getInitialView(resource, reservationToEdit)).toBe('time');
+    });
+
+    describe('when reservation to edit is empty', () => {
+      const reservationToEdit = null;
+
+      test('returns string products when resource has products', () => {
+        const instance = getWrapper().instance();
+        const product = Product.build();
+        const resourceA = Resource.build({ products: [product] });
+        expect(instance.getInitialView(resourceA, reservationToEdit)).toBe('products');
+      });
+
+      test('returns string information when resource has no products', () => {
+        const instance = getWrapper().instance();
+        const resourceA = Resource.build({ products: [] });
+        expect(instance.getInitialView(resourceA, reservationToEdit)).toBe('information');
+      });
+    });
+  });
 
   describe('handleBack', () => {
-    test('sets state view time when reservationToEdit no empty', () => {
-      const instance = getWrapper({
-        reservationToEdit: Reservation.build(),
-      }).instance();
-      instance.handleBack();
-      expect(instance.state.view).toBe('time');
+    describe('when view is information and payments are involved', () => {
+      test('sets state view to products', () => {
+        const reservationToEdit = null;
+        const product = Product.build();
+        const resourceA = Resource.build({ products: [product] });
+        const wrapper = getWrapper({ resource: resourceA, reservationToEdit });
+        const instance = wrapper.instance();
+        instance.state.view = 'information';
+        instance.handleBack();
+        expect(instance.state.view).toBe('products');
+      });
+    });
+
+    describe('when view is not information and payments are not involved', () => {
+      test('sets state view time when reservationToEdit is not empty', () => {
+        const instance = getWrapper({
+          reservationToEdit: Reservation.build(),
+        }).instance();
+        instance.handleBack();
+        expect(instance.state.view).toBe('time');
+      });
     });
   });
 
@@ -607,11 +720,22 @@ describe('pages/reservation/ReservationPage', () => {
   });
 
   describe('handleConfirmTime', () => {
-    test('sets state view information when reservationToEdit no empty', () => {
-      const instance = getWrapper().instance();
-      instance.state.view = 'time';
-      instance.handleConfirmTime();
-      expect(instance.state.view).toBe('information');
+    describe('when reservationToEdit is empty', () => {
+      test('sets state view to information when resource has no products', () => {
+        const instance = getWrapper().instance();
+        instance.state.view = 'time';
+        instance.handleConfirmTime();
+        expect(instance.state.view).toBe('information');
+      });
+
+      test('sets state view to products when resource has products', () => {
+        const product = Product.build();
+        const resourceA = Resource.build({ products: [product] });
+        const instance = getWrapper({ resource: resourceA }).instance();
+        instance.state.view = 'time';
+        instance.handleConfirmTime();
+        expect(instance.state.view).toBe('products');
+      });
     });
   });
 
@@ -642,7 +766,7 @@ describe('pages/reservation/ReservationPage', () => {
     });
 
     test('calls postReservation action when reservationToEdit empty', () => {
-      const products = [{ id: 'test-id', type: 'rent' }];
+      const products = [{ id: 'test-id', type: 'rent', quantity: 1 }];
       postReservation.reset();
       putReservation.reset();
       const instance = getWrapper({
@@ -658,6 +782,188 @@ describe('pages/reservation/ReservationPage', () => {
       expect(postReservation.lastCall.args[0].order)
         .toEqual(createOrder(instance.props.resource.products));
       expect(putReservation.callCount).toBe(0);
+    });
+  });
+
+  describe('handleCreateErrorNotification', () => {
+    afterEach(() => {
+      defaultProps.actions.addNotification.mockClear();
+    });
+
+    test('calls actions.addNotification', () => {
+      const instance = getWrapper().instance();
+      instance.handleCreateErrorNotification();
+      const expectedParams = { message: 'Notifications.errorMessage', timeOut: 10000, type: 'error' };
+      expect(defaultProps.actions.addNotification).toHaveBeenCalledTimes(1);
+      expect(defaultProps.actions.addNotification).toHaveBeenCalledWith(expectedParams);
+    });
+  });
+
+  describe('handleCheckOrderPrice', () => {
+    describe('returns undefined and doesnt call checkOrderPrice', () => {
+      afterEach(() => {
+        checkOrderPrice.mockClear();
+      });
+
+      test('when resource has no products', () => {
+        const instance = getWrapper().instance();
+        const resourceA = Resource.build({ products: [] });
+        expect(instance.handleCheckOrderPrice(
+          resourceA, defaultProps.selected, [], []
+        )).toBe(undefined);
+        expect(checkOrderPrice).toHaveBeenCalledTimes(0);
+      });
+
+      test('when editing reservation', () => {
+        const instance = getWrapper().instance();
+        const resourceA = Resource.build({ products: [Product.build()] });
+        const isEditing = true;
+        expect(instance.handleCheckOrderPrice(
+          resourceA, defaultProps.selected, [], [], isEditing
+        )).toBe(undefined);
+        expect(checkOrderPrice).toHaveBeenCalledTimes(0);
+      });
+    });
+
+    describe('when resource has products', () => {
+      const product = Product.build();
+      const resourceA = Resource.build({ products: [product] });
+      const mandatoryProducts = getInitialProducts(resourceA, constants.PRODUCT_TYPES.MANDATORY);
+      const extraProducts = getInitialProducts(resourceA, constants.PRODUCT_TYPES.EXTRA);
+
+      afterEach(() => {
+        checkOrderPrice.mockClear();
+      });
+
+      test('checkOrderPrice is called', () => {
+        const { selected } = defaultProps;
+        const instance = getWrapper().instance();
+        instance.handleCheckOrderPrice(
+          resourceA, selected, mandatoryProducts, extraProducts
+        );
+        const begin = !isEmpty(selected) ? first(selected).begin : null;
+        const end = !isEmpty(selected) ? last(selected).end : null;
+        const orderLines = createOrderLines([...mandatoryProducts, ...extraProducts]);
+        expect(checkOrderPrice).toHaveBeenCalledTimes(1);
+        expect(checkOrderPrice).toHaveBeenCalledWith(begin, end, orderLines, {});
+      });
+
+      test('calls setState', async () => {
+        const { selected } = defaultProps;
+        const instance = getWrapper().instance();
+        const spy = jest.spyOn(instance, 'setState');
+        await instance.handleCheckOrderPrice(
+          resourceA, selected, mandatoryProducts, extraProducts
+        );
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith({ order: { id: 'test' } });
+      });
+    });
+  });
+
+  describe('HandleToggleMandatoryProducts', () => {
+    const product = Product.build({ type: 'rent' });
+    const resourceA = Resource.build({ products: [product] });
+    const mandatoryProducts = getInitialProducts(resourceA, constants.PRODUCT_TYPES.MANDATORY);
+    const extraProducts = getInitialProducts(resourceA, constants.PRODUCT_TYPES.EXTRA);
+
+    test('sets correct state when skipMandatoryProducts is false', () => {
+      const instance = getWrapper({ resource: resourceA }).instance();
+      instance.state.mandatoryProducts = mandatoryProducts;
+      instance.state.extraProducts = extraProducts;
+      instance.state.skipMandatoryProducts = false;
+      const spy = jest.spyOn(instance, 'setState');
+      instance.HandleToggleMandatoryProducts();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(instance.state.mandatoryProducts).toStrictEqual([{ ...product, quantity: 0 }]);
+      expect(instance.state.skipMandatoryProducts).toBe(true);
+    });
+
+    test('sets correct state when skipMandatoryProducts is true', () => {
+      const instance = getWrapper({ resource: resourceA }).instance();
+      instance.state.mandatoryProducts = [{ ...product, quantity: 0 }];
+      instance.state.extraProducts = extraProducts;
+      instance.state.skipMandatoryProducts = true;
+      const spy = jest.spyOn(instance, 'setState');
+      instance.HandleToggleMandatoryProducts();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(instance.state.mandatoryProducts).toStrictEqual([{ ...product, quantity: 1 }]);
+      expect(instance.state.skipMandatoryProducts).toBe(false);
+    });
+
+    test('calls handleCheckOrderPrice', () => {
+      const instance = getWrapper({ resource: resourceA }).instance();
+      const spy = jest.spyOn(instance, 'handleCheckOrderPrice');
+      instance.state.mandatoryProducts = mandatoryProducts;
+      instance.state.extraProducts = extraProducts;
+      instance.HandleToggleMandatoryProducts();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        resourceA, defaultProps.selected,
+        instance.state.mandatoryProducts, instance.state.extraProducts
+      );
+    });
+  });
+
+  describe('handleChangeProductQuantity', () => {
+    test('returns undefined when props.resource has no products', () => {
+      const resourceA = Resource.build({ products: [] });
+      const instance = getWrapper({ resource: resourceA }).instance();
+      expect(instance.handleChangeProductQuantity()).toBe(undefined);
+    });
+
+    describe('when props.resource has products', () => {
+      const extraProduct = Product.build({ type: constants.PRODUCT_TYPES.EXTRA });
+      const mandatoryProduct = Product.build({ type: 'rent' });
+      const resourceA = Resource.build({ products: [mandatoryProduct, extraProduct] });
+
+      describe('when given type is mandatory', () => {
+        const type = constants.PRODUCT_TYPES.MANDATORY;
+        test('calls setState', () => {
+          const instance = getWrapper({ resource: resourceA }).instance();
+          const spy = jest.spyOn(instance, 'setState');
+          instance.handleChangeProductQuantity(mandatoryProduct, 2, type);
+          expect(spy).toHaveBeenCalledTimes(1);
+          expect(spy).toHaveBeenCalledWith(
+            { mandatoryProducts: [{ ...mandatoryProduct, quantity: 2 }] }
+          );
+        });
+
+        test('calls handleCheckOrderPrice', () => {
+          const instance = getWrapper({ resource: resourceA }).instance();
+          const spy = jest.spyOn(instance, 'handleCheckOrderPrice');
+          instance.handleChangeProductQuantity(mandatoryProduct, 2, type);
+          expect(spy).toHaveBeenCalledTimes(1);
+          expect(spy).toHaveBeenCalledWith(
+            resourceA, defaultProps.selected,
+            instance.state.mandatoryProducts, instance.state.extraProducts
+          );
+        });
+      });
+
+      describe('when given type is extra', () => {
+        const type = constants.PRODUCT_TYPES.EXTRA;
+        test('calls setState', () => {
+          const instance = getWrapper({ resource: resourceA }).instance();
+          const spy = jest.spyOn(instance, 'setState');
+          instance.handleChangeProductQuantity(extraProduct, 5, type);
+          expect(spy).toHaveBeenCalledTimes(1);
+          expect(spy).toHaveBeenCalledWith(
+            { extraProducts: [{ ...extraProduct, quantity: 5 }] }
+          );
+        });
+
+        test('calls handleCheckOrderPrice', () => {
+          const instance = getWrapper({ resource: resourceA }).instance();
+          const spy = jest.spyOn(instance, 'handleCheckOrderPrice');
+          instance.handleChangeProductQuantity(extraProduct, 4, type);
+          expect(spy).toHaveBeenCalledTimes(1);
+          expect(spy).toHaveBeenCalledWith(
+            resourceA, defaultProps.selected,
+            instance.state.mandatoryProducts, instance.state.extraProducts
+          );
+        });
+      });
     });
   });
 });

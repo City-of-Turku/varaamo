@@ -20,6 +20,8 @@ import {
   isPastDate,
   isValidDateString,
   padLeft,
+  getPrettifiedDuration,
+  getPrettifiedPeriodUnits,
   prettifyHours,
   periodToMinute,
   getEndTimeSlotWithMinPeriod
@@ -692,6 +694,29 @@ describe('Utils: timeUtils', () => {
       expect(isValidDateString(dateOne)).toBe(false);
       expect(isValidDateString(dateTwo)).toBe(false);
       expect(isValidDateString(dateThree)).toBe(false);
+    });
+  });
+
+  describe('getPrettifiedDuration', () => {
+    test('returns correct string', () => {
+      const beginString = '2021-11-20T08:30:00.000Z';
+      const endString = '2021-11-20T09:40:00.000Z';
+      const beginMoment = moment('2021-11-20 09:30Z');
+      const endMoment = moment('2021-11-20 09:35Z');
+
+      expect(getPrettifiedDuration(beginString, endString)).toBe('1h 10min');
+      expect(getPrettifiedDuration(beginString, endMoment)).toBe('1h 5min');
+      expect(getPrettifiedDuration(beginMoment, endString)).toBe('10min');
+      expect(getPrettifiedDuration(beginMoment, endMoment)).toBe('5min');
+    });
+  });
+
+  describe('getPrettifiedPeriodUnits', () => {
+    test('returns correct string', () => {
+      expect(getPrettifiedPeriodUnits('1:30:00')).toBe('1h 30min');
+      expect(getPrettifiedPeriodUnits('2:00:00')).toBe('2h');
+      expect(getPrettifiedPeriodUnits('0:25:00')).toBe('25min');
+      expect(getPrettifiedPeriodUnits('0:00:00')).toBe('');
     });
   });
 

@@ -23,7 +23,7 @@ class MobileNavbar extends React.Component {
           <Row>
             <Col sm={6} smOffset={6} xs={12}>
               <ul>
-                <ContrastChanger />
+                <ContrastChanger idPrefix="mobile" />
                 <FontChanger />
               </ul>
             </Col>

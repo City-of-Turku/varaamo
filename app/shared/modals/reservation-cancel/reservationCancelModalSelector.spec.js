@@ -1,4 +1,3 @@
-
 import ActionTypes from 'constants/ActionTypes';
 import ModalTypes from 'constants/ModalTypes';
 
@@ -73,6 +72,10 @@ describe('shared/modals/reservation-cancel/reservationCancelModalSelector', () =
       expect(selectedA.cancelAllowed).toBe(false);
       expect(selectedB.cancelAllowed).toBe(false);
     });
+  });
+
+  test('returns fontSize', () => {
+    expect(getSelected().fontSize).toBeDefined();
   });
 
   describe('isCancellingReservations', () => {

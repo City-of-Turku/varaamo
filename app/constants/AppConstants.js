@@ -40,6 +40,10 @@ const constants = {
     timeOut: 5000,
     hidden: false,
   },
+  PRODUCT_TYPES: {
+    MANDATORY: 'mandatory',
+    EXTRA: 'extra',
+  },
   RECURRING_RESERVATIONS: {
     maxRecurringReservations: 99,
   },
@@ -52,6 +56,11 @@ const constants = {
     'Content-Type': 'application/json',
   },
   REQUIRED_STAFF_EVENT_FIELDS: ['eventDescription', 'reserverName'],
+  RESERVATION_BILLING_FIELDS: [
+    'billing_first_name', 'billing_last_name', 'billing_phone_number',
+    'billing_email_address', 'billing_address_street', 'billing_address_zip',
+    'billing_address_city'
+  ],
   RESERVATION_SHOWONLY_FILTERS: {
     FAVORITE: 'favorite',
     CAN_MODIFY: 'can_modify',

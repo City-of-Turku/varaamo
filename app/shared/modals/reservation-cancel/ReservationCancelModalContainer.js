@@ -27,6 +27,7 @@ class UnconnectedReservationCancelModalContainer extends Component {
     const {
       actions,
       cancelAllowed,
+      fontSize,
       isCancellingReservations,
       reservation,
       resource,
@@ -36,11 +37,12 @@ class UnconnectedReservationCancelModalContainer extends Component {
 
     return (
       <Modal
+        className={fontSize}
         onHide={actions.closeReservationCancelModal}
         show={show}
       >
         <Modal.Header closeButton closeLabel={t('ModalHeader.closeButtonText')}>
-          <Modal.Title>
+          <Modal.Title componentClass="h3">
             {cancelAllowed
               ? t('ReservationCancelModal.cancelAllowedTitle')
               : t('ReservationCancelModal.cancelNotAllowedTitle')
@@ -77,6 +79,7 @@ class UnconnectedReservationCancelModalContainer extends Component {
         <Modal.Footer>
           <Button
             bsStyle="default"
+            className={fontSize}
             onClick={actions.closeReservationCancelModal}
           >
             {cancelAllowed
@@ -87,6 +90,7 @@ class UnconnectedReservationCancelModalContainer extends Component {
           {cancelAllowed && (
             <Button
               bsStyle="danger"
+              className={fontSize}
               disabled={isCancellingReservations}
               onClick={this.handleCancel}
             >
@@ -105,6 +109,7 @@ class UnconnectedReservationCancelModalContainer extends Component {
 UnconnectedReservationCancelModalContainer.propTypes = {
   actions: PropTypes.object.isRequired,
   cancelAllowed: PropTypes.bool.isRequired,
+  fontSize: PropTypes.string.isRequired,
   isCancellingReservations: PropTypes.bool.isRequired,
   reservation: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,

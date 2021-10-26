@@ -10,6 +10,7 @@ import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
 import ReservationTime from './ReservationTime';
+import ReservationDetails from '../reservation-details/ReservationDetails';
 
 describe('pages/reservation/reservation-time/ReservationTime', () => {
   const history = {
@@ -78,12 +79,11 @@ describe('pages/reservation/reservation-time/ReservationTime', () => {
     expect(button.prop('children')).toBe('common.continue');
   });
 
-  test('renders resource and unit names', () => {
-    const details = getWrapper().find('.app-ReservationDetails__value');
-
+  test('renders reservation details', () => {
+    const details = getWrapper().find(ReservationDetails);
     expect(details).toHaveLength(1);
-    expect(details.props().children).toEqual(expect.arrayContaining([defaultProps.resource.name]));
-    expect(details.props().children).toEqual(expect.arrayContaining([defaultProps.unit.name]));
+    expect(details.prop('resourceName')).toBe(defaultProps.resource.name);
+    expect(details.prop('unitName')).toBe(defaultProps.unit.name);
   });
 
   describe('reservation time controls', () => {

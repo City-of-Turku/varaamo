@@ -6,6 +6,8 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { createIsStaffSelector, isAdminSelector } from 'state/selectors/authSelectors';
 import { createResourceSelector } from 'state/selectors/dataSelectors';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
+import { currentLanguageSelector } from 'state/selectors/translationSelectors';
+import { contrastSelector, fontSizeSelector, isLargerFontSizeSelector } from 'state/selectors/accessibilitySelectors';
 
 function reservationSelector(state) {
   return state.ui.reservationInfoModal.reservation || {};
@@ -27,8 +29,12 @@ const resourceIdSelector = createSelector(
 const resourceSelector = createResourceSelector(resourceIdSelector);
 
 const reservationInfoModalSelector = createStructuredSelector({
+  contrast: contrastSelector,
+  currentLanguage: currentLanguageSelector,
+  fontSize: fontSizeSelector,
   isAdmin: isAdminSelector,
   isEditing: state => state.ui.reservationInfoModal.isEditing,
+  isLargerFontSize: isLargerFontSizeSelector,
   isSaving: requestIsActiveSelectorFactory(ActionTypes.API.RESERVATION_PUT_REQUEST),
   isStaff: createIsStaffSelector(resourceSelector),
   reservation: reservationSelector,

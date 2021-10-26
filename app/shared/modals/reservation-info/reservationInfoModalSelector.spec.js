@@ -11,6 +11,18 @@ describe('shared/modals/reservation-info/reservationInfoModalSelector', () => {
     return reservationInfoModalSelector(state);
   }
 
+  test('returns contrast', () => {
+    expect(getSelected().contrast).toBeDefined();
+  });
+
+  test('returns currentLanguage', () => {
+    expect(getSelected().currentLanguage).toBeDefined();
+  });
+
+  test('returns fontSize', () => {
+    expect(getSelected().fontSize).toBeDefined();
+  });
+
   test('returns isAdmin', () => {
     expect(getSelected().isAdmin).toBeDefined();
   });
@@ -29,6 +41,10 @@ describe('shared/modals/reservation-info/reservationInfoModalSelector', () => {
       });
       expect(selected.isEditing).toBe(false);
     });
+  });
+
+  test('returns isLargerFontSize', () => {
+    expect(getSelected().isLargerFontSize).toBeDefined();
   });
 
   describe('isSaving', () => {

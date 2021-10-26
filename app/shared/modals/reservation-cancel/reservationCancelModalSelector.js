@@ -8,6 +8,7 @@ import { isAdminSelector } from 'state/selectors/authSelectors';
 import { createResourceSelector } from 'state/selectors/dataSelectors';
 import modalIsOpenSelectorFactory from 'state/selectors/factories/modalIsOpenSelectorFactory';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
+import { fontSizeSelector } from 'state/selectors/accessibilitySelectors';
 import { hasOrder } from '../../../utils/reservationUtils';
 
 function reservationSelector(state) {
@@ -31,6 +32,7 @@ const cancelAllowedSelector = createSelector(
 
 const reservationCancelModalSelector = createStructuredSelector({
   cancelAllowed: cancelAllowedSelector,
+  fontSize: fontSizeSelector,
   isCancellingReservations: requestIsActiveSelectorFactory(
     ActionTypes.API.RESERVATION_DELETE_REQUEST
   ),

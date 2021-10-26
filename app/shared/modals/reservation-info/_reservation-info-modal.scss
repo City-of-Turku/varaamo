@@ -9,6 +9,19 @@
     text-align: right;
     font-size: 2.4rem;
     margin-bottom: 10px;
+
+    .label-success {
+      background-color: #008540;
+    }
+    .label-danger {
+      background-color: #ab1204;
+    }
+    .label-primary {
+      background-color: #c15801;
+    }
+    .label-default {
+      background-color: #37475e;
+    }
   }
 
   .reservation-edit-form {
@@ -16,6 +29,10 @@
     margin-left: -10px;
     margin-right: -10px;
     margin-bottom: 15px;
+    @media (min-width: $screen-sm-min) {
+      margin-left: 0;
+      margin-right: 0;
+    }
 
     &.editing {
       background-color: $gray-lighter;
@@ -57,5 +74,23 @@
 
   .form-controls {
     text-align: right;
+  }
+
+  #reservation-order-info {
+    margin-top: 24px;
+
+    hr {
+      border-style: solid;
+      border-width: 1px;
+    }
+  }
+}
+
+.high-contrast {
+  .reservation-edit-form {
+    .well {
+      background-color: white;
+      border: 1px solid $black;
+    }
   }
 }

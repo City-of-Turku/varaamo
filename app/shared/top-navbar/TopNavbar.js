@@ -47,8 +47,7 @@ class TopNavbar extends Component {
 
   componentDidUpdate(prevState) {
     if (!prevState.expandMobileNavbar && this.state.expandMobileNavbar) {
-      document.getElementById('contrastButton').focus();
-      event.preventDefault();
+      document.getElementById('mobile-contrastButton').focus();
     }
   }
 
@@ -150,7 +149,7 @@ class TopNavbar extends Component {
           </Navbar.Header>
           <Navbar.Collapse id="navCollapse">
             <Nav pullRight role="list">
-              <ContrastChanger />
+              <ContrastChanger idPrefix="desktop" />
 
               <FontChanger />
               <LanguageDropdown

@@ -240,7 +240,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       }
     });
     const fields = getWrapper({ reservation }).find('.app-ReservationConfirmation__field');
-    expect(fields).toHaveLength(25);
+    expect(fields).toHaveLength(24);
   });
 
   describe('Button onClick', () => {

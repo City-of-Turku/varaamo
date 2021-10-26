@@ -4,6 +4,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import Modal from 'react-bootstrap/lib/Modal';
 import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
+import classNames from 'classnames';
 
 import ReservationStateLabel from 'shared/reservation-state-label';
 import Reservation from 'utils/fixtures/Reservation';
@@ -31,9 +32,13 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
     resource: resource.id,
   });
   const defaultProps = {
+    contrast: 'test-high',
+    currentLanguage: 'fi',
+    fontSize: 'test-small',
     hideReservationInfoModal: () => null,
     isAdmin: false,
     isEditing: false,
+    isLargerFontSize: false,
     isSaving: false,
     isStaff: false,
     onCancelClick: () => null,
@@ -56,8 +61,11 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
   describe('render', () => {
     test('renders a Modal component', () => {
       const modalComponent = getWrapper().find(Modal);
-
       expect(modalComponent.length).toBe(1);
+      expect(modalComponent.prop('className'))
+        .toBe(classNames('reservation-info-modal', defaultProps.fontSize, defaultProps.contrast));
+      expect(modalComponent.prop('onHide')).toBe(defaultProps.hideReservationInfoModal);
+      expect(modalComponent.prop('show')).toBe(defaultProps.show);
     });
 
     describe('Modal header', () => {
@@ -75,6 +83,7 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
       test('renders a ModalTitle with correct title', () => {
         const modalTitle = getWrapper().find(Modal.Title);
         expect(modalTitle.length).toBe(1);
+        expect(modalTitle.prop('componentClass')).toBe('h3');
         expect(modalTitle.prop('children')).toBe('ReservationInfoModal.title');
       });
     });
@@ -92,7 +101,24 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
       });
 
       test('renders ReservationEditForm component', () => {
-        expect(getWrapper().find(ReservationEditForm)).toHaveLength(1);
+        const wrapper = getWrapper();
+        const instance = wrapper.instance();
+        const editForm = wrapper.find(ReservationEditForm);
+        expect(editForm).toHaveLength(1);
+        expect(editForm.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+        expect(editForm.prop('enableReinitialize')).toBe(true);
+        expect(editForm.prop('initialValues')).toBe(defaultProps.reservation);
+        expect(editForm.prop('isAdmin')).toBe(defaultProps.isAdmin);
+        expect(editForm.prop('isEditing')).toBe(defaultProps.isEditing);
+        expect(editForm.prop('isLargerFontSize')).toBe(defaultProps.isLargerFontSize);
+        expect(editForm.prop('isSaving')).toBe(defaultProps.isSaving);
+        expect(editForm.prop('isStaff')).toBe(defaultProps.isStaff);
+        expect(editForm.prop('onCancelEditClick')).toBe(defaultProps.onCancelEditClick);
+        expect(editForm.prop('onStartEditClick')).toBe(defaultProps.onStartEditClick);
+        expect(editForm.prop('onSubmit')).toBe(instance.handleEditFormSubmit);
+        expect(editForm.prop('reservation')).toBe(defaultProps.reservation);
+        expect(editForm.prop('reservationIsEditable')).toBe(defaultProps.reservationIsEditable);
+        expect(editForm.prop('resource')).toBe(defaultProps.resource);
       });
 
       describe('comments form', () => {
@@ -159,6 +185,21 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
     });
 
     describe('Footer', () => {
+      describe('all buttons', () => {
+        test('have correct className', () => {
+          const props = {
+            isStaff: true,
+            reservationIsEditable: true,
+            reservation: { ...reservation, state: 'requested' },
+          };
+          const buttons = getWrapper(props).find(Modal.Footer).find(Button);
+          expect(buttons).toHaveLength(4);
+          buttons.forEach((button) => {
+            expect(button.prop('className')).toBe(defaultProps.fontSize);
+          });
+        });
+      });
+
       describe('back button', () => {
         function getBackButton(props) {
           const hideReservationInfoModal = () => null;

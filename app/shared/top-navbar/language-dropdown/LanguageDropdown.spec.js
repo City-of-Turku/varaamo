@@ -112,8 +112,15 @@ describe('shared/top-navbar/language-dropdown', () => {
         expect(element.prop('aria-haspopup')).toBe('true');
         expect(element.prop('aria-label')).toBe('Navbar.language.active');
         expect(element.prop('href')).toBe('#');
-        expect(element.prop('id')).toBe('langdropdown');
+        expect(element.prop('id')).toBe(`${defaults.id}-langdropdown`);
         expect(element.prop('onClick')).toBeDefined();
+      });
+      test('with correct id prop based on props', () => {
+        let element = wrapper.find('a').first();
+        expect(element.prop('id')).toBe(`${defaults.id}-langdropdown`);
+        wrapper.setProps({ id: 'mobile' });
+        element = wrapper.find('a').first();
+        expect(element.prop('id')).toBe('mobile-langdropdown');
       });
 
       test('with correct children', () => {
