@@ -1,8 +1,11 @@
 import OrderLine from 'utils/fixtures/OrderLine';
 import Product from 'utils/fixtures/Product';
+import CustomerGroup from 'utils/fixtures/CustomerGroup';
+import ProductCustomerGroup from 'utils/fixtures/ProductCustomerGroup';
+import Resource from 'utils/fixtures/Resource';
 import {
   calculateTax, compareTaxPercentages, getOrderTaxTotals, getProductsOfType,
-  getRoundedVat, getSortedTaxPercentages, roundPriceToTwoDecimals
+  getRoundedVat, getSortedTaxPercentages, getUniqueCustomerGroups, roundPriceToTwoDecimals
 } from '../ReservationProductsUtils';
 
 describe('reservation-products/ReservationProductsUtils', () => {
@@ -174,6 +177,27 @@ describe('reservation-products/ReservationProductsUtils', () => {
     test('returns given tax percentages from smallert to largest', () => {
       expect(getSortedTaxPercentages([taxA, taxB, taxC, taxD]))
         .toStrictEqual([taxD, taxA, taxC, taxB]);
+    });
+  });
+
+  describe('getUniqueCustomerGroups', () => {
+    describe('returns correct array', () => {
+      test('when there are no customer groups in resource products', () => {
+        const productA = Product.build({ productCustomerGroups: [] });
+        const resourceA = Resource.build({ products: [productA] });
+        expect(getUniqueCustomerGroups(resourceA)).toStrictEqual([]);
+      });
+
+      test('when there are customer groups in resource products', () => {
+        const customerGroupA = CustomerGroup.build();
+        const customerGroupB = CustomerGroup.build();
+        const pcgA = ProductCustomerGroup.build({ customerGroup: customerGroupA });
+        const pcgB = ProductCustomerGroup.build({ customerGroup: customerGroupB });
+        const productA = Product.build({ productCustomerGroups: [pcgA, pcgB] });
+        const productB = Product.build({ productCustomerGroups: [pcgA, pcgB] });
+        const resourceA = Resource.build({ products: [productA, productB] });
+        expect(getUniqueCustomerGroups(resourceA)).toStrictEqual([customerGroupA, customerGroupB]);
+      });
     });
   });
 });

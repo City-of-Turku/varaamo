@@ -14,6 +14,9 @@ import MandatoryProducts from '../mandatory-products/MandatoryProducts';
 import ExtraProducts from '../extra-products/ExtraProducts';
 import ProductsSummary from '../ProductsSummary';
 import ReservationDetails from '../../reservation-details/ReservationDetails';
+import CustomerGroupSelect from '../CustomerGroupSelect';
+import ProductCustomerGroup from 'utils/fixtures/ProductCustomerGroup';
+import CustomerGroup from 'utils/fixtures/CustomerGroup';
 
 describe('reservation-products/ProductsSummary', () => {
   const resource = Immutable(Resource.build());
@@ -44,12 +47,14 @@ describe('reservation-products/ProductsSummary', () => {
   ];
   const defaultProps = {
     changeProductQuantity: () => {},
+    currentCustomerGroup: '',
     currentLanguage: 'fi',
     isEditing: false,
     isStaff: false,
     onBack: () => {},
     onCancel: () => {},
     onConfirm: () => {},
+    onCustomerGroupChange: () => {},
     onStaffSkipChange: () => {},
     order: {
       begin: '2021-09-24T11:00:00+03:00',
@@ -113,6 +118,27 @@ describe('reservation-products/ProductsSummary', () => {
         const loader = getWrapper().find(Loader);
         expect(loader).toHaveLength(1);
         expect(loader.prop('loaded')).toBe(!defaultProps.order.loadingData);
+      });
+
+      describe('CustomerGroupSelect', () => {
+        test('when there are no unique customer groups in resource products', () => {
+          const select = getWrapper().find(CustomerGroupSelect);
+          expect(select).toHaveLength(0);
+        });
+
+        test('when there are unique customer groups in resource products', () => {
+          const customerGroupA = CustomerGroup.build();
+          const customerGroupB = CustomerGroup.build();
+          const pcgA = ProductCustomerGroup.build({ customerGroup: customerGroupA });
+          const pcgB = ProductCustomerGroup.build({ customerGroup: customerGroupB });
+          const productA = Product.build({ productCustomerGroups: [pcgA, pcgB] });
+          const resourceA = Resource.build({ products: [productA] });
+          const select = getWrapper({ resource: resourceA }).find(CustomerGroupSelect);
+          expect(select).toHaveLength(1);
+          expect(select.prop('currentlySelectedGroup')).toBe(defaultProps.currentCustomerGroup);
+          expect(select.prop('customerGroups')).toStrictEqual([customerGroupA, customerGroupB]);
+          expect(select.prop('onChange')).toBe(defaultProps.onCustomerGroupChange);
+        });
       });
 
       test('MandatoryProducts', () => {

@@ -202,12 +202,14 @@ describe('pages/reservation/ReservationPage', () => {
       const reservationProducts = wrapper.find(ReservationProducts);
       expect(reservationProducts).toHaveLength(1);
       expect(reservationProducts.prop('changeProductQuantity')).toBe(instance.handleChangeProductQuantity);
+      expect(reservationProducts.prop('currentCustomerGroup')).toBe(instance.state.currentCustomerGroup);
       expect(reservationProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
       expect(reservationProducts.prop('isEditing')).toBe(!isEmpty(defaultProps.reservationToEdit));
       expect(reservationProducts.prop('isStaff')).toBe(defaultProps.isStaff);
       expect(reservationProducts.prop('onBack')).toBe(instance.handleBack);
       expect(reservationProducts.prop('onCancel')).toBe(instance.handleCancel);
       expect(reservationProducts.prop('onConfirm')).toBe(instance.handleProductsConfirm);
+      expect(reservationProducts.prop('onCustomerGroupChange')).toBe(instance.handleCustomerGroupChange);
       expect(reservationProducts.prop('onStaffSkipChange')).toBe(instance.HandleToggleMandatoryProducts);
       expect(reservationProducts.prop('order')).toBe(instance.state.order);
       expect(reservationProducts.prop('resource')).toBe(defaultProps.resource);
@@ -799,6 +801,30 @@ describe('pages/reservation/ReservationPage', () => {
     });
   });
 
+  describe('handleCustomerGroupChange', () => {
+    const event = { target: { value: 'cg-test' } };
+
+    test('calls setState', () => {
+      const instance = getWrapper().instance();
+      const spy = jest.spyOn(instance, 'setState');
+      instance.handleCustomerGroupChange(event);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith({ currentCustomerGroup: event.target.value });
+    });
+
+    test('calls handleCheckOrderPrice', () => {
+      const instance = getWrapper().instance();
+      const spy = jest.spyOn(instance, 'handleCheckOrderPrice');
+      instance.handleCustomerGroupChange(event);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        defaultProps.resource, defaultProps.selected,
+        instance.state.mandatoryProducts, instance.state.extraProducts,
+        false, event.target.value
+      );
+    });
+  });
+
   describe('handleCheckOrderPrice', () => {
     describe('returns undefined and doesnt call checkOrderPrice', () => {
       afterEach(() => {
@@ -845,7 +871,9 @@ describe('pages/reservation/ReservationPage', () => {
         const end = !isEmpty(selected) ? last(selected).end : null;
         const orderLines = createOrderLines([...mandatoryProducts, ...extraProducts]);
         expect(checkOrderPrice).toHaveBeenCalledTimes(1);
-        expect(checkOrderPrice).toHaveBeenCalledWith(begin, end, orderLines, {});
+        expect(checkOrderPrice).toHaveBeenCalledWith(
+          begin, end, orderLines, {}, undefined
+        );
       });
 
       test('calls setState', async () => {
@@ -936,7 +964,8 @@ describe('pages/reservation/ReservationPage', () => {
           expect(spy).toHaveBeenCalledTimes(1);
           expect(spy).toHaveBeenCalledWith(
             resourceA, defaultProps.selected,
-            instance.state.mandatoryProducts, instance.state.extraProducts
+            instance.state.mandatoryProducts, instance.state.extraProducts,
+            false, instance.state.currentCustomerGroup
           );
         });
       });
@@ -960,7 +989,8 @@ describe('pages/reservation/ReservationPage', () => {
           expect(spy).toHaveBeenCalledTimes(1);
           expect(spy).toHaveBeenCalledWith(
             resourceA, defaultProps.selected,
-            instance.state.mandatoryProducts, instance.state.extraProducts
+            instance.state.mandatoryProducts, instance.state.extraProducts,
+            false, instance.state.currentCustomerGroup
           );
         });
       });

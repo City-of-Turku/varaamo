@@ -7,7 +7,7 @@ import MandatoryProductTableRow from './MandatoryProductTableRow';
 import MobileProduct from '../MobileProduct';
 
 function MandatoryProducts({
-  currentCustomerGroupId, currentLanguage, isStaff, onStaffSkipChange, orderLines, skipProducts, t
+  currentLanguage, isStaff, onStaffSkipChange, orderLines, skipProducts, t
 }) {
   const mandatoryProducts = [];
   const mobileProducts = orderLines.reduce((acc, order) => {
@@ -20,7 +20,6 @@ function MandatoryProducts({
     );
     mandatoryProducts.push(
       <MandatoryProductTableRow
-        currentCustomerGroupId={currentCustomerGroupId}
         currentLanguage={currentLanguage}
         key={order.product.id}
         orderLine={order}
@@ -70,7 +69,6 @@ function MandatoryProducts({
 }
 
 MandatoryProducts.propTypes = {
-  currentCustomerGroupId: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   isStaff: PropTypes.bool.isRequired,
   onStaffSkipChange: PropTypes.func.isRequired,
