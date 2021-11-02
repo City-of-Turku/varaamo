@@ -501,8 +501,8 @@ describe('Utils: reservationUtils', () => {
   });
 
   describe('createOrder', () => {
+    const products = [{ id: 'test1' }, { id: 'test2' }];
     test('returns order object with order_lines and return_url if given products is not empty', () => {
-      const products = [{ id: 'test1' }, { id: 'test2' }];
       const expected = {
         order_lines: createOrderLines(products),
         return_url: `${window.location.origin}/reservation-payment-return`
@@ -510,9 +510,19 @@ describe('Utils: reservationUtils', () => {
       expect(createOrder(products)).toStrictEqual(expected);
     });
 
+    test('returns correct order object when customerGroup is given', () => {
+      const customerGroup = 'test-cg-1';
+      const expected = {
+        order_lines: createOrderLines(products),
+        return_url: `${window.location.origin}/reservation-payment-return`,
+        customer_group: customerGroup
+      };
+      expect(createOrder(products, customerGroup)).toStrictEqual(expected);
+    });
+
     test('returns null if given products is empty', () => {
-      const products = [];
-      expect(createOrder(products)).toBe(null);
+      const productsEmpty = [];
+      expect(createOrder(productsEmpty)).toBe(null);
     });
   });
 
@@ -525,15 +535,31 @@ describe('Utils: reservationUtils', () => {
     afterAll(() => {
       fetch.mockClear();
     });
+
+    const begin = '2015-10-16T08:00:00.000Z';
+    const end = '2015-10-16T09:00:00.000Z';
+    const products = [{ id: 'test1' }, { id: 'test2' }];
+    const orderLines = createOrderLines(products);
+    const state = { auth: { user: null } };
+
     test('calls fetch with correct parameters', async () => {
-      const begin = '2015-10-16T08:00:00.000Z';
-      const end = '2015-10-16T09:00:00.000Z';
-      const products = [{ id: 'test1' }, { id: 'test2' }];
-      const orderLines = createOrderLines(products);
-      const state = { auth: { user: null } };
       const payload = { begin, end, order_lines: orderLines };
       const request = { method: 'POST', headers: getHeadersCreator()(state), body: JSON.stringify(payload) };
       const result = await checkOrderPrice(begin, end, orderLines, state);
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetch.mock.calls[0][0]).toBe(buildAPIUrl('order/check_price'));
+      expect(fetch.mock.calls[0][1]).toStrictEqual(request);
+      expect(result).toBe(testResult);
+    });
+
+    test('calls fetch with correct parameters when customerGroup is given', async () => {
+      const customerGroup = 'test-cg-1';
+      const payload = {
+        begin, end, order_lines: orderLines, customer_group: customerGroup
+      };
+      const request = { method: 'POST', headers: getHeadersCreator()(state), body: JSON.stringify(payload) };
+      const result = await checkOrderPrice(begin, end, orderLines, state, customerGroup);
 
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(fetch.mock.calls[0][0]).toBe(buildAPIUrl('order/check_price'));

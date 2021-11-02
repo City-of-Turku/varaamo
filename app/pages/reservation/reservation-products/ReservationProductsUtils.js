@@ -116,7 +116,7 @@ export function getSortedTaxPercentages(taxPercentages) {
  * Returns unique customer groups (names and id) from given resource
  * and its products
  * @param {object} resource
- * @returns {array} array of unique customer group objects
+ * @returns {array} unique customer group objects
  */
 export function getUniqueCustomerGroups(resource) {
   const customerGroups = {};
