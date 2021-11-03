@@ -222,6 +222,7 @@ function createOrderLines(products) {
 /**
  * Creates an order object with order lines and return url.
  * @param {Array} products array
+ * @param {string} [customerGroup] customer group's id
  * @returns {object} order object e.g.
  * {order_lines: {...}, returnUrl: 'mysite/reservation-payment-return'}
  * or null if given products is empty
@@ -246,6 +247,7 @@ function createOrder(products, customerGroup = '') {
  * @param {string} end time
  * @param {Array} orderLines products of this order
  * @param {object} state current redux state
+ * @param {string} [customerGroup] customer group's id
  * @returns {object} response price data
  */
 async function checkOrderPrice(begin, end, orderLines, state, customerGroup = '') {
