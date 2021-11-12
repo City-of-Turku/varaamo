@@ -8,13 +8,18 @@ import React, { Component } from 'react';
 import Col from 'react-bootstrap/lib/Col';
 
 import { injectT } from 'i18n';
-import { isStaffEvent, hasPayment, hasProducts } from 'utils/reservationUtils';
-import { getTermsAndConditions, getPaymentTermsAndConditions } from 'utils/resourceUtils';
+import {
+  isStaffEvent, hasPayment, hasProducts
+} from 'utils/reservationUtils';
+import {
+  getTermsAndConditions, getPaymentTermsAndConditions, getResourceCustomerGroupName
+} from 'utils/resourceUtils';
 import ReservationInformationForm from './ReservationInformationForm';
 import ReservationDetails from '../reservation-details/ReservationDetails';
 
 class ReservationInformation extends Component {
   static propTypes = {
+    currentCustomerGroup: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
     isEditing: PropTypes.bool.isRequired,
     isMakingReservations: PropTypes.bool.isRequired,
@@ -161,6 +166,7 @@ class ReservationInformation extends Component {
 
   render() {
     const {
+      currentCustomerGroup,
       isEditing,
       isMakingReservations,
       onBack,
@@ -177,6 +183,7 @@ class ReservationInformation extends Component {
 
     const termsAndConditions = getTermsAndConditions(resource);
     const paymentTermsAndConditions = getPaymentTermsAndConditions(resource);
+    const customerGroupName = currentCustomerGroup ? getResourceCustomerGroupName(resource, currentCustomerGroup) : '';
 
     return (
       <div className="app-ReservationInformation">
@@ -203,6 +210,7 @@ class ReservationInformation extends Component {
         </Col>
         <Col lg={4} sm={12}>
           <ReservationDetails
+            customerGroupName={customerGroupName}
             orderPrice={(hasProducts(resource) && order && order.price) ? `${order.price} €` : ''}
             resourceName={resource.name}
             selectedTime={selectedTime}

@@ -9,6 +9,8 @@ import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
 import User from 'utils/fixtures/User';
+import ProductCustomerGroup from 'utils/fixtures/ProductCustomerGroup';
+import CustomerGroup from 'utils/fixtures/CustomerGroup';
 import { shallowWithIntl } from 'utils/testUtils';
 import { hasPayment } from 'utils/reservationUtils';
 import ReservationInformation from './ReservationInformation';
@@ -22,6 +24,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     isEditing: false,
     isMakingReservations: false,
     isStaff: false,
+    currentCustomerGroup: '',
     onBack: simple.stub(),
     onCancel: simple.stub(),
     onConfirm: simple.stub(),
@@ -84,8 +87,15 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
   });
 
   test('renders ReservationDetails', () => {
+    const cgA = CustomerGroup.build();
+    const cgB = CustomerGroup.build();
+    const pcgA = ProductCustomerGroup.build({ customerGroup: cgA });
+    const pcgB = ProductCustomerGroup.build({ customerGroup: cgB });
     const resource = Resource.build({
-      products: [{ id: 'test1' }, { id: 'test2' }]
+      products: [
+        { id: 'test1', productCustomerGroups: [pcgA, pcgB] },
+        { id: 'test2', productCustomerGroups: [pcgB] }
+      ]
     });
     const order = {
       order_lines: [{
@@ -97,9 +107,10 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }],
       price: '3.50'
     };
-
-    const details = getWrapper({ resource, order }).find(ReservationDetails);
+    const currentCustomerGroup = cgB.id;
+    const details = getWrapper({ currentCustomerGroup, resource, order }).find(ReservationDetails);
     expect(details).toHaveLength(1);
+    expect(details.prop('customerGroupName')).toBe(cgB.name);
     expect(details.prop('orderPrice')).toBe(`${order.price} €`);
     expect(details.prop('selectedTime')).toBe(defaultProps.selectedTime);
     expect(details.prop('resourceName')).toBe(resource.name);

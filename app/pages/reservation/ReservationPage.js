@@ -464,6 +464,7 @@ class UnconnectedReservationPage extends Component {
                 )}
                 {view === 'information' && selectedTime && (
                   <ReservationInformation
+                    currentCustomerGroup={currentCustomerGroup}
                     isAdmin={isAdmin}
                     isEditing={isEditing}
                     isMakingReservations={isMakingReservations}

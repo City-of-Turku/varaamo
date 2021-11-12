@@ -26,9 +26,15 @@ import {
   getMandatoryProducts,
   getNonZeroQuantityProducts,
   getInitialProducts,
+  getReservationCustomerGroupName,
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 import Product from '../fixtures/Product';
+import { getLocalizedFieldValue } from '../languageUtils';
+
+jest.mock('../languageUtils', () => ({
+  getLocalizedFieldValue: jest.fn(() => 'test-localized-value'),
+}));
 
 describe('Utils: reservationUtils', () => {
   describe('combine', () => {
@@ -579,6 +585,31 @@ describe('Utils: reservationUtils', () => {
       const product = { price: { amount: '3.50', period: '01:00:00', type: 'period' } };
       const expected = `${product.price.amount}€ / 1 h`;
       expect(getFormattedProductPrice(product)).toBe(expected);
+    });
+  });
+
+  describe('getReservationCustomerGroupName', () => {
+    const locale = 'fi';
+    afterAll(() => {
+      getLocalizedFieldValue.mockClear();
+    });
+
+    describe('when reservation order exists', () => {
+      test('calls getLocalizedFieldValue and returns its value', () => {
+        const cgName = { fi: 'test-fi', en: 'test-en', sv: 'test-sv' };
+        const reservation = Reservation.build({ order: { customerGroupName: cgName } });
+        const result = getReservationCustomerGroupName(reservation, locale);
+        expect(getLocalizedFieldValue.mock.calls.length).toBe(1);
+        expect(getLocalizedFieldValue.mock.calls[0][0]).toBe(cgName);
+        expect(getLocalizedFieldValue.mock.calls[0][1]).toBe(locale);
+        expect(result).toBe('test-localized-value');
+      });
+
+      test('when reservation order does not exist, returns null', () => {
+        const reservation = Reservation.build({ order: undefined });
+        const result = getReservationCustomerGroupName(reservation, locale);
+        expect(result).toBe(null);
+      });
     });
   });
 

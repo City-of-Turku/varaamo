@@ -12,6 +12,7 @@ import moment from 'moment';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
 import { buildAPIUrl, getHeadersCreator } from './apiUtils';
+import { getLocalizedFieldValue } from './languageUtils';
 
 function combine(reservations) {
   if (!reservations || !reservations.length) {
@@ -294,6 +295,23 @@ function getFormattedProductPrice(product) {
 }
 
 /**
+ * Returns localized customer group name from the given reservation.
+ * If reservation has no customer group name or correct translation for it,
+ * null is returned.
+ * @param {object} reservation
+ * @param {string} locale current locale e.g. fi, en, sv
+ * @returns {string|null} localized customer group name
+ */
+function getReservationCustomerGroupName(reservation, locale) {
+  const { order } = reservation;
+  if (order) {
+    return getLocalizedFieldValue(order.customerGroupName, locale);
+  }
+
+  return null;
+}
+
+/**
  * Check if current user (logged in user) has
  * permission to modify selected reservation.
  *
@@ -349,5 +367,6 @@ export {
   createOrderLines,
   createOrder,
   checkOrderPrice,
-  getFormattedProductPrice
+  getFormattedProductPrice,
+  getReservationCustomerGroupName,
 };

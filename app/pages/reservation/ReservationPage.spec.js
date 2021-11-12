@@ -227,6 +227,7 @@ describe('pages/reservation/ReservationPage', () => {
         const instance = wrapper.instance();
         const reservationInformation = wrapper.find(ReservationInformation);
         expect(reservationInformation).toHaveLength(1);
+        expect(reservationInformation.prop('currentCustomerGroup')).toBe(instance.state.currentCustomerGroup);
         expect(reservationInformation.prop('isAdmin')).toBe(defaultProps.isAdmin);
         expect(reservationInformation.prop('isEditing')).toBeDefined();
         expect(reservationInformation.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);

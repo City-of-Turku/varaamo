@@ -219,6 +219,31 @@ function getOpenReservations(resource) {
   );
 }
 
+/**
+ * Returns a customer group name from the given resource based on the given customer group id.
+ * If the given resource doesn't have a product with given customer group id, undefined
+ * is returned.
+ * @param {object} resource
+ * @param {string} customerGroupId
+ * @returns {string|undefined} customer group name
+ */
+function getResourceCustomerGroupName(resource, customerGroupId) {
+  if (resource && customerGroupId) {
+    const { products } = resource;
+    for (let productIndex = 0; productIndex < products.length; productIndex += 1) {
+      const { productCustomerGroups } = products[productIndex];
+      for (let groupIndex = 0; groupIndex < productCustomerGroups.length; groupIndex += 1) {
+        const group = productCustomerGroups[groupIndex];
+        if (group.customerGroup.id === customerGroupId) {
+          return group.customerGroup.name;
+        }
+      }
+    }
+  }
+
+  return undefined;
+}
+
 function getResourcePageUrl(resource, date, time) {
   if (!resource || !resource.id) {
     return '';
@@ -301,6 +326,7 @@ export {
   getMaxPeriodText,
   getOpeningHours,
   getOpenReservations,
+  getResourceCustomerGroupName,
   getResourcePageUrl,
   getResourcePageUrlComponents,
   getTermsAndConditions,

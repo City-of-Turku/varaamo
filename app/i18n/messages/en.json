@@ -51,6 +51,7 @@
   "common.cancelled": "Cancelled",
   "common.cancelling": "Cancelling...",
   "common.checkError": "Error: ",
+  "common.customerGroup": "Customer Group",
   "common.comments": "Comments",
   "common.commentsLabel": "Comments",
   "common.commentsPlaceholder": "Any additional information about the reservation",

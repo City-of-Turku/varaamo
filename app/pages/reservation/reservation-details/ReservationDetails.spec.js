@@ -2,13 +2,21 @@ import React from 'react';
 
 import { shallowWithIntl } from 'utils/testUtils';
 import ReservationDetails from './ReservationDetails';
+import SingleReservationDetail from './SingleReservationDetail';
 
 describe('pages/reservation/reservation-details/ReservationDetails', () => {
   const defaultProps = {
+    customerGroupName: 'Test group',
     orderPrice: '',
     resourceName: 'test-resource-name',
+    selectedTime: {
+      begin: '2021-10-21T08:35:00.000Z',
+      end: '2021-10-21T09:45:00.000Z',
+    },
     unitName: 'test-unit-name',
   };
+
+  const defaultReservationTime = '21.10.2021 11:35–12:45 (1h 10min)';
 
   function getWrapper(extraProps) {
     return shallowWithIntl(<ReservationDetails {...defaultProps} {...extraProps} />);
@@ -26,80 +34,41 @@ describe('pages/reservation/reservation-details/ReservationDetails', () => {
       expect(heading.text()).toBe('ReservationPage.detailsTitle');
     });
 
-    describe('correct details fields', () => {
-      const orderPrice = '3.50 €';
-      const selectedTime = {
-        begin: '2021-10-21T08:35:00.000Z',
-        end: '2021-10-21T09:45:00.000Z',
-      };
-      const reservationTime = '21.10.2021 11:35–12:45 (1h 10min)';
+    describe('SingleReservationDetails', () => {
+      const details = getWrapper().find(SingleReservationDetail);
 
-      test('when orderPrice and selectedTime are not defined', () => {
-        const wrapper = getWrapper();
-        const labels = wrapper.find('.app-ReservationDetails__label');
-        const values = wrapper.find('.app-ReservationDetails__value');
-
-        expect(labels).toHaveLength(2);
-        expect(values).toHaveLength(2);
-
-        expect(labels.at(0).text()).toBe('ReservationDetails.resourceLabel');
-        expect(labels.at(1).text()).toBe('ReservationDetails.unitLabel');
-
-        expect(values.at(0).text()).toBe(defaultProps.resourceName);
-        expect(values.at(1).text()).toBe(defaultProps.unitName);
+      test('correct amount', () => {
+        expect(details).toHaveLength(5);
       });
 
-      test('when orderPrice is defined and selectedTime is not defined', () => {
-        const wrapper = getWrapper({ orderPrice });
-        const labels = wrapper.find('.app-ReservationDetails__label');
-        const values = wrapper.find('.app-ReservationDetails__value');
-
-        expect(labels).toHaveLength(3);
-        expect(values).toHaveLength(3);
-
-        expect(labels.at(0).text()).toBe('ReservationDetails.resourceLabel');
-        expect(labels.at(1).text()).toBe('ReservationDetails.unitLabel');
-        expect(labels.at(2).text()).toBe('common.priceTotalLabel');
-
-        expect(values.at(0).text()).toBe(defaultProps.resourceName);
-        expect(values.at(1).text()).toBe(defaultProps.unitName);
-        expect(values.at(2).text()).toBe(orderPrice);
+      test('first detail', () => {
+        const detail = details.at(0);
+        expect(detail.prop('label')).toBe('ReservationDetails.resourceLabel');
+        expect(detail.prop('value')).toBe(defaultProps.resourceName);
       });
 
-      test('when orderPrice is not defined and selectedTime is defined', () => {
-        const wrapper = getWrapper({ selectedTime });
-        const labels = wrapper.find('.app-ReservationDetails__label');
-        const values = wrapper.find('.app-ReservationDetails__value');
-
-        expect(labels).toHaveLength(3);
-        expect(values).toHaveLength(3);
-
-        expect(labels.at(0).text()).toBe('ReservationDetails.resourceLabel');
-        expect(labels.at(1).text()).toBe('ReservationDetails.unitLabel');
-        expect(labels.at(2).text()).toBe('ReservationPage.detailsTime');
-
-        expect(values.at(0).text()).toBe(defaultProps.resourceName);
-        expect(values.at(1).text()).toBe(defaultProps.unitName);
-        expect(values.at(2).text()).toBe(reservationTime);
+      test('second detail', () => {
+        const detail = details.at(1);
+        expect(detail.prop('label')).toBe('ReservationDetails.unitLabel');
+        expect(detail.prop('value')).toBe(defaultProps.unitName);
       });
 
-      test('when orderPrice and selectedTime are defined', () => {
-        const wrapper = getWrapper({ orderPrice, selectedTime });
-        const labels = wrapper.find('.app-ReservationDetails__label');
-        const values = wrapper.find('.app-ReservationDetails__value');
+      test('third detail', () => {
+        const detail = details.at(2);
+        expect(detail.prop('label')).toBe('common.customerGroup');
+        expect(detail.prop('value')).toBe(defaultProps.customerGroupName);
+      });
 
-        expect(labels).toHaveLength(4);
-        expect(values).toHaveLength(4);
+      test('fourth detail', () => {
+        const detail = details.at(3);
+        expect(detail.prop('label')).toBe('common.priceTotalLabel');
+        expect(detail.prop('value')).toBe(defaultProps.orderPrice);
+      });
 
-        expect(labels.at(0).text()).toBe('ReservationDetails.resourceLabel');
-        expect(labels.at(1).text()).toBe('ReservationDetails.unitLabel');
-        expect(labels.at(2).text()).toBe('common.priceTotalLabel');
-        expect(labels.at(3).text()).toBe('ReservationPage.detailsTime');
-
-        expect(values.at(0).text()).toBe(defaultProps.resourceName);
-        expect(values.at(1).text()).toBe(defaultProps.unitName);
-        expect(values.at(2).text()).toBe(orderPrice);
-        expect(values.at(3).text()).toBe(reservationTime);
+      test('fifth detail', () => {
+        const detail = details.at(4);
+        expect(detail.prop('label')).toBe('ReservationPage.detailsTime');
+        expect(detail.prop('value')).toBe(defaultReservationTime);
       });
     });
   });
