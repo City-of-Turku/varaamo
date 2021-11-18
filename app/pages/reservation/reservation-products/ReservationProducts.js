@@ -13,9 +13,10 @@ import ExtraProducts from './extra-products/ExtraProducts';
 import ReservationDetails from '../reservation-details/ReservationDetails';
 import CustomerGroupSelect from './CustomerGroupSelect';
 import { getProductsOfType, PRODUCT_TYPES, getUniqueCustomerGroups } from './ReservationProductsUtils';
+import ProductsValidationErrors from './ProductsValidationErrors';
 
 function ReservationProducts({
-  changeProductQuantity, currentCustomerGroup, currentLanguage, isEditing,
+  changeProductQuantity, currentCustomerGroup, customerGroupError, currentLanguage, isEditing,
   isStaff, onBack, onCancel, onConfirm, onCustomerGroupChange,
   onStaffSkipChange, order, resource, selectedTime, skipMandatoryProducts, t, unit
 }) {
@@ -23,6 +24,11 @@ function ReservationProducts({
   const uniqueCustomerGroups = getUniqueCustomerGroups(resource);
   const mandatoryOrders = getProductsOfType(orderLines, PRODUCT_TYPES.MANDATORY);
   const extraOrders = getProductsOfType(orderLines, PRODUCT_TYPES.EXTRA);
+
+  const errorFields = [];
+  if (customerGroupError) {
+    errorFields.push(t('ReservationProducts.select.clientGroup.label'));
+  }
 
   return (
     <div className="app-ReservationProducts">
@@ -35,6 +41,8 @@ function ReservationProducts({
                 <CustomerGroupSelect
                   currentlySelectedGroup={currentCustomerGroup}
                   customerGroups={uniqueCustomerGroups}
+                  hasError={customerGroupError}
+                  isRequired
                   onChange={onCustomerGroupChange}
                 />
               )}
@@ -81,6 +89,9 @@ function ReservationProducts({
               {t('common.continue')}
             </Button>
           </div>
+          <ProductsValidationErrors
+            errorFields={errorFields}
+          />
         </Col>
 
         <Col lg={4} sm={12}>
@@ -99,6 +110,7 @@ ReservationProducts.propTypes = {
   changeProductQuantity: PropTypes.func.isRequired,
   currentCustomerGroup: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
+  customerGroupError: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool.isRequired,
   isStaff: PropTypes.bool.isRequired,
   onBack: PropTypes.func.isRequired,

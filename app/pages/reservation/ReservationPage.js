@@ -35,6 +35,7 @@ import {
 } from '../../utils/reservationUtils';
 import userManager from 'utils/userManager';
 import ReservationProducts from './reservation-products/ReservationProducts';
+import { getUniqueCustomerGroups } from './reservation-products/ReservationProductsUtils';
 
 class UnconnectedReservationPage extends Component {
   constructor(props) {
@@ -56,6 +57,7 @@ class UnconnectedReservationPage extends Component {
       order: { loadingData: true },
       skipMandatoryProducts: false,
       currentCustomerGroup: '',
+      customerGroupError: false,
     };
   }
 
@@ -176,8 +178,18 @@ class UnconnectedReservationPage extends Component {
   };
 
   handleProductsConfirm = () => {
-    this.setState({ view: 'information' });
-    window.scrollTo(0, 0);
+    const { currentCustomerGroup } = this.state;
+    const { resource } = this.props;
+    const uniqueCustomerGroups = getUniqueCustomerGroups(resource);
+
+    // handle order/products validation before going forward
+    // customer group is required when any of the resource's products have customer group options
+    if (uniqueCustomerGroups.length > 0 && !currentCustomerGroup) {
+      this.setState({ customerGroupError: true });
+    } else {
+      this.setState({ view: 'information' });
+      window.scrollTo(0, 0);
+    }
   };
 
   /**
@@ -263,7 +275,11 @@ class UnconnectedReservationPage extends Component {
     const { value } = event.target;
     const { resource, selected } = this.props;
     const { mandatoryProducts, extraProducts } = this.state;
-    this.setState({ currentCustomerGroup: value });
+    this.setState({
+      currentCustomerGroup: value,
+      customerGroupError: false,
+    });
+
     this.handleCheckOrderPrice(
       resource, selected, mandatoryProducts, extraProducts, false, value
     );
@@ -393,7 +409,7 @@ class UnconnectedReservationPage extends Component {
       history,
     } = this.props;
     const {
-      currentCustomerGroup, order, skipMandatoryProducts, view
+      currentCustomerGroup, customerGroupError, order, skipMandatoryProducts, view
     } = this.state;
 
     if (
@@ -448,6 +464,7 @@ class UnconnectedReservationPage extends Component {
                     changeProductQuantity={this.handleChangeProductQuantity}
                     currentCustomerGroup={currentCustomerGroup}
                     currentLanguage={currentLanguage}
+                    customerGroupError={customerGroupError}
                     isEditing={isEditing}
                     isStaff={isStaff}
                     onBack={this.handleBack}

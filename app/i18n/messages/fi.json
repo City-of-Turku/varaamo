@@ -336,6 +336,7 @@
   "ReservationProducts.table.heading.quantity": "Määrä",
   "ReservationProducts.table.heading.total": "Yhteensä",
   "ReservationProducts.table.heading.unitPrice": "À hinta",
+  "ReservationProducts.validation.label": "Korjaa virheet annetuissa tiedoissa:",
   "ReservationSuccessModal.emailHelpText": "sekä varausvahvistuksesta, joka on lähetetty sähköpostiosoitteeseen: <strong> {email}</strong>",
   "ReservationSuccessModal.failedReservationsHeader": "Seuraavien varausten tekeminen ei onnistunut:",
   "ReservationSuccessModal.ownReservationsPageHelpText": "PIN-koodin voit tarkistaa jatkossa \"Omat varaukset\" -sivulta",

@@ -23,6 +23,8 @@ import {
 import userManager from 'utils/userManager';
 import ReservationProducts from './reservation-products/ReservationProducts';
 import Product from '../../utils/fixtures/Product';
+import ProductCustomerGroup from '../../utils/fixtures/ProductCustomerGroup';
+import CustomerGroup from '../../utils/fixtures/CustomerGroup';
 
 jest.mock('utils/reservationUtils', () => {
   const originalModule = jest.requireActual('utils/reservationUtils');
@@ -204,6 +206,7 @@ describe('pages/reservation/ReservationPage', () => {
       expect(reservationProducts.prop('changeProductQuantity')).toBe(instance.handleChangeProductQuantity);
       expect(reservationProducts.prop('currentCustomerGroup')).toBe(instance.state.currentCustomerGroup);
       expect(reservationProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+      expect(reservationProducts.prop('customerGroupError')).toBe(instance.state.customerGroupError);
       expect(reservationProducts.prop('isEditing')).toBe(!isEmpty(defaultProps.reservationToEdit));
       expect(reservationProducts.prop('isStaff')).toBe(defaultProps.isStaff);
       expect(reservationProducts.prop('onBack')).toBe(instance.handleBack);
@@ -579,18 +582,7 @@ describe('pages/reservation/ReservationPage', () => {
       expect(fetchResource.lastCall.args[0]).toEqual(resource.id);
     });
   });
-  /*
-  getInitialView(resource, reservationToEdit) {
-    if (!isEmpty(reservationToEdit)) {
-      return 'time';
-    }
-    if (hasProducts(resource)) {
-      return 'products';
-    }
 
-    return 'information';
-  }
-  */
   describe('getInitialView', () => {
     test('returns string time when reservation to edit is not empty', () => {
       const instance = getWrapper().instance();
@@ -742,6 +734,25 @@ describe('pages/reservation/ReservationPage', () => {
     });
   });
 
+  describe('handleProductsConfirm', () => {
+    test('sets correct state when customer group is required and missing', () => {
+      const cgA = CustomerGroup.build();
+      const pcgA = ProductCustomerGroup.build({ customerGroup: cgA });
+      const prodA = Product.build({ productCustomerGroups: [pcgA] });
+      const resourceA = Resource.build({ products: [prodA] });
+      const instance = getWrapper({ resource: resourceA }).instance();
+      instance.state.currentCustomerGroup = '';
+      instance.handleProductsConfirm();
+      expect(instance.state.customerGroupError).toBe(true);
+    });
+
+    test('sets correct state when there are no validation errors', () => {
+      const instance = getWrapper().instance();
+      instance.handleProductsConfirm();
+      expect(instance.state.view).toBe('information');
+    });
+  });
+
   describe('handleReservation', () => {
     const postReservation = simple.mock();
     const putReservation = simple.mock();
@@ -810,7 +821,10 @@ describe('pages/reservation/ReservationPage', () => {
       const spy = jest.spyOn(instance, 'setState');
       instance.handleCustomerGroupChange(event);
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith({ currentCustomerGroup: event.target.value });
+      expect(spy).toHaveBeenCalledWith({
+        currentCustomerGroup: event.target.value,
+        customerGroupError: false,
+      });
     });
 
     test('calls handleCheckOrderPrice', () => {
