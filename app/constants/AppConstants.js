@@ -70,6 +70,7 @@ const constants = {
     REQUESTED: 'requested',
     CANCELLED: 'cancelled',
     DENIED: 'denied',
+    READY_FOR_PAYMENT: 'ready_for_payment',
     WAITING_FOR_PAYMENT: 'waiting_for_payment',
   },
   RESERVATION_STATE_LABELS: {
@@ -85,9 +86,17 @@ const constants = {
       labelBsStyle: 'danger',
       labelTextId: 'common.denied',
     },
+    ready_for_payment: {
+      labelBsStyle: 'primary',
+      labelTextId: 'common.waitingForPayment',
+    },
     requested: {
       labelBsStyle: 'primary',
       labelTextId: 'common.requested',
+    },
+    waiting_for_payment: {
+      labelBsStyle: 'primary',
+      labelTextId: 'common.waitingForPayment',
     },
   },
   RESOURCE_PRICE_TYPES: {
