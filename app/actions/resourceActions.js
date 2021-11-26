@@ -21,7 +21,14 @@ function fetchFavoritedResources(timeAsMoment, source, userIsSuperUser = false) 
     is_favorite: true,
     start: timeAsMoment.startOf('day').toISOString(),
   };
-  if (source === 'adminResourcesPage' && userIsSuperUser === true) { return fetchResources(paramsAll, source); }
+
+  if (source === 'adminResourcesPage') {
+    if (userIsSuperUser) {
+      return fetchResources({ ...paramsAll, include: 'order_detail' }, source);
+    }
+    return fetchResources({ ...params, include: 'order_detail' }, source);
+  }
+
   return fetchResources(params, source);
 }
 

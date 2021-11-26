@@ -71,7 +71,19 @@ function getSearchParamsString(params) {
   const parts = [];
 
   Object.keys(decamelized).forEach((key) => {
-    parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(decamelized[key])}`);
+    const value = decamelized[key];
+    /*
+      params of type object are handled as if they have the same name/key
+      e.g. myParam: { 1: 'foo', 2: 'bar' }
+      results in ['myParam=foo', 'myParam=bar']
+    */
+    if (typeof (value) === 'object') {
+      Object.keys(value).forEach((objKey) => {
+        parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value[objKey])}`);
+      });
+    } else {
+      parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(decamelized[key])}`);
+    }
   });
 
   return parts.join('&');

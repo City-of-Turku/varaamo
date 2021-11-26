@@ -213,7 +213,7 @@ describe('ManageReservationsFilters', () => {
           is_favorite_resource: 'true',
           ...filters,
           pageSize: constants.MANAGE_RESERVATIONS.PAGE_SIZE,
-          include: 'resource_detail',
+          include: { 1: 'resource_detail', 2: 'order_detail' },
         };
         const instance = getWrapper({ location }).instance();
         instance.handleFetchReservations();

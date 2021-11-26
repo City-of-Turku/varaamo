@@ -88,7 +88,9 @@ class ManageReservationsPage extends React.Component {
       is_favorite_resource: 'true',
       ...filters,
       pageSize: constants.MANAGE_RESERVATIONS.PAGE_SIZE,
-      include: 'resource_detail',
+      // adding both include params into an obj results them being added like this:
+      // include=resource_detail&include=order_detai
+      include: { 1: 'resource_detail', 2: 'order_detail' },
     };
 
     actions.fetchReservations({ ...params });
