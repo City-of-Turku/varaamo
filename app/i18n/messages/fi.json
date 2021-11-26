@@ -314,6 +314,7 @@
   "ReservationPage.detailsTitle": "Varauksen tiedot",
   "ReservationPage.editReservationTitle": "Muokkaa varausta",
   "ReservationPage.newReservationTitle": "Uusi varaus",
+  "ReservationPaymentModal.title": "Varauksen maksaminen",
   "ReservationPhase.timeTitle": "Varauksen ajankohta",
   "ReservationPhase.productsTitle": "Maksulliset palvelut",
   "ReservationPhase.informationTitle": "Varauksen lisätiedot",

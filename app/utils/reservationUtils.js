@@ -232,7 +232,7 @@ function createOrder(products, customerGroup = '') {
   if (products && products.length > 0) {
     const orderLines = createOrderLines(products);
 
-    const returnUrl = `${window.location.origin}/reservation-payment-return`;
+    const returnUrl = getPaymentReturnUrl();
     const order = { order_lines: orderLines, return_url: returnUrl };
     if (customerGroup) {
       order.customer_group = customerGroup;
@@ -292,6 +292,14 @@ function getFormattedProductPrice(product) {
   const priceEnding = priceType === 'fixed' ? '' : ` / ${period}`;
 
   return `${price}€${priceEnding}`;
+}
+
+/**
+ * Returns the url where Varaamo expects completed payments to be redirected to
+ * @returns {string} return url
+ */
+function getPaymentReturnUrl() {
+  return `${window.location.origin}/reservation-payment-return`;
 }
 
 /**
@@ -368,5 +376,6 @@ export {
   createOrder,
   checkOrderPrice,
   getFormattedProductPrice,
+  getPaymentReturnUrl,
   getReservationCustomerGroupName,
 };

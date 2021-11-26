@@ -316,6 +316,7 @@
   "ReservationPage.detailsTitle": "Bokningens uppgifter",
   "ReservationPage.editReservationTitle": "Ändra din bokning",
   "ReservationPage.newReservationTitle": "Ny bokning",
+  "ReservationPaymentModal.title": "Reservationsbetalning",
   "ReservationPhase.timeTitle": "Bokningens tidpunkt",
   "ReservationPhase.productsTitle": "Avgiftsbelagda tjänster",
   "ReservationPhase.informationTitle": "Bokningens detaljer",

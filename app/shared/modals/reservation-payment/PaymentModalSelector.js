@@ -1,0 +1,24 @@
+
+import ModalTypes from 'constants/ModalTypes';
+
+import { createSelector, createStructuredSelector } from 'reselect';
+
+import { createResourceSelector } from 'state/selectors/dataSelectors';
+import modalIsOpenSelectorFactory from 'state/selectors/factories/modalIsOpenSelectorFactory';
+
+function reservationSelector(state) {
+  return state.ui.reservations.toShow[0] || {};
+}
+
+const resourceIdSelector = createSelector(
+  reservationSelector,
+  reservation => reservation.resource
+);
+
+const paymentModalSelector = createStructuredSelector({
+  reservation: reservationSelector,
+  resource: createResourceSelector(resourceIdSelector),
+  show: modalIsOpenSelectorFactory(ModalTypes.RESERVATION_PAYMENT),
+});
+
+export default paymentModalSelector;

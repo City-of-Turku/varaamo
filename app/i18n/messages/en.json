@@ -314,6 +314,7 @@
   "ReservationPage.detailsTitle": "Reservation details",
   "ReservationPage.editReservationTitle": "Edit reservation",
   "ReservationPage.newReservationTitle": "New reservation",
+  "ReservationPaymentModal.title": "Reservation payment",
   "ReservationPhase.timeTitle": "Reservation time",
   "ReservationPhase.productsTitle": "Paid services",
   "ReservationPhase.informationTitle": "Reservation details",

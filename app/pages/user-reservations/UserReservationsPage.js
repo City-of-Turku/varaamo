@@ -10,6 +10,7 @@ import { fetchUnits } from 'actions/unitActions';
 import ReservationInfoModal from 'shared/modals/reservation-info';
 import PageWrapper from 'pages/PageWrapper';
 import ReservationCancelModal from 'shared/modals/reservation-cancel';
+import ReservationPaymentModal from 'shared/modals/reservation-payment';
 import { injectT } from 'i18n';
 import userReservationsPageSelector from './userReservationsPageSelector';
 import ReservationList from './reservation-list';
@@ -41,6 +42,7 @@ class UnconnectedUserReservationsPage extends Component {
             </div>
             <ReservationCancelModal />
             <ReservationInfoModal />
+            <ReservationPaymentModal />
           </Loader>
         </PageWrapper>
       </div>

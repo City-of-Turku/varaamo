@@ -11,6 +11,7 @@ import {
 import {
   openConfirmReservationModal,
   openReservationCancelModal,
+  openReservationPaymentModal,
   selectReservationToCancel,
   selectReservationToEdit,
   selectReservationToShow,
@@ -28,6 +29,7 @@ export class UnconnectedReservationControlsContainer extends Component {
     this.handleDenyClick = this.handleDenyClick.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleInfoClick = this.handleInfoClick.bind(this);
+    this.handlePayClick = this.handlePayClick.bind(this);
   }
 
   handleCancelClick() {
@@ -68,6 +70,12 @@ export class UnconnectedReservationControlsContainer extends Component {
     actions.showReservationInfoModal(reservation);
   }
 
+  handlePayClick() {
+    const { actions, reservation } = this.props;
+    actions.selectReservationToShow(reservation);
+    actions.openReservationPaymentModal();
+  }
+
   render() {
     const { isAdmin, isStaff, reservation } = this.props;
 
@@ -80,6 +88,7 @@ export class UnconnectedReservationControlsContainer extends Component {
         onDenyClick={this.handleDenyClick}
         onEditClick={this.handleEditClick}
         onInfoClick={this.handleInfoClick}
+        onPayClick={this.handlePayClick}
         reservation={reservation}
       />
     );
@@ -101,6 +110,7 @@ function mapDispatchToProps(dispatch) {
     denyPreliminaryReservation,
     openConfirmReservationModal,
     openReservationCancelModal,
+    openReservationPaymentModal,
     selectReservationToCancel,
     selectReservationToEdit,
     selectReservationToShow,

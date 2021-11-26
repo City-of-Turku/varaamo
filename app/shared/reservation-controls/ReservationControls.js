@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 
+import constants from '../../constants/AppConstants';
 import { injectT } from 'i18n';
 
 class ReservationControls extends Component {
@@ -54,6 +55,15 @@ class ReservationControls extends Component {
           {props.t('ReservationControls.info')}
         </Button>
       ),
+      pay: (
+        <Button
+          bsStyle="success"
+          key="payButton"
+          onClick={props.onPayClick}
+        >
+          {props.t('ReservationControls.pay')}
+        </Button>
+      )
     };
   }
 
@@ -92,6 +102,10 @@ class ReservationControls extends Component {
         return isAdmin
           ? []
           : [];
+      }
+
+      case constants.RESERVATION_STATE.READY_FOR_PAYMENT: {
+        return [buttons.pay, buttons.cancel];
       }
 
       case 'requested': {
@@ -142,6 +156,7 @@ ReservationControls.propTypes = {
   onDenyClick: PropTypes.func.isRequired,
   onEditClick: PropTypes.func.isRequired,
   onInfoClick: PropTypes.func.isRequired,
+  onPayClick: PropTypes.func.isRequired,
   reservation: PropTypes.object,
   t: PropTypes.func.isRequired,
 };
