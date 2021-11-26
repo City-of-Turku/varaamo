@@ -7,7 +7,7 @@ import { createResourceSelector } from 'state/selectors/dataSelectors';
 import modalIsOpenSelectorFactory from 'state/selectors/factories/modalIsOpenSelectorFactory';
 
 function reservationSelector(state) {
-  return state.ui.reservations.toShow[0] || {};
+  return state.ui.reservations.toShow[0] || state.ui.reservations.toShowEdited[0] || {};
 }
 
 const resourceIdSelector = createSelector(

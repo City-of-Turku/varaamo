@@ -21,6 +21,11 @@ function UnconnectedPaymentModalContainer({
     actions.putReservation(updatedResevation);
   };
 
+  // redirect to payment url when order has it defined
+  const { order } = reservation;
+  if (order && 'paymentUrl' in order) {
+    window.location = order.paymentUrl;
+  }
 
   return (
     <ModalWrapper
