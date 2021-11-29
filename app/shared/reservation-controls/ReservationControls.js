@@ -108,6 +108,10 @@ class ReservationControls extends Component {
         return [buttons.pay, buttons.cancel];
       }
 
+      case constants.RESERVATION_STATE.WAITING_FOR_PAYMENT: {
+        return [buttons.pay, buttons.cancel];
+      }
+
       case 'requested': {
         if (isAdmin) {
           return isStaff

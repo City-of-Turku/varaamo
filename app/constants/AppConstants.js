@@ -95,8 +95,8 @@ const constants = {
       labelTextId: 'common.requested',
     },
     waiting_for_payment: {
-      labelBsStyle: 'primary',
-      labelTextId: 'common.waitingForPayment',
+      labelBsStyle: 'danger',
+      labelTextId: 'common.paymentInProgress',
     },
   },
   RESOURCE_PRICE_TYPES: {

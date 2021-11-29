@@ -71,6 +71,7 @@
   "common.optionsAllLabel": "Alla",
   "common.orderDetailsLabel": "Orderdetaljer",
   "common.payerInformationLabel": "Betalarens information",
+  "common.paymentInProgress": "Betalning pågår",
   "common.pincode.waitingForCreation": "Väntar på att PIN-kod skapas",
   "common.previous": "Föregående",
   "common.priceLabel": "Pris",
