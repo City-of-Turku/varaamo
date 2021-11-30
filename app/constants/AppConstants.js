@@ -96,7 +96,7 @@ const constants = {
     },
     waiting_for_payment: {
       labelBsStyle: 'danger',
-      labelTextId: 'common.paymentInProgress',
+      labelTextId: 'common.paymentAborted',
     },
   },
   RESOURCE_PRICE_TYPES: {

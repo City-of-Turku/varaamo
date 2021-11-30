@@ -71,7 +71,7 @@
   "common.optionsAllLabel": "All",
   "common.orderDetailsLabel": "Order details",
   "common.payerInformationLabel": "Payer information",
-  "common.paymentInProgress": "Payment in progress",
+  "common.paymentAborted": "Payment aborted",
   "common.pincode.waitingForCreation": "Waiting for PIN code creation",
   "common.previous": "Previous",
   "common.priceLabel": "Price",

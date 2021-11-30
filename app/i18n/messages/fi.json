@@ -71,7 +71,7 @@
   "common.optionsAllLabel": "Kaikki",
   "common.orderDetailsLabel": "Tilaustiedot",
   "common.payerInformationLabel": "Maksajan tiedot",
-  "common.paymentInProgress": "Maksu kesken",
+  "common.paymentAborted": "Maksu keskeytyi",
   "common.pincode.waitingForCreation": "Odottaa PIN-koodin luontia",
   "common.previous": "Edellinen",
   "common.priceLabel": "Hinta",

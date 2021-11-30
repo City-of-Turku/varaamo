@@ -109,7 +109,7 @@ class ReservationControls extends Component {
       }
 
       case constants.RESERVATION_STATE.WAITING_FOR_PAYMENT: {
-        return [buttons.pay, buttons.cancel];
+        return [];
       }
 
       case 'requested': {
