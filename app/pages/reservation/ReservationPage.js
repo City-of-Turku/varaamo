@@ -124,7 +124,8 @@ class UnconnectedReservationPage extends Component {
       (!isEmpty(nextCreated) || !isEmpty(nextEdited))
       && (nextCreated !== reservationCreated || nextEdited !== reservationEdited)
     ) {
-      if (has(nextCreated, 'order.paymentUrl')) {
+      const { needManualConfirmation } = nextCreated || nextEdited;
+      if (!needManualConfirmation && has(nextCreated, 'order.paymentUrl')) {
         const paymentUrl = get(nextCreated, 'order.paymentUrl');
         window.location = paymentUrl;
         return;
@@ -431,7 +432,6 @@ class UnconnectedReservationPage extends Component {
       `ReservationPage.${isEditing || isEdited ? 'editReservationTitle' : 'newReservationTitle'}`
     );
     const params = queryString.parse(location.search);
-    const hasPayment = hasProducts(resource);
 
     return (
       <div className="app-ReservationPage">
@@ -442,8 +442,9 @@ class UnconnectedReservationPage extends Component {
               <Loader loaded={!isEmpty(resource)}>
                 <ReservationPhases
                   currentPhase={view}
-                  hasPayment={hasPayment}
+                  hasProducts={hasProducts(resource)}
                   isEditing={isEditing || isEdited}
+                  needManualConfirmation={resource.needManualConfirmation}
                 />
                 {view === 'time' && isEditing && (
                   <ReservationTime

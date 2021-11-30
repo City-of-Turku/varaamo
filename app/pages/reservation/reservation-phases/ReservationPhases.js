@@ -7,19 +7,29 @@ import ReservationPhase from './ReservationPhase';
 
 ReservationPhases.propTypes = {
   currentPhase: PropTypes.string.isRequired,
-  hasPayment: PropTypes.bool.isRequired,
+  hasProducts: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool,
+  needManualConfirmation: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
 };
 
 function ReservationPhases({
-  currentPhase, hasPayment, isEditing, t
+  currentPhase, hasProducts, isEditing, needManualConfirmation, t
 }) {
-  const inclucePayments = hasPayment && !isEditing;
-  const phases = inclucePayments ? ['products', 'information', 'payment', 'confirmation'] : ['information', 'confirmation'];
+  const includePayments = hasProducts && !isEditing;
+  const phases = [];
   if (isEditing) {
-    phases.splice(0, 0, 'time');
+    phases.push('time');
   }
+  if (includePayments) {
+    phases.push('products');
+  }
+  phases.push('information');
+  if (includePayments && !needManualConfirmation) {
+    phases.push('payment');
+  }
+  phases.push('confirmation');
+
   const activeIndex = indexOf(phases, currentPhase);
 
   return (
