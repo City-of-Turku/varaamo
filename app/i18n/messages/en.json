@@ -315,6 +315,7 @@
   "ReservationPage.detailsTitle": "Reservation details",
   "ReservationPage.editReservationTitle": "Edit reservation",
   "ReservationPage.newReservationTitle": "New reservation",
+  "ReservationPaymentModal.onlinePaymentNotice": "Note. if the online payment fails or is interrupted, a completely new reservation must be made.",
   "ReservationPaymentModal.title": "Reservation payment",
   "ReservationPhase.timeTitle": "Reservation time",
   "ReservationPhase.productsTitle": "Paid services",

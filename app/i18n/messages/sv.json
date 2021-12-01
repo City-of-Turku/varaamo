@@ -317,6 +317,7 @@
   "ReservationPage.detailsTitle": "Bokningens uppgifter",
   "ReservationPage.editReservationTitle": "Ändra din bokning",
   "ReservationPage.newReservationTitle": "Ny bokning",
+  "ReservationPaymentModal.onlinePaymentNotice": "Notera. om onlinebetalningen misslyckas eller avbryts måste bokningen göras helt igen.",
   "ReservationPaymentModal.title": "Reservationsbetalning",
   "ReservationPhase.timeTitle": "Bokningens tidpunkt",
   "ReservationPhase.productsTitle": "Avgiftsbelagda tjänster",

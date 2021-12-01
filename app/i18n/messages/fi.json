@@ -315,6 +315,7 @@
   "ReservationPage.detailsTitle": "Varauksen tiedot",
   "ReservationPage.editReservationTitle": "Muokkaa varausta",
   "ReservationPage.newReservationTitle": "Uusi varaus",
+  "ReservationPaymentModal.onlinePaymentNotice": "Huom. jos verkkomaksu epäonnistuu tai keskeytyy, niin varaus täytyy tehdä kokonaan uudelleen.",
   "ReservationPaymentModal.title": "Varauksen maksaminen",
   "ReservationPhase.timeTitle": "Varauksen ajankohta",
   "ReservationPhase.productsTitle": "Maksulliset palvelut",
