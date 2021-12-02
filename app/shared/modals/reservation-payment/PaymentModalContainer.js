@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,28 +13,30 @@ import { getPaymentReturnUrl } from 'utils/reservationUtils';
 import TimeRange from '../../time-range/TimeRange';
 
 function UnconnectedPaymentModalContainer({
-  actions, contrast, fontSize, reservation, resource, show, t
+  actions, contrast, fontSize, isSaving, reservation, resource, show, t
 }) {
+  // TODO: handle sign in refresh here?
+  useEffect(() => {
+    const { order } = reservation;
+    if (order && 'paymentUrl' in order) {
+      actions.closeReservationPaymentModal();
+      window.location = order.paymentUrl;
+    }
+  }, [reservation]);
+
   const handleUpdateReservation = () => {
     const returnUrl = getPaymentReturnUrl();
     const order = { id: reservation.order.id, returnUrl };
     const updatedResevation = { ...reservation, order };
-
-    actions.putReservation(updatedResevation);
+    const omitSuccessNotification = true;
+    actions.putReservation(updatedResevation, omitSuccessNotification);
   };
 
-  // redirect to payment url when order has it defined
-  const { order } = reservation;
-  if (order && 'paymentUrl' in order) {
-    window.location = order.paymentUrl;
-  }
-
-  if (!reservation || !reservation.order) {
-    return null;
-  }
+  const reservationExists = reservation && reservation.order;
 
   return (
     <Modal
+      // animation={false}
       className={classNames('reservation-payment-modal', fontSize, contrast)}
       onHide={actions.closeReservationPaymentModal}
       show={show}
@@ -45,14 +47,20 @@ function UnconnectedPaymentModalContainer({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="reservation-name">{resource.name}</p>
-        <div className="reservation-time">
-          <TimeRange begin={reservation.begin} end={reservation.end} />
-        </div>
-        <p className="reservation-price">{`${t('common.priceTotalLabel')}: ${reservation.order.price}€`}</p>
-        <p className="reservation-payment-notice">
-          {t('ReservationPaymentModal.onlinePaymentNotice')}
-        </p>
+        {reservationExists ? (
+          <React.Fragment>
+            <p className="reservation-name">{resource.name}</p>
+            <div className="reservation-time">
+              <TimeRange begin={reservation.begin} end={reservation.end} />
+            </div>
+            <p className="reservation-price">{`${t('common.priceTotalLabel')}: ${reservation.order.price}€`}</p>
+            <p className="reservation-payment-notice">
+              {t('ReservationPaymentModal.onlinePaymentNotice')}
+            </p>
+          </React.Fragment>
+        )
+          : <p>{t('Notifications.errorMessage')}</p>
+      }
       </Modal.Body>
       <Modal.Footer>
         <Button
@@ -66,9 +74,10 @@ function UnconnectedPaymentModalContainer({
         <Button
           bsStyle="success"
           className={fontSize}
+          disabled={!reservationExists || isSaving}
           onClick={() => handleUpdateReservation()}
         >
-          {t('common.proceedToPayment')}
+          {isSaving ? t('common.proceedingToPayment') : t('common.proceedToPayment')}
         </Button>
       </Modal.Footer>
     </Modal>
@@ -79,6 +88,7 @@ UnconnectedPaymentModalContainer.propTypes = {
   actions: PropTypes.object.isRequired,
   contrast: PropTypes.string.isRequired,
   fontSize: PropTypes.string.isRequired,
+  isSaving: PropTypes.bool.isRequired,
   reservation: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
