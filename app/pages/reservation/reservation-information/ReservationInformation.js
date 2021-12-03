@@ -49,6 +49,7 @@ class ReservationInformation extends Component {
       isStaff,
       resource,
       order,
+      reservation,
     } = this.props;
 
     /*
@@ -57,7 +58,7 @@ class ReservationInformation extends Component {
       even if billing fields are marked as required for the resource.
     */
     const filtered = [...resource.supportedReservationExtraFields].filter((field) => {
-      if (!hasPayment(order)) {
+      if (!hasPayment(order) && (reservation && !hasPayment(reservation.order))) {
         return !constants.RESERVATION_BILLING_FIELDS.includes(field);
       }
       return true;
