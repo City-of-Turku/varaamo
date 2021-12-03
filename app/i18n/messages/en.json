@@ -87,6 +87,7 @@
   "common.reserverNameLabel": "The person making the reservation / lessee",
   "common.reserverPhoneNumberLabel": "Phone",
   "common.resourceLabel": "Premises",
+  "common.resumePayment": "Resume payment",
   "common.requireAssistanceLabel": "I require guidance",
   "common.requireWorkstationLabel": "I require a Cura-workstation",
   "common.save": "Save",

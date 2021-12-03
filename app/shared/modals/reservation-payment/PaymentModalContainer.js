@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { Button, Modal } from 'react-bootstrap';
 import classNames from 'classnames';
 
+import constants from '../../../constants/AppConstants';
 import injectT from '../../../i18n/injectT';
 import { closeReservationPaymentModal } from 'actions/uiActions';
 import paymentModalSelector from './PaymentModalSelector';
@@ -12,6 +13,7 @@ import { putReservation } from 'actions/reservationActions';
 import { getPaymentReturnUrl } from 'utils/reservationUtils';
 import TimeRange from '../../time-range/TimeRange';
 import { handleSigninRefresh } from '../../../utils/authUtils';
+import { loadPersistedPaymentUrl, savePersistedPaymentUrl } from '../../../utils/localStorageUtils';
 
 function UnconnectedPaymentModalContainer({
   actions, contrast, fontSize, isLoggedIn, isSaving, loginExpiresAt, reservation, resource, show, t
@@ -19,6 +21,7 @@ function UnconnectedPaymentModalContainer({
   useEffect(() => {
     const { order } = reservation;
     if (order && 'paymentUrl' in order) {
+      savePersistedPaymentUrl(order.paymentUrl, reservation.id);
       actions.closeReservationPaymentModal();
       window.location = order.paymentUrl;
     }
@@ -38,6 +41,14 @@ function UnconnectedPaymentModalContainer({
   };
 
   const reservationExists = reservation && reservation.order;
+
+  let paymentUrl;
+  if (reservation && reservation.state === constants.RESERVATION_STATE.WAITING_FOR_PAYMENT) {
+    const paymentUrlData = loadPersistedPaymentUrl();
+    if (paymentUrlData && paymentUrlData.reservationId === reservation.id) {
+      paymentUrl = paymentUrlData.paymentUrl;
+    }
+  }
 
   return (
     <Modal
@@ -76,14 +87,24 @@ function UnconnectedPaymentModalContainer({
           {t('common.back')}
         </Button>
 
-        <Button
-          bsStyle="success"
-          className={fontSize}
-          disabled={!reservationExists || isSaving}
-          onClick={() => handleUpdateReservation()}
-        >
-          {isSaving ? t('common.proceedingToPayment') : t('common.proceedToPayment')}
-        </Button>
+        {!paymentUrl ? (
+          <Button
+            bsStyle="success"
+            className={fontSize}
+            disabled={!reservationExists || isSaving}
+            onClick={() => handleUpdateReservation()}
+          >
+            {isSaving ? t('common.proceedingToPayment') : t('common.proceedToPayment')}
+          </Button>
+        ) : (
+          <Button
+            bsStyle="success"
+            className={fontSize}
+            href={paymentUrl}
+          >
+            {t('common.resumePayment')}
+          </Button>
+        )}
       </Modal.Footer>
     </Modal>
   );

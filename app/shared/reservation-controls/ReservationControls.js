@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/lib/Button';
 
 import constants from '../../constants/AppConstants';
 import { injectT } from 'i18n';
+import { loadPersistedPaymentUrl } from '../../utils/localStorageUtils';
 
 class ReservationControls extends Component {
   constructor(props) {
@@ -109,6 +110,13 @@ class ReservationControls extends Component {
       }
 
       case constants.RESERVATION_STATE.WAITING_FOR_PAYMENT: {
+        const paymentUrlData = loadPersistedPaymentUrl();
+        if (paymentUrlData) {
+          if (paymentUrlData.paymentUrl && paymentUrlData.reservationId === reservation.id) {
+            return [buttons.pay];
+          }
+        }
+
         return [];
       }
 
