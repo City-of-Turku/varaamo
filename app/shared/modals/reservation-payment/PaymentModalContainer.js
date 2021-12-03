@@ -11,11 +11,11 @@ import paymentModalSelector from './PaymentModalSelector';
 import { putReservation } from 'actions/reservationActions';
 import { getPaymentReturnUrl } from 'utils/reservationUtils';
 import TimeRange from '../../time-range/TimeRange';
+import { handleSigninRefresh } from '../../../utils/authUtils';
 
 function UnconnectedPaymentModalContainer({
-  actions, contrast, fontSize, isSaving, reservation, resource, show, t
+  actions, contrast, fontSize, isLoggedIn, isSaving, loginExpiresAt, reservation, resource, show, t
 }) {
-  // TODO: handle sign in refresh here?
   useEffect(() => {
     const { order } = reservation;
     if (order && 'paymentUrl' in order) {
@@ -23,6 +23,11 @@ function UnconnectedPaymentModalContainer({
       window.location = order.paymentUrl;
     }
   }, [reservation]);
+
+  // handle sign in refresh only when modal is open
+  if (show) {
+    handleSigninRefresh(isLoggedIn, loginExpiresAt);
+  }
 
   const handleUpdateReservation = () => {
     const returnUrl = getPaymentReturnUrl();
@@ -88,7 +93,9 @@ UnconnectedPaymentModalContainer.propTypes = {
   actions: PropTypes.object.isRequired,
   contrast: PropTypes.string.isRequired,
   fontSize: PropTypes.string.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
+  loginExpiresAt: PropTypes.number.isRequired,
   reservation: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
