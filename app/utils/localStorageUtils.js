@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 const persistedPaymentUrlKey = 'reservation.paymentUrlData';
-const maxPaymentUrlAge = 15; // in minutes
+const maxPaymentUrlAge = 10;
 
 /**
  * Tells whether paymentUrl data has expired or not
@@ -9,9 +9,11 @@ const maxPaymentUrlAge = 15; // in minutes
  * @returns {boolean} true or false
  */
 export function isPaymentUrlExpired(timestamp) {
-  const createdAt = moment.unix(timestamp);
-  const minutesSinceCreation = moment().diff(createdAt, 'minutes');
-  if (minutesSinceCreation > maxPaymentUrlAge) {
+  const createdAt = moment(timestamp);
+  const expiresAt = createdAt.add(maxPaymentUrlAge, 'minutes');
+  const minutesLeft = expiresAt.diff(moment(), 'minutes');
+
+  if (minutesLeft < 0) {
     return true;
   }
   return false;
