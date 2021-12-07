@@ -2,6 +2,7 @@ import moment from 'moment';
 
 const persistedPaymentUrlKey = 'reservation.paymentUrlData';
 const maxPaymentUrlAge = 10;
+const enablePersistPaymentUrl = true; // toggle localStorage use on/off
 
 /**
  * Tells whether paymentUrl data has expired or not
@@ -26,6 +27,10 @@ export function isPaymentUrlExpired(timestamp) {
  * or undefined if data does not exist or is faulty
  */
 export function loadPersistedPaymentUrl() {
+  if (!enablePersistPaymentUrl) {
+    return undefined;
+  }
+
   try {
     const data = localStorage.getItem(persistedPaymentUrlKey);
     if (data === null) {
@@ -57,6 +62,10 @@ export function loadPersistedPaymentUrl() {
  * @returns {undefined|null} void
  */
 export function savePersistedPaymentUrl(paymentUrl, reservationId) {
+  if (!enablePersistPaymentUrl) {
+    return undefined;
+  }
+
   const timestamp = Date.now();
   const formattedData = JSON.stringify({ reservationId, paymentUrl, timestamp });
   try {
@@ -71,6 +80,10 @@ export function savePersistedPaymentUrl(paymentUrl, reservationId) {
  * @returns {undefined|null} void
  */
 export function deletePersistedPaymentUrl() {
+  if (!enablePersistPaymentUrl) {
+    return undefined;
+  }
+
   try {
     return localStorage.removeItem(persistedPaymentUrlKey);
   } catch (err) {
