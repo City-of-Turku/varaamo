@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -14,10 +14,23 @@ import { getPaymentReturnUrl } from 'utils/reservationUtils';
 import TimeRange from '../../time-range/TimeRange';
 import { handleSigninRefresh } from '../../../utils/authUtils';
 import { loadPersistedPaymentUrl, savePersistedPaymentUrl } from '../../../utils/localStorageUtils';
+import PaymentButton from './PaymentButton';
 
 function UnconnectedPaymentModalContainer({
   actions, contrast, fontSize, isLoggedIn, isSaving, loginExpiresAt, reservation, resource, show, t
 }) {
+  const [paymentUrlData, setPaymentUrlData] = useState(undefined);
+  const [timer, setTimer] = useState(null); // paymentUrlData refresh timer
+
+  // handle clearing timer when modal is closed
+  useEffect(() => {
+    if (!show && timer) {
+      clearInterval(timer);
+      setTimer(null);
+    }
+  }, [show]);
+
+  // handle redirect when reservation gets a payment url
   useEffect(() => {
     const { order } = reservation;
     if (order && 'paymentUrl' in order) {
@@ -40,11 +53,17 @@ function UnconnectedPaymentModalContainer({
     actions.putReservation(updatedResevation, omitSuccessNotification);
   };
 
-  const reservationExists = reservation && reservation.order;
-
+  const reservationExists = !!(reservation && reservation.order);
+  const reservationState = reservation && reservation.state;
   let paymentUrl;
-  if (reservation && reservation.state === constants.RESERVATION_STATE.WAITING_FOR_PAYMENT) {
-    const paymentUrlData = loadPersistedPaymentUrl();
+  if (reservationState === constants.RESERVATION_STATE.WAITING_FOR_PAYMENT) {
+    if (!timer) {
+      // load payment url data and set a timer to get updated data for it
+      setPaymentUrlData(loadPersistedPaymentUrl());
+      setTimer(setInterval(() => {
+        setPaymentUrlData(loadPersistedPaymentUrl());
+      }, 60 * 1000));
+    }
     if (paymentUrlData && paymentUrlData.reservationId === reservation.id) {
       paymentUrl = paymentUrlData.paymentUrl;
     }
@@ -86,25 +105,14 @@ function UnconnectedPaymentModalContainer({
         >
           {t('common.back')}
         </Button>
-
-        {!paymentUrl ? (
-          <Button
-            bsStyle="success"
-            className={fontSize}
-            disabled={!reservationExists || isSaving}
-            onClick={() => handleUpdateReservation()}
-          >
-            {isSaving ? t('common.proceedingToPayment') : t('common.proceedToPayment')}
-          </Button>
-        ) : (
-          <Button
-            bsStyle="success"
-            className={fontSize}
-            href={paymentUrl}
-          >
-            {t('common.resumePayment')}
-          </Button>
-        )}
+        <PaymentButton
+          fontSize={fontSize}
+          handleUpdateReservation={handleUpdateReservation}
+          isSaving={isSaving}
+          paymentUrl={paymentUrl || ''}
+          reservationExists={reservationExists}
+          reservationState={reservationState || ''}
+        />
       </Modal.Footer>
     </Modal>
   );
