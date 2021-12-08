@@ -20,6 +20,7 @@ import {
 } from 'actions/uiActions';
 import { getEditReservationUrl } from 'utils/reservationUtils';
 import ReservationControls from './ReservationControls';
+import { loadPersistedPaymentUrl } from '../../utils/localStorageUtils';
 
 export class UnconnectedReservationControlsContainer extends Component {
   constructor(props) {
@@ -78,6 +79,7 @@ export class UnconnectedReservationControlsContainer extends Component {
 
   render() {
     const { isAdmin, isStaff, reservation } = this.props;
+    const paymentUrlData = loadPersistedPaymentUrl();
 
     return (
       <ReservationControls
@@ -89,6 +91,7 @@ export class UnconnectedReservationControlsContainer extends Component {
         onEditClick={this.handleEditClick}
         onInfoClick={this.handleInfoClick}
         onPayClick={this.handlePayClick}
+        paymentUrlData={paymentUrlData}
         reservation={reservation}
       />
     );
