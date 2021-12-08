@@ -20,6 +20,7 @@ class UnconnectedReservationListContainer extends Component {
       resources,
       staffUnits,
       units,
+      paymentUrlData,
     } = this.props;
     const resource = resources[reservation.resource] || {};
     const unit = resource.unit ? units[resource.unit] || {} : {};
@@ -29,6 +30,7 @@ class UnconnectedReservationListContainer extends Component {
         isAdmin={isAdmin}
         isStaff={includes(staffUnits, resource.unit)}
         key={reservation.url}
+        paymentUrlData={paymentUrlData}
         reservation={reservation}
         resource={resource}
         unit={unit}
@@ -71,6 +73,7 @@ UnconnectedReservationListContainer.propTypes = {
   staffUnits: PropTypes.array.isRequired,
   t: PropTypes.func.isRequired,
   units: PropTypes.object.isRequired,
+  paymentUrlData: PropTypes.object,
 };
 UnconnectedReservationListContainer = injectT(UnconnectedReservationListContainer);  // eslint-disable-line
 

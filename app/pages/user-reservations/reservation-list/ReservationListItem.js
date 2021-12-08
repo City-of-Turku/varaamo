@@ -23,7 +23,7 @@ class ReservationListItem extends Component {
 
   render() {
     const {
-      isAdmin, isStaff, reservation, resource, t, unit
+      isAdmin, isStaff, reservation, resource, t, unit, paymentUrlData
     } = this.props;
 
     const nameSeparator = isEmpty(resource) || isEmpty(unit) ? '' : ', ';
@@ -64,6 +64,7 @@ class ReservationListItem extends Component {
           <ReservationControls
             isAdmin={isAdmin}
             isStaff={isStaff}
+            paymentUrlData={paymentUrlData}
             reservation={reservation}
             resource={resource}
           />
@@ -80,6 +81,7 @@ ReservationListItem.propTypes = {
   resource: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
   unit: PropTypes.object.isRequired,
+  paymentUrlData: PropTypes.object,
 };
 
 export default injectT(ReservationListItem);

@@ -78,8 +78,9 @@ export class UnconnectedReservationControlsContainer extends Component {
   }
 
   render() {
-    const { isAdmin, isStaff, reservation } = this.props;
-    const paymentUrlData = loadPersistedPaymentUrl();
+    const {
+      isAdmin, isStaff, reservation, paymentUrlData
+    } = this.props;
 
     return (
       <ReservationControls
@@ -105,6 +106,7 @@ UnconnectedReservationControlsContainer.propTypes = {
   reservation: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  paymentUrlData: PropTypes.object,
 };
 
 function mapDispatchToProps(dispatch) {

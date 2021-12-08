@@ -14,6 +14,7 @@ import ReservationPaymentModal from 'shared/modals/reservation-payment';
 import { injectT } from 'i18n';
 import userReservationsPageSelector from './userReservationsPageSelector';
 import ReservationList from './reservation-list';
+import { loadPersistedPaymentUrl } from '../../utils/localStorageUtils';
 
 class UnconnectedUserReservationsPage extends Component {
   componentDidMount() {
@@ -30,6 +31,8 @@ class UnconnectedUserReservationsPage extends Component {
       contrast,
     } = this.props;
 
+    const paymentUrlData = loadPersistedPaymentUrl();
+
     return (
       <div className={`app-UserReservationPage ${contrast}`}>
         <PageWrapper className="app-UserReservationPage__wrapper" title={t('UserReservationsPage.title')} transparent={false}>
@@ -38,6 +41,7 @@ class UnconnectedUserReservationsPage extends Component {
               <h1>{t('UserReservationsPage.title')}</h1>
               <ReservationList
                 loading={reservationsFetchCount < 1}
+                paymentUrlData={paymentUrlData}
               />
             </div>
             <ReservationCancelModal />
