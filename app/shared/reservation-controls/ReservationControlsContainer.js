@@ -20,7 +20,6 @@ import {
 } from 'actions/uiActions';
 import { getEditReservationUrl } from 'utils/reservationUtils';
 import ReservationControls from './ReservationControls';
-import { loadPersistedPaymentUrl } from '../../utils/localStorageUtils';
 
 export class UnconnectedReservationControlsContainer extends Component {
   constructor(props) {
