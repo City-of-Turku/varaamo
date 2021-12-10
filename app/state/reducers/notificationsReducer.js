@@ -85,7 +85,7 @@ function notificationsReducer(state = initialState, action) {
     }
 
     case types.API.RESERVATION_PUT_SUCCESS: {
-      if (action.meta.omitNotification) {
+      if (action.meta && action.meta.omitNotification) {
         return state;
       }
 

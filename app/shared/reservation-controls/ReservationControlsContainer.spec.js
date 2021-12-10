@@ -21,6 +21,7 @@ describe('shared/reservation-controls/ReservationControlsContainer', () => {
       denyPreliminaryReservation: simple.stub(),
       openConfirmReservationModal: simple.stub(),
       openReservationCancelModal: simple.stub(),
+      openReservationPaymentModal: simple.stub(),
       selectReservationToCancel: simple.stub(),
       selectReservationToEdit: simple.stub(),
       selectReservationToShow: simple.stub(),
@@ -55,6 +56,7 @@ describe('shared/reservation-controls/ReservationControlsContainer', () => {
       expect(actualProps.onDenyClick).toBe(instance.handleDenyClick);
       expect(actualProps.onEditClick).toBe(instance.handleEditClick);
       expect(actualProps.onInfoClick).toBe(instance.handleInfoClick);
+      expect(actualProps.onPayClick).toBe(instance.handlePayClick);
       expect(actualProps.reservation).toBe(props.reservation);
     });
   });
@@ -121,5 +123,20 @@ describe('shared/reservation-controls/ReservationControlsContainer', () => {
         expect(props.actions.showReservationInfoModal.lastCall.args[0]).toEqual(props.reservation);
       }
     );
+  });
+
+  describe('handlePayClick', () => {
+    beforeAll(() => {
+      instance.handlePayClick();
+    });
+
+    test('calls props.actions.selectReservationToShow function with props.reservation', () => {
+      expect(props.actions.selectReservationToShow.callCount).toBe(1);
+      expect(props.actions.selectReservationToShow.lastCall.args[0]).toEqual(props.reservation);
+    });
+
+    test('calls props.actions.openReservationPaymentModal function', () => {
+      expect(props.actions.openReservationPaymentModal.callCount).toBe(1);
+    });
   });
 });

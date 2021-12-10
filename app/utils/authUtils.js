@@ -15,6 +15,7 @@ export function handleSigninRefresh(isLoggedIn, loginExpiresAt, minMinutesLeft =
     const expiresAt = moment.unix(loginExpiresAt);
     const minutesLeft = expiresAt.diff(moment(), 'minutes');
     if (minutesLeft < minMinutesLeft) {
+      // may not work in localhost
       userManager.signinSilent();
     }
   }

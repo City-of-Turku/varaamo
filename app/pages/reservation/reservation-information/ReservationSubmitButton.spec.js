@@ -27,16 +27,30 @@ describe('pages/reservation/reservation-information/ReservationSubmitButton', ()
 
     describe('with correct text', () => {
       describe('when hasPayment is true', () => {
+        const hasPayment = true;
+
         test('and isMakingReservations is true', () => {
-          const props = { hasPayment: true, isMakingReservations: true };
+          const props = { hasPayment, isMakingReservations: true };
           const button = getWrapper(props);
           expect(button.props().children).toBe('common.proceedingToPayment');
         });
 
         test('and isMakingReservations is false', () => {
-          const props = { hasPayment: true, isMakingReservations: false };
+          const props = { hasPayment, isMakingReservations: false };
           const button = getWrapper(props);
           expect(button.props().children).toBe('common.proceedToPayment');
+        });
+
+        test('and making a manually confirmed reservation', () => {
+          const props = { hasPayment, isMakingReservations: true, needManualConfirmation: true };
+          const button = getWrapper(props);
+          expect(button.props().children).toBe('common.saving');
+        });
+
+        test('and not making a manually confirmed reservation', () => {
+          const props = { hasPayment, isMakingReservations: false, needManualConfirmation: true };
+          const button = getWrapper(props);
+          expect(button.props().children).toBe('common.save');
         });
       });
 

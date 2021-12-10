@@ -26,7 +26,7 @@ function PaymentButton({
           bsStyle="success"
           className={fontSize}
           disabled={isSaving}
-          onClick={() => handleUpdateReservation()}
+          onClick={handleUpdateReservation}
         >
           {isSaving ? t('common.proceedingToPayment') : t('common.proceedToPayment')}
         </Button>

@@ -18,7 +18,7 @@ import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import { UnconnectedReservationPage as ReservationPage } from './ReservationPage';
 import {
-  checkOrderPrice, createOrder, getInitialProducts, createOrderLines
+  checkOrderPrice, createOrder, getInitialProducts, createOrderLines, hasProducts
 } from 'utils/reservationUtils';
 import userManager from 'utils/userManager';
 import ReservationProducts from './reservation-products/ReservationProducts';
@@ -157,22 +157,29 @@ describe('pages/reservation/ReservationPage', () => {
   });
 
   describe('ReservationPhases', () => {
+    const resourceA = Resource.build();
     test('renders correct props when reservationToEdit null', () => {
       const reservationPhases = getWrapper({
         reservationToEdit: null,
+        resource: resourceA
       }).find(ReservationPhases);
       expect(reservationPhases).toHaveLength(1);
       expect(reservationPhases.prop('currentPhase')).toBe('information');
+      expect(reservationPhases.prop('hasProducts')).toBe(hasProducts(resourceA));
       expect(reservationPhases.prop('isEditing')).toBe(false);
+      expect(reservationPhases.prop('needManualConfirmation')).toBe(resourceA.needManualConfirmation);
     });
 
     test('renders correct props when reservationToEdit not null', () => {
       const reservationPhases = getWrapper({
         reservationToEdit: Reservation.build(),
+        resource: resourceA
       }).find(ReservationPhases);
       expect(reservationPhases).toHaveLength(1);
       expect(reservationPhases.prop('currentPhase')).toBe('time');
+      expect(reservationPhases.prop('hasProducts')).toBe(hasProducts(resourceA));
       expect(reservationPhases.prop('isEditing')).toBe(true);
+      expect(reservationPhases.prop('needManualConfirmation')).toBe(resourceA.needManualConfirmation);
     });
   });
 
@@ -488,20 +495,36 @@ describe('pages/reservation/ReservationPage', () => {
       }
     );
 
-    test('sets window.location to paymentUrl when next props has reservation with order.paymentUrl', () => {
-      delete window.location;
-      window.location = new URL('https://www.current-location.fi');
-
-      const instance = getWrapper().instance();
-      const reservationCreated = Reservation.build();
+    describe('window.location redirect', () => {
+      const currentUrl = 'https://www.current-location.fi/';
       const paymentUrl = 'http://test-payment-url.fi';
-      reservationCreated.order = { paymentUrl };
-      const nextProps = {
-        reservationCreated
-      };
-      instance.componentWillUpdate(nextProps);
 
-      expect(window.location).toBe(paymentUrl);
+      test('sets window.location to paymentUrl when next props has reservation with order.paymentUrl', () => {
+        delete window.location;
+        window.location = currentUrl;
+
+        const instance = getWrapper().instance();
+        const reservationCreated = Reservation.build();
+        reservationCreated.order = { paymentUrl };
+        const nextProps = { reservationCreated };
+        instance.componentWillUpdate(nextProps);
+
+        expect(window.location).toBe(paymentUrl);
+      });
+
+      test('does not set window.location to paymentUrl when reservation needs manual confirmation', () => {
+        delete window.location;
+        window.location = currentUrl;
+
+        const instance = getWrapper().instance();
+        const reservationCreated = Reservation.build();
+        reservationCreated.needManualConfirmation = true;
+        reservationCreated.order = { paymentUrl };
+        const nextProps = { reservationCreated };
+        instance.componentWillUpdate(nextProps);
+
+        expect(window.location).toBe(currentUrl);
+      });
     });
   });
   describe('componentWillUnmount when state.view is confirmation', () => {

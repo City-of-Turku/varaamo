@@ -11,7 +11,8 @@ describe('ManageReservations/status/statusUtils', () => {
       expect(getLabelStyle(states.CONFIRMED)).toBe('success');
       expect(getLabelStyle(states.DENIED)).toBe('danger');
       expect(getLabelStyle(states.REQUESTED)).toBe('warning');
-      expect(getLabelStyle(states.WAITING_FOR_PAYMENT)).toBe('');
+      expect(getLabelStyle(states.READY_FOR_PAYMENT)).toBe('warning');
+      expect(getLabelStyle(states.WAITING_FOR_PAYMENT)).toBe('warning');
     });
   });
 

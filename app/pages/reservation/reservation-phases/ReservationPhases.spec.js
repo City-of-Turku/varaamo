@@ -8,7 +8,8 @@ describe('pages/reservation/reservation-phases/ReservationPhases', () => {
   const defaultProps = {
     currentPhase: 'information',
     isEditing: false,
-    hasPayment: false,
+    hasProducts: false,
+    needManualConfirmation: false,
   };
 
   function getWrapper(extraProps) {
@@ -111,27 +112,38 @@ describe('pages/reservation/reservation-phases/ReservationPhases', () => {
     });
   });
 
-  describe('when hasPayment is true and isEditing is true', () => {
+  describe('when hasProducts is true and isEditing is true', () => {
     test('renders three phases', () => {
       const phases = getWrapper({
         currentPhase: 'confirmation',
         isEditing: true,
-        hasPayment: true
+        hasProducts: true
       }).find(ReservationPhase);
       expect(phases).toHaveLength(3);
     });
   });
 
-  describe('when hasPayment is true and isEditing is false', () => {
+  describe('when hasProducts is true and isEditing is false', () => {
     test('renders four phases', () => {
       const phases = getWrapper({
         currentPhase: 'confirmation',
         isEditing: false,
-        hasPayment: true
+        hasProducts: true
       }).find(ReservationPhase);
       expect(phases).toHaveLength(4);
       expect(phases.at(0).prop('title')).toBe('ReservationPhase.productsTitle');
       expect(phases.at(2).prop('title')).toBe('ReservationPhase.paymentTitle');
+    });
+  });
+
+  describe('when hasProducts is true, isEditing is true and needManualConfirmation is true', () => {
+    test('renders three phases', () => {
+      const phases = getWrapper({
+        currentPhase: 'confirmation',
+        isEditing: true,
+        hasProducts: true
+      }).find(ReservationPhase);
+      expect(phases).toHaveLength(3);
     });
   });
 });

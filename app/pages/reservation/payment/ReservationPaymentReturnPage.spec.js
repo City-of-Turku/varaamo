@@ -49,8 +49,9 @@ describe('pages/reservation/payment/ReservationPaymentReturnPage', () => {
       test('with default props', () => {
         const phases = getWrapper().find(ReservationPhases);
         expect(phases).toHaveLength(1);
-        expect(phases.prop('hasPayment')).toBe(true);
+        expect(phases.prop('hasProducts')).toBe(true);
         expect(phases.prop('isEditing')).toBe(false);
+        expect(phases.prop('needManualConfirmation')).toBe(false);
       });
       test('when query param success is false', () => {
         const location = {

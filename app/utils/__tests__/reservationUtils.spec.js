@@ -19,6 +19,7 @@ import {
   createOrder,
   checkOrderPrice,
   getFormattedProductPrice,
+  getPaymentReturnUrl,
   canUserCancelReservation,
   canUserModifyReservation,
   changeProductQuantity,
@@ -585,6 +586,12 @@ describe('Utils: reservationUtils', () => {
       const product = { price: { amount: '3.50', period: '01:00:00', type: 'period' } };
       const expected = `${product.price.amount}€ / 1 h`;
       expect(getFormattedProductPrice(product)).toBe(expected);
+    });
+  });
+
+  describe('getPaymentReturnUrl', () => {
+    test('returns correct url string', () => {
+      expect(getPaymentReturnUrl()).toBe(`${window.location.origin}/reservation-payment-return`);
     });
   });
 
