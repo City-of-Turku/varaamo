@@ -35,6 +35,20 @@ describe('shared/modals/reservation-cancel/reservationCancelModalSelector', () =
       expect(selected.cancelAllowed).toBe(true);
     });
 
+    describe('returns true when reservation is preliminary, its state is requested and it has an order', () => {
+      const order = { id: 'test-id', price: 3.50 };
+      const reservation = {
+        id: 'reservation-1',
+        needManualConfirmation: true,
+        order,
+        state: 'requested',
+      };
+      const selected = getSelected({
+        'ui.reservations.toCancel': [reservation],
+      });
+      expect(selected.cancelAllowed).toBe(true);
+    });
+
     test(
       'returns false if user is not admin and reservation is confirmed and preliminary',
       () => {

@@ -25,6 +25,7 @@ const cancelAllowedSelector = createSelector(
   reservationSelector,
   (isAdmin, reservation) => (
     isAdmin
+    || (reservation.needManualConfirmation && hasOrder(reservation) && reservation.state === 'requested')
     || (!reservation.needManualConfirmation && !hasOrder(reservation))
     || (reservation.state !== 'confirmed' && !hasOrder(reservation))
   )
