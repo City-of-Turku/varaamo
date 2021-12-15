@@ -109,6 +109,16 @@ describe('shared/availability-view/Reservation', () => {
     }
   );
 
+  test('adds class ready_for_payment to reservation if reservation state is ready_for_payment', () => {
+    const element = getWrapper({ state: 'ready_for_payment' }).find('.ready_for_payment');
+    expect(element).toHaveLength(1);
+  });
+
+  test('does not add class ready_for_payment to reservation if reservation state is not ready_for_payment', () => {
+    const element = getWrapper({ state: 'approved' }).find('.ready_for_payment');
+    expect(element).toHaveLength(0);
+  });
+
   test('has correct width', () => {
     const times = {
       end: '2016-01-01T20:00:00Z',
