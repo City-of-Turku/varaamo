@@ -146,4 +146,16 @@ describe('pages/reservation/reservation-phases/ReservationPhases', () => {
       expect(phases).toHaveLength(3);
     });
   });
+
+  describe('when hasProducts is true, isEditing is false, needManualConfirmation is true and isStaff is true', () => {
+    test('renders four phases', () => {
+      const phases = getWrapper({
+        currentPhase: 'confirmation',
+        isEditing: false,
+        isStaff: true,
+        hasProducts: true
+      }).find(ReservationPhase);
+      expect(phases).toHaveLength(4);
+    });
+  });
 });

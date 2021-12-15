@@ -119,13 +119,14 @@ class UnconnectedReservationPage extends Component {
     // changes to confirm page if receives correct reservation props from backend
     // if requires payment, redirect to given url
     const { reservationCreated: nextCreated, reservationEdited: nextEdited } = nextProps;
-    const { reservationCreated, reservationEdited } = this.props;
+    const { reservationCreated, reservationEdited, isStaff } = this.props;
     if (
       (!isEmpty(nextCreated) || !isEmpty(nextEdited))
       && (nextCreated !== reservationCreated || nextEdited !== reservationEdited)
     ) {
       const { needManualConfirmation } = nextCreated || nextEdited;
-      if (!needManualConfirmation && has(nextCreated, 'order.paymentUrl')) {
+      // staff payments are always handled directly
+      if ((isStaff || !needManualConfirmation) && has(nextCreated, 'order.paymentUrl')) {
         const paymentUrl = get(nextCreated, 'order.paymentUrl');
         window.location = paymentUrl;
         return;
@@ -444,6 +445,7 @@ class UnconnectedReservationPage extends Component {
                   currentPhase={view}
                   hasProducts={hasProducts(resource)}
                   isEditing={isEditing || isEdited}
+                  isStaff={isStaff}
                   needManualConfirmation={resource.needManualConfirmation}
                 />
                 {view === 'time' && isEditing && (

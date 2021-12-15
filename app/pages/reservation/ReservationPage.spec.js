@@ -512,18 +512,38 @@ describe('pages/reservation/ReservationPage', () => {
         expect(window.location).toBe(paymentUrl);
       });
 
-      test('does not set window.location to paymentUrl when reservation needs manual confirmation', () => {
-        delete window.location;
-        window.location = currentUrl;
+      describe('when user is not staff', () => {
+        const isStaff = false;
+        test('does not set window.location to paymentUrl when reservation needs manual confirmation', () => {
+          delete window.location;
+          window.location = currentUrl;
 
-        const instance = getWrapper().instance();
-        const reservationCreated = Reservation.build();
-        reservationCreated.needManualConfirmation = true;
-        reservationCreated.order = { paymentUrl };
-        const nextProps = { reservationCreated };
-        instance.componentWillUpdate(nextProps);
+          const instance = getWrapper({ isStaff }).instance();
+          const reservationCreated = Reservation.build();
+          reservationCreated.needManualConfirmation = true;
+          reservationCreated.order = { paymentUrl };
+          const nextProps = { reservationCreated };
+          instance.componentWillUpdate(nextProps);
 
-        expect(window.location).toBe(currentUrl);
+          expect(window.location).toBe(currentUrl);
+        });
+      });
+
+      describe('when user is staff', () => {
+        const isStaff = true;
+        test('sets window.location to paymentUrl when reservation needs manual confirmation', () => {
+          delete window.location;
+          window.location = currentUrl;
+
+          const instance = getWrapper({ isStaff }).instance();
+          const reservationCreated = Reservation.build();
+          reservationCreated.needManualConfirmation = true;
+          reservationCreated.order = { paymentUrl };
+          const nextProps = { reservationCreated };
+          instance.componentWillUpdate(nextProps);
+
+          expect(window.location).toBe(paymentUrl);
+        });
       });
     });
   });
