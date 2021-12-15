@@ -9,7 +9,7 @@ import { createResourceSelector } from 'state/selectors/dataSelectors';
 import modalIsOpenSelectorFactory from 'state/selectors/factories/modalIsOpenSelectorFactory';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
 import { fontSizeSelector } from 'state/selectors/accessibilitySelectors';
-import { hasOrder } from '../../../utils/reservationUtils';
+import { hasOrder, isManuallyConfirmedWithOrderAllowed } from '../../../utils/reservationUtils';
 
 function reservationSelector(state) {
   return state.ui.reservations.toCancel[0] || {};
@@ -25,7 +25,7 @@ const cancelAllowedSelector = createSelector(
   reservationSelector,
   (isAdmin, reservation) => (
     isAdmin
-    || (reservation.needManualConfirmation && hasOrder(reservation) && reservation.state === 'requested')
+    || isManuallyConfirmedWithOrderAllowed(reservation)
     || (!reservation.needManualConfirmation && !hasOrder(reservation))
     || (reservation.state !== 'confirmed' && !hasOrder(reservation))
   )

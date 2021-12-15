@@ -355,6 +355,22 @@ export const canUserCancelReservation = (reservation) => {
   return false;
 };
 
+/**
+ * Checks whether cancelling manually confirmed paid reservation is allowed or not
+ * @param {object} reservation
+ * @returns {boolean} true when allowed, false if not
+ */
+function isManuallyConfirmedWithOrderAllowed(reservation) {
+  const { needManualConfirmation, state } = reservation;
+  if (needManualConfirmation && hasOrder(reservation)) {
+    const states = constants.RESERVATION_STATE;
+    if (state === states.REQUESTED || state === states.READY_FOR_PAYMENT) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export {
   combine,
   isStaffEvent,
@@ -378,4 +394,5 @@ export {
   getFormattedProductPrice,
   getPaymentReturnUrl,
   getReservationCustomerGroupName,
+  isManuallyConfirmedWithOrderAllowed,
 };

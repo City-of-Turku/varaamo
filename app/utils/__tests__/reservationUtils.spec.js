@@ -28,6 +28,7 @@ import {
   getNonZeroQuantityProducts,
   getInitialProducts,
   getReservationCustomerGroupName,
+  isManuallyConfirmedWithOrderAllowed,
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 import Product from '../fixtures/Product';
@@ -705,6 +706,53 @@ describe('Utils: reservationUtils', () => {
       const canCancel = canUserCancelReservation(reservation);
 
       expect(canCancel).toBe(true);
+    });
+  });
+
+  describe('isManuallyConfirmedWithOrderAllowed', () => {
+    const states = constants.RESERVATION_STATE;
+
+    describe('when reservation needs manual confirmation and has an order', () => {
+      const needManualConfirmation = true;
+      const order = { id: 'test-id', price: 3.50 };
+
+      test('returns true when reservation state is requested', () => {
+        const state = states.REQUESTED;
+        const reservation = Reservation.build({ needManualConfirmation, order, state });
+        expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(true);
+      });
+
+      test('returns true when reservation state is ready for payment', () => {
+        const state = states.READY_FOR_PAYMENT;
+        const reservation = Reservation.build({ needManualConfirmation, order, state });
+        expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(true);
+      });
+
+      test('returns false when reservation state is not requested or ready for payment', () => {
+        const notAllowedStates = Object.values(states).filter(
+          state => state !== states.REQUESTED && state !== states.READY_FOR_PAYMENT
+        );
+        notAllowedStates.forEach((state) => {
+          const reservation = Reservation.build({ needManualConfirmation, order, state });
+          expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(false);
+        });
+      });
+    });
+
+    test('returns false when reservation is not manually confirmed', () => {
+      const needManualConfirmation = false;
+      const order = { id: 'test-id', price: 3.50 };
+      const state = states.READY_FOR_PAYMENT;
+      const reservation = Reservation.build({ needManualConfirmation, order, state });
+      expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(false);
+    });
+
+    test('returns false when reservation has no order', () => {
+      const needManualConfirmation = true;
+      const order = undefined;
+      const state = states.READY_FOR_PAYMENT;
+      const reservation = Reservation.build({ needManualConfirmation, order, state });
+      expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(false);
     });
   });
 });
