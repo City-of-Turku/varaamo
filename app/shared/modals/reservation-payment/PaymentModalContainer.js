@@ -33,7 +33,7 @@ function UnconnectedPaymentModalContainer({
   // handle redirect when reservation gets a payment url
   useEffect(() => {
     const { order } = reservation;
-    if (order && 'paymentUrl' in order) {
+    if (order && 'paymentUrl' in order && order.paymentUrl) {
       savePersistedPaymentUrl(order.paymentUrl, reservation.id);
       actions.closeReservationPaymentModal();
       window.location = order.paymentUrl;
