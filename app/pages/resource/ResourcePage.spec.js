@@ -350,6 +350,9 @@ describe('pages/resource/ResourcePage', () => {
 
       test('returns false when the day is today', () => {
         const today = new Date();
+        // to avoid problems with comparing different "now" variables,
+        // manually set this "now"/today to be the last moment in today
+        today.setHours(23, 59, 59);
         const isDisabled = instance.disableDays(today.toISOString());
         expect(isDisabled).toBe(false);
       });
