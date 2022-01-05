@@ -22,6 +22,7 @@ import PageResultsText from '../PageResultsText';
 describe('ManageReservationsFilters', () => {
   const defaultProps = {
     actions: {
+      clearReservations: jest.fn(),
       editReservation: jest.fn(),
       fetchUnits: jest.fn(),
       fetchReservations: jest.fn(),
@@ -268,6 +269,11 @@ describe('ManageReservationsFilters', () => {
       const normalizedReservation = Object.assign(
         {}, reservation, { resource: reservation.resource.id }
       );
+      test('calls clearReservations', () => {
+        const instance = getWrapper().instance();
+        instance.handleEditClick(reservation);
+        expect(defaultProps.actions.clearReservations.mock.calls.length).toBe(1);
+      });
 
       test('calls handleFetchResource with correct params', () => {
         const instance = getWrapper().instance();
