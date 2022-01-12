@@ -30,7 +30,7 @@ module.exports = {
     ),
   },
   isProduction,
-  piwikSiteId: process.env.PIWIK_SITE_ID,
+  matomoSiteId: process.env.MATOMO_SITE_ID,
   port,
   webpackStylesExtensions: ['css', 'scss'],
 };
