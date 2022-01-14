@@ -20,7 +20,7 @@ function fetchUser(id, params = {}) {
             meta: {
               track: {
                 event: 'trackEvent',
-                args: ['User', 'user-get', id],
+                args: ['User', 'user-get'],
               },
             },
           }

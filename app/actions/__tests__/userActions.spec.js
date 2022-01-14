@@ -18,7 +18,6 @@ describe('Actions: userActions', () => {
         args: [
           'User',
           'user-get',
-          id,
         ],
       });
     });
