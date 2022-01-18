@@ -48,9 +48,9 @@ function UnconnectedPaymentModalContainer({
   const handleUpdateReservation = () => {
     const returnUrl = getPaymentReturnUrl();
     const order = { id: reservation.order.id, returnUrl };
-    const updatedResevation = { ...reservation, order };
+    const updatedReservation = { ...reservation, order };
     const omitSuccessNotification = true;
-    actions.putReservation(updatedResevation, omitSuccessNotification);
+    actions.putReservation(updatedReservation, omitSuccessNotification);
   };
 
   const reservationExists = !!(reservation && reservation.order);
