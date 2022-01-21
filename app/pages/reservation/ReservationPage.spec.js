@@ -980,13 +980,15 @@ describe('pages/reservation/ReservationPage', () => {
     test('calls handleCheckOrderPrice', () => {
       const instance = getWrapper({ resource: resourceA }).instance();
       const spy = jest.spyOn(instance, 'handleCheckOrderPrice');
+      const customerGroupId = 'cg-id-1';
+      instance.state.currentCustomerGroup = customerGroupId;
       instance.state.mandatoryProducts = mandatoryProducts;
       instance.state.extraProducts = extraProducts;
       instance.HandleToggleMandatoryProducts();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
-        resourceA, defaultProps.selected,
-        instance.state.mandatoryProducts, instance.state.extraProducts
+        resourceA, defaultProps.selected, instance.state.mandatoryProducts,
+        instance.state.extraProducts, false, customerGroupId
       );
     });
   });

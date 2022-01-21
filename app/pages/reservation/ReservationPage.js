@@ -307,7 +307,9 @@ class UnconnectedReservationPage extends Component {
   }
 
   HandleToggleMandatoryProducts() {
-    const { skipMandatoryProducts, mandatoryProducts, extraProducts } = this.state;
+    const {
+      skipMandatoryProducts, mandatoryProducts, extraProducts, currentCustomerGroup
+    } = this.state;
     const { resource, selected } = this.props;
     const quantity = skipMandatoryProducts ? 1 : 0;
     const updatedMandatoryProducts = mandatoryProducts.map(
@@ -318,7 +320,7 @@ class UnconnectedReservationPage extends Component {
       skipMandatoryProducts: !prevState.skipMandatoryProducts,
     }));
     this.handleCheckOrderPrice(
-      resource, selected, updatedMandatoryProducts, extraProducts
+      resource, selected, updatedMandatoryProducts, extraProducts, false, currentCustomerGroup
     );
   }
 
