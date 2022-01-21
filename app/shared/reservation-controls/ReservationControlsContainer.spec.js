@@ -28,7 +28,6 @@ describe('shared/reservation-controls/ReservationControlsContainer', () => {
       showReservationInfoModal: simple.stub(),
     },
     isAdmin: false,
-    isStaff: false,
     reservation,
     resource,
   };
@@ -50,7 +49,6 @@ describe('shared/reservation-controls/ReservationControlsContainer', () => {
       const actualProps = container.find(ReservationControls).props();
 
       expect(actualProps.isAdmin).toBe(props.isAdmin);
-      expect(actualProps.isStaff).toBe(props.isStaff);
       expect(actualProps.onCancelClick).toBe(instance.handleCancelClick);
       expect(actualProps.onConfirmClick).toBe(instance.handleConfirmClick);
       expect(actualProps.onDenyClick).toBe(instance.handleDenyClick);

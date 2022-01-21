@@ -78,13 +78,12 @@ export class UnconnectedReservationControlsContainer extends Component {
 
   render() {
     const {
-      isAdmin, isStaff, reservation, paymentUrlData
+      isAdmin, reservation, paymentUrlData
     } = this.props;
 
     return (
       <ReservationControls
         isAdmin={isAdmin}
-        isStaff={isStaff}
         onCancelClick={this.handleCancelClick}
         onConfirmClick={this.handleConfirmClick}
         onDenyClick={this.handleDenyClick}
@@ -101,7 +100,6 @@ export class UnconnectedReservationControlsContainer extends Component {
 UnconnectedReservationControlsContainer.propTypes = {
   actions: PropTypes.object.isRequired,
   isAdmin: PropTypes.bool.isRequired,
-  isStaff: PropTypes.bool.isRequired,
   reservation: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,

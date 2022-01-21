@@ -1,4 +1,3 @@
-import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Loader from 'react-loader';
@@ -18,7 +17,6 @@ class UnconnectedReservationListContainer extends Component {
     const {
       isAdmin,
       resources,
-      staffUnits,
       units,
       paymentUrlData,
     } = this.props;
@@ -28,7 +26,6 @@ class UnconnectedReservationListContainer extends Component {
     return (
       <ReservationListItem
         isAdmin={isAdmin}
-        isStaff={includes(staffUnits, resource.unit)}
         key={reservation.url}
         paymentUrlData={paymentUrlData}
         reservation={reservation}
@@ -70,7 +67,6 @@ UnconnectedReservationListContainer.propTypes = {
   loading: PropTypes.bool.isRequired,
   reservations: PropTypes.array.isRequired,
   resources: PropTypes.object.isRequired,
-  staffUnits: PropTypes.array.isRequired,
   t: PropTypes.func.isRequired,
   units: PropTypes.object.isRequired,
   paymentUrlData: PropTypes.object,
