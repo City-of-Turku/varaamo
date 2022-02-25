@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /* eslint-disable no-console */
 
 import path from 'path';
@@ -5,16 +6,12 @@ import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
 import webpack from 'webpack';
-import webpackMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
 import compression from 'compression';
 
-import webpackConfig from '../config/webpack.development';
 import serverConfig from './config';
 import render from './render';
 
 const app = express();
-const compiler = webpack(webpackConfig);
 const port = serverConfig.port;
 
 // serve static assets like images outside of normal bundling
@@ -29,6 +26,10 @@ if (serverConfig.isProduction) {
   // Serve the static assets. We can cache them as they include hashes.
   app.use('/_assets', express.static(path.resolve(__dirname, '../dist'), { maxAge: '200d' }));
 } else {
+  const webpackConfig = require('../config/webpack.development');
+  const compiler = webpack(webpackConfig);
+  const webpackMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
   console.log('Starting development server...');
 
   app.use(webpackMiddleware(compiler, {
