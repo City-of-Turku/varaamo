@@ -1,7 +1,8 @@
 # Docker image for Varaamo
+FROM node:14-alpine AS appbase
 
 # Install dependencies
-FROM node:14-alpine AS deps
+FROM appbase AS deps
 ENV NPM_CONFIG_LOGLEVEL warn
 
 # defaults to production, docker-compose dev overrides this to development on build and run.
@@ -17,7 +18,7 @@ RUN if [ "$NODE_ENV" = "production" ]; \
   fi
 
 # Create build
-FROM node:14-alpine AS builder
+FROM appbase AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules /app/node_modules
 COPY --from=deps /app/package.json /app/package-lock.json ./
@@ -25,7 +26,7 @@ COPY . .
 RUN npm run build
 
 # Create production image
-FROM node:14-alpine AS runner
+FROM appbase AS runner
 
 # defaults to production, docker-compose dev overrides this to development on build and run.
 ARG NODE_ENV=production
