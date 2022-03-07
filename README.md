@@ -41,9 +41,20 @@ Usage
     ```
 3. Start building docker image and start container:
     ```
-    $ docker-compose up
+    $ docker compose -f docker-compose.yml -f docker-compose.dev.yml up
     ```
 4. Open `localhost:3000` on browser when Webpack bundling is ready.
+
+### Starting dockerized production server
+
+Starting production server works in the same way as starting a development server with these exceptions:
+
+- Production default port is `8080`
+
+- Starting production server with docker compose:
+    ```
+    $ docker compose -f docker-compose.yml -f docker-compose.prod.yml up
+    ```
 
 ### Starting local development server
 
@@ -151,27 +162,27 @@ By default the running app uses port `8080`.
     ```
 OR enable `eslint --fix` onSave config in your code editor config.
 
-### Useful docker command
+### Useful docker commands
 - To rebuild the docker images:
     ```
-    $ docker-compose up --force-recreate --build
+    $ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --force-recreate --build
     ```
 - To enter inside docker container environment:
     ```
-    $ docker-compose exec web sh
+    $ docker compose exec node-app sh
     ```
 - Remove docker container if needed:
     ```
-    $ docker rm -f varaamo-frontend
+    $ docker rm -f <container_name>
     ```
 - Remove docker image:
     ```
-    $ docker rmi varaamo_web
+    $ docker rmi varaamo_node-app
     ```
-- Running command inside Docker environment (test for example):
+- Running command inside Docker environment:
 (Make sure docker container is running)
     ```
-    $ docker-compose run web YOUR_COMMAND_HERE
+    $ docker compose run node-app YOUR_COMMAND_HERE
     ```
 - Encounter `node-sass` issue ? try to go inside docker container environment and run `npm rebuild node-sass`
 
