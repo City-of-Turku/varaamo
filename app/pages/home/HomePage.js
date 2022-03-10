@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Link from 'react-router-dom/Link';
 import { FormattedHTMLMessage } from 'react-intl';
+import classNames from 'classnames';
 
 import { fetchPurposes } from 'actions/purposeActions';
 import { injectT } from 'i18n';
@@ -31,11 +32,17 @@ class UnconnectedHomePage extends Component {
   }
 
   renderPurposeBanner(purpose) {
-    const { t, contrast } = this.props;
+    const { t, contrast, isLargerFontSize } = this.props;
     const image = purpose.image || iconEmptyPurpose;
 
     return (
-      <Col className="app-HomePageContent__banner" key={purpose.value} md={3} sm={6} xs={12}>
+      <Col
+        className={classNames('app-HomePageContent__banner', isLargerFontSize && 'large-font')}
+        key={purpose.value}
+        md={3}
+        sm={6}
+        xs={12}
+      >
         <Link className={`app-HomePageContent__banner__linkWrapper ${contrast}`} to={`/search?purpose=${purpose.value}`}>
           <div className="app-HomePageContent__banner-icon">
             {typeof image === 'string' ? <img alt="" src={image} />
@@ -46,7 +53,7 @@ class UnconnectedHomePage extends Component {
           <div className="app-HomePageContent__banner-action">
             <Button
               bsStyle="primary"
-              className="app-HomePageContent__button"
+              className={classNames('app-HomePageContent__button', isLargerFontSize && 'large-font')}
               tabIndex="-1"
             >
               {t('HomePage.buttonText')}
@@ -87,6 +94,7 @@ class UnconnectedHomePage extends Component {
 UnconnectedHomePage.propTypes = {
   actions: PropTypes.object.isRequired,
   isFetchingPurposes: PropTypes.bool.isRequired,
+  isLargerFontSize: PropTypes.bool.isRequired,
   purposes: PropTypes.array.isRequired,
   history: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,

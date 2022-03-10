@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy';
 import values from 'lodash/values';
 import { createSelector, createStructuredSelector } from 'reselect';
 
-import { contrastSelector } from 'state/selectors/accessibilitySelectors';
+import { contrastSelector, isLargerFontSizeSelector } from 'state/selectors/accessibilitySelectors';
 import { purposesSelector } from 'state/selectors/dataSelectors';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
 
@@ -25,6 +25,7 @@ const purposeOptionsSelector = createSelector(
 
 const homePageSelector = createStructuredSelector({
   isFetchingPurposes: requestIsActiveSelectorFactory(ActionTypes.API.PURPOSES_GET_REQUEST),
+  isLargerFontSize: isLargerFontSizeSelector,
   purposes: purposeOptionsSelector,
   contrast: contrastOptionsSelector,
 });

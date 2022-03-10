@@ -15,6 +15,10 @@ describe('pages/home/homePageSelector', () => {
     expect(getSelected().isFetchingPurposes).toBeDefined();
   });
 
+  test('returns isLargerFontSize', () => {
+    expect(getSelected().isLargerFontSize).toBeDefined();
+  });
+
   describe('purposes', () => {
     function getPurposes(purposes) {
       return getSelected({
