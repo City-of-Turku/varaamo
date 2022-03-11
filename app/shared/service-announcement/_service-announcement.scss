@@ -1,0 +1,22 @@
+.service-announcement {
+  text-align: center;
+  border-top: 1px solid black;
+  margin-bottom: 0;
+
+  p {
+    margin-bottom: 8px;
+  }
+
+  button {
+    font-size: 1em;
+  }
+
+  #service-announcement-title {
+    font-weight: $font-weight-bold;
+    margin-right: 4px;
+  }
+
+  @include high-contrast {
+    border-bottom: 1px solid black;
+  }
+}

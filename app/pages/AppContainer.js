@@ -16,7 +16,9 @@ import TestSiteMessage from 'shared/test-site-message';
 import Notifications from 'shared/notifications';
 import { getCustomizationClassName } from 'utils/customizationUtils';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
+import { contrastSelector } from 'state/selectors/accessibilitySelectors';
 import { cookieBotAddListener, cookieBotRemoveListener } from '../utils/cookieUtils';
+import ServiceAnnouncement from '../shared/service-announcement/ServiceAnnouncement';
 
 const userSelector = state => state.auth.user;
 const fontSizeSelector = state => state.ui.accessibility.fontSize;
@@ -25,6 +27,7 @@ export const selector = createStructuredSelector({
   user: userSelector,
   fontSize: fontSizeSelector,
   currentLanguage: currentLanguageSelector,
+  contrast: contrastSelector,
 });
 
 export class UnconnectedAppContainer extends Component {
@@ -51,7 +54,7 @@ export class UnconnectedAppContainer extends Component {
   }
 
   render() {
-    const { fontSize } = this.props;
+    const { contrast, currentLanguage, fontSize } = this.props;
     return (
       <div className={classNames('app', getCustomizationClassName(), (fontSize))}>
         <SkipLink />
@@ -61,6 +64,7 @@ export class UnconnectedAppContainer extends Component {
         <Header location={this.props.location}>
           <Favicon />
           <TestSiteMessage />
+          <ServiceAnnouncement contrast={contrast} currentLanguage={currentLanguage} />
         </Header>
         <main className={classNames('app-content')} id="main-content" tabIndex="-1">
           <Grid>
@@ -81,6 +85,7 @@ UnconnectedAppContainer.propTypes = {
   user: PropTypes.object,
   fontSize: PropTypes.string,
   currentLanguage: PropTypes.string,
+  contrast: PropTypes.string.isRequired
 };
 
 const actions = { fetchUser };

@@ -433,6 +433,8 @@
   "SearchResultsPaging.next": "Seuraava sivu",
   "SearchResultsPaging.previous": "Edellinen sivu",
   "SearchResultsPaging.section.name": "Hakutulosten sivuvalitsin",
+  "ServiceAnnouncement.title": "Tiedote",
+  "ServiceAnnouncement.close": "Sulje",
   "AccessibilityInfo.title": "Saavutettavuusseloste",
   "ShowResourcesLink.text": "Näytä kaikki tilat ja laitteet",
   "SkipLink.text": "Siirry sisältöön",
