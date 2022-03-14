@@ -11,31 +11,36 @@ import { getState } from 'utils/testUtils';
 import * as customizationUtils from 'utils/customizationUtils';
 import { selector, UnconnectedAppContainer as AppContainer } from './AppContainer';
 import { cookieBotAddListener, cookieBotRemoveListener } from '../utils/cookieUtils';
+import Favicon from 'shared/favicon';
+import TestSiteMessage from '../shared/test-site-message/TestSiteMessage';
+import ServiceAnnouncement from '../shared/service-announcement/ServiceAnnouncement';
 
 jest.mock('../utils/cookieUtils');
 
 describe('pages/AppContainer', () => {
+  const defaultProps = {
+    children: <div id="child-div" />,
+    fetchUser: () => null,
+    location: {},
+    user: null,
+    currentLanguage: 'fi',
+    contrast: 'test-contrast-style',
+  };
+
   function getWrapper(props) {
-    const defaults = {
-      children: <div id="child-div" />,
-      fetchUser: () => null,
-      location: {},
-      user: null,
-      currentLanguage: 'fi',
-    };
-    return shallow(<AppContainer {...defaults} {...props} />);
+    return shallow(<AppContainer {...defaultProps} {...props} />);
   }
 
   describe('selector', () => {
     const searchResultIds = ['resource-1', 'resourece-2'];
 
-    const defaultProps = {
+    const defaultSelectorProps = {
       location: {
         pathname: '/',
       },
     };
 
-    function getSelected(props = defaultProps) {
+    function getSelected(props = defaultSelectorProps) {
       const state = getState({
         auth: {
           user: {
@@ -87,6 +92,21 @@ describe('pages/AppContainer', () => {
 
     test('renders Header', () => {
       expect(getWrapper().find(Header)).toHaveLength(1);
+    });
+
+    test('renders Favicon', () => {
+      expect(getWrapper().find(Favicon)).toHaveLength(1);
+    });
+
+    test('renders TestSiteMessage', () => {
+      expect(getWrapper().find(TestSiteMessage)).toHaveLength(1);
+    });
+
+    test('renders ServiceAnnouncement', () => {
+      const serviceAnnouncement = getWrapper().find(ServiceAnnouncement);
+      expect(serviceAnnouncement).toHaveLength(1);
+      expect(serviceAnnouncement.prop('contrast')).toBe(defaultProps.contrast);
+      expect(serviceAnnouncement.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
     });
 
     test('renders main', () => {

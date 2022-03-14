@@ -34,7 +34,7 @@ class ServiceAnnouncement extends React.Component {
     const { announcement, show } = this.state;
     const { contrast, currentLanguage, t } = this.props;
 
-    if (show) {
+    if (show && announcement && announcement.message) {
       return (
         <Alert
           bsStyle="danger"
