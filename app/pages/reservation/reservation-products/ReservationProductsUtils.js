@@ -111,3 +111,23 @@ export function compareTaxPercentages(taxA, taxB) {
 export function getSortedTaxPercentages(taxPercentages) {
   return taxPercentages.sort(compareTaxPercentages);
 }
+
+/**
+ * Returns unique customer groups (names and id) from given resource
+ * and its products
+ * @param {object} resource
+ * @returns {array} unique customer group objects
+ */
+export function getUniqueCustomerGroups(resource) {
+  const customerGroups = {};
+  const products = resource.products;
+  products.forEach((product) => {
+    const { productCustomerGroups } = product;
+    productCustomerGroups.forEach((group) => {
+      const { customerGroup } = group;
+      customerGroups[customerGroup.id] = { ...customerGroup };
+    });
+  });
+
+  return Object.values(customerGroups);
+}

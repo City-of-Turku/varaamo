@@ -7,6 +7,7 @@ import { UnconnectedPaymentSuccess as PaymentSuccess } from './PaymentSuccess';
 
 describe('pages/reservation/payment/PaymentFailed', () => {
   const defaultProps = {
+    currentLanguage: 'fi',
     reservation: { id: 'test-reservation' },
     resource: { id: 'test-resource' },
     user: { name: 'test-user' },
@@ -28,6 +29,7 @@ describe('pages/reservation/payment/PaymentFailed', () => {
     test('ReservationConfirmation with correct props', () => {
       const reservationConf = getWrapper().find(ReservationConfirmation);
       expect(reservationConf).toHaveLength(1);
+      expect(reservationConf.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
       expect(reservationConf.prop('history')).toBe(defaultProps.history);
       expect(reservationConf.prop('isLoggedIn')).toBe(defaultProps.isLoggedIn);
       expect(reservationConf.prop('reservation')).toBe(defaultProps.reservation);

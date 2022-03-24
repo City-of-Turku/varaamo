@@ -35,6 +35,11 @@ const closeReservationCommentModal = createAction(
   () => ModalTypes.RESERVATION_COMMENT
 );
 
+const closeReservationPaymentModal = createAction(
+  types.UI.CLOSE_MODAL,
+  () => ModalTypes.RESERVATION_PAYMENT
+);
+
 const closeReservationSuccessModal = createAction(
   types.UI.CLOSE_MODAL,
   () => ModalTypes.RESERVATION_SUCCESS
@@ -83,6 +88,11 @@ const openReservationCommentModal = createAction(
   () => ModalTypes.RESERVATION_COMMENT
 );
 
+const openReservationPaymentModal = createAction(
+  types.UI.OPEN_MODAL,
+  () => ModalTypes.RESERVATION_PAYMENT
+);
+
 const selectReservationSlot = createAction(types.UI.SELECT_RESERVATION_SLOT);
 
 const selectReservationToCancel = createAction(types.UI.SELECT_RESERVATION_TO_CANCEL);
@@ -125,6 +135,7 @@ export {
   closeConfirmReservationModal,
   closeReservationCancelModal,
   closeReservationCommentModal,
+  closeReservationPaymentModal,
   closeReservationSuccessModal,
   closeResourceTermsModal,
   closeResourcePaymentTermsModal,
@@ -137,6 +148,7 @@ export {
   openConfirmReservationModal,
   openReservationCancelModal,
   openReservationCommentModal,
+  openReservationPaymentModal,
   openResourceTermsModal,
   openResourcePaymentTermsModal,
   selectReservationToCancel,

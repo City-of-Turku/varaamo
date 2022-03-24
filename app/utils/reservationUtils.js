@@ -12,6 +12,7 @@ import moment from 'moment';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
 import { buildAPIUrl, getHeadersCreator } from './apiUtils';
+import { getLocalizedFieldValue } from './languageUtils';
 
 function combine(reservations) {
   if (!reservations || !reservations.length) {
@@ -222,16 +223,20 @@ function createOrderLines(products) {
 /**
  * Creates an order object with order lines and return url.
  * @param {Array} products array
+ * @param {string} [customerGroup] customer group's id
  * @returns {object} order object e.g.
  * {order_lines: {...}, returnUrl: 'mysite/reservation-payment-return'}
  * or null if given products is empty
  */
-function createOrder(products) {
+function createOrder(products, customerGroup = '') {
   if (products && products.length > 0) {
     const orderLines = createOrderLines(products);
 
-    const returnUrl = `${window.location.origin}/reservation-payment-return`;
+    const returnUrl = getPaymentReturnUrl();
     const order = { order_lines: orderLines, return_url: returnUrl };
+    if (customerGroup) {
+      order.customer_group = customerGroup;
+    }
     return order;
   }
   return null;
@@ -243,15 +248,20 @@ function createOrder(products) {
  * @param {string} end time
  * @param {Array} orderLines products of this order
  * @param {object} state current redux state
+ * @param {string} [customerGroup] customer group's id
  * @returns {object} response price data
  */
-async function checkOrderPrice(begin, end, orderLines, state) {
+async function checkOrderPrice(begin, end, orderLines, state, customerGroup = '') {
   const apiUrl = buildAPIUrl('order/check_price');
   const payload = {
     begin,
     end,
-    order_lines: orderLines
+    order_lines: orderLines,
   };
+
+  if (customerGroup) {
+    payload.customer_group = customerGroup;
+  }
 
   const response = await fetch(apiUrl, {
     method: 'POST',
@@ -282,6 +292,31 @@ function getFormattedProductPrice(product) {
   const priceEnding = priceType === 'fixed' ? '' : ` / ${period}`;
 
   return `${price}€${priceEnding}`;
+}
+
+/**
+ * Returns the url where Varaamo expects completed payments to be redirected to
+ * @returns {string} return url
+ */
+function getPaymentReturnUrl() {
+  return `${window.location.origin}/reservation-payment-return`;
+}
+
+/**
+ * Returns localized customer group name from the given reservation.
+ * If reservation has no customer group name or correct translation for it,
+ * null is returned.
+ * @param {object} reservation
+ * @param {string} locale current locale e.g. fi, en, sv
+ * @returns {string|null} localized customer group name
+ */
+function getReservationCustomerGroupName(reservation, locale) {
+  const { order } = reservation;
+  if (order) {
+    return getLocalizedFieldValue(order.customerGroupName, locale);
+  }
+
+  return null;
 }
 
 /**
@@ -320,6 +355,22 @@ export const canUserCancelReservation = (reservation) => {
   return false;
 };
 
+/**
+ * Checks whether cancelling manually confirmed paid reservation is allowed or not
+ * @param {object} reservation
+ * @returns {boolean} true when allowed, false if not
+ */
+function isManuallyConfirmedWithOrderAllowed(reservation) {
+  const { needManualConfirmation, state } = reservation;
+  if (needManualConfirmation && hasOrder(reservation)) {
+    const states = constants.RESERVATION_STATE;
+    if (state === states.REQUESTED || state === states.READY_FOR_PAYMENT) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export {
   combine,
   isStaffEvent,
@@ -340,5 +391,8 @@ export {
   createOrderLines,
   createOrder,
   checkOrderPrice,
-  getFormattedProductPrice
+  getFormattedProductPrice,
+  getPaymentReturnUrl,
+  getReservationCustomerGroupName,
+  isManuallyConfirmedWithOrderAllowed,
 };

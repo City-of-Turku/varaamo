@@ -130,10 +130,20 @@ describe('state/reducers/notificationReducer', () => {
 
       const initialState = Immutable([]);
       const action = addNotification(mockNotification);
-      const actualNotifications = notificationsReducer(initialState, action);
 
       test('add new notification object to state array', () => {
+        const actualNotifications = notificationsReducer(initialState, action);
         expect(actualNotifications[0]).toMatchObject(mockNotification);
+      });
+
+      test('notification is omitted when meta.omitNotification is true', () => {
+        const notificationAction = createAction(
+          types.API.RESERVATION_PUT_SUCCESS,
+          payload => payload,
+          () => ({ omitNotification: true })
+        );
+        const actualNotifications = notificationsReducer(initialState, notificationAction);
+        expect(actualNotifications).toStrictEqual([]);
       });
     });
 

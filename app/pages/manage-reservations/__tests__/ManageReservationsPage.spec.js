@@ -22,6 +22,7 @@ import PageResultsText from '../PageResultsText';
 describe('ManageReservationsFilters', () => {
   const defaultProps = {
     actions: {
+      clearReservations: jest.fn(),
       editReservation: jest.fn(),
       fetchUnits: jest.fn(),
       fetchReservations: jest.fn(),
@@ -213,7 +214,7 @@ describe('ManageReservationsFilters', () => {
           is_favorite_resource: 'true',
           ...filters,
           pageSize: constants.MANAGE_RESERVATIONS.PAGE_SIZE,
-          include: 'resource_detail',
+          include: { 1: 'resource_detail', 2: 'order_detail' },
         };
         const instance = getWrapper({ location }).instance();
         instance.handleFetchReservations();
@@ -268,6 +269,11 @@ describe('ManageReservationsFilters', () => {
       const normalizedReservation = Object.assign(
         {}, reservation, { resource: reservation.resource.id }
       );
+      test('calls clearReservations', () => {
+        const instance = getWrapper().instance();
+        instance.handleEditClick(reservation);
+        expect(defaultProps.actions.clearReservations.mock.calls.length).toBe(1);
+      });
 
       test('calls handleFetchResource with correct params', () => {
         const instance = getWrapper().instance();

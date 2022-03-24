@@ -19,6 +19,7 @@ import {
   createOrder,
   checkOrderPrice,
   getFormattedProductPrice,
+  getPaymentReturnUrl,
   canUserCancelReservation,
   canUserModifyReservation,
   changeProductQuantity,
@@ -26,9 +27,16 @@ import {
   getMandatoryProducts,
   getNonZeroQuantityProducts,
   getInitialProducts,
+  getReservationCustomerGroupName,
+  isManuallyConfirmedWithOrderAllowed,
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 import Product from '../fixtures/Product';
+import { getLocalizedFieldValue } from '../languageUtils';
+
+jest.mock('../languageUtils', () => ({
+  getLocalizedFieldValue: jest.fn(() => 'test-localized-value'),
+}));
 
 describe('Utils: reservationUtils', () => {
   describe('combine', () => {
@@ -501,8 +509,8 @@ describe('Utils: reservationUtils', () => {
   });
 
   describe('createOrder', () => {
+    const products = [{ id: 'test1' }, { id: 'test2' }];
     test('returns order object with order_lines and return_url if given products is not empty', () => {
-      const products = [{ id: 'test1' }, { id: 'test2' }];
       const expected = {
         order_lines: createOrderLines(products),
         return_url: `${window.location.origin}/reservation-payment-return`
@@ -510,9 +518,19 @@ describe('Utils: reservationUtils', () => {
       expect(createOrder(products)).toStrictEqual(expected);
     });
 
+    test('returns correct order object when customerGroup is given', () => {
+      const customerGroup = 'test-cg-1';
+      const expected = {
+        order_lines: createOrderLines(products),
+        return_url: `${window.location.origin}/reservation-payment-return`,
+        customer_group: customerGroup
+      };
+      expect(createOrder(products, customerGroup)).toStrictEqual(expected);
+    });
+
     test('returns null if given products is empty', () => {
-      const products = [];
-      expect(createOrder(products)).toBe(null);
+      const productsEmpty = [];
+      expect(createOrder(productsEmpty)).toBe(null);
     });
   });
 
@@ -525,15 +543,31 @@ describe('Utils: reservationUtils', () => {
     afterAll(() => {
       fetch.mockClear();
     });
+
+    const begin = '2015-10-16T08:00:00.000Z';
+    const end = '2015-10-16T09:00:00.000Z';
+    const products = [{ id: 'test1' }, { id: 'test2' }];
+    const orderLines = createOrderLines(products);
+    const state = { auth: { user: null } };
+
     test('calls fetch with correct parameters', async () => {
-      const begin = '2015-10-16T08:00:00.000Z';
-      const end = '2015-10-16T09:00:00.000Z';
-      const products = [{ id: 'test1' }, { id: 'test2' }];
-      const orderLines = createOrderLines(products);
-      const state = { auth: { user: null } };
       const payload = { begin, end, order_lines: orderLines };
       const request = { method: 'POST', headers: getHeadersCreator()(state), body: JSON.stringify(payload) };
       const result = await checkOrderPrice(begin, end, orderLines, state);
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetch.mock.calls[0][0]).toBe(buildAPIUrl('order/check_price'));
+      expect(fetch.mock.calls[0][1]).toStrictEqual(request);
+      expect(result).toBe(testResult);
+    });
+
+    test('calls fetch with correct parameters when customerGroup is given', async () => {
+      const customerGroup = 'test-cg-1';
+      const payload = {
+        begin, end, order_lines: orderLines, customer_group: customerGroup
+      };
+      const request = { method: 'POST', headers: getHeadersCreator()(state), body: JSON.stringify(payload) };
+      const result = await checkOrderPrice(begin, end, orderLines, state, customerGroup);
 
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(fetch.mock.calls[0][0]).toBe(buildAPIUrl('order/check_price'));
@@ -553,6 +587,37 @@ describe('Utils: reservationUtils', () => {
       const product = { price: { amount: '3.50', period: '01:00:00', type: 'period' } };
       const expected = `${product.price.amount}€ / 1 h`;
       expect(getFormattedProductPrice(product)).toBe(expected);
+    });
+  });
+
+  describe('getPaymentReturnUrl', () => {
+    test('returns correct url string', () => {
+      expect(getPaymentReturnUrl()).toBe(`${window.location.origin}/reservation-payment-return`);
+    });
+  });
+
+  describe('getReservationCustomerGroupName', () => {
+    const locale = 'fi';
+    afterAll(() => {
+      getLocalizedFieldValue.mockClear();
+    });
+
+    describe('when reservation order exists', () => {
+      test('calls getLocalizedFieldValue and returns its value', () => {
+        const cgName = { fi: 'test-fi', en: 'test-en', sv: 'test-sv' };
+        const reservation = Reservation.build({ order: { customerGroupName: cgName } });
+        const result = getReservationCustomerGroupName(reservation, locale);
+        expect(getLocalizedFieldValue.mock.calls.length).toBe(1);
+        expect(getLocalizedFieldValue.mock.calls[0][0]).toBe(cgName);
+        expect(getLocalizedFieldValue.mock.calls[0][1]).toBe(locale);
+        expect(result).toBe('test-localized-value');
+      });
+
+      test('when reservation order does not exist, returns null', () => {
+        const reservation = Reservation.build({ order: undefined });
+        const result = getReservationCustomerGroupName(reservation, locale);
+        expect(result).toBe(null);
+      });
     });
   });
 
@@ -641,6 +706,53 @@ describe('Utils: reservationUtils', () => {
       const canCancel = canUserCancelReservation(reservation);
 
       expect(canCancel).toBe(true);
+    });
+  });
+
+  describe('isManuallyConfirmedWithOrderAllowed', () => {
+    const states = constants.RESERVATION_STATE;
+
+    describe('when reservation needs manual confirmation and has an order', () => {
+      const needManualConfirmation = true;
+      const order = { id: 'test-id', price: 3.50 };
+
+      test('returns true when reservation state is requested', () => {
+        const state = states.REQUESTED;
+        const reservation = Reservation.build({ needManualConfirmation, order, state });
+        expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(true);
+      });
+
+      test('returns true when reservation state is ready for payment', () => {
+        const state = states.READY_FOR_PAYMENT;
+        const reservation = Reservation.build({ needManualConfirmation, order, state });
+        expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(true);
+      });
+
+      test('returns false when reservation state is not requested or ready for payment', () => {
+        const notAllowedStates = Object.values(states).filter(
+          state => state !== states.REQUESTED && state !== states.READY_FOR_PAYMENT
+        );
+        notAllowedStates.forEach((state) => {
+          const reservation = Reservation.build({ needManualConfirmation, order, state });
+          expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(false);
+        });
+      });
+    });
+
+    test('returns false when reservation is not manually confirmed', () => {
+      const needManualConfirmation = false;
+      const order = { id: 'test-id', price: 3.50 };
+      const state = states.READY_FOR_PAYMENT;
+      const reservation = Reservation.build({ needManualConfirmation, order, state });
+      expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(false);
+    });
+
+    test('returns false when reservation has no order', () => {
+      const needManualConfirmation = true;
+      const order = undefined;
+      const state = states.READY_FOR_PAYMENT;
+      const reservation = Reservation.build({ needManualConfirmation, order, state });
+      expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(false);
     });
   });
 });

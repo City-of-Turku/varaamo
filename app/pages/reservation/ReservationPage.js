@@ -35,6 +35,7 @@ import {
 } from '../../utils/reservationUtils';
 import userManager from 'utils/userManager';
 import ReservationProducts from './reservation-products/ReservationProducts';
+import { getUniqueCustomerGroups } from './reservation-products/ReservationProductsUtils';
 
 class UnconnectedReservationPage extends Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class UnconnectedReservationPage extends Component {
     this.handleCheckOrderPrice = this.handleCheckOrderPrice.bind(this);
     this.handleCreateErrorNotification = this.handleCreateErrorNotification.bind(this);
     this.HandleToggleMandatoryProducts = this.HandleToggleMandatoryProducts.bind(this);
+    this.handleCustomerGroupChange = this.handleCustomerGroupChange.bind(this);
 
     const { reservationToEdit, resource } = this.props;
 
@@ -54,6 +56,8 @@ class UnconnectedReservationPage extends Component {
       extraProducts: getInitialProducts(resource, constants.PRODUCT_TYPES.EXTRA),
       order: { loadingData: true },
       skipMandatoryProducts: false,
+      currentCustomerGroup: '',
+      customerGroupError: false,
     };
   }
 
@@ -115,12 +119,14 @@ class UnconnectedReservationPage extends Component {
     // changes to confirm page if receives correct reservation props from backend
     // if requires payment, redirect to given url
     const { reservationCreated: nextCreated, reservationEdited: nextEdited } = nextProps;
-    const { reservationCreated, reservationEdited } = this.props;
+    const { reservationCreated, reservationEdited, isStaff } = this.props;
     if (
       (!isEmpty(nextCreated) || !isEmpty(nextEdited))
       && (nextCreated !== reservationCreated || nextEdited !== reservationEdited)
     ) {
-      if (has(nextCreated, 'order.paymentUrl')) {
+      const { needManualConfirmation } = nextCreated || nextEdited;
+      // staff payments are always handled directly
+      if ((isStaff || !needManualConfirmation) && has(nextCreated, 'order.paymentUrl')) {
         const paymentUrl = get(nextCreated, 'order.paymentUrl');
         window.location = paymentUrl;
         return;
@@ -174,8 +180,18 @@ class UnconnectedReservationPage extends Component {
   };
 
   handleProductsConfirm = () => {
-    this.setState({ view: 'information' });
-    window.scrollTo(0, 0);
+    const { currentCustomerGroup } = this.state;
+    const { resource } = this.props;
+    const uniqueCustomerGroups = getUniqueCustomerGroups(resource);
+
+    // handle order/products validation before going forward
+    // customer group is required when any of the resource's products have customer group options
+    if (uniqueCustomerGroups.length > 0 && !currentCustomerGroup) {
+      this.setState({ customerGroupError: true });
+    } else {
+      this.setState({ view: 'information' });
+      window.scrollTo(0, 0);
+    }
   };
 
   /**
@@ -192,11 +208,11 @@ class UnconnectedReservationPage extends Component {
       const { begin } = first(selected);
       const { end } = last(selected);
       const preferredLanguage = currentLanguage;
-      const { mandatoryProducts, extraProducts } = this.state;
+      const { mandatoryProducts, extraProducts, currentCustomerGroup } = this.state;
 
       // order with only zero quantity products won't go through payment process
       const products = getNonZeroQuantityProducts([...mandatoryProducts, ...extraProducts]);
-      const order = createOrder(products);
+      const order = createOrder(products, currentCustomerGroup);
 
       if (!isEmpty(reservationToEdit)) {
         // old reservation values before editing
@@ -257,8 +273,22 @@ class UnconnectedReservationPage extends Component {
     });
   }
 
+  handleCustomerGroupChange(event) {
+    const { value } = event.target;
+    const { resource, selected } = this.props;
+    const { mandatoryProducts, extraProducts } = this.state;
+    this.setState({
+      currentCustomerGroup: value,
+      customerGroupError: false,
+    });
+
+    this.handleCheckOrderPrice(
+      resource, selected, mandatoryProducts, extraProducts, false, value
+    );
+  }
+
   handleCheckOrderPrice(
-    resource, selectedTime, mandatoryProducts, extraProducts, isEditing = false
+    resource, selectedTime, mandatoryProducts, extraProducts, isEditing = false, customerGroup
   ) {
     if (!hasProducts(resource) || isEditing) {
       return;
@@ -268,7 +298,7 @@ class UnconnectedReservationPage extends Component {
     const end = !isEmpty(selectedTime) ? last(selectedTime).end : null;
     const products = [...mandatoryProducts, ...extraProducts];
 
-    checkOrderPrice(begin, end, createOrderLines(products), this.props.state)
+    checkOrderPrice(begin, end, createOrderLines(products), this.props.state, customerGroup)
       .then(order => this.setState({ order }))
       .catch(() => {
         this.handleCreateErrorNotification();
@@ -277,7 +307,9 @@ class UnconnectedReservationPage extends Component {
   }
 
   HandleToggleMandatoryProducts() {
-    const { skipMandatoryProducts, mandatoryProducts, extraProducts } = this.state;
+    const {
+      skipMandatoryProducts, mandatoryProducts, extraProducts, currentCustomerGroup
+    } = this.state;
     const { resource, selected } = this.props;
     const quantity = skipMandatoryProducts ? 1 : 0;
     const updatedMandatoryProducts = mandatoryProducts.map(
@@ -288,15 +320,15 @@ class UnconnectedReservationPage extends Component {
       skipMandatoryProducts: !prevState.skipMandatoryProducts,
     }));
     this.handleCheckOrderPrice(
-      resource, selected, updatedMandatoryProducts, extraProducts
+      resource, selected, updatedMandatoryProducts, extraProducts, false, currentCustomerGroup
     );
   }
 
   handleChangeProductQuantity(product, quantity, type = constants.PRODUCT_TYPES.EXTRA) {
-    const { resource } = this.props;
+    const { resource, selected } = this.props;
+    const { mandatoryProducts, extraProducts, currentCustomerGroup } = this.state;
     if (hasProducts(resource)) {
       if (type === constants.PRODUCT_TYPES.MANDATORY) {
-        const { mandatoryProducts } = this.state;
         const updatedMandatoryProducts = mandatoryProducts.map((mandatoryProduct) => {
           if (mandatoryProduct.id === product.id) {
             return changeProductQuantity(product, quantity);
@@ -305,11 +337,10 @@ class UnconnectedReservationPage extends Component {
         });
         this.setState({ mandatoryProducts: updatedMandatoryProducts });
         this.handleCheckOrderPrice(
-          resource, this.props.selected, updatedMandatoryProducts, this.state.extraProducts
+          resource, selected, updatedMandatoryProducts, extraProducts, false, currentCustomerGroup
         );
       }
       if (type === constants.PRODUCT_TYPES.EXTRA) {
-        const { extraProducts } = this.state;
         const updatedExtraProducts = extraProducts.map((extraProduct) => {
           if (extraProduct.id === product.id) {
             return changeProductQuantity(product, quantity);
@@ -318,7 +349,7 @@ class UnconnectedReservationPage extends Component {
         });
         this.setState({ extraProducts: updatedExtraProducts });
         this.handleCheckOrderPrice(
-          resource, this.props.selected, this.state.mandatoryProducts, updatedExtraProducts
+          resource, selected, mandatoryProducts, updatedExtraProducts, false, currentCustomerGroup
         );
       }
     }
@@ -381,7 +412,9 @@ class UnconnectedReservationPage extends Component {
       user,
       history,
     } = this.props;
-    const { order, skipMandatoryProducts, view } = this.state;
+    const {
+      currentCustomerGroup, customerGroupError, order, skipMandatoryProducts, view
+    } = this.state;
 
     if (
       isEmpty(resource)
@@ -402,7 +435,6 @@ class UnconnectedReservationPage extends Component {
       `ReservationPage.${isEditing || isEdited ? 'editReservationTitle' : 'newReservationTitle'}`
     );
     const params = queryString.parse(location.search);
-    const hasPayment = hasProducts(resource);
 
     return (
       <div className="app-ReservationPage">
@@ -413,8 +445,10 @@ class UnconnectedReservationPage extends Component {
               <Loader loaded={!isEmpty(resource)}>
                 <ReservationPhases
                   currentPhase={view}
-                  hasPayment={hasPayment}
+                  hasProducts={hasProducts(resource)}
                   isEditing={isEditing || isEdited}
+                  isStaff={isStaff}
+                  needManualConfirmation={resource.needManualConfirmation}
                 />
                 {view === 'time' && isEditing && (
                   <ReservationTime
@@ -433,12 +467,15 @@ class UnconnectedReservationPage extends Component {
                 {view === 'products' && selectedTime && (
                   <ReservationProducts
                     changeProductQuantity={this.handleChangeProductQuantity}
+                    currentCustomerGroup={currentCustomerGroup}
                     currentLanguage={currentLanguage}
+                    customerGroupError={customerGroupError}
                     isEditing={isEditing}
                     isStaff={isStaff}
                     onBack={this.handleBack}
                     onCancel={this.handleCancel}
                     onConfirm={this.handleProductsConfirm}
+                    onCustomerGroupChange={this.handleCustomerGroupChange}
                     onStaffSkipChange={this.HandleToggleMandatoryProducts}
                     order={order}
                     resource={resource}
@@ -449,6 +486,7 @@ class UnconnectedReservationPage extends Component {
                 )}
                 {view === 'information' && selectedTime && (
                   <ReservationInformation
+                    currentCustomerGroup={currentCustomerGroup}
                     isAdmin={isAdmin}
                     isEditing={isEditing}
                     isMakingReservations={isMakingReservations}

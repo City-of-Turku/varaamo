@@ -19,6 +19,7 @@ import ReservationTimeControls from 'shared/form-fields/ReservationTimeControls'
 import TimeRange from 'shared/time-range';
 import { injectT } from 'i18n';
 import ReservationOrderInfo from './ReservationOrderInfo';
+import { getReservationCustomerGroupName } from 'utils/reservationUtils';
 
 class UnconnectedReservationEditForm extends Component {
   constructor(props) {
@@ -156,6 +157,7 @@ class UnconnectedReservationEditForm extends Component {
     const order = ('order' in reservation && typeof (reservation.order)) === 'object' ? reservation.order : null;
     const orderLine = (order && 'orderLines' in order) ? order.orderLines[0] : null;
     const price = (order && 'price' in order) ? order.price : null;
+    const customerGroupName = getReservationCustomerGroupName(reservation, currentLanguage);
 
     return (
       <Form
@@ -171,6 +173,9 @@ class UnconnectedReservationEditForm extends Component {
         )}
         {this.renderEditableInfoRow('eventSubject', 'text')}
         {this.renderStaticInfoRow('reserverName')}
+        {customerGroupName && (
+          this.renderInfoRow(t('common.customerGroup'), customerGroupName)
+        )}
         {this.renderEditableInfoRow('eventDescription', 'textarea', { maxLength: '256' })}
         {this.renderEditableInfoRow('numberOfParticipants', 'number')}
         {this.renderReservationTime()}

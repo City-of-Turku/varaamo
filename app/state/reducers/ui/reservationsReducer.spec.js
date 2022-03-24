@@ -14,6 +14,7 @@ import {
   clearTimeSlots,
   closeReservationCancelModal,
   closeReservationCommentModal,
+  closeReservationPaymentModal,
   closeReservationSuccessModal,
   selectReservationSlot,
   selectReservationToCancel,
@@ -290,6 +291,18 @@ describe('state/reducers/ui/reservationsReducer', () => {
             toShow: [Reservation.build()],
           });
           const action = closeReservationCommentModal();
+          const nextState = reservationsReducer(initialState, action);
+
+          expect(nextState.toShow).toEqual([]);
+        });
+      });
+
+      describe('if closed modal is RESERVATION_PAYMENT modal', () => {
+        test('clears toShow array', () => {
+          const initialState = Immutable({
+            toShow: [Reservation.build()],
+          });
+          const action = closeReservationPaymentModal();
           const nextState = reservationsReducer(initialState, action);
 
           expect(nextState.toShow).toEqual([]);

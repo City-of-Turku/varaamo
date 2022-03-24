@@ -318,6 +318,9 @@
     &.requested {
       background-color: $theme-warning;
     }
+    &.ready_for_payment {
+      background-color: $theme-warning;
+    }
     &.disabled {
       background-color: $red;
     }

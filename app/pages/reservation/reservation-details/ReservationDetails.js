@@ -5,9 +5,10 @@ import moment from 'moment';
 
 import injectT from '../../../i18n/injectT';
 import { getPrettifiedDuration } from 'utils/timeUtils';
+import SingleReservationDetail from './SingleReservationDetail';
 
 function ReservationDetails({
-  orderPrice, resourceName, selectedTime, unitName, t
+  customerGroupName, orderPrice, resourceName, selectedTime, unitName, t
 }) {
   let reservationTime = '';
   if (selectedTime) {
@@ -20,51 +21,39 @@ function ReservationDetails({
   return (
     <Well className="app-ReservationDetails">
       <h2>{t('ReservationPage.detailsTitle')}</h2>
-      <p className="app-ReservationDetails__label">
-        {t('ReservationDetails.resourceLabel')}
-      </p>
-      <p className="app-ReservationDetails__value">
-        {resourceName}
-      </p>
 
-      <p className="app-ReservationDetails__label">
-        {t('ReservationDetails.unitLabel')}
-      </p>
-      <p className="app-ReservationDetails__value">
-        {unitName}
-      </p>
-
-      {orderPrice && (
-        <React.Fragment>
-          <p className="app-ReservationDetails__label">
-            {t('common.priceTotalLabel')}
-          </p>
-          <p className="app-ReservationDetails__value">
-            {orderPrice}
-          </p>
-        </React.Fragment>
-      )}
-
-      {reservationTime && (
-        <React.Fragment>
-          <p className="app-ReservationDetails__label">
-            {t('ReservationPage.detailsTime')}
-          </p>
-          <p className="app-ReservationDetails__value">
-            {reservationTime}
-          </p>
-        </React.Fragment>
-      )}
+      <SingleReservationDetail
+        label={t('ReservationDetails.resourceLabel')}
+        value={resourceName}
+      />
+      <SingleReservationDetail
+        label={t('ReservationDetails.unitLabel')}
+        value={unitName}
+      />
+      <SingleReservationDetail
+        label={t('common.customerGroup')}
+        value={customerGroupName}
+      />
+      <SingleReservationDetail
+        label={t('common.priceTotalLabel')}
+        value={orderPrice}
+      />
+      <SingleReservationDetail
+        label={t('ReservationPage.detailsTime')}
+        value={reservationTime}
+      />
     </Well>
   );
 }
 
 ReservationDetails.defaultProps = {
+  customerGroupName: '',
   orderPrice: '',
   selectedTime: null,
 };
 
 ReservationDetails.propTypes = {
+  customerGroupName: PropTypes.string,
   orderPrice: PropTypes.string,
   resourceName: PropTypes.string.isRequired,
   selectedTime: PropTypes.object,

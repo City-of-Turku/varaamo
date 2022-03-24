@@ -21,7 +21,7 @@ const searchMapClick = createAction(types.UI.SEARCH_MAP_CLICK);
 const selectUnit = createAction(types.UI.SELECT_SEARCH_RESULTS_UNIT);
 
 
-function getPiwikActionName(searchParams) {
+function getMatomoActionName(searchParams) {
   if (searchParams.search) {
     return searchParams.search;
   } if (searchParams.purpose) {
@@ -34,7 +34,7 @@ function getPiwikActionName(searchParams) {
 function searchResources(filters = {}) {
   const params = getFetchParamsFromFilters(filters);
   const fetchParams = Object.assign({}, params, { pageSize: constants.SEARCH_PAGE_SIZE });
-  const piwikActionName = getPiwikActionName(fetchParams);
+  const matomoActionName = getMatomoActionName(fetchParams);
 
   return {
     [RSAA]: {
@@ -48,7 +48,7 @@ function searchResources(filters = {}) {
                 args: [
                   'Search',
                   'search-get',
-                  piwikActionName,
+                  matomoActionName,
                 ],
               },
             },
@@ -69,7 +69,7 @@ function searchResources(filters = {}) {
 
 export {
   clearSearchResults,
-  getPiwikActionName,
+  getMatomoActionName,
   searchResources,
   searchMapClick,
   selectUnit,

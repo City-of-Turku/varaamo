@@ -20,6 +20,7 @@ describe('pages/home/HomePage', () => {
       fetchPurposes: simple.stub(),
     },
     isFetchingPurposes: false,
+    isLargerFontSize: false,
     purposes: [
       {
         label: 'Purpose 1',
@@ -111,6 +112,38 @@ describe('pages/home/HomePage', () => {
           } else {
             expect(image.prop('src')).toBe(iconEmptyPurpose);
           }
+        });
+      });
+
+      describe('when fontsize is not large', () => {
+        test('wrapping cols do not have class large-font', () => {
+          const banners = getWrapper({ isLargerFontSize: false }).find('.app-HomePageContent__banner');
+          banners.forEach((banner) => {
+            expect(banner.prop('className')).toBe('app-HomePageContent__banner');
+          });
+        });
+
+        test('search action buttons do not have class large-font', () => {
+          const buttons = getWrapper({ isLargerFontSize: false }).find('.app-HomePageContent__button');
+          buttons.forEach((button) => {
+            expect(button.prop('className')).toBe('app-HomePageContent__button');
+          });
+        });
+      });
+
+      describe('when fontsize is large', () => {
+        test('wrapping cols have class large-font', () => {
+          const banners = getWrapper({ isLargerFontSize: true }).find('.app-HomePageContent__banner');
+          banners.forEach((banner) => {
+            expect(banner.prop('className')).toBe('app-HomePageContent__banner large-font');
+          });
+        });
+
+        test('search action buttons have class large-font', () => {
+          const buttons = getWrapper({ isLargerFontSize: true }).find('.app-HomePageContent__button');
+          buttons.forEach((button) => {
+            expect(button.prop('className')).toBe('app-HomePageContent__button large-font');
+          });
         });
       });
     });

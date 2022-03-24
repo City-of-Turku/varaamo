@@ -164,7 +164,7 @@ function postReservation(reservation) {
   };
 }
 
-function putReservation(reservation) {
+function putReservation(reservation, omitSuccessNotification = false) {
   return {
     [RSAA]: {
       types: [
@@ -177,7 +177,10 @@ function putReservation(reservation) {
         ),
         getSuccessTypeDescriptor(
           types.API.RESERVATION_PUT_SUCCESS,
-          { countable: true }
+          {
+            countable: true,
+            meta: { omitNotification: omitSuccessNotification }
+          }
         ),
         getErrorTypeDescriptor(
           types.API.RESERVATION_PUT_ERROR,

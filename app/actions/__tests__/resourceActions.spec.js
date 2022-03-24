@@ -26,15 +26,17 @@ describe('Actions: resourceActions', () => {
       start: time.startOf('day').toISOString(),
     };
 
+    const include = 'order_detail';
+
     test('when source = adminResourcesPage and userIsSuperUser = false', () => {
       const actual = fetchFavoritedResources(time, source);
-      const expected = fetchResources(params, source);
+      const expected = fetchResources({ ...params, include }, source);
       expect(JSON.stringify(actual)).toEqual(JSON.stringify(expected));
     });
 
     test('when source = adminResourcesPage and userIsSuperUser = true', () => {
       const actual = fetchFavoritedResources(time, source, true);
-      const expected = fetchResources(paramsAll, source);
+      const expected = fetchResources({ ...paramsAll, include }, source);
       expect(JSON.stringify(actual)).toEqual(JSON.stringify(expected));
     });
 

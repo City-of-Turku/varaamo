@@ -1,0 +1,10 @@
+services:
+  node-app:
+    build:
+      args:
+        NODE_ENV: production
+    ports:
+      - '8080:8080'
+    environment:
+      - NODE_ENV=production
+    restart: always

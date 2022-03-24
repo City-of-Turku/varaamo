@@ -15,6 +15,7 @@ import {
   getMaxPeriodText,
   getOpeningHours,
   getOpenReservations,
+  getResourceCustomerGroupName,
   getResourcePageUrl,
   getTermsAndConditions,
   getPaymentTermsAndConditions,
@@ -27,6 +28,9 @@ import {
   isStrongAuthSatisfied,
 } from 'utils/resourceUtils';
 import { getPrettifiedPeriodUnits } from '../timeUtils';
+import Product from '../fixtures/Product';
+import CustomerGroup from '../fixtures/CustomerGroup';
+import ProductCustomerGroup from '../fixtures/ProductCustomerGroup';
 
 describe('Utils: resourceUtils', () => {
   describe('hasMaxReservations', () => {
@@ -767,6 +771,37 @@ describe('Utils: resourceUtils', () => {
       const expected = [{ id: 2, state: 'confirmed' }, { id: 4, state: 'something' }];
 
       expect(getOpenReservations(resource)).toEqual(expected);
+    });
+  });
+
+  describe('getResourceCustomerGroupName', () => {
+    const resource = Resource.build();
+    describe('when resource or customer group id is not defined', () => {
+      test('returns undefined', () => {
+        const customerGroupId = '';
+        const result = getResourceCustomerGroupName(resource, customerGroupId);
+        expect(result).toBe(undefined);
+      });
+    });
+
+    describe('when resource and customer group id are defined', () => {
+      const customerGroupId = 'test-id';
+      test('returns undefined when customer group is not found in products', () => {
+        const result = getResourceCustomerGroupName(resource, customerGroupId);
+        expect(result).toBe(undefined);
+      });
+
+      test('returns correct name when customer group is found in products', () => {
+        const cgA = CustomerGroup.build();
+        const cgB = CustomerGroup.build({ id: customerGroupId });
+        const pcgA = ProductCustomerGroup.build({ customerGroup: cgA });
+        const pcgB = ProductCustomerGroup.build({ customerGroup: cgB });
+        const productA = Product.build({ productCustomerGroups: [pcgA] });
+        const productB = Product.build({ productCustomerGroups: [pcgA, pcgB] });
+        const resourceA = Resource.build({ products: [productA, productB] });
+        const result = getResourceCustomerGroupName(resourceA, customerGroupId);
+        expect(result).toBe(cgB.name);
+      });
     });
   });
 

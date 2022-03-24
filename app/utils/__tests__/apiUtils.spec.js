@@ -313,6 +313,13 @@ describe('Utils: apiUtils', () => {
 
       expect(getSearchParamsString(params)).toBe(expected);
     });
+
+    test('returns correct params when value is object', () => {
+      const params = { multipleSameKeyParam: { a: 'first', b: 'second' } };
+      const expected = 'multiple_same_key_param=first&multiple_same_key_param=second';
+
+      expect(getSearchParamsString(params)).toBe(expected);
+    });
   });
 
   describe('getSuccessTypeDescriptor', () => {

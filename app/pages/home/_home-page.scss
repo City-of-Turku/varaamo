@@ -85,12 +85,22 @@ $purposeCellHeight: 350px;
       display: flex;
       height: $purposeCellHeight;
 
+      @media (max-width: $screen-xs-min) {
+        height: 130px;
+        &.large-font {
+          height: 150px;
+        }
+      }
 
       &-icon {
         height: 30%;
         display: flex;
         align-items: center;
         justify-content: center;
+
+        @media (max-width: $screen-xs-min) {
+          height: 100%;
+        }
       }
 
       &__linkWrapper {
@@ -102,8 +112,12 @@ $purposeCellHeight: 350px;
         height: 100%;
         position: relative;
         text-decoration: none;
-//        border: 1px solid black;
         @include box-shadow;
+
+        @media (max-width: $screen-xs-min) {
+          padding: 12px 12px;
+          flex-direction: row;
+        }
 
         &:hover, &:active, &:focus {
           color: $black;
@@ -122,6 +136,22 @@ $purposeCellHeight: 350px;
 
         h3 {
           margin: 0 10px;
+
+          @media (max-width: $screen-xs-min) {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: auto;
+            margin-left: 8px;
+            margin-right: 8px;
+            width: 100%;
+          }
         }
 
         button {
@@ -139,10 +169,25 @@ $purposeCellHeight: 350px;
           }
         }
       }
+      &-action {
+        @media (max-width: $screen-xs-min) {
+          display: flex;
+        }
+      }
+
       button {
         text-transform: uppercase;
         font-size: 1em;
         @include add-focus;
+
+        @media (max-width: $screen-xs-min) {
+          margin-top: 16px;
+          margin-bottom: 16px;
+          &.large-font {
+            margin-top: 24px;
+            margin-bottom: 24px;
+          }
+        }
       }
     }
   }

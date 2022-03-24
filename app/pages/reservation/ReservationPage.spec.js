@@ -18,11 +18,13 @@ import ReservationPhases from './reservation-phases/ReservationPhases';
 import ReservationTime from './reservation-time/ReservationTime';
 import { UnconnectedReservationPage as ReservationPage } from './ReservationPage';
 import {
-  checkOrderPrice, createOrder, getInitialProducts, createOrderLines
+  checkOrderPrice, createOrder, getInitialProducts, createOrderLines, hasProducts
 } from 'utils/reservationUtils';
 import userManager from 'utils/userManager';
 import ReservationProducts from './reservation-products/ReservationProducts';
 import Product from '../../utils/fixtures/Product';
+import ProductCustomerGroup from '../../utils/fixtures/ProductCustomerGroup';
+import CustomerGroup from '../../utils/fixtures/CustomerGroup';
 
 jest.mock('utils/reservationUtils', () => {
   const originalModule = jest.requireActual('utils/reservationUtils');
@@ -155,22 +157,29 @@ describe('pages/reservation/ReservationPage', () => {
   });
 
   describe('ReservationPhases', () => {
+    const resourceA = Resource.build();
     test('renders correct props when reservationToEdit null', () => {
       const reservationPhases = getWrapper({
         reservationToEdit: null,
+        resource: resourceA
       }).find(ReservationPhases);
       expect(reservationPhases).toHaveLength(1);
       expect(reservationPhases.prop('currentPhase')).toBe('information');
+      expect(reservationPhases.prop('hasProducts')).toBe(hasProducts(resourceA));
       expect(reservationPhases.prop('isEditing')).toBe(false);
+      expect(reservationPhases.prop('needManualConfirmation')).toBe(resourceA.needManualConfirmation);
     });
 
     test('renders correct props when reservationToEdit not null', () => {
       const reservationPhases = getWrapper({
         reservationToEdit: Reservation.build(),
+        resource: resourceA
       }).find(ReservationPhases);
       expect(reservationPhases).toHaveLength(1);
       expect(reservationPhases.prop('currentPhase')).toBe('time');
+      expect(reservationPhases.prop('hasProducts')).toBe(hasProducts(resourceA));
       expect(reservationPhases.prop('isEditing')).toBe(true);
+      expect(reservationPhases.prop('needManualConfirmation')).toBe(resourceA.needManualConfirmation);
     });
   });
 
@@ -202,12 +211,15 @@ describe('pages/reservation/ReservationPage', () => {
       const reservationProducts = wrapper.find(ReservationProducts);
       expect(reservationProducts).toHaveLength(1);
       expect(reservationProducts.prop('changeProductQuantity')).toBe(instance.handleChangeProductQuantity);
+      expect(reservationProducts.prop('currentCustomerGroup')).toBe(instance.state.currentCustomerGroup);
       expect(reservationProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+      expect(reservationProducts.prop('customerGroupError')).toBe(instance.state.customerGroupError);
       expect(reservationProducts.prop('isEditing')).toBe(!isEmpty(defaultProps.reservationToEdit));
       expect(reservationProducts.prop('isStaff')).toBe(defaultProps.isStaff);
       expect(reservationProducts.prop('onBack')).toBe(instance.handleBack);
       expect(reservationProducts.prop('onCancel')).toBe(instance.handleCancel);
       expect(reservationProducts.prop('onConfirm')).toBe(instance.handleProductsConfirm);
+      expect(reservationProducts.prop('onCustomerGroupChange')).toBe(instance.handleCustomerGroupChange);
       expect(reservationProducts.prop('onStaffSkipChange')).toBe(instance.HandleToggleMandatoryProducts);
       expect(reservationProducts.prop('order')).toBe(instance.state.order);
       expect(reservationProducts.prop('resource')).toBe(defaultProps.resource);
@@ -225,6 +237,7 @@ describe('pages/reservation/ReservationPage', () => {
         const instance = wrapper.instance();
         const reservationInformation = wrapper.find(ReservationInformation);
         expect(reservationInformation).toHaveLength(1);
+        expect(reservationInformation.prop('currentCustomerGroup')).toBe(instance.state.currentCustomerGroup);
         expect(reservationInformation.prop('isAdmin')).toBe(defaultProps.isAdmin);
         expect(reservationInformation.prop('isEditing')).toBeDefined();
         expect(reservationInformation.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
@@ -482,20 +495,56 @@ describe('pages/reservation/ReservationPage', () => {
       }
     );
 
-    test('sets window.location to paymentUrl when next props has reservation with order.paymentUrl', () => {
-      delete window.location;
-      window.location = new URL('https://www.current-location.fi');
-
-      const instance = getWrapper().instance();
-      const reservationCreated = Reservation.build();
+    describe('window.location redirect', () => {
+      const currentUrl = 'https://www.current-location.fi/';
       const paymentUrl = 'http://test-payment-url.fi';
-      reservationCreated.order = { paymentUrl };
-      const nextProps = {
-        reservationCreated
-      };
-      instance.componentWillUpdate(nextProps);
 
-      expect(window.location).toBe(paymentUrl);
+      test('sets window.location to paymentUrl when next props has reservation with order.paymentUrl', () => {
+        delete window.location;
+        window.location = currentUrl;
+
+        const instance = getWrapper().instance();
+        const reservationCreated = Reservation.build();
+        reservationCreated.order = { paymentUrl };
+        const nextProps = { reservationCreated };
+        instance.componentWillUpdate(nextProps);
+
+        expect(window.location).toBe(paymentUrl);
+      });
+
+      describe('when user is not staff', () => {
+        const isStaff = false;
+        test('does not set window.location to paymentUrl when reservation needs manual confirmation', () => {
+          delete window.location;
+          window.location = currentUrl;
+
+          const instance = getWrapper({ isStaff }).instance();
+          const reservationCreated = Reservation.build();
+          reservationCreated.needManualConfirmation = true;
+          reservationCreated.order = { paymentUrl };
+          const nextProps = { reservationCreated };
+          instance.componentWillUpdate(nextProps);
+
+          expect(window.location).toBe(currentUrl);
+        });
+      });
+
+      describe('when user is staff', () => {
+        const isStaff = true;
+        test('sets window.location to paymentUrl when reservation needs manual confirmation', () => {
+          delete window.location;
+          window.location = currentUrl;
+
+          const instance = getWrapper({ isStaff }).instance();
+          const reservationCreated = Reservation.build();
+          reservationCreated.needManualConfirmation = true;
+          reservationCreated.order = { paymentUrl };
+          const nextProps = { reservationCreated };
+          instance.componentWillUpdate(nextProps);
+
+          expect(window.location).toBe(paymentUrl);
+        });
+      });
     });
   });
   describe('componentWillUnmount when state.view is confirmation', () => {
@@ -576,18 +625,7 @@ describe('pages/reservation/ReservationPage', () => {
       expect(fetchResource.lastCall.args[0]).toEqual(resource.id);
     });
   });
-  /*
-  getInitialView(resource, reservationToEdit) {
-    if (!isEmpty(reservationToEdit)) {
-      return 'time';
-    }
-    if (hasProducts(resource)) {
-      return 'products';
-    }
 
-    return 'information';
-  }
-  */
   describe('getInitialView', () => {
     test('returns string time when reservation to edit is not empty', () => {
       const instance = getWrapper().instance();
@@ -739,6 +777,25 @@ describe('pages/reservation/ReservationPage', () => {
     });
   });
 
+  describe('handleProductsConfirm', () => {
+    test('sets correct state when customer group is required and missing', () => {
+      const cgA = CustomerGroup.build();
+      const pcgA = ProductCustomerGroup.build({ customerGroup: cgA });
+      const prodA = Product.build({ productCustomerGroups: [pcgA] });
+      const resourceA = Resource.build({ products: [prodA] });
+      const instance = getWrapper({ resource: resourceA }).instance();
+      instance.state.currentCustomerGroup = '';
+      instance.handleProductsConfirm();
+      expect(instance.state.customerGroupError).toBe(true);
+    });
+
+    test('sets correct state when there are no validation errors', () => {
+      const instance = getWrapper().instance();
+      instance.handleProductsConfirm();
+      expect(instance.state.view).toBe('information');
+    });
+  });
+
   describe('handleReservation', () => {
     const postReservation = simple.mock();
     const putReservation = simple.mock();
@@ -799,6 +856,33 @@ describe('pages/reservation/ReservationPage', () => {
     });
   });
 
+  describe('handleCustomerGroupChange', () => {
+    const event = { target: { value: 'cg-test' } };
+
+    test('calls setState', () => {
+      const instance = getWrapper().instance();
+      const spy = jest.spyOn(instance, 'setState');
+      instance.handleCustomerGroupChange(event);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith({
+        currentCustomerGroup: event.target.value,
+        customerGroupError: false,
+      });
+    });
+
+    test('calls handleCheckOrderPrice', () => {
+      const instance = getWrapper().instance();
+      const spy = jest.spyOn(instance, 'handleCheckOrderPrice');
+      instance.handleCustomerGroupChange(event);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        defaultProps.resource, defaultProps.selected,
+        instance.state.mandatoryProducts, instance.state.extraProducts,
+        false, event.target.value
+      );
+    });
+  });
+
   describe('handleCheckOrderPrice', () => {
     describe('returns undefined and doesnt call checkOrderPrice', () => {
       afterEach(() => {
@@ -845,7 +929,9 @@ describe('pages/reservation/ReservationPage', () => {
         const end = !isEmpty(selected) ? last(selected).end : null;
         const orderLines = createOrderLines([...mandatoryProducts, ...extraProducts]);
         expect(checkOrderPrice).toHaveBeenCalledTimes(1);
-        expect(checkOrderPrice).toHaveBeenCalledWith(begin, end, orderLines, {});
+        expect(checkOrderPrice).toHaveBeenCalledWith(
+          begin, end, orderLines, {}, undefined
+        );
       });
 
       test('calls setState', async () => {
@@ -894,13 +980,15 @@ describe('pages/reservation/ReservationPage', () => {
     test('calls handleCheckOrderPrice', () => {
       const instance = getWrapper({ resource: resourceA }).instance();
       const spy = jest.spyOn(instance, 'handleCheckOrderPrice');
+      const customerGroupId = 'cg-id-1';
+      instance.state.currentCustomerGroup = customerGroupId;
       instance.state.mandatoryProducts = mandatoryProducts;
       instance.state.extraProducts = extraProducts;
       instance.HandleToggleMandatoryProducts();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
-        resourceA, defaultProps.selected,
-        instance.state.mandatoryProducts, instance.state.extraProducts
+        resourceA, defaultProps.selected, instance.state.mandatoryProducts,
+        instance.state.extraProducts, false, customerGroupId
       );
     });
   });
@@ -936,7 +1024,8 @@ describe('pages/reservation/ReservationPage', () => {
           expect(spy).toHaveBeenCalledTimes(1);
           expect(spy).toHaveBeenCalledWith(
             resourceA, defaultProps.selected,
-            instance.state.mandatoryProducts, instance.state.extraProducts
+            instance.state.mandatoryProducts, instance.state.extraProducts,
+            false, instance.state.currentCustomerGroup
           );
         });
       });
@@ -960,7 +1049,8 @@ describe('pages/reservation/ReservationPage', () => {
           expect(spy).toHaveBeenCalledTimes(1);
           expect(spy).toHaveBeenCalledWith(
             resourceA, defaultProps.selected,
-            instance.state.mandatoryProducts, instance.state.extraProducts
+            instance.state.mandatoryProducts, instance.state.extraProducts,
+            false, instance.state.currentCustomerGroup
           );
         });
       });

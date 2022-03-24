@@ -508,6 +508,7 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           expect(submitButton.prop('handleSubmit')).toBe(defaultProps.handleSubmit);
           expect(submitButton.prop('hasPayment')).toBe(hasProducts(defaultProps.resource));
           expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
+          expect(submitButton.prop('needManualConfirmation')).toBe(defaultProps.resource.needManualConfirmation);
           expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
         });
       });

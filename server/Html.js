@@ -11,15 +11,15 @@ class Html extends Component {
 
 
   getCookieScript() {
-    if (this.props.piwikSiteId) {
+    if (this.props.matomoSiteId) {
       const scriptString = `
       var _paq = _paq || [];
       _paq.push(['trackPageView']);
       _paq.push(['enableLinkTracking']);
       (function() {
-        var u="https://testivaraamo.turku.fi:8003/";
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', ${this.props.piwikSiteId}]);
+        var u="https://matomo.turku.fi/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', ${this.props.matomoSiteId}]);
         _paq.push(['setVisitorCookieTimeout','7776000']);
         var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
         g.type='text/javascript';
@@ -94,7 +94,7 @@ class Html extends Component {
           <link href="https://overpass-30e2.kxcdn.com/overpass.css" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" />
           {this.getConsentScripts()}
-          {Boolean(process.env.PIWIK_SITE_ID) && <script dangerouslySetInnerHTML={{ __html: this.getCookieScript() }} type="text/javascript" />}
+          {Boolean(process.env.MATOMO_SITE_ID) && <script dangerouslySetInnerHTML={{ __html: this.getCookieScript() }} type="text/javascript" />}
           {this.renderStylesLink(appCssSrc, isProduction)}
           <title>Varaamo</title>
         </head>
@@ -114,7 +114,7 @@ Html.propTypes = {
   appScriptSrc: PropTypes.string.isRequired,
   initialState: PropTypes.object.isRequired,
   isProduction: PropTypes.bool.isRequired,
-  piwikSiteId: PropTypes.string,
+  matomoSiteId: PropTypes.string,
 };
 
 export default Html;

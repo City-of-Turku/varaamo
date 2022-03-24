@@ -5,6 +5,7 @@ import simple from 'simple-mock';
 
 import Reservation from 'utils/fixtures/Reservation';
 import { makeButtonTests, shallowWithIntl } from 'utils/testUtils';
+import constants from '../../constants/AppConstants';
 import ReservationControls from './ReservationControls';
 
 describe('shared/reservation-controls/ReservationControls', () => {
@@ -13,17 +14,19 @@ describe('shared/reservation-controls/ReservationControls', () => {
   const onDenyClick = simple.stub();
   const onEditClick = simple.stub();
   const onInfoClick = simple.stub();
+  const onPayClick = simple.stub();
 
-  function getWrapper(reservation, isAdmin = false, isStaff = false) {
+  function getWrapper(reservation, isAdmin = false, paymentUrlData = {}) {
     const props = {
       isAdmin,
-      isStaff,
       onCancelClick,
       onConfirmClick,
       onDenyClick,
       onEditClick,
       onInfoClick,
+      onPayClick,
       reservation: Immutable(reservation),
+      paymentUrlData,
     };
     return shallowWithIntl(<ReservationControls {...props} />);
   }
@@ -97,52 +100,6 @@ describe('shared/reservation-controls/ReservationControls', () => {
       });
     });
 
-    describe('with preliminary reservation in requested state', () => {
-      const reservation = Reservation.build({ needManualConfirmation: true, state: 'requested' });
-
-      describe('if user has staff permissions', () => {
-        const isStaff = true;
-        const buttons = getWrapper(reservation, isAdmin, isStaff).find(Button);
-
-        test('renders four buttons', () => {
-          expect(buttons.length).toBe(4);
-        });
-
-        describe('the first button', () => {
-          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
-        });
-
-        describe('the second button', () => {
-          makeButtonTests(buttons.at(1), 'confirm', 'ReservationControls.confirm', onConfirmClick);
-        });
-
-        describe('the third button', () => {
-          makeButtonTests(buttons.at(2), 'deny', 'ReservationControls.deny', onDenyClick);
-        });
-
-        describe('the fourth button', () => {
-          makeButtonTests(buttons.at(3), 'edit', 'ReservationControls.edit', onEditClick);
-        });
-      });
-
-      describe('if user does not have staff permissions', () => {
-        const isStaff = false;
-        const buttons = getWrapper(reservation, isAdmin, isStaff).find(Button);
-
-        test('renders two buttons', () => {
-          expect(buttons.length).toBe(2);
-        });
-
-        describe('the first button', () => {
-          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
-        });
-
-        describe('the second button', () => {
-          makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
-        });
-      });
-    });
-
     describe('with preliminary reservation in cancelled state', () => {
       const reservation = Reservation.build({ needManualConfirmation: true, state: 'cancelled' });
       const buttons = getWrapper(reservation, isAdmin).find(Button);
@@ -170,11 +127,14 @@ describe('shared/reservation-controls/ReservationControls', () => {
     });
 
     describe('with preliminary reservation in confirmed state', () => {
-      const reservation = Reservation.build({ needManualConfirmation: true, state: 'confirmed' });
-
-      describe('if user has staff permissions', () => {
-        const isStaff = true;
-        const buttons = getWrapper(reservation, isAdmin, isStaff).find(Button);
+      describe('if user has can modify reservation permission', () => {
+        const userPermissions = { canModify: true };
+        const reservation = Reservation.build({
+          needManualConfirmation: true,
+          state: 'confirmed',
+          userPermissions
+        });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
 
         test('renders three buttons', () => {
           expect(buttons.length).toBe(3);
@@ -193,9 +153,14 @@ describe('shared/reservation-controls/ReservationControls', () => {
         });
       });
 
-      describe('if user does not have staff permissions', () => {
-        const isStaff = false;
-        const buttons = getWrapper(reservation, isAdmin, isStaff).find(Button);
+      describe('if user does not have can modify reservation permission', () => {
+        const userPermissions = { canModify: false };
+        const reservation = Reservation.build({
+          needManualConfirmation: true,
+          state: 'confirmed',
+          userPermissions
+        });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
 
         test('renders two buttons', () => {
           expect(buttons.length).toBe(2);
@@ -342,6 +307,64 @@ describe('shared/reservation-controls/ReservationControls', () => {
 
       describe('the second button', () => {
         makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
+      });
+    });
+
+    describe('with preliminary reservation in ready for payment state', () => {
+      const reservation = Reservation.build({
+        needManualConfirmation: true,
+        state: constants.RESERVATION_STATE.READY_FOR_PAYMENT
+      });
+      const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+      test('renders three buttons', () => {
+        expect(buttons.length).toBe(3);
+      });
+
+      describe('the first button', () => {
+        makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+      });
+
+      describe('the second button', () => {
+        makeButtonTests(buttons.at(1), 'pay', 'ReservationControls.pay', onPayClick);
+      });
+
+      describe('the third button', () => {
+        makeButtonTests(buttons.at(2), 'cancel', 'ReservationControls.cancel', onCancelClick);
+      });
+    });
+
+    describe('with preliminary reservation in waiting for payment state', () => {
+      const reservation = Reservation.build({
+        needManualConfirmation: true,
+        state: constants.RESERVATION_STATE.WAITING_FOR_PAYMENT
+      });
+
+      describe('when paymentUrlData is defined and its reservation id matches given reservation id', () => {
+        const paymentUrlData = { paymentUrl: 'https://google.fi', reservationId: reservation.id };
+        const buttons = getWrapper(reservation, isAdmin, paymentUrlData).find(Button);
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
+        });
+
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'pay', 'ReservationControls.pay', onPayClick);
+        });
+      });
+
+      describe('when paymentUrlData is not defined', () => {
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+        test('renders one button', () => {
+          expect(buttons.length).toBe(1);
+        });
+
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
       });
     });
   });

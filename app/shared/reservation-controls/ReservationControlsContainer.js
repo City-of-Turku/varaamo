@@ -11,6 +11,7 @@ import {
 import {
   openConfirmReservationModal,
   openReservationCancelModal,
+  openReservationPaymentModal,
   selectReservationToCancel,
   selectReservationToEdit,
   selectReservationToShow,
@@ -28,6 +29,7 @@ export class UnconnectedReservationControlsContainer extends Component {
     this.handleDenyClick = this.handleDenyClick.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleInfoClick = this.handleInfoClick.bind(this);
+    this.handlePayClick = this.handlePayClick.bind(this);
   }
 
   handleCancelClick() {
@@ -68,18 +70,27 @@ export class UnconnectedReservationControlsContainer extends Component {
     actions.showReservationInfoModal(reservation);
   }
 
+  handlePayClick() {
+    const { actions, reservation } = this.props;
+    actions.selectReservationToShow(reservation);
+    actions.openReservationPaymentModal();
+  }
+
   render() {
-    const { isAdmin, isStaff, reservation } = this.props;
+    const {
+      isAdmin, reservation, paymentUrlData
+    } = this.props;
 
     return (
       <ReservationControls
         isAdmin={isAdmin}
-        isStaff={isStaff}
         onCancelClick={this.handleCancelClick}
         onConfirmClick={this.handleConfirmClick}
         onDenyClick={this.handleDenyClick}
         onEditClick={this.handleEditClick}
         onInfoClick={this.handleInfoClick}
+        onPayClick={this.handlePayClick}
+        paymentUrlData={paymentUrlData}
         reservation={reservation}
       />
     );
@@ -89,10 +100,10 @@ export class UnconnectedReservationControlsContainer extends Component {
 UnconnectedReservationControlsContainer.propTypes = {
   actions: PropTypes.object.isRequired,
   isAdmin: PropTypes.bool.isRequired,
-  isStaff: PropTypes.bool.isRequired,
   reservation: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  paymentUrlData: PropTypes.object,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -101,6 +112,7 @@ function mapDispatchToProps(dispatch) {
     denyPreliminaryReservation,
     openConfirmReservationModal,
     openReservationCancelModal,
+    openReservationPaymentModal,
     selectReservationToCancel,
     selectReservationToEdit,
     selectReservationToShow,

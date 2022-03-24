@@ -5,6 +5,9 @@ import PageWrapper from 'pages/PageWrapper';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedUserReservationsPage as UserReservationsPage } from './UserReservationsPage';
 import ReservationList from './reservation-list';
+import ReservationCancelModal from 'shared/modals/reservation-cancel';
+import ReservationInfoModal from 'shared/modals/reservation-info';
+import ReservationPaymentModal from 'shared/modals/reservation-payment';
 
 describe('pages/user-reservations/UserReservationsPage', () => {
   const fetchReservations = simple.stub();
@@ -54,6 +57,23 @@ describe('pages/user-reservations/UserReservationsPage', () => {
 
       expect(reservationList.length).toBe(1);
       expect(reservationList.props().filter).toBeFalsy();
+      expect(reservationList.prop('loading')).toBeDefined();
+      expect(reservationList.prop('paymentUrlData')).toBe(undefined);
+    });
+
+    test('renders ReservationCancelModal', () => {
+      const modal = getWrapper().find(ReservationCancelModal);
+      expect(modal).toHaveLength(1);
+    });
+
+    test('renders ReservationInfoModal ', () => {
+      const modal = getWrapper().find(ReservationInfoModal);
+      expect(modal).toHaveLength(1);
+    });
+
+    test('renders ReservationPaymentModal ', () => {
+      const modal = getWrapper().find(ReservationPaymentModal);
+      expect(modal).toHaveLength(1);
     });
   });
 

@@ -74,6 +74,7 @@ function Reservation({ onClick, ...reservation }) {
         <span
           className={classNames('reservation',
             { requested: reservation.state === 'requested' },
+            { ready_for_payment: reservation.state === 'ready_for_payment' },
             { disabled: reservation.state === 'confirmed' && !reservation.isOwn && !reservation.userPermissions.canModify },
             { reserved: reservation.state === 'confirmed' && !reservation.isOwn && reservation.userPermissions.canModify })}
           style={{ width }}

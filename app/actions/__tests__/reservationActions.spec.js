@@ -10,8 +10,10 @@ describe('Actions: reservationActions', () => {
   };
 
   let getRequestTypeDescriptorMock;
+  let getSuccessTypeDescriptorMock;
   beforeEach(() => {
     getRequestTypeDescriptorMock = simple.mock(apiUtils, 'getRequestTypeDescriptor');
+    getSuccessTypeDescriptorMock = simple.mock(apiUtils, 'getSuccessTypeDescriptor');
   });
 
   describe('deleteReservation', () => {
@@ -65,6 +67,20 @@ describe('Actions: reservationActions', () => {
           'reservation-edit',
           reservation.resource,
         ],
+      });
+    });
+
+    describe('includes correct omitNotification boolean in meta', () => {
+      test('by default when value not given', () => {
+        reservationActions.putReservation(reservation);
+        expect(getSuccessTypeDescriptorMock.lastCall.args[1].meta.omitNotification).toBe(false);
+      });
+
+      test('when omitNotification is given', () => {
+        const omitSuccessNotification = true;
+        reservationActions.putReservation(reservation, omitSuccessNotification);
+        expect(getSuccessTypeDescriptorMock.lastCall.args[1].meta.omitNotification)
+          .toBe(omitSuccessNotification);
       });
     });
   });

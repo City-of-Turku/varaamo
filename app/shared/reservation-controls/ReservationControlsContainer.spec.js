@@ -21,13 +21,13 @@ describe('shared/reservation-controls/ReservationControlsContainer', () => {
       denyPreliminaryReservation: simple.stub(),
       openConfirmReservationModal: simple.stub(),
       openReservationCancelModal: simple.stub(),
+      openReservationPaymentModal: simple.stub(),
       selectReservationToCancel: simple.stub(),
       selectReservationToEdit: simple.stub(),
       selectReservationToShow: simple.stub(),
       showReservationInfoModal: simple.stub(),
     },
     isAdmin: false,
-    isStaff: false,
     reservation,
     resource,
   };
@@ -49,12 +49,12 @@ describe('shared/reservation-controls/ReservationControlsContainer', () => {
       const actualProps = container.find(ReservationControls).props();
 
       expect(actualProps.isAdmin).toBe(props.isAdmin);
-      expect(actualProps.isStaff).toBe(props.isStaff);
       expect(actualProps.onCancelClick).toBe(instance.handleCancelClick);
       expect(actualProps.onConfirmClick).toBe(instance.handleConfirmClick);
       expect(actualProps.onDenyClick).toBe(instance.handleDenyClick);
       expect(actualProps.onEditClick).toBe(instance.handleEditClick);
       expect(actualProps.onInfoClick).toBe(instance.handleInfoClick);
+      expect(actualProps.onPayClick).toBe(instance.handlePayClick);
       expect(actualProps.reservation).toBe(props.reservation);
     });
   });
@@ -121,5 +121,20 @@ describe('shared/reservation-controls/ReservationControlsContainer', () => {
         expect(props.actions.showReservationInfoModal.lastCall.args[0]).toEqual(props.reservation);
       }
     );
+  });
+
+  describe('handlePayClick', () => {
+    beforeAll(() => {
+      instance.handlePayClick();
+    });
+
+    test('calls props.actions.selectReservationToShow function with props.reservation', () => {
+      expect(props.actions.selectReservationToShow.callCount).toBe(1);
+      expect(props.actions.selectReservationToShow.lastCall.args[0]).toEqual(props.reservation);
+    });
+
+    test('calls props.actions.openReservationPaymentModal function', () => {
+      expect(props.actions.openReservationPaymentModal.callCount).toBe(1);
+    });
   });
 });

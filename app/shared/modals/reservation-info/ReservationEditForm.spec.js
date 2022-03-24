@@ -135,6 +135,29 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
         expect(getData()).toContain(reservation.reserverName);
       });
 
+      describe('customer group', () => {
+        test('when reservation order has customer group name', () => {
+          const order = { customerGroupName: { fi: 'name-fi', en: 'name-en', sv: 'name-sv' } };
+          const reservationA = Reservation.build({ order });
+          const cgName = order.customerGroupName[defaultProps.currentLanguage];
+          const data = getData({ reservation: reservationA });
+          expect(data).toContain('common.customerGroup');
+          expect(data).toContain(cgName);
+        });
+
+        test('when reservation order has no customer group name', () => {
+          const order = 'test-id';
+          const reservationA = Reservation.build({ order });
+          expect(getData({ reservation: reservationA })).not.toContain('common.customerGroup');
+        });
+
+        test('when reservation has no order', () => {
+          const order = undefined;
+          const reservationA = Reservation.build({ order });
+          expect(getData({ reservation: reservationA })).not.toContain('common.customerGroup');
+        });
+      });
+
       test('renders reserverPhoneNumber', () => {
         expect(getData()).toContain(reservation.reserverPhoneNumber);
       });

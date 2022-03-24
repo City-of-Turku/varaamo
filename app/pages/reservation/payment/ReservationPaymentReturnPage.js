@@ -77,8 +77,9 @@ class ReservationPaymentReturnPage extends Component {
           </h1>
           <ReservationPhases
             currentPhase={view}
-            hasPayment
+            hasProducts
             isEditing={false}
+            needManualConfirmation={false}
           />
           <Loader loaded={!isLoading}>
             {status === 'success' && !isLoading && (

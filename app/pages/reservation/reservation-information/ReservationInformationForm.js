@@ -463,6 +463,7 @@ class UnconnectedReservationInformationForm extends Component {
               handleSubmit={handleSubmit}
               hasPayment={hasPayment}
               isMakingReservations={isMakingReservations}
+              needManualConfirmation={resource.needManualConfirmation}
               onConfirm={onConfirm}
             />
           </div>

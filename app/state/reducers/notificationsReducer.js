@@ -85,6 +85,10 @@ function notificationsReducer(state = initialState, action) {
     }
 
     case types.API.RESERVATION_PUT_SUCCESS: {
+      if (action.meta && action.meta.omitNotification) {
+        return state;
+      }
+
       const notification = {
         messageId: 'Notifications.reservationUpdateSuccessMessage',
         type: 'success',

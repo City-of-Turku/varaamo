@@ -9,6 +9,8 @@ import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
 import User from 'utils/fixtures/User';
+import ProductCustomerGroup from 'utils/fixtures/ProductCustomerGroup';
+import CustomerGroup from 'utils/fixtures/CustomerGroup';
 import { shallowWithIntl } from 'utils/testUtils';
 import { hasPayment } from 'utils/reservationUtils';
 import ReservationInformation from './ReservationInformation';
@@ -22,6 +24,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     isEditing: false,
     isMakingReservations: false,
     isStaff: false,
+    currentCustomerGroup: '',
     onBack: simple.stub(),
     onCancel: simple.stub(),
     onConfirm: simple.stub(),
@@ -84,8 +87,15 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
   });
 
   test('renders ReservationDetails', () => {
+    const cgA = CustomerGroup.build();
+    const cgB = CustomerGroup.build();
+    const pcgA = ProductCustomerGroup.build({ customerGroup: cgA });
+    const pcgB = ProductCustomerGroup.build({ customerGroup: cgB });
     const resource = Resource.build({
-      products: [{ id: 'test1' }, { id: 'test2' }]
+      products: [
+        { id: 'test1', productCustomerGroups: [pcgA, pcgB] },
+        { id: 'test2', productCustomerGroups: [pcgB] }
+      ]
     });
     const order = {
       order_lines: [{
@@ -97,9 +107,10 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }],
       price: '3.50'
     };
-
-    const details = getWrapper({ resource, order }).find(ReservationDetails);
+    const currentCustomerGroup = cgB.id;
+    const details = getWrapper({ currentCustomerGroup, resource, order }).find(ReservationDetails);
     expect(details).toHaveLength(1);
+    expect(details.prop('customerGroupName')).toBe(cgB.name);
     expect(details.prop('orderPrice')).toBe(`${order.price} €`);
     expect(details.prop('selectedTime')).toBe(defaultProps.selectedTime);
     expect(details.prop('resourceName')).toBe(resource.name);
@@ -168,36 +179,39 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       expect(actual).toEqual([...supportedFields, 'termsAndConditions']);
     });
 
-    test('doesnt return billing fields when reservation has no payment', () => {
-      const resourceWithBilling = Resource.build({
-        needManualConfirmation: true,
-        supportedReservationExtraFields: [...constants.RESERVATION_BILLING_FIELDS, 'some_field_1', 'some_field_2'],
-      });
-      const expectedFields = ['someField1', 'someField2'];
-      const wrapper = getWrapper({ resource: resourceWithBilling });
-      const instance = wrapper.instance();
-      const actual = instance.getFormFields();
-
-      expect(actual).toEqual(expectedFields);
-    });
-
-    test('returns billing fields when reservation has a payment', () => {
-      const order = {
-        quantity: 1,
-        price: 3.50,
-      };
+    describe('billing fields', () => {
       const resourceWithBilling = Resource.build({
         needManualConfirmation: true,
         supportedReservationExtraFields: [...constants.RESERVATION_BILLING_FIELDS, 'some_field_1', 'some_field_2'],
       });
 
+      const order = { quantity: 1, price: 3.50, };
       const billingFields = constants.RESERVATION_BILLING_FIELDS.map(value => camelCase(value));
-      const expectedFields = [...billingFields, 'someField1', 'someField2'];
-      const wrapper = getWrapper({ resource: resourceWithBilling, order });
-      const instance = wrapper.instance();
-      const actual = instance.getFormFields();
 
-      expect(actual).toEqual(expectedFields);
+      test('are not returned when reservation has no payment', () => {
+        const expectedFields = ['someField1', 'someField2'];
+        const wrapper = getWrapper({ resource: resourceWithBilling });
+        const instance = wrapper.instance();
+        const actual = instance.getFormFields();
+        expect(actual).toEqual(expectedFields);
+      });
+
+      test('are returned when new reservation has a payment', () => {
+        const expectedFields = [...billingFields, 'someField1', 'someField2'];
+        const wrapper = getWrapper({ resource: resourceWithBilling, order });
+        const instance = wrapper.instance();
+        const actual = instance.getFormFields();
+        expect(actual).toEqual(expectedFields);
+      });
+
+      test('are returned when old reservation has a payment', () => {
+        const oldReservation = Reservation.build({ order });
+        const expectedFields = [...billingFields, 'someField1', 'someField2'];
+        const wrapper = getWrapper({ resource: resourceWithBilling, reservation: oldReservation });
+        const instance = wrapper.instance();
+        const actual = instance.getFormFields();
+        expect(actual).toEqual(expectedFields);
+      });
     });
   });
 

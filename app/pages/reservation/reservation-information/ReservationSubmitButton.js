@@ -5,10 +5,10 @@ import { Button } from 'react-bootstrap';
 import injectT from '../../../i18n/injectT';
 
 function ReservationSubmitButton({
-  isMakingReservations, handleSubmit, hasPayment, onConfirm, t
+  isMakingReservations, handleSubmit, hasPayment, needManualConfirmation, onConfirm, t
 }) {
   let buttonText = isMakingReservations ? t('common.saving') : t('common.save');
-  if (hasPayment) {
+  if (hasPayment && !needManualConfirmation) {
     buttonText = isMakingReservations ? t('common.proceedingToPayment') : t('common.proceedToPayment');
   }
 
@@ -24,10 +24,15 @@ function ReservationSubmitButton({
   );
 }
 
+ReservationSubmitButton.defaultProps = {
+  needManualConfirmation: false,
+};
+
 ReservationSubmitButton.propTypes = {
   isMakingReservations: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   hasPayment: PropTypes.bool.isRequired,
+  needManualConfirmation: PropTypes.bool,
   onConfirm: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired
 };

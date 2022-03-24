@@ -110,6 +110,9 @@ function reservationsReducer(state = initialState, action) {
       if (modal === ModalTypes.RESERVATION_COMMENT) {
         return state.merge({ toShow: [] });
       }
+      if (modal === ModalTypes.RESERVATION_PAYMENT) {
+        return state.merge({ toShow: [] });
+      }
       if (modal === ModalTypes.RESERVATION_SUCCESS) {
         return state.merge({ failed: [], toShow: [] });
       }

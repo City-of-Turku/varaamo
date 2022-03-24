@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 
 import { currentUserSelector } from '../../../state/selectors/authSelectors';
 import ReservationConfirmation from '../reservation-confirmation/ReservationConfirmation';
+import { currentLanguageSelector } from '../../../state/selectors/translationSelectors';
 
 function PaymentSuccess({
+  currentLanguage,
   reservation,
   resource,
   user,
@@ -15,6 +17,7 @@ function PaymentSuccess({
   return (
     <div className="reservation-payment-success">
       <ReservationConfirmation
+        currentLanguage={currentLanguage}
         history={history}
         isLoggedIn={isLoggedIn}
         reservation={reservation}
@@ -26,6 +29,7 @@ function PaymentSuccess({
 }
 
 PaymentSuccess.propTypes = {
+  currentLanguage: PropTypes.string.isRequired,
   reservation: PropTypes.object,
   resource: PropTypes.object,
   user: PropTypes.object,
@@ -35,6 +39,7 @@ PaymentSuccess.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    currentLanguage: currentLanguageSelector(state),
     user: currentUserSelector(state)
   };
 }

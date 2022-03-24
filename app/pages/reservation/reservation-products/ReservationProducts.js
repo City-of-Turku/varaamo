@@ -11,15 +11,24 @@ import MandatoryProducts from './mandatory-products/MandatoryProducts';
 import ProductsSummary from './ProductsSummary';
 import ExtraProducts from './extra-products/ExtraProducts';
 import ReservationDetails from '../reservation-details/ReservationDetails';
-import { getProductsOfType, PRODUCT_TYPES } from './ReservationProductsUtils';
+import CustomerGroupSelect from './CustomerGroupSelect';
+import { getProductsOfType, PRODUCT_TYPES, getUniqueCustomerGroups } from './ReservationProductsUtils';
+import ProductsValidationErrors from './ProductsValidationErrors';
 
 function ReservationProducts({
-  changeProductQuantity, currentLanguage, isEditing, isStaff, onBack, onCancel, onConfirm,
+  changeProductQuantity, currentCustomerGroup, customerGroupError, currentLanguage, isEditing,
+  isStaff, onBack, onCancel, onConfirm, onCustomerGroupChange,
   onStaffSkipChange, order, resource, selectedTime, skipMandatoryProducts, t, unit
 }) {
   const orderLines = order.order_lines || [];
+  const uniqueCustomerGroups = getUniqueCustomerGroups(resource);
   const mandatoryOrders = getProductsOfType(orderLines, PRODUCT_TYPES.MANDATORY);
   const extraOrders = getProductsOfType(orderLines, PRODUCT_TYPES.EXTRA);
+
+  const errorFields = [];
+  if (customerGroupError) {
+    errorFields.push(t('ReservationProducts.select.clientGroup.label'));
+  }
 
   return (
     <div className="app-ReservationProducts">
@@ -28,6 +37,15 @@ function ReservationProducts({
         <Col lg={8} sm={12}>
           {!order.error ? (
             <Loader loaded={!order.loadingData}>
+              {uniqueCustomerGroups.length > 0 && (
+                <CustomerGroupSelect
+                  currentlySelectedGroup={currentCustomerGroup}
+                  customerGroups={uniqueCustomerGroups}
+                  hasError={customerGroupError}
+                  isRequired
+                  onChange={onCustomerGroupChange}
+                />
+              )}
               <MandatoryProducts
                 currentLanguage={currentLanguage}
                 isStaff={isStaff}
@@ -71,6 +89,9 @@ function ReservationProducts({
               {t('common.continue')}
             </Button>
           </div>
+          <ProductsValidationErrors
+            errorFields={errorFields}
+          />
         </Col>
 
         <Col lg={4} sm={12}>
@@ -87,12 +108,15 @@ function ReservationProducts({
 
 ReservationProducts.propTypes = {
   changeProductQuantity: PropTypes.func.isRequired,
+  currentCustomerGroup: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
+  customerGroupError: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool.isRequired,
   isStaff: PropTypes.bool.isRequired,
   onBack: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
+  onCustomerGroupChange: PropTypes.func.isRequired,
   onStaffSkipChange: PropTypes.func.isRequired,
   order: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,

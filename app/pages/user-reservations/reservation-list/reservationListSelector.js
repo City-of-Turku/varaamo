@@ -3,7 +3,7 @@ import ActionTypes from 'constants/ActionTypes';
 import { filter, orderBy, values } from 'lodash';
 import { createSelector, createStructuredSelector } from 'reselect';
 
-import { isAdminSelector, staffUnitsSelector } from 'state/selectors/authSelectors';
+import { isAdminSelector } from 'state/selectors/authSelectors';
 import { resourcesSelector, unitsSelector } from 'state/selectors/dataSelectors';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
 
@@ -21,7 +21,6 @@ const reservationListSelector = createStructuredSelector({
   isFetchingReservations: requestIsActiveSelectorFactory(ActionTypes.API.RESERVATIONS_GET_REQUEST),
   reservations: sortedReservationsSelector,
   resources: resourcesSelector,
-  staffUnits: staffUnitsSelector,
   units: unitsSelector,
 });
 

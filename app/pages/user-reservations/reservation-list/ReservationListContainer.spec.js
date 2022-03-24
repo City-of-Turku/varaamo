@@ -17,7 +17,6 @@ describe('pages/user-reservations/reservation-list/ReservationListContainer', ()
       loading: false,
       reservations: [],
       resources: {},
-      staffUnits: [],
       units: {},
     };
     return shallowWithIntl(<ReservationListContainer {...defaults} {...props} />);
@@ -55,12 +54,11 @@ describe('pages/user-reservations/reservation-list/ReservationListContainer', ()
         expect(reservationListItems).toHaveLength(props.reservations.length);
       });
 
-      test('passes isAdmin, isStaff and reservation', () => {
+      test('passes isAdmin and reservation', () => {
         const reservationListItems = getWithReservationsWrapper().find(ReservationListItem);
         reservationListItems.forEach((reservationListItem, index) => {
           const actualProps = reservationListItem.props();
           expect(actualProps.isAdmin).toBe(props.isAdmin);
-          expect(actualProps.isStaff).toBe(false);
           expect(actualProps.reservation).toEqual(props.reservations[index]);
           expect(reservationListItems.at(0).prop('resource')).toEqual(resource);
           expect(reservationListItems.at(1).prop('resource')).toEqual({});

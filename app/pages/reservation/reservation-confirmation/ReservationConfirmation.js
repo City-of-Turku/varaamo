@@ -10,6 +10,7 @@ import iconHome from 'hel-icons/dist/shapes/home.svg';
 import { injectT } from 'i18n';
 import ReservationDate from 'shared/reservation-date';
 import { getFeedbackLink } from 'utils/languageUtils';
+import { getReservationCustomerGroupName } from 'utils/reservationUtils';
 
 class ReservationConfirmation extends Component {
   static propTypes = {
@@ -62,6 +63,7 @@ class ReservationConfirmation extends Component {
     } = this.props;
 
     const href = getFeedbackLink(currentLanguage);
+    const customerGroupName = getReservationCustomerGroupName(reservation, currentLanguage);
     let email = '';
     if (reservation.reserverEmailAddress) {
       email = reservation.reserverEmailAddress;
@@ -190,6 +192,12 @@ class ReservationConfirmation extends Component {
                 t('common.homeMunicipality'),
                 reservation.homeMunicipality.name[currentLanguage]
               )}
+            {customerGroupName
+             && this.renderField(
+               'customerGroupName',
+               t('common.customerGroup'),
+               customerGroupName,
+             )}
             {reservation.order
               && this.renderField(
                 'reservationPrice',

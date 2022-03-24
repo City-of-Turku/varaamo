@@ -6,7 +6,9 @@ import { getRoundedVat } from '../ReservationProductsUtils';
 import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
 
-function MandatoryProductTableRow({ currentLanguage, orderLine, t }) {
+function MandatoryProductTableRow({
+  currentLanguage, orderLine, t
+}) {
   const name = getLocalizedFieldValue(orderLine.product.name, currentLanguage, true);
   const basePrice = orderLine.product.price.amount;
   const totalPrice = orderLine.price;

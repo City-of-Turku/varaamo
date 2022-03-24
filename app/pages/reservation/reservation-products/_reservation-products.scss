@@ -122,4 +122,40 @@
       font-weight: bold;
     }
   }
+
+  #customer-group-select-wrapper {
+    p {
+      margin-bottom: 4px;
+    }
+  }
+
+  #customer-group-select {
+    display: block;
+    font-weight: normal;
+  }
+
+  .has-error {
+    color: $varaamo-high-contrast-red;
+  }
+
+  #products-page-validation-and-errors {
+    color: $varaamo-high-contrast-red;
+    display: flex;
+    justify-content: flex-end;
+
+    p {
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    .list {
+      margin-bottom: 4px;
+      p {
+        margin-top: 0;
+        margin-bottom: 0;
+        list-style: disc inside none;
+        display: list-item;
+      }
+    }
+  }
 }

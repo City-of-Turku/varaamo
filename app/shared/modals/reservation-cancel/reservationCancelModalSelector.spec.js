@@ -2,6 +2,7 @@ import ActionTypes from 'constants/ActionTypes';
 import ModalTypes from 'constants/ModalTypes';
 
 import { getState } from 'utils/testUtils';
+import constants from '../../../constants/AppConstants';
 import reservationCancelModalSelector from './reservationCancelModalSelector';
 
 describe('shared/modals/reservation-cancel/reservationCancelModalSelector', () => {
@@ -33,6 +34,37 @@ describe('shared/modals/reservation-cancel/reservationCancelModalSelector', () =
         'ui.reservations.toCancel': [reservation],
       });
       expect(selected.cancelAllowed).toBe(true);
+    });
+
+    describe('when reservation is preliminar and it has an order', () => {
+      const order = { id: 'test-id', price: 3.50 };
+      const needManualConfirmation = true;
+      const states = constants.RESERVATION_STATE;
+      test('returns true when reservation state is requested', () => {
+        const reservation = {
+          id: 'reservation-1',
+          needManualConfirmation,
+          order,
+          state: states.REQUESTED,
+        };
+        const selected = getSelected({
+          'ui.reservations.toCancel': [reservation],
+        });
+        expect(selected.cancelAllowed).toBe(true);
+      });
+
+      test('returns true when reservation state is ready for payment', () => {
+        const reservation = {
+          id: 'reservation-1',
+          needManualConfirmation,
+          order,
+          state: states.READY_FOR_PAYMENT,
+        };
+        const selected = getSelected({
+          'ui.reservations.toCancel': [reservation],
+        });
+        expect(selected.cancelAllowed).toBe(true);
+      });
     });
 
     test(

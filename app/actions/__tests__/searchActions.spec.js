@@ -1,6 +1,6 @@
 import simple from 'simple-mock';
 
-import { getPiwikActionName, searchResources } from 'actions/searchActions';
+import { getMatomoActionName, searchResources } from 'actions/searchActions';
 import * as apiUtils from 'utils/apiUtils';
 
 describe('Actions: searchActions', () => {
@@ -9,7 +9,7 @@ describe('Actions: searchActions', () => {
     getRequestTypeDescriptorMock = simple.mock(apiUtils, 'getRequestTypeDescriptor');
   });
 
-  describe('getPiwikActionName', () => {
+  describe('getMatomoActionName', () => {
     describe('when searchParams.search is non-empty string', () => {
       const searchParams = {
         search: 'my search',
@@ -17,7 +17,7 @@ describe('Actions: searchActions', () => {
       };
 
       test('returns searchParams.search', () => {
-        expect(getPiwikActionName(searchParams)).toBe(searchParams.search);
+        expect(getMatomoActionName(searchParams)).toBe(searchParams.search);
       });
     });
 
@@ -30,7 +30,7 @@ describe('Actions: searchActions', () => {
 
         test('returns text "category:" with searchParams.purpose', () => {
           const expected = `category: ${searchParams.purpose}`;
-          expect(getPiwikActionName(searchParams)).toBe(expected);
+          expect(getMatomoActionName(searchParams)).toBe(expected);
         });
       });
 
@@ -41,7 +41,7 @@ describe('Actions: searchActions', () => {
         };
 
         test('returns text "-empty-search-"', () => {
-          expect(getPiwikActionName(searchParams)).toBe('-empty-search-');
+          expect(getMatomoActionName(searchParams)).toBe('-empty-search-');
         });
       });
     });

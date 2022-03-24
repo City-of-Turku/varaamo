@@ -77,6 +77,7 @@ export function getStatusOptions(t) {
     { value: constants.RESERVATION_STATE.CONFIRMED, label: t('common.confirmed') },
     { value: constants.RESERVATION_STATE.CANCELLED, label: t('common.cancelled') },
     { value: constants.RESERVATION_STATE.DENIED, label: t('common.denied') },
+    { value: constants.RESERVATION_STATE.READY_FOR_PAYMENT, label: t('common.waitingForPayment') },
     { value: constants.RESERVATION_STATE.REQUESTED, label: t('common.requested') },
   ];
 }
