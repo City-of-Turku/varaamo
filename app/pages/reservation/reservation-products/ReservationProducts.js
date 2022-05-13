@@ -47,6 +47,7 @@ function ReservationProducts({
                 />
               )}
               <MandatoryProducts
+                currentCustomerGroup={currentCustomerGroup}
                 currentLanguage={currentLanguage}
                 isStaff={isStaff}
                 onStaffSkipChange={onStaffSkipChange}
@@ -55,6 +56,7 @@ function ReservationProducts({
               />
               <ExtraProducts
                 changeProductQuantity={changeProductQuantity}
+                currentCustomerGroup={currentCustomerGroup}
                 currentLanguage={currentLanguage}
                 orderLines={extraOrders}
               />

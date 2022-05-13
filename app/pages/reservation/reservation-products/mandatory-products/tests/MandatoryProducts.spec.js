@@ -10,6 +10,7 @@ import MobileProduct from '../../MobileProduct';
 
 describe('reservation-products/mandatory-products/MandatoryProducts', () => {
   const defaultProps = {
+    currentCustomerGroup: 'abc-cg',
     currentLanguage: 'fi',
     isStaff: false,
     onStaffSkipChange: () => {},
@@ -116,6 +117,7 @@ describe('reservation-products/mandatory-products/MandatoryProducts', () => {
       const mandatoryProductTableRow = getWrapper().find(MandatoryProductTableRow);
       expect(mandatoryProductTableRow).toHaveLength(2);
       mandatoryProductTableRow.forEach((element, index) => {
+        expect(element.prop('currentCustomerGroup')).toBe(defaultProps.currentCustomerGroup);
         expect(element.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
         expect(element.prop('orderLine')).toEqual(defaultProps.orderLines[index]);
       });
@@ -138,6 +140,7 @@ describe('reservation-products/mandatory-products/MandatoryProducts', () => {
         const elements = getWrapper().find(MobileProduct);
         expect(elements).toHaveLength(2);
         elements.forEach((element, index) => {
+          expect(element.prop('currentCustomerGroup')).toBe(defaultProps.currentCustomerGroup);
           expect(element.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
           expect(element.prop('order')).toEqual(defaultProps.orderLines[index]);
         });

@@ -148,6 +148,7 @@ describe('reservation-products/ProductsSummary', () => {
       test('MandatoryProducts', () => {
         const mandatoryProducts = getWrapper().find(MandatoryProducts);
         expect(mandatoryProducts).toHaveLength(1);
+        expect(mandatoryProducts.prop('currentCustomerGroup')).toBe(defaultProps.currentCustomerGroup);
         expect(mandatoryProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
         expect(mandatoryProducts.prop('isStaff')).toBe(defaultProps.isStaff);
         expect(mandatoryProducts.prop('onStaffSkipChange')).toBe(defaultProps.onStaffSkipChange);
@@ -159,6 +160,7 @@ describe('reservation-products/ProductsSummary', () => {
         const extraProducts = getWrapper().find(ExtraProducts);
         expect(extraProducts).toHaveLength(1);
         expect(extraProducts.prop('changeProductQuantity')).toBe(defaultProps.changeProductQuantity);
+        expect(extraProducts.prop('currentCustomerGroup')).toBe(defaultProps.currentCustomerGroup);
         expect(extraProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
         expect(extraProducts.prop('orderLines')).toEqual([orderLines[1], orderLines[2]]);
       });

@@ -24,7 +24,8 @@ import {
   getPrettifiedPeriodUnits,
   prettifyHours,
   periodToMinute,
-  getEndTimeSlotWithMinPeriod
+  getEndTimeSlotWithMinPeriod,
+  formatTime
 } from 'utils/timeUtils';
 
 const moment = extendMoment(Moment);
@@ -824,6 +825,16 @@ describe('Utils: timeUtils', () => {
       const result = periodToMinute(period);
 
       expect(result).toEqual(60);
+    });
+  });
+
+  describe('formatTime', () => {
+    test.each([
+      ['12:00:00', 'HH:mm:ss', 'HH:mm', '12:00'],
+      ['15:00', 'HH:mm', 'HH', '15'],
+      ['8:00', 'H:mm', 'HH', '08'],
+    ])('returns correctly formatted time string with given params', (time, timeFormat, targetTimeFormat, expected) => {
+      expect(formatTime(time, timeFormat, targetTimeFormat)).toBe(expected);
     });
   });
 });

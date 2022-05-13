@@ -9,7 +9,7 @@ import MobileProduct from '../MobileProduct';
 
 
 function ExtraProducts({
-  changeProductQuantity, currentLanguage, orderLines, t
+  changeProductQuantity, currentCustomerGroup, currentLanguage, orderLines, t
 }) {
   const quantityHeadingId = 'extra-products-product-quantity';
   const handleQuantityChange = (newQuantity, orderLine) => {
@@ -20,6 +20,7 @@ function ExtraProducts({
   const mobileProducts = orderLines.reduce((acc, order) => {
     acc.push(
       <MobileProduct
+        currentCustomerGroup={currentCustomerGroup}
         currentLanguage={currentLanguage}
         handleChange={handleQuantityChange}
         key={order.product.id}
@@ -28,6 +29,7 @@ function ExtraProducts({
     );
     extraProducts.push(
       <ExtraProductTableRow
+        currentCustomerGroup={currentCustomerGroup}
         currentLanguage={currentLanguage}
         handleQuantityChange={handleQuantityChange}
         key={order.product.id}
@@ -71,6 +73,7 @@ function ExtraProducts({
 
 ExtraProducts.propTypes = {
   changeProductQuantity: PropTypes.func.isRequired,
+  currentCustomerGroup: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   orderLines: PropTypes.array.isRequired,
   t: PropTypes.func.isRequired,

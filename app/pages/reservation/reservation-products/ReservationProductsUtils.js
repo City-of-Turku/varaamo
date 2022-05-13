@@ -131,3 +131,77 @@ export function getUniqueCustomerGroups(resource) {
 
   return Object.values(customerGroups);
 }
+
+/**
+ * Checks if a given customer group is found in given product customer groups
+ * @param {string} customerGroup id
+ * @param {Object[]} productCustomerGroups
+ * @returns {boolean} true when customer group is found in product customer groups
+ */
+export function isCustomerGroupInProductCustomerGroups(customerGroup, productCustomerGroups) {
+  for (let index = 0; index < productCustomerGroups.length; index += 1) {
+    const pcg = productCustomerGroups[index];
+    if (pcg.customer_group.id === customerGroup) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Returns time slots that apply for given customer group
+ * @param {string} customerGroup id
+ * @param {Object[]} productCustomerGroups
+ * @param {Object[]} timeSlots
+ * @returns {Object[]} timeSlots that apply for given customerGroup
+ */
+export function getTimeSlotsForCustomerGroup(customerGroup, productCustomerGroups, timeSlots) {
+  if (!customerGroup) {
+    // when not using a cg, return time slot prices as they are
+    return timeSlots;
+  }
+  const pcgHasGivenCg = isCustomerGroupInProductCustomerGroups(
+    customerGroup, productCustomerGroups
+  );
+
+  const resultTimeSlots = timeSlots.map((timeSlot) => {
+    const customerGroupPrices = timeSlot.customer_group_time_slot_prices;
+    for (let index = 0; index < customerGroupPrices.length; index += 1) {
+      const cgPrice = customerGroupPrices[index];
+      // when given cg is in time slot, use its price
+      if (cgPrice.customer_group.id === customerGroup) {
+        return {
+          price: cgPrice.price, begin: timeSlot.begin, end: timeSlot.end, id: timeSlot.id
+        };
+      }
+    }
+    // when given cg is not in time slot but is in product, use product pricing
+    if (pcgHasGivenCg) {
+      return null;
+    }
+    // when given cg is not in time slot nor in product, use time slot pricing
+    return {
+      price: timeSlot.price, begin: timeSlot.begin, end: timeSlot.end, id: timeSlot.id
+    };
+  });
+
+  return resultTimeSlots.filter(slot => !!slot);
+}
+
+/**
+ * Returns an object containing min and max price for given time slots
+ * @param {Object[]} timeSlots time slots containing a price
+ * @param {string} [productPrice] optional product's own price to be included
+ * in min and max calculations
+ * @returns {Object} object containing min and max price
+ */
+export function getTimeSlotMinMaxPrices(timeSlots, productPrice = undefined) {
+  const prices = timeSlots.map(timeSlot => timeSlot.price);
+  if (productPrice) {
+    prices.push(productPrice);
+  }
+  return {
+    min: Math.min(...prices).toFixed(2),
+    max: Math.max(...prices).toFixed(2)
+  };
+}

@@ -344,6 +344,8 @@
   "ReservationProducts.table.heading.quantity": "Antal",
   "ReservationProducts.table.heading.total": "Totalt",
   "ReservationProducts.table.heading.unitPrice": "À pris",
+  "ReservationProducts.timeSlots.otherwise": "Annat",
+  "ReservationProducts.timeSlots.prices": "Priser",
   "ReservationProducts.validation.label": "Åtgärda fel i given information:",
   "ReservationSuccessModal.emailHelpText": "samt på bokningsbekräftelsen som skickats till e-postadressen: <strong> {email}</strong>",
   "ReservationSuccessModal.failedReservationsHeader": "Följande bokningar misslyckades:",

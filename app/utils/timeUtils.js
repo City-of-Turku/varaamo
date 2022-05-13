@@ -315,6 +315,17 @@ function getTimeDiff(startTime, endTime, unit) {
   return moment(startTime).diff(moment(endTime), unit);
 }
 
+/**
+ * Parses and formats given time into desired target format
+ * @param {string} time e.g. 08:00:00
+ * @param {string} timeFormat time's formatting parsable by Moment e.g. "HH:mm:ss"
+ * @param {string} targetTimeFormat desired time format parsable by Moment for output e.g. "HH.mm"
+ * @returns {string} formatted time string
+ */
+function formatTime(time, timeFormat, targetTimeFormat) {
+  return moment(time, timeFormat).format(targetTimeFormat);
+}
+
 export {
   addToDate,
   calculateDuration,
@@ -334,5 +345,6 @@ export {
   padLeft,
   periodToMinute,
   getEndTimeSlotWithMinPeriod,
-  getTimeDiff
+  getTimeDiff,
+  formatTime,
 };

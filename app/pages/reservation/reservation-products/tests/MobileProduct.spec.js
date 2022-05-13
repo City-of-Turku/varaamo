@@ -6,10 +6,14 @@ import OrderLine from 'utils/fixtures/OrderLine';
 import Product from 'utils/fixtures/Product';
 import { getPrettifiedPeriodUnits } from '../../../../utils/timeUtils';
 import QuantityInput from '../extra-products/QuantityInput';
+import ProductTimeSlotPrices from '../product-time-slots/ProductTimeSlotPrices';
+import TimeSlotPriceFixture from '../../../../utils/fixtures/TimeSlotPriceFixture';
+import { PRODUCT_TYPES } from '../ReservationProductsUtils';
 
 
 describe('reservation-products/MobileProduct', () => {
   const defaultProps = {
+    currentCustomerGroup: '',
     order: {},
     handleChange: jest.fn(),
     currentLanguage: 'fi',
@@ -79,6 +83,7 @@ describe('reservation-products/MobileProduct', () => {
       });
     });
 
+
     test('when order.product is extra', () => {
       const extraProduct = Product.build({
         type: 'extra',
@@ -117,6 +122,24 @@ describe('reservation-products/MobileProduct', () => {
       expect(quantityElement.prop('handleReduce')).toBeDefined();
       expect(quantityElement.prop('maxQuantity')).toEqual(extraProduct.max_quantity);
       expect(quantityElement.prop('quantity')).toEqual(orderQuantity);
+    });
+
+    describe('when product contains time slot prices', () => {
+      test.each([
+        PRODUCT_TYPES.MANDATORY,
+        PRODUCT_TYPES.EXTRA
+      ])('when product type is %p ProductTimeSlotPrices is rendered', (productType) => {
+        const orderLine = OrderLine.build({
+          product: Product.build({
+            type: productType,
+            time_slot_prices: [TimeSlotPriceFixture.build(), TimeSlotPriceFixture.build()]
+          })
+        });
+        const productTimeSlotPrices = getWrapper({ order: orderLine }).find(ProductTimeSlotPrices);
+        expect(productTimeSlotPrices).toHaveLength(1);
+        expect(productTimeSlotPrices.prop('orderLine')).toBe(orderLine);
+        expect(productTimeSlotPrices.prop('timeSlotPrices')).toBe(orderLine.product.time_slot_prices);
+      });
     });
   });
 });
