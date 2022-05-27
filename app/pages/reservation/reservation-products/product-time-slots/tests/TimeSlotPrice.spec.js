@@ -8,7 +8,7 @@ describe('reservation-products/product-time-slots/TimeSlotPrice', () => {
     begin: '08:00:00',
     end: '12:00:00',
     price: '3.50',
-    period: '00:30:00',
+    priceUnit: '€ / 30min',
   };
 
   function getWrapper(extraProps) {

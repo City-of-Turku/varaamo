@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { formatTime, getPrettifiedPeriodUnits } from '../../../../utils/timeUtils';
+import { formatTime } from '../../../../utils/timeUtils';
 
 /**
  * Renders a single time slot price list element
@@ -9,11 +9,11 @@ import { formatTime, getPrettifiedPeriodUnits } from '../../../../utils/timeUtil
  * @param {string} props.begin
  * @param {string} props.end
  * @param {string} props.price
- * @param {string} props.period
+ * @param {string} props.priceUnit
  * @returns {JSX.Element}
  */
 function TimeSlotPrice({
-  begin, end, price, period
+  begin, end, price, priceUnit
 }) {
   const initialTimeFormat = 'HH:mm:ss';
   const targetTimeFormat = 'HH:mm';
@@ -23,7 +23,7 @@ function TimeSlotPrice({
         begin, initialTimeFormat, targetTimeFormat
       )}–${formatTime(
         end, initialTimeFormat, targetTimeFormat
-      )}:⠀${price} € / ${getPrettifiedPeriodUnits(period)}`}
+      )}:⠀${price} ${priceUnit}`}
     </li>
   );
 }
@@ -32,7 +32,7 @@ TimeSlotPrice.propTypes = {
   begin: PropTypes.string.isRequired,
   end: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
-  period: PropTypes.string.isRequired
+  priceUnit: PropTypes.string.isRequired
 };
 
 export default TimeSlotPrice;

@@ -6,8 +6,7 @@ import OrderLine from 'utils/fixtures/OrderLine';
 import Product from 'utils/fixtures/Product';
 import TimeSlotPriceFixture from 'utils/fixtures/TimeSlotPriceFixture';
 import ProductTimeSlotPrices from '../ProductTimeSlotPrices';
-import { getTimeSlotMinMaxPrices } from '../../ReservationProductsUtils';
-import { getPrettifiedPeriodUnits } from '../../../../../utils/timeUtils';
+import { getTimeSlotMinMaxPrices, PRODUCT_PRICE_TYPES } from '../../ReservationProductsUtils';
 import TimeSlotPrice from '../TimeSlotPrice';
 
 describe('reservation-products/product-time-slots/ProductTimeSlotPrices', () => {
@@ -16,7 +15,7 @@ describe('reservation-products/product-time-slots/ProductTimeSlotPrices', () => 
       product: Product.build({
         type: 'rent',
         price: {
-          type: 'per_period', amount: '7.51', period: '01:00:00', tax_percentage: '24'
+          type: PRODUCT_PRICE_TYPES.PER_PERIOD, amount: '7.51', period: '01:00:00', tax_percentage: '24'
         }
       })
     }),
@@ -40,16 +39,26 @@ describe('reservation-products/product-time-slots/ProductTimeSlotPrices', () => 
     });
 
     test('Panel title', () => {
-      const { price } = defaultProps.orderLine.product;
-      const { min, max } = getTimeSlotMinMaxPrices(
-        defaultProps.timeSlotPrices, price.amount
-      );
       const title = getWrapper().find(Panel.Title);
       expect(title).toHaveLength(1);
       expect(title.prop('toggle')).toBe(true);
-      expect(title.children().text()).toBe(
-        `ReservationProducts.timeSlots.prices ${min}–${max} € / ${getPrettifiedPeriodUnits(price.period)}`
-      );
+    });
+    describe('Panel title text', () => {
+      test.each([
+        [PRODUCT_PRICE_TYPES.FIXED, '€'],
+        [PRODUCT_PRICE_TYPES.PER_PERIOD, '€ / 1h'],
+      ])('when product price type is %p', (priceType, expectedUnit) => {
+        const price = { ...defaultProps.orderLine.product.price, type: priceType };
+        const { orderLine } = defaultProps;
+        orderLine.product.price = price;
+        const { min, max } = getTimeSlotMinMaxPrices(
+          defaultProps.timeSlotPrices, price.amount
+        );
+        const title = getWrapper({ orderLine }).find(Panel.Title);
+        expect(title.children().text()).toBe(
+          `ReservationProducts.timeSlots.prices ${min}–${max} ${expectedUnit}`
+        );
+      });
     });
 
     test('Panel collapse', () => {
@@ -68,9 +77,9 @@ describe('reservation-products/product-time-slots/ProductTimeSlotPrices', () => 
       timeSlots.forEach((timeSlot, index) => {
         expect(timeSlot.prop('begin')).toBe(defaultProps.timeSlotPrices[index].begin);
         expect(timeSlot.prop('end')).toBe(defaultProps.timeSlotPrices[index].end);
-        expect(timeSlot.prop('id')).toBe(defaultProps.timeSlotPrices[index].id);
         expect(timeSlot.prop('period')).toBe(defaultProps.orderLine.product.price.period);
         expect(timeSlot.prop('price')).toBe(defaultProps.timeSlotPrices[index].price);
+        expect(timeSlot.prop('priceUnit')).toBe('€ / 1h');
       });
     });
 

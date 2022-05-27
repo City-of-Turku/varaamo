@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Panel } from 'react-bootstrap';
 
 import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
-import { getTimeSlotMinMaxPrices } from '../ReservationProductsUtils';
+import { getTimeSlotMinMaxPrices, PRODUCT_PRICE_TYPES } from '../ReservationProductsUtils';
 import injectT from '../../../../i18n/injectT';
 import TimeSlotPrice from './TimeSlotPrice';
 
@@ -20,12 +20,13 @@ function ProductTimeSlotPrices({ orderLine, t, timeSlotPrices }) {
   const type = orderLine.product.price.type;
   const period = orderLine.product.price.period;
   const { min, max } = getTimeSlotMinMaxPrices(timeSlotPrices, basePrice);
+  const priceUnit = type !== PRODUCT_PRICE_TYPES.FIXED ? `€ / ${getPrettifiedPeriodUnits(period)}` : '€';
   if (timeSlotPrices.length > 0) {
     return (
       <Panel className="pricing-expandable-panel" defaultExpanded={false}>
         <Panel.Heading>
           <Panel.Title toggle>
-            {`${t('ReservationProducts.timeSlots.prices')} ${min}–${max} € / ${getPrettifiedPeriodUnits(period)}`}
+            {`${t('ReservationProducts.timeSlots.prices')} ${min}–${max} ${priceUnit}`}
           </Panel.Title>
         </Panel.Heading>
         <Panel.Collapse>
@@ -34,10 +35,10 @@ function ProductTimeSlotPrices({ orderLine, t, timeSlotPrices }) {
               <TimeSlotPrice
                 begin={timeSlotPrice.begin}
                 end={timeSlotPrice.end}
-                id={timeSlotPrice.id}
                 key={`time-slot-price-${timeSlotPrice.id}`}
                 period={period}
                 price={timeSlotPrice.price}
+                priceUnit={priceUnit}
               />
             ))}
             <li>

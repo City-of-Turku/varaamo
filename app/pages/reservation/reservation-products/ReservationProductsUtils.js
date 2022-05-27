@@ -3,6 +3,11 @@ export const PRODUCT_TYPES = {
   EXTRA: 'extra'
 };
 
+export const PRODUCT_PRICE_TYPES = {
+  FIXED: 'fixed',
+  PER_PERIOD: 'per_period'
+};
+
 export function getRoundedVat(vat) {
   return Math.round(parseInt(vat, 10));
 }
