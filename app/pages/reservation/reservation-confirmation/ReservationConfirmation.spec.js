@@ -147,6 +147,17 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       expect(link.length).toBe(1);
       expect(link.prop('values')).toEqual({ href: constants.FEEDBACK_URL.EN });
     });
+
+    test('when resource has a defined reservation feedback url', () => {
+      const testFeedbackUrl = 'https://test-feedback.fi';
+      const resource = Resource.build({ reservationFeedbackUrl: testFeedbackUrl });
+      const link = getWrapper({ currentLanguage: 'en', resource })
+        .find(FormattedHTMLMessage)
+        .filter({ id: 'ReservationConfirmation.feedbackText' });
+
+      expect(link.length).toBe(1);
+      expect(link.prop('values')).toEqual({ href: testFeedbackUrl });
+    });
   });
 
   test('renders reservation.user.email', () => {

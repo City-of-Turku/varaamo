@@ -62,7 +62,10 @@ class ReservationConfirmation extends Component {
       currentLanguage, isEdited, isLoggedIn, reservation, resource, t, user
     } = this.props;
 
-    const href = getFeedbackLink(currentLanguage);
+    // if resource has feedback url defined, use it instead of default urls
+    const resourceFeedbackUrl = 'reservationFeedbackUrl' in resource ? resource.reservationFeedbackUrl : '';
+    const href = resourceFeedbackUrl || getFeedbackLink(currentLanguage);
+
     const customerGroupName = getReservationCustomerGroupName(reservation, currentLanguage);
     let email = '';
     if (reservation.reserverEmailAddress) {
