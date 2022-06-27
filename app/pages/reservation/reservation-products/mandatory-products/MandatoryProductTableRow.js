@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import injectT from '../../../../i18n/injectT';
-import { getRoundedVat } from '../ReservationProductsUtils';
+import { getRoundedVat, getTimeSlotsForCustomerGroup } from '../ReservationProductsUtils';
 import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
+import ProductTimeSlotPrices from '../product-time-slots/ProductTimeSlotPrices';
 
 function MandatoryProductTableRow({
-  currentLanguage, orderLine, t
+  currentCustomerGroup, currentLanguage, orderLine, t
 }) {
   const name = getLocalizedFieldValue(orderLine.product.name, currentLanguage, true);
   const basePrice = orderLine.product.price.amount;
@@ -20,16 +21,32 @@ function MandatoryProductTableRow({
   const roundedVat = getRoundedVat(vat);
   const vatText = t('ReservationProducts.price.includesVat', { vat: roundedVat });
 
+  const filteredtimeSlotPrices = getTimeSlotsForCustomerGroup(
+    currentCustomerGroup, orderLine.product.product_customer_groups,
+    orderLine.product.time_slot_prices
+  );
+
   return (
     <tr>
       <td>{name}</td>
-      <td>{`${basePrice} €${type !== 'fixed' ? ` / ${getPrettifiedPeriodUnits(period)}` : ''}`}</td>
+      {filteredtimeSlotPrices.length > 0 ? (
+        <td className="time-slot-price-table-row">
+          <ProductTimeSlotPrices
+            currentCustomerGroup={currentCustomerGroup}
+            orderLine={orderLine}
+            timeSlotPrices={filteredtimeSlotPrices}
+          />
+        </td>
+      )
+        : <td>{`${basePrice} €${type !== 'fixed' ? ` / ${getPrettifiedPeriodUnits(period)}` : ''}`}</td>
+      }
       <td>{`${totalPrice} € ${vatText}`}</td>
     </tr>
   );
 }
 
 MandatoryProductTableRow.propTypes = {
+  currentCustomerGroup: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   orderLine: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,

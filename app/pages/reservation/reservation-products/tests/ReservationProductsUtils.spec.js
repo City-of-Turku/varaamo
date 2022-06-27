@@ -3,9 +3,11 @@ import Product from 'utils/fixtures/Product';
 import CustomerGroup from 'utils/fixtures/CustomerGroup';
 import ProductCustomerGroup from 'utils/fixtures/ProductCustomerGroup';
 import Resource from 'utils/fixtures/Resource';
+import TimeSlotPriceFixture from 'utils/fixtures/TimeSlotPriceFixture';
 import {
   calculateTax, compareTaxPercentages, getOrderTaxTotals, getProductsOfType,
-  getRoundedVat, getSortedTaxPercentages, getUniqueCustomerGroups, roundPriceToTwoDecimals
+  getRoundedVat, getSortedTaxPercentages, getTimeSlotMinMaxPrices, getTimeSlotsForCustomerGroup,
+  getUniqueCustomerGroups, isCustomerGroupInProductCustomerGroups, roundPriceToTwoDecimals
 } from '../ReservationProductsUtils';
 
 describe('reservation-products/ReservationProductsUtils', () => {
@@ -197,6 +199,150 @@ describe('reservation-products/ReservationProductsUtils', () => {
         const productB = Product.build({ productCustomerGroups: [pcgA, pcgB] });
         const resourceA = Resource.build({ products: [productA, productB] });
         expect(getUniqueCustomerGroups(resourceA)).toStrictEqual([customerGroupA, customerGroupB]);
+      });
+    });
+  });
+
+  describe('isCustomerGroupInProductCustomerGroups', () => {
+    test('returns true when customer group is in product customer groups', () => {
+      const customerGroupA = CustomerGroup.build();
+      const customerGroupB = CustomerGroup.build();
+      const pcgA = ProductCustomerGroup.build({ customer_group: customerGroupA });
+      const pcgB = ProductCustomerGroup.build({ customer_group: customerGroupB });
+      expect(isCustomerGroupInProductCustomerGroups(customerGroupA.id, [pcgA, pcgB])).toBe(true);
+    });
+
+    test('returns false when customer group is not in product customer groups', () => {
+      const customerGroupA = CustomerGroup.build();
+      const customerGroupB = CustomerGroup.build();
+      const pcgA = ProductCustomerGroup.build({ customer_group: customerGroupA });
+      const pcgB = ProductCustomerGroup.build({ customer_group: customerGroupB });
+      expect(isCustomerGroupInProductCustomerGroups('bad-cg-id', [pcgA, pcgB])).toBe(false);
+    });
+  });
+
+  describe('getTimeSlotsForCustomerGroup', () => {
+    describe('returns correct time slots and their prices', () => {
+      test('when customer group is not defined', () => {
+        const timeSlots = [TimeSlotPriceFixture.build(), TimeSlotPriceFixture.build()];
+        expect(getTimeSlotsForCustomerGroup('', [], timeSlots)).toBe(timeSlots);
+      });
+
+      test('when customer group is defined and found in all time slots', () => {
+        const customerGroupA = CustomerGroup.build();
+        const customerGroupB = CustomerGroup.build();
+        const pcgB = ProductCustomerGroup.build({ customer_group: customerGroupB });
+        const timeSlots = [
+          TimeSlotPriceFixture.build({
+            customer_group_time_slot_prices: [{
+              customer_group: customerGroupA,
+              price: '31.00'
+            },
+            {
+              customer_group: customerGroupB,
+              price: '123.00'
+            }]
+          }),
+          TimeSlotPriceFixture.build({
+            customer_group_time_slot_prices: [{
+              customer_group: customerGroupA,
+              price: '42.00'
+            }]
+          })
+        ];
+        const expectedFirstTimeSlot = { ...timeSlots[0], price: '31.00' };
+        delete expectedFirstTimeSlot.customer_group_time_slot_prices;
+        const expectedSecondTimeSlot = { ...timeSlots[1], price: '42.00' };
+        delete expectedSecondTimeSlot.customer_group_time_slot_prices;
+        expect(getTimeSlotsForCustomerGroup(customerGroupA.id, [pcgB], timeSlots)).toStrictEqual(
+          [expectedFirstTimeSlot, expectedSecondTimeSlot]
+        );
+      });
+
+      test('when customer group is defined and not found in all time slots', () => {
+        const customerGroupA = CustomerGroup.build();
+        const customerGroupB = CustomerGroup.build();
+        const pcgB = ProductCustomerGroup.build({ customer_group: customerGroupB });
+        const timeSlots = [
+          TimeSlotPriceFixture.build({
+            customer_group_time_slot_prices: [{
+              customer_group: customerGroupA,
+              price: '31.00'
+            },
+            {
+              customer_group: customerGroupB,
+              price: '123.00'
+            }]
+          }),
+          TimeSlotPriceFixture.build({
+            customer_group_time_slot_prices: [{
+              customer_group: customerGroupA,
+              price: '42.00'
+            }]
+          })
+        ];
+        const expectedFirstTimeSlot = { ...timeSlots[0], price: '123.00' };
+        delete expectedFirstTimeSlot.customer_group_time_slot_prices;
+        expect(getTimeSlotsForCustomerGroup(customerGroupB.id, [pcgB], timeSlots)).toStrictEqual(
+          [expectedFirstTimeSlot]
+        );
+      });
+
+      test('when customer group is defined and not found in any time slots nor product customer groups', () => {
+        const customerGroupA = CustomerGroup.build();
+        const customerGroupB = CustomerGroup.build();
+        const customerGroupC = CustomerGroup.build();
+        const pcgB = ProductCustomerGroup.build({ customer_group: customerGroupB });
+        const timeSlots = [
+          TimeSlotPriceFixture.build({
+            customer_group_time_slot_prices: [{
+              customer_group: customerGroupA,
+              price: '31.00'
+            },
+            {
+              customer_group: customerGroupB,
+              price: '123.00'
+            }]
+          }),
+          TimeSlotPriceFixture.build({
+            customer_group_time_slot_prices: [{
+              customer_group: customerGroupA,
+              price: '42.00'
+            }]
+          })
+        ];
+        const expectedFirstTimeSlot = { ...timeSlots[0] };
+        delete expectedFirstTimeSlot.customer_group_time_slot_prices;
+        const expectedSecondTimeSlot = { ...timeSlots[1] };
+        delete expectedSecondTimeSlot.customer_group_time_slot_prices;
+        expect(getTimeSlotsForCustomerGroup(customerGroupC.id, [pcgB], timeSlots)).toStrictEqual(
+          [expectedFirstTimeSlot, expectedSecondTimeSlot]
+        );
+      });
+    });
+  });
+
+  describe('getTimeSlotMinMaxPrices', () => {
+    describe('returns correct object with min and max properties', () => {
+      const timeSlotA = TimeSlotPriceFixture.build({ price: '52.50' });
+      const timeSlotB = TimeSlotPriceFixture.build({ price: '2.40' });
+      const timeSlotC = TimeSlotPriceFixture.build({ price: '10.00' });
+
+      test('when productPrice is not given', () => {
+        expect(getTimeSlotMinMaxPrices([timeSlotA, timeSlotB, timeSlotC])).toStrictEqual({
+          min: timeSlotB.price,
+          max: timeSlotA.price
+        });
+      });
+
+      test('when productPrice is given', () => {
+        const productPrice = '123.00';
+        expect(getTimeSlotMinMaxPrices(
+          [timeSlotA, timeSlotB, timeSlotC], productPrice
+        )).toStrictEqual({
+          min: timeSlotB.price,
+          max: productPrice
+        });
       });
     });
   });

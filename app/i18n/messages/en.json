@@ -342,6 +342,8 @@
   "ReservationProducts.table.heading.quantity": "Quantity",
   "ReservationProducts.table.heading.total": "Total",
   "ReservationProducts.table.heading.unitPrice": "À price",
+  "ReservationProducts.timeSlots.otherwise": "Otherwise",
+  "ReservationProducts.timeSlots.prices": "Prices",
   "ReservationProducts.validation.label": "Fix errors in given information:",
   "ReservationSuccessModal.emailHelpText": "as well as on the reservation confirmation sent to the following e-mail address: <strong> {email}</strong>",
   "ReservationSuccessModal.failedReservationsHeader": "We were not able to make the following reservations:",

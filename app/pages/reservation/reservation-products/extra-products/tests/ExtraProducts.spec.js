@@ -10,6 +10,7 @@ import MobileProduct from '../../MobileProduct';
 
 describe('reservation-products/extra-products/ExtraProducts', () => {
   const defaultProps = {
+    currentCustomerGroup: 'abc-cg',
     currentLanguage: 'fi',
     changeProductQuantity: () => {},
     orderLines: [
@@ -92,6 +93,7 @@ describe('reservation-products/extra-products/ExtraProducts', () => {
       const extraProductTableRow = getWrapper().find(ExtraProductTableRow);
       expect(extraProductTableRow).toHaveLength(2);
       extraProductTableRow.forEach((element, index) => {
+        expect(element.prop('currentCustomerGroup')).toBe(defaultProps.currentCustomerGroup);
         expect(element.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
         expect(element.prop('handleQuantityChange')).toBeDefined();
         expect(element.prop('orderLine')).toEqual(defaultProps.orderLines[index]);
@@ -114,6 +116,7 @@ describe('reservation-products/extra-products/ExtraProducts', () => {
         const elements = getWrapper().find(MobileProduct);
         expect(elements).toHaveLength(2);
         elements.forEach((element, index) => {
+          expect(element.prop('currentCustomerGroup')).toBe(defaultProps.currentCustomerGroup);
           expect(element.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
           expect(element.prop('handleChange')).toBeDefined();
           expect(element.prop('order')).toEqual(defaultProps.orderLines[index]);
