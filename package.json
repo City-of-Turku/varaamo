@@ -90,7 +90,7 @@
     "seamless-immutable": "7.1.4",
     "serialize-javascript": "4.0.0",
     "url-loader": "1.1.2",
-    "validator": "6.1.0",
+    "validator": "13.7.0",
     "webpack": "4.46.0",
     "webpack-cli": "3.3.12",
     "webpack-merge": "4.2.1"
