@@ -3,9 +3,10 @@ import React from 'react';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import { injectT } from 'i18n';
+import constants from '../../constants/AppConstants';
 
 function TestSiteMessage({ t }) {
-  if (process.env.NODE_ENV === 'development') {
+  if (constants.SHOW_TEST_SITE_MESSAGE) {
     return (
       <Alert bsStyle="danger" className="test-site-message">
         {t('TestSiteMessage.text')}
