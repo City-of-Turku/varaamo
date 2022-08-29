@@ -12,6 +12,7 @@ import Resource from 'utils/fixtures/Resource';
 import { shallowWithIntl } from 'utils/testUtils';
 import ReservationEditForm from './ReservationEditForm';
 import ReservationInfoModal from './ReservationInfoModal';
+import constants from '../../../constants/AppConstants';
 
 describe('shared/modals/reservation-info/ReservationInfoModal', () => {
   const resource = Resource.build();
@@ -311,6 +312,65 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
               reservation: { ...reservation, state: 'requested' },
             };
             expect(getConfirmButton(props)).toHaveLength(1);
+          }
+        );
+      });
+
+      describe('confirm cash payment button', () => {
+        function getConfirmButton(props) {
+          const onConfirmClick = () => null;
+          const wrapper = getWrapper({ ...props, onConfirmClick });
+          const buttons = wrapper.find(Modal.Footer).find(Button);
+          return buttons.filter({ onClick: onConfirmClick });
+        }
+
+        test('is not rendered if user is not a staff member', () => {
+          const props = {
+            isStaff: false,
+            reservationIsEditable: true,
+            reservation: {
+              ...reservation,
+              state: constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT
+            },
+          };
+          expect(getConfirmButton(props)).toHaveLength(0);
+        });
+
+        test('is not rendered if reservation is not editable', () => {
+          const props = {
+            isStaff: true,
+            reservationIsEditable: false,
+            reservation: {
+              ...reservation,
+              state: constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT
+            },
+          };
+          expect(getConfirmButton(props)).toHaveLength(0);
+        });
+
+        test('is not rendered if reservation state is not "waiting_for_cash_payment"', () => {
+          const props = {
+            isStaff: true,
+            reservationIsEditable: true,
+            reservation: { ...reservation, state: 'confirmed' },
+          };
+          expect(getConfirmButton(props)).toHaveLength(0);
+        });
+
+        test(
+          'is rendered if user is staff, reservation is editable and in "waiting_for_cash_payment" state',
+          () => {
+            const props = {
+              isStaff: true,
+              reservationIsEditable: true,
+              reservation: {
+                ...reservation,
+                state: constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT
+              },
+            };
+            const button = getConfirmButton(props);
+            expect(button).toHaveLength(1);
+            expect(button.prop('children')).toBe('common.confirmCashPayment');
           }
         );
       });

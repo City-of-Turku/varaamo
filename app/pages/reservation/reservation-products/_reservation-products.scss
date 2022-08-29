@@ -253,6 +253,23 @@
   .time-slot-price-table-row {
     width: 290px;
   }
+
+  .payment-methods {
+    margin-bottom: 18px;
+
+    legend {
+      font-size: 1.17em;
+      margin-bottom: 12px;
+    }
+
+    label {
+      margin-right: 18px;
+    }
+
+    input {
+      margin-right: 4px;
+    }
+  }
 }
 
 @include high-contrast {

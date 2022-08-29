@@ -8,6 +8,7 @@ import { getLocalizedFieldValue } from 'utils/languageUtils';
 import {
   getOrderTaxTotals, getRoundedVat, getSortedTaxPercentages, roundPriceToTwoDecimals
 } from '../../../pages/reservation/reservation-products/ReservationProductsUtils';
+import constants from '../../../constants/AppConstants';
 
 function ReservationOrderInfo({
   currentLanguage, order, renderHeading, renderInfoRow, t
@@ -34,6 +35,13 @@ function ReservationOrderInfo({
   });
   nonZeroTaxTotal = roundPriceToTwoDecimals(nonZeroTaxTotal);
 
+  let orderPaymentMethod = '';
+  if (order.paymentMethod === constants.PAYMENT_METHODS.CASH) {
+    orderPaymentMethod = t('common.paymentMethod.cash');
+  } else if (order.paymentMethod === constants.PAYMENT_METHODS.ONLINE) {
+    orderPaymentMethod = t('common.paymentMethod.online');
+  }
+
   return (
     <Well id="reservation-order-info">
       {renderHeading(t('common.orderDetailsLabel'))}
@@ -42,6 +50,7 @@ function ReservationOrderInfo({
       {renderInfoRow(t('common.taxlessTotal'), `${taxlessTotal} €`)}
       {renderInfoRow(t('common.taxesTotal'), `${nonZeroTaxTotal} €`)}
       {renderInfoRow(t('common.priceTotalLabel'), `${order.price} €`)}
+      {orderPaymentMethod && (renderInfoRow(t('common.paymentMethod'), orderPaymentMethod))}
     </Well>
   );
 }

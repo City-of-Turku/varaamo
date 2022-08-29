@@ -13,6 +13,7 @@ describe('ManageReservations/status/statusUtils', () => {
       expect(getLabelStyle(states.REQUESTED)).toBe('warning');
       expect(getLabelStyle(states.READY_FOR_PAYMENT)).toBe('warning');
       expect(getLabelStyle(states.WAITING_FOR_PAYMENT)).toBe('warning');
+      expect(getLabelStyle(states.WAITING_FOR_CASH_PAYMENT)).toBe('warning');
     });
   });
 

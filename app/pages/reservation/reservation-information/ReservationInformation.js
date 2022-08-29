@@ -20,6 +20,7 @@ import ReservationDetails from '../reservation-details/ReservationDetails';
 class ReservationInformation extends Component {
   static propTypes = {
     currentCustomerGroup: PropTypes.string.isRequired,
+    currentPaymentMethod: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
     isEditing: PropTypes.bool.isRequired,
     isMakingReservations: PropTypes.bool.isRequired,
@@ -168,6 +169,7 @@ class ReservationInformation extends Component {
   render() {
     const {
       currentCustomerGroup,
+      currentPaymentMethod,
       isEditing,
       isMakingReservations,
       onBack,
@@ -185,6 +187,8 @@ class ReservationInformation extends Component {
     const termsAndConditions = getTermsAndConditions(resource);
     const paymentTermsAndConditions = getPaymentTermsAndConditions(resource);
     const customerGroupName = currentCustomerGroup ? getResourceCustomerGroupName(resource, currentCustomerGroup) : '';
+    const paymentMethod = currentPaymentMethod ? t(`common.paymentMethod.${currentPaymentMethod}`) : '';
+    const orderAndPriceExist = hasProducts(resource) && order && order.price;
 
     return (
       <div className="app-ReservationInformation">
@@ -212,7 +216,8 @@ class ReservationInformation extends Component {
         <Col lg={4} sm={12}>
           <ReservationDetails
             customerGroupName={customerGroupName}
-            orderPrice={(hasProducts(resource) && order && order.price) ? `${order.price} €` : ''}
+            orderPrice={orderAndPriceExist ? `${order.price} €` : ''}
+            paymentMethod={orderAndPriceExist ? paymentMethod : ''}
             resourceName={resource.name}
             selectedTime={selectedTime}
             unitName={unit.name}

@@ -47,6 +47,7 @@ class UnconnectedReservationPage extends Component {
     this.handleCreateErrorNotification = this.handleCreateErrorNotification.bind(this);
     this.HandleToggleMandatoryProducts = this.HandleToggleMandatoryProducts.bind(this);
     this.handleCustomerGroupChange = this.handleCustomerGroupChange.bind(this);
+    this.handlePaymentMethodChange = this.handlePaymentMethodChange.bind(this);
 
     const { reservationToEdit, resource } = this.props;
 
@@ -58,6 +59,7 @@ class UnconnectedReservationPage extends Component {
       skipMandatoryProducts: false,
       currentCustomerGroup: '',
       customerGroupError: false,
+      currentPaymentMethod: constants.PAYMENT_METHODS.ONLINE,
     };
   }
 
@@ -125,8 +127,11 @@ class UnconnectedReservationPage extends Component {
       && (nextCreated !== reservationCreated || nextEdited !== reservationEdited)
     ) {
       const { needManualConfirmation } = nextCreated || nextEdited;
-      // staff payments are always handled directly
-      if ((isStaff || !needManualConfirmation) && has(nextCreated, 'order.paymentUrl')) {
+      const paymentMethodIsCash = has(nextCreated, 'order.paymentMethod')
+        && nextCreated.order.paymentMethod === constants.PAYMENT_METHODS.CASH;
+
+      // staff online payments are always handled directly
+      if (((isStaff && !paymentMethodIsCash) || !needManualConfirmation) && has(nextCreated, 'order.paymentUrl')) {
         const paymentUrl = get(nextCreated, 'order.paymentUrl');
         window.location = paymentUrl;
         return;
@@ -208,11 +213,13 @@ class UnconnectedReservationPage extends Component {
       const { begin } = first(selected);
       const { end } = last(selected);
       const preferredLanguage = currentLanguage;
-      const { mandatoryProducts, extraProducts, currentCustomerGroup } = this.state;
+      const {
+        mandatoryProducts, extraProducts, currentCustomerGroup, currentPaymentMethod
+      } = this.state;
 
       // order with only zero quantity products won't go through payment process
       const products = getNonZeroQuantityProducts([...mandatoryProducts, ...extraProducts]);
-      const order = createOrder(products, currentCustomerGroup);
+      const order = createOrder(products, currentCustomerGroup, currentPaymentMethod);
 
       if (!isEmpty(reservationToEdit)) {
         // old reservation values before editing
@@ -285,6 +292,11 @@ class UnconnectedReservationPage extends Component {
     this.handleCheckOrderPrice(
       resource, selected, mandatoryProducts, extraProducts, false, value
     );
+  }
+
+  handlePaymentMethodChange(event) {
+    const { value } = event.target;
+    this.setState({ currentPaymentMethod: value });
   }
 
   handleCheckOrderPrice(
@@ -413,7 +425,8 @@ class UnconnectedReservationPage extends Component {
       history,
     } = this.props;
     const {
-      currentCustomerGroup, customerGroupError, order, skipMandatoryProducts, view
+      currentCustomerGroup, customerGroupError, currentPaymentMethod,
+      order, skipMandatoryProducts, view,
     } = this.state;
 
     if (
@@ -469,6 +482,7 @@ class UnconnectedReservationPage extends Component {
                     changeProductQuantity={this.handleChangeProductQuantity}
                     currentCustomerGroup={currentCustomerGroup}
                     currentLanguage={currentLanguage}
+                    currentPaymentMethod={currentPaymentMethod}
                     customerGroupError={customerGroupError}
                     isEditing={isEditing}
                     isStaff={isStaff}
@@ -476,6 +490,7 @@ class UnconnectedReservationPage extends Component {
                     onCancel={this.handleCancel}
                     onConfirm={this.handleProductsConfirm}
                     onCustomerGroupChange={this.handleCustomerGroupChange}
+                    onPaymentMethodChange={this.handlePaymentMethodChange}
                     onStaffSkipChange={this.HandleToggleMandatoryProducts}
                     order={order}
                     resource={resource}
@@ -487,6 +502,7 @@ class UnconnectedReservationPage extends Component {
                 {view === 'information' && selectedTime && (
                   <ReservationInformation
                     currentCustomerGroup={currentCustomerGroup}
+                    currentPaymentMethod={currentPaymentMethod}
                     isAdmin={isAdmin}
                     isEditing={isEditing}
                     isMakingReservations={isMakingReservations}

@@ -11,6 +11,7 @@ import { injectT } from 'i18n';
 import ReservationDate from 'shared/reservation-date';
 import { getFeedbackLink } from 'utils/languageUtils';
 import { getReservationCustomerGroupName } from 'utils/reservationUtils';
+import constants from '../../../constants/AppConstants';
 
 class ReservationConfirmation extends Component {
   static propTypes = {
@@ -206,6 +207,13 @@ class ReservationConfirmation extends Component {
                 'reservationPrice',
                 t('common.priceTotalLabel'),
                 `${reservation.order.price}€`,
+              )}
+            {reservation.order
+              && this.renderField(
+                'reservationPaymentMethod',
+                t('common.paymentMethod'),
+                reservation.order.paymentMethod === constants.PAYMENT_METHODS.CASH
+                  ? t('common.paymentMethod.cash') : t('common.paymentMethod.online')
               )}
             {(reservation.billingFirstName
               || reservation.billingLastName

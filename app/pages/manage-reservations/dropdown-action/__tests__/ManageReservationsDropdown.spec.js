@@ -31,6 +31,7 @@ describe('ManageReservationsDropdown', () => {
       const button = getWrapper().find(DropdownButton);
       expect(button).toHaveLength(1);
       expect(button.prop('id')).toBe(`ManageReservationDropdown-${defaultProps.reservation.id}`);
+      expect(button.prop('pullRight')).toBe(true);
       expect(button.prop('title')).toBe('ManageReservationsList.actionsHeader');
     });
 
@@ -75,6 +76,41 @@ describe('ManageReservationsDropdown', () => {
           const state = constants.RESERVATION_STATE.CONFIRMED;
           const reservation = Reservation.build({ state });
           test('MenuItems info and edit', () => {
+            const menuItems = getWrapper(
+              { userCanModify, userCanCancel, reservation }
+            ).find(MenuItem);
+            expect(menuItems).toHaveLength(2);
+
+            expect(menuItems.at(0).prop('onClick')).toBe(defaultProps.onInfoClick);
+            expect(menuItems.at(0).props().children).toBe('ManageReservationsList.actionLabel.information');
+
+            expect(menuItems.at(1).prop('onClick')).toBeDefined();
+            expect(menuItems.at(1).props().children).toBe('ManageReservationsList.actionLabel.edit');
+          });
+        });
+        describe('and isWaitingForCashPayment is true', () => {
+          const state = constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT;
+          const reservation = Reservation.build({ state });
+          test('MenuItem info, confirmCashPayment and edit', () => {
+            const menuItems = getWrapper(
+              { userCanModify, userCanCancel, reservation }
+            ).find(MenuItem);
+            expect(menuItems).toHaveLength(3);
+
+            expect(menuItems.at(0).prop('onClick')).toBe(defaultProps.onInfoClick);
+            expect(menuItems.at(0).props().children).toBe('ManageReservationsList.actionLabel.information');
+
+            expect(menuItems.at(1).prop('onClick')).toBeDefined();
+            expect(menuItems.at(1).props().children).toBe('common.confirmCashPayment');
+
+            expect(menuItems.at(2).prop('onClick')).toBeDefined();
+            expect(menuItems.at(2).props().children).toBe('ManageReservationsList.actionLabel.edit');
+          });
+        });
+        describe('and isWaitingForCashPayment is false', () => {
+          const state = constants.RESERVATION_STATE.CONFIRMED;
+          const reservation = Reservation.build({ state });
+          test('MenuItem info, confirmCashPayment and edit', () => {
             const menuItems = getWrapper(
               { userCanModify, userCanCancel, reservation }
             ).find(MenuItem);

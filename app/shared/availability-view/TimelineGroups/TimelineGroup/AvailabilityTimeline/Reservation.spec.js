@@ -119,6 +119,16 @@ describe('shared/availability-view/Reservation', () => {
     expect(element).toHaveLength(0);
   });
 
+  test('adds class waiting_for_cash_payment to reservation if reservation state is waiting_for_cash_payment', () => {
+    const element = getWrapper({ state: 'waiting_for_cash_payment' }).find('.waiting_for_cash_payment');
+    expect(element).toHaveLength(1);
+  });
+
+  test('does not add class waiting_for_cash_payment to reservation if reservation state is not waiting_for_cash_payment', () => {
+    const element = getWrapper({ state: 'approved' }).find('.waiting_for_cash_payment');
+    expect(element).toHaveLength(0);
+  });
+
   test('has correct width', () => {
     const times = {
       end: '2016-01-01T20:00:00Z',

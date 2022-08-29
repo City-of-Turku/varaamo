@@ -118,6 +118,13 @@ class ReservationControls extends Component {
         return [];
       }
 
+      case constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT: {
+        if (canModify) {
+          return [buttons.edit, buttons.cancel];
+        }
+        return [buttons.cancel];
+      }
+
       case 'requested': {
         if (isAdmin) {
           return [buttons.edit];

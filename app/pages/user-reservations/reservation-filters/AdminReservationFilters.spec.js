@@ -40,6 +40,7 @@ describe('pages/user-reservations/reservation-filters/AdminReservationFilters', 
         { label: 'common.denied', value: 'denied' },
         { label: 'common.paymentAborted', value: 'waiting_for_payment' },
         { label: 'common.requested', value: 'requested' },
+        { label: 'common.waitingForCashPayment', value: 'waiting_for_cash_payment' },
         { label: 'common.waitingForPayment', value: 'ready_for_payment' },
       ];
       expect(select.props().options).toEqual(expected);

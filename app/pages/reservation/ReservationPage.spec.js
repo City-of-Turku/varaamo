@@ -213,6 +213,7 @@ describe('pages/reservation/ReservationPage', () => {
       expect(reservationProducts.prop('changeProductQuantity')).toBe(instance.handleChangeProductQuantity);
       expect(reservationProducts.prop('currentCustomerGroup')).toBe(instance.state.currentCustomerGroup);
       expect(reservationProducts.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
+      expect(reservationProducts.prop('currentPaymentMethod')).toBe(instance.state.currentPaymentMethod);
       expect(reservationProducts.prop('customerGroupError')).toBe(instance.state.customerGroupError);
       expect(reservationProducts.prop('isEditing')).toBe(!isEmpty(defaultProps.reservationToEdit));
       expect(reservationProducts.prop('isStaff')).toBe(defaultProps.isStaff);
@@ -220,6 +221,7 @@ describe('pages/reservation/ReservationPage', () => {
       expect(reservationProducts.prop('onCancel')).toBe(instance.handleCancel);
       expect(reservationProducts.prop('onConfirm')).toBe(instance.handleProductsConfirm);
       expect(reservationProducts.prop('onCustomerGroupChange')).toBe(instance.handleCustomerGroupChange);
+      expect(reservationProducts.prop('onPaymentMethodChange')).toBe(instance.handlePaymentMethodChange);
       expect(reservationProducts.prop('onStaffSkipChange')).toBe(instance.HandleToggleMandatoryProducts);
       expect(reservationProducts.prop('order')).toBe(instance.state.order);
       expect(reservationProducts.prop('resource')).toBe(defaultProps.resource);
@@ -238,6 +240,7 @@ describe('pages/reservation/ReservationPage', () => {
         const reservationInformation = wrapper.find(ReservationInformation);
         expect(reservationInformation).toHaveLength(1);
         expect(reservationInformation.prop('currentCustomerGroup')).toBe(instance.state.currentCustomerGroup);
+        expect(reservationInformation.prop('currentPaymentMethod')).toBe(instance.state.currentPaymentMethod);
         expect(reservationInformation.prop('isAdmin')).toBe(defaultProps.isAdmin);
         expect(reservationInformation.prop('isEditing')).toBeDefined();
         expect(reservationInformation.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
@@ -544,6 +547,20 @@ describe('pages/reservation/ReservationPage', () => {
 
           expect(window.location).toBe(paymentUrl);
         });
+
+        test('does not set window.location to paymentUrl when reservation payment method is cash', () => {
+          delete window.location;
+          window.location = currentUrl;
+
+          const instance = getWrapper({ isStaff }).instance();
+          const reservationCreated = Reservation.build();
+          reservationCreated.needManualConfirmation = true;
+          reservationCreated.order = { paymentUrl, paymentMethod: constants.PAYMENT_METHODS.CASH };
+          const nextProps = { reservationCreated };
+          instance.componentWillUpdate(nextProps);
+
+          expect(window.location).toBe(currentUrl);
+        });
       });
     });
   });
@@ -833,11 +850,14 @@ describe('pages/reservation/ReservationPage', () => {
           putReservation,
         },
       }).instance();
+      const { currentCustomerGroup, currentPaymentMethod } = instance.state;
       instance.handleReservation(values);
       expect(postReservation.callCount).toBe(1);
       expect(postReservation.lastCall.args[0].preferredLanguage).toEqual('fi');
       expect(postReservation.lastCall.args[0].order)
-        .toEqual(createOrder(instance.props.resource.products));
+        .toEqual(createOrder(
+          instance.props.resource.products, currentCustomerGroup, currentPaymentMethod
+        ));
       expect(putReservation.callCount).toBe(0);
     });
   });
@@ -880,6 +900,20 @@ describe('pages/reservation/ReservationPage', () => {
         instance.state.mandatoryProducts, instance.state.extraProducts,
         false, event.target.value
       );
+    });
+  });
+
+  describe('handlePaymentMethodChange', () => {
+    const event = { target: { value: 'payment-method-test' } };
+
+    test('calls setState', () => {
+      const instance = getWrapper().instance();
+      const spy = jest.spyOn(instance, 'setState');
+      instance.handlePaymentMethodChange(event);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith({
+        currentPaymentMethod: event.target.value,
+      });
     });
   });
 

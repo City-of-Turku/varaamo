@@ -7,6 +7,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
 import ReservationAccessCode from 'shared/reservation-access-code';
+import constants from '../../../../../constants/AppConstants';
 import utils from '../utils';
 
 function getReserverName(reserverName, user) {
@@ -75,6 +76,10 @@ function Reservation({ onClick, ...reservation }) {
           className={classNames('reservation',
             { requested: reservation.state === 'requested' },
             { ready_for_payment: reservation.state === 'ready_for_payment' },
+            {
+              waiting_for_cash_payment:
+                reservation.state === constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT
+            },
             { disabled: reservation.state === 'confirmed' && !reservation.isOwn && !reservation.userPermissions.canModify },
             { reserved: reservation.state === 'confirmed' && !reservation.isOwn && reservation.userPermissions.canModify })}
           style={{ width }}

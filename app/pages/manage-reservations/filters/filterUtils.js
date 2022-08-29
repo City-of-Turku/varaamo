@@ -79,6 +79,7 @@ export function getStatusOptions(t) {
     { value: constants.RESERVATION_STATE.DENIED, label: t('common.denied') },
     { value: constants.RESERVATION_STATE.READY_FOR_PAYMENT, label: t('common.waitingForPayment') },
     { value: constants.RESERVATION_STATE.REQUESTED, label: t('common.requested') },
+    { value: constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT, label: t('common.waitingForCashPayment') },
   ];
 }
 

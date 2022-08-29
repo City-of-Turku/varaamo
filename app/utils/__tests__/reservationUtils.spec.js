@@ -528,6 +528,18 @@ describe('Utils: reservationUtils', () => {
       expect(createOrder(products, customerGroup)).toStrictEqual(expected);
     });
 
+    test('returns correct order object when customerGroup and paymentMethod are given', () => {
+      const customerGroup = 'test-cg-1';
+      const paymentMethod = 'cash';
+      const expected = {
+        order_lines: createOrderLines(products),
+        return_url: `${window.location.origin}/reservation-payment-return`,
+        customer_group: customerGroup,
+        payment_method: paymentMethod,
+      };
+      expect(createOrder(products, customerGroup, paymentMethod)).toStrictEqual(expected);
+    });
+
     test('returns null if given products is empty', () => {
       const productsEmpty = [];
       expect(createOrder(productsEmpty)).toBe(null);

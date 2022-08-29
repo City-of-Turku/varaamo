@@ -8,7 +8,7 @@ import { getPrettifiedDuration } from 'utils/timeUtils';
 import SingleReservationDetail from './SingleReservationDetail';
 
 function ReservationDetails({
-  customerGroupName, orderPrice, resourceName, selectedTime, unitName, t
+  customerGroupName, orderPrice, paymentMethod, resourceName, selectedTime, unitName, t
 }) {
   let reservationTime = '';
   if (selectedTime) {
@@ -39,6 +39,10 @@ function ReservationDetails({
         value={orderPrice}
       />
       <SingleReservationDetail
+        label={t('common.paymentMethod')}
+        value={paymentMethod}
+      />
+      <SingleReservationDetail
         label={t('ReservationPage.detailsTime')}
         value={reservationTime}
       />
@@ -49,12 +53,14 @@ function ReservationDetails({
 ReservationDetails.defaultProps = {
   customerGroupName: '',
   orderPrice: '',
+  paymentMethod: '',
   selectedTime: null,
 };
 
 ReservationDetails.propTypes = {
   customerGroupName: PropTypes.string,
   orderPrice: PropTypes.string,
+  paymentMethod: PropTypes.string,
   resourceName: PropTypes.string.isRequired,
   selectedTime: PropTypes.object,
   t: PropTypes.func.isRequired,

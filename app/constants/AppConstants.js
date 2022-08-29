@@ -40,6 +40,10 @@ const constants = {
     timeOut: 5000,
     hidden: false,
   },
+  PAYMENT_METHODS: {
+    CASH: 'cash',
+    ONLINE: 'online',
+  },
   PRODUCT_TYPES: {
     MANDATORY: 'mandatory',
     EXTRA: 'extra',
@@ -72,6 +76,7 @@ const constants = {
     DENIED: 'denied',
     READY_FOR_PAYMENT: 'ready_for_payment',
     WAITING_FOR_PAYMENT: 'waiting_for_payment',
+    WAITING_FOR_CASH_PAYMENT: 'waiting_for_cash_payment',
   },
   RESERVATION_STATE_LABELS: {
     cancelled: {
@@ -97,6 +102,10 @@ const constants = {
     waiting_for_payment: {
       labelBsStyle: 'danger',
       labelTextId: 'common.paymentAborted',
+    },
+    waiting_for_cash_payment: {
+      labelBsStyle: 'primary',
+      labelTextId: 'common.waitingForCashPayment',
     },
   },
   RESOURCE_PRICE_TYPES: {

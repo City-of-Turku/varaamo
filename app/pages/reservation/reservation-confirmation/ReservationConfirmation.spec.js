@@ -248,11 +248,12 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
           }
         },
         quantity: 1,
-        price: '2.50'
+        price: '2.50',
+        paymentMethod: constants.PAYMENT_METHODS.ONLINE
       }
     });
     const fields = getWrapper({ reservation }).find('.app-ReservationConfirmation__field');
-    expect(fields).toHaveLength(25);
+    expect(fields).toHaveLength(26);
   });
 
   describe('Button onClick', () => {
