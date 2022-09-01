@@ -337,7 +337,7 @@
   "ReservationProducts.button.removeOne": "Ta bort en",
   "ReservationProducts.heading.extra": "Tilläggstjänster",
   "ReservationProducts.heading.mandatory": "Obligatoriska bokningsavgifter",
-  "ReservationProducts.paymentMethod.label": "Välj betalsätt",
+  "ReservationProducts.paymentMethod.label": "Välj betalningsmetod",
   "ReservationProducts.price.includesVat": "(inkl. MOMS {vat}%)",
   "ReservationProducts.select.clientGroup.label": "Din kundgrupp",
   "ReservationProducts.staffSkip.mandatory": "Förbigå obligatoriska avgifter med filialpersonalens rättigheter",
