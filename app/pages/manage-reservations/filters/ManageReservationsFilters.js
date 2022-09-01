@@ -40,7 +40,7 @@ function ManageReservationsFilters({
     <div className="app-ManageReservationsFilters">
       <Grid>
         <Row>
-          <Col md={3}>
+          <Col md={12}>
             <ButtonGroupField
               id="stateField"
               label={t('ManageReservationsFilters.statusLabel')}
@@ -50,7 +50,10 @@ function ManageReservationsFilters({
               value={state ? state.split(',') : null}
             />
           </Col>
-          <Col md={5}>
+        </Row>
+
+        <Row>
+          <Col md={7}>
             <div className="app-ManageReservationsFilters__datePickers">
               <DateField
                 id="startDateField"
@@ -75,7 +78,7 @@ function ManageReservationsFilters({
               />
             </div>
           </Col>
-          <Col md={4}>
+          <Col md={5}>
             <TextField
               id="searchField"
               label={t('ManageReservationsFilters.searchLabel')}
@@ -98,7 +101,7 @@ function ManageReservationsFilters({
               value={get(filters, 'unit', null)}
             />
           </Col>
-          <Col className="app-ManageReservationsFilters__filterToggles" md={5}>
+          <Col className="app-ManageReservationsFilters__filterToggles" md={9}>
             <ToggleField
               id="favorite-toggle-field"
               label={t('ManageReservationsFilters.favoritesLabel')}
@@ -115,7 +118,10 @@ function ManageReservationsFilters({
               value={showOnlyFilters.includes(canModify)}
             />
           </Col>
-          <Col>
+        </Row>
+
+        <Row>
+          <Col md={12}>
             {hasFilters(filters, showOnlyFilters) && (
             <Button
               bsStyle="link"

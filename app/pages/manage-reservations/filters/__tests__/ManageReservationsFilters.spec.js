@@ -37,9 +37,9 @@ describe('ManageReservationsFilters', () => {
       expect(grid).toHaveLength(1);
     });
 
-    test('two Row elements', () => {
+    test('four Row elements', () => {
       const rows = getWrapper().find(Row);
-      expect(rows).toHaveLength(2);
+      expect(rows).toHaveLength(4);
     });
 
     describe('first Row element', () => {
@@ -48,10 +48,8 @@ describe('ManageReservationsFilters', () => {
 
       test('Cols with correct props', () => {
         const cols = firstRow.find(Col);
-        expect(cols).toHaveLength(3);
-        expect(cols.at(0).prop('md')).toBe(3);
-        expect(cols.at(1).prop('md')).toBe(5);
-        expect(cols.at(2).prop('md')).toBe(4);
+        expect(cols).toHaveLength(1);
+        expect(cols.at(0).prop('md')).toBe(12);
       });
 
       test('ButtonGroupField', () => {
@@ -64,19 +62,31 @@ describe('ManageReservationsFilters', () => {
         expect(btnGroupField.prop('type')).toBe('checkbox');
         expect(btnGroupField.prop('value')).toBe(null);
       });
+    });
+
+    describe('second Row element', () => {
+      const rows = getWrapper().find(Row);
+      const secondRow = rows.at(1);
+
+      test('Cols with correct props', () => {
+        const cols = secondRow.find(Col);
+        expect(cols).toHaveLength(2);
+        expect(cols.at(0).prop('md')).toBe(7);
+        expect(cols.at(1).prop('md')).toBe(5);
+      });
 
       test('date picker wrapper div', () => {
-        const div = firstRow.find('.app-ManageReservationsFilters__datePickers');
+        const div = secondRow.find('.app-ManageReservationsFilters__datePickers');
         expect(div).toHaveLength(1);
       });
 
       test('date picker separator div', () => {
-        const div = firstRow.find('.separator');
+        const div = secondRow.find('.separator');
         expect(div).toHaveLength(1);
       });
 
       describe('DateFields', () => {
-        const dateFields = firstRow.find(DateField);
+        const dateFields = secondRow.find(DateField);
         test('start and end', () => {
           expect(dateFields).toHaveLength(2);
         });
@@ -103,7 +113,7 @@ describe('ManageReservationsFilters', () => {
       });
 
       test('TextField', () => {
-        const textField = firstRow.find(TextField);
+        const textField = secondRow.find(TextField);
         expect(textField).toHaveLength(1);
         expect(textField.prop('id')).toBe('searchField');
         expect(textField.prop('label')).toBe('ManageReservationsFilters.searchLabel');
@@ -112,19 +122,19 @@ describe('ManageReservationsFilters', () => {
       });
     });
 
-    describe('last Row element', () => {
+    describe('third Row element', () => {
       const rows = getWrapper().find(Row);
-      const lastRow = rows.last();
+      const thirdRow = rows.at(2);
 
       test('Cols with correct props', () => {
-        const cols = lastRow.find(Col);
-        expect(cols).toHaveLength(3);
+        const cols = thirdRow.find(Col);
+        expect(cols).toHaveLength(2);
         expect(cols.at(0).prop('md')).toBe(3);
-        expect(cols.at(1).prop('md')).toBe(5);
+        expect(cols.at(1).prop('md')).toBe(9);
       });
 
       test('TextField', () => {
-        const textField = lastRow.find(SelectField);
+        const textField = thirdRow.find(SelectField);
         const expectedOptions = defaultProps.units.map(unit => ({
           value: unit.id,
           label: unit.name,
@@ -153,6 +163,17 @@ describe('ManageReservationsFilters', () => {
         expect(canModifyToggle.prop('label')).toBe('ManageReservationsFilters.showOnly.canModifyLabel');
         expect(canModifyToggle.prop('onChange')).toBeDefined();
         expect(canModifyToggle.prop('value')).toBe(defaultProps.showOnlyFilters.includes(canModify));
+      });
+    });
+
+    describe('last Row element', () => {
+      const rows = getWrapper().find(Row);
+      const lastRow = rows.last();
+
+      test('Cols with correct props', () => {
+        const cols = lastRow.find(Col);
+        expect(cols).toHaveLength(1);
+        expect(cols.at(0).prop('md')).toBe(12);
       });
 
       describe('reset filter button', () => {
