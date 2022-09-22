@@ -30,7 +30,7 @@ module.exports = {
         },
       },
       {
-        test: /\.jpg$/,
+        test: /\.(jpg|webp)$/,
         use: [
           {
             loader: 'file-loader',
