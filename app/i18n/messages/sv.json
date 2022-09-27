@@ -107,7 +107,7 @@
   "common.userNameLabel": "Konto namn",
   "common.userEmailLabel": "Konto e-post",
   "common.waitingForCashPayment": "Väntar på kontant betalning",
-  "common.waitingForPayment": "Väntar på utbetalning",
+  "common.waitingForPayment": "Väntar på online betalning",
   "common.yes": "Ja",
   "SelectControl.noOptions": "Inga val",
   "SelectControl.clearLabel": "Ta bort val",
