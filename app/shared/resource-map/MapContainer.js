@@ -31,6 +31,7 @@ export class UnconnectedResourceMapContainer extends React.Component {
       maxLongitude: PropTypes.number,
       minLongitude: PropTypes.number,
     }),
+    currentLanguage: PropTypes.string.isRequired,
     markers: PropTypes.array,
     useHighContrast: PropTypes.bool.isRequired,
     position: PropTypes.object,
@@ -91,7 +92,9 @@ export class UnconnectedResourceMapContainer extends React.Component {
   }
 
   render() {
-    const { useHighContrast } = this.props;
+    const { useHighContrast, currentLanguage } = this.props;
+    const mapLanguage = currentLanguage === 'sv' ? 'sv' : 'fi';
+    const mapUrl = `${useHighContrast ? highContrastTilesUrl : defaultTilesUrl}@${mapLanguage}.png`;
 
     return (
       <div className={classNames('app-ResourceMap', { 'app-ResourceMap__showMap': this.props.showMap })}>
@@ -105,7 +108,7 @@ export class UnconnectedResourceMapContainer extends React.Component {
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url={useHighContrast ? highContrastTilesUrl : defaultTilesUrl}
+            url={mapUrl}
           />
           <ZoomControl position="bottomright" />
           {this.props.markers && this.props.markers.map(

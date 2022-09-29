@@ -26,8 +26,8 @@ const constants = {
     MAX_SHOWN_PAGINATION_BUTTONS: 9,
   },
   MAP_TILE_URLS: {
-    DEFAULT_TILES: 'https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}.png',
-    HIGH_CONTRAST_TILES: 'https://maptiles.turku.fi/styles/hel-osm-high-contrast/{z}/{x}/{y}.png'
+    DEFAULT_TILES: 'https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}',
+    HIGH_CONTRAST_TILES: 'https://maptiles.turku.fi/styles/high-contrast-map-layer/{z}/{x}/{y}'
   },
   NAV_ADMIN_URLS: {
     gitbook: 'https://city-of-turku.gitbook.io/varaamo-turku/',

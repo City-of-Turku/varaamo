@@ -156,6 +156,16 @@ describe('shared/resource-map/mapSelector', () => {
     });
   });
 
+  describe('currentLanguage', () => {
+    test('is defined', () => {
+      const state = getState();
+      const props = getProps({ resourceIds: ['123'] });
+      const selected = selector(state, props);
+
+      expect(selected.currentLanguage).toBeDefined();
+    });
+  });
+
   describe('isHighContrast', () => {
     test('is defined', () => {
       const state = getState();

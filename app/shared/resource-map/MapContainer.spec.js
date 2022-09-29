@@ -17,6 +17,7 @@ describe('shared/resource-map/MapContainer', () => {
         maxLongitude: 0,
         minLongitude: 0,
       },
+      currentLanguage: 'fi',
       useHighContrast: false,
       searchMapClick: () => {},
       selectedUnitId: null,
@@ -62,14 +63,26 @@ describe('shared/resource-map/MapContainer', () => {
       const tileLayer = getWrapper({ useHighContrast: true }).find(TileLayer);
       expect(tileLayer.length).toBe(1);
       expect(tileLayer.prop('attribution')).toEqual('© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors');
-      expect(tileLayer.prop('url')).toEqual('https://maptiles.turku.fi/styles/hel-osm-high-contrast/{z}/{x}/{y}.png');
+      expect(tileLayer.prop('url')).toEqual('https://maptiles.turku.fi/styles/high-contrast-map-layer/{z}/{x}/{y}@fi.png');
     });
 
     test('is rendered with correct props when high contrast is not in use', () => {
       const tileLayer = getWrapper({ useHighContrast: false }).find(TileLayer);
       expect(tileLayer.length).toBe(1);
       expect(tileLayer.prop('attribution')).toEqual('© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors');
-      expect(tileLayer.prop('url')).toEqual('https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}.png');
+      expect(tileLayer.prop('url')).toEqual('https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}@fi.png');
+    });
+
+    test.each([
+      ['fi', 'fi'],
+      ['sv', 'sv'],
+      ['en', 'fi'],
+      ['xy', 'fi'],
+    ])('is rendered with correct language map', (lang, expectedMapLang) => {
+      const tileLayer = getWrapper({ currentLanguage: lang }).find(TileLayer);
+      expect(tileLayer.prop('url')).toEqual(
+        `https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}@${expectedMapLang}.png`
+      );
     });
   });
 
