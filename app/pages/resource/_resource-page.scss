@@ -14,6 +14,15 @@ $content-padding: 10px;
 @import './resource-map-info/resource-map-info';
 
 .app-ResourcePage {
+  .login-text {
+    font-weight: bold;
+    button {
+      font-weight: bold;
+    }
+    .glyphicon-exclamation-sign {
+      padding-right: 5px;
+    }
+  }
 
   a {
     color: $blue;
