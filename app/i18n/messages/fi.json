@@ -4,7 +4,7 @@
   "AboutPageContent.customerRegisterHeader": "Tietosuojaseloste",
   "AboutPageContent.customerRegisterLink": "<a href='http://www.turku.fi/tietosuoja' rel='noopener noreferrer' target='_blank'>www.turku.fi/tietosuoja</a>",
   "AboutPageContent.customerRegisterLinkVR": "<a href='https://rekisteri.turku.fi' rel='noopener noreferrer' target='_blank'>https://rekisteri.turku.fi</a> (Varaus- ja tietokantarekisteri Varaamo ja respa)",
-  "AboutPageContent.customerRegisterLinkSUO": "Vahvaan tunnistautumiseen käytämme Suomi.fi-tunnistusta jonka tietosuojaselosteen löydät osoitteesta <a href='http://www.suomi.fi/tietosuojaseloste' rel='noopener noreferrer' target='_blank'>www.suomi.fi/tietosuojaseloste</a>",
+  "AboutPageContent.customerRegisterLinkSUO": "Vahvaan tunnistautumiseen käytämme Suomi.fi-tunnistusta jonka tietosuojaselosteen löydät osoitteesta <a href='https://www.suomi.fi/ohjeet-ja-tuki/yleista-verkkopalvelusta/tietosuoja' rel='noopener noreferrer' target='_blank'>https://www.suomi.fi/ohjeet-ja-tuki/yleista-verkkopalvelusta/tietosuoja</a>",
   "AboutPageContent.customerRegisterParagraph": "Tietoa Turun kaupungin henkilötietojen käsittelystä sekä tämän palvelun rekisteriselosteet löydät alla olevista osoitteista.<br />",
   "AboutPageContent.defaultHeader": "Tietoa varaamo.turku.fi –palvelusta",
   "AboutPageContent.defaultLead": "Varaamo on Turun kaupungin ylläpitämä verkkopalvelu, jonka kautta voi varata kaupungin julkisia tiloja sekä työpisteitä yksityiseen käyttöön.",

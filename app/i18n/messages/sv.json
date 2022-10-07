@@ -4,7 +4,7 @@
   "AboutPageContent.customerRegisterHeader": "Dataskyddsbeskrivning",
   "AboutPageContent.customerRegisterLink": "<a href='http://www.turku.fi/sv/information-om-abo/datasekretess' rel='noopener noreferrer' target='_blank'>www.turku.fi/sv/information-om-abo/datasekretess</a>",
   "AboutPageContent.customerRegisterLinkVR": "<a href='https://rekisteri.turku.fi' rel='noopener noreferrer' target='_blank'>https://rekisteri.turku.fi</a> (Boknings- och databasregistret Varaamo och gränssnittet för resursbokningen. Sidan finns enbart på finska)",
-  "AboutPageContent.customerRegisterLinkSUO": "För stark autentisering använder vi Suomi.fi-identifiering vars dataskyddsbeskrivning finns på adressen <a href='http://www.suomi.fi/dataskyddsbeskrivning' rel='noopener noreferrer' target='_blank'>www.suomi.fi/dataskyddsbeskrivning</a>",
+  "AboutPageContent.customerRegisterLinkSUO": "För stark autentisering använder vi Suomi.fi-identifiering vars dataskyddsbeskrivning finns på adressen <a href='https://www.suomi.fi/anvisningar-och-stod/allmant-om-webbtjansten/dataskydd' rel='noopener noreferrer' target='_blank'>https://www.suomi.fi/anvisningar-och-stod/allmant-om-webbtjansten/dataskydd</a>",
   "AboutPageContent.customerRegisterParagraph": "Information om hur Åbo stad behandlar personuppgifter samt registerbeskrivningarna för denna tjänst hittar du på adresserna nedan.<br />",
   "AboutPageContent.defaultHeader": "Information om tjänsten varaamo.turku.fi",
   "AboutPageContent.defaultLead": "Varaamo är en webbtjänst som upprätthålls av Åbo stad. Via tjänsten kan stadens offentliga lokaler och utrustning bokas för privat bruk.",
