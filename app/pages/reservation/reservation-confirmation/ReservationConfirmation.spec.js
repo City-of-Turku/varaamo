@@ -13,6 +13,17 @@ import Resource from 'utils/fixtures/Resource';
 import User from 'utils/fixtures/User';
 import { shallowWithIntl } from 'utils/testUtils';
 import ReservationConfirmation from './ReservationConfirmation';
+import { checkQualityToolsLink } from '../../../shared/quality-tools-form/qualityToolsUtils';
+import ThankYouAndFeedback from './ThankYouAndFeedback';
+
+jest.mock('../../../shared/quality-tools-form/qualityToolsUtils', () => {
+  const originalModule = jest.requireActual('../../../shared/quality-tools-form/qualityToolsUtils');
+  return {
+    __esModule: true,
+    ...originalModule,
+    checkQualityToolsLink: jest.fn(() => Promise.resolve(true)),
+  };
+});
 
 describe('pages/reservation/reservation-confirmation/ReservationConfirmation', () => {
   const history = {
@@ -120,43 +131,22 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
     expect(email.prop('values')).toEqual({ email: reserverEmailAddress });
   });
 
-  describe('renders feedback link with correct props', () => {
-    test('when currentLanguage is fi', () => {
-      const link = getWrapper({ currentLanguage: 'fi' })
-        .find(FormattedHTMLMessage)
-        .filter({ id: 'ReservationConfirmation.feedbackText' });
-
-      expect(link.length).toBe(1);
-      expect(link.prop('values')).toEqual({ href: constants.FEEDBACK_URL.FI });
+  describe('ThankYouAndFeedback', () => {
+    test('renders correctly with defaults', () => {
+      const thankYouFeedback = getWrapper().find(ThankYouAndFeedback);
+      expect(thankYouFeedback).toHaveLength(1);
+      expect(thankYouFeedback.prop('feedbackHref')).toBe(constants.FEEDBACK_URL.FI);
+      expect(thankYouFeedback.prop('reservation')).toBe(defaultProps.reservation);
+      expect(thankYouFeedback.prop('reservationIsEdited')).toBe(defaultProps.isEdited);
+      expect(thankYouFeedback.prop('resourceHasQualityToolsLink')).toBe(false);
     });
 
-    test('when currentLanguage is sv', () => {
-      const link = getWrapper({ currentLanguage: 'sv' })
-        .find(FormattedHTMLMessage)
-        .filter({ id: 'ReservationConfirmation.feedbackText' });
-
-      expect(link.length).toBe(1);
-      expect(link.prop('values')).toEqual({ href: constants.FEEDBACK_URL.SV });
-    });
-
-    test('when currentLanguage is en', () => {
-      const link = getWrapper({ currentLanguage: 'en' })
-        .find(FormattedHTMLMessage)
-        .filter({ id: 'ReservationConfirmation.feedbackText' });
-
-      expect(link.length).toBe(1);
-      expect(link.prop('values')).toEqual({ href: constants.FEEDBACK_URL.EN });
-    });
-
-    test('when resource has a defined reservation feedback url', () => {
-      const testFeedbackUrl = 'https://test-feedback.fi';
-      const resource = Resource.build({ reservationFeedbackUrl: testFeedbackUrl });
-      const link = getWrapper({ currentLanguage: 'en', resource })
-        .find(FormattedHTMLMessage)
-        .filter({ id: 'ReservationConfirmation.feedbackText' });
-
-      expect(link.length).toBe(1);
-      expect(link.prop('values')).toEqual({ href: testFeedbackUrl });
+    test('gets correct feedbackHref prop when resource has feedback url', () => {
+      const testUrl = 'https://test.feedback.url.fi/feedback';
+      const resource = Resource.build({ reservationFeedbackUrl: testUrl });
+      const thankYouFeedback = getWrapper({ resource }).find(ThankYouAndFeedback);
+      expect(thankYouFeedback).toHaveLength(1);
+      expect(thankYouFeedback.prop('feedbackHref')).toBe(testUrl);
     });
   });
 
@@ -310,6 +300,18 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
 
       expect(historyMock.callCount).toBe(1);
       expect(historyMock.lastCall.args).toEqual([expectedPath]);
+    });
+  });
+
+  describe('componentDidMount', () => {
+    test('calls checkQualityToolsLink and sets correct state', async () => {
+      const instance = getWrapper().instance();
+      const spy = jest.spyOn(instance, 'setState');
+      await instance.componentDidMount();
+      expect(checkQualityToolsLink).toHaveBeenCalledTimes(1);
+      expect(checkQualityToolsLink).toHaveBeenCalledWith(defaultProps.resource.id);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith({ resourceHasQualityToolsLink: true });
     });
   });
 });

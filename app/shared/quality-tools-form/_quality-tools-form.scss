@@ -1,0 +1,81 @@
+#quality-tools-container {
+  border-bottom: 2px solid black;
+  border-top: 2px solid black;
+  margin-bottom: 8px;
+
+  .quality-tools-form {
+    text-align: center;
+
+    fieldset {
+      margin-top: 8px;
+      margin-bottom: 8px;
+
+      legend {
+        font-size: 1.1em;
+        margin-bottom: 12px;
+        border-bottom: none;
+      }
+
+      label {
+        margin-left: 4px;
+        margin-right: 4px;
+        border-bottom: 2px solid transparent;
+      }
+
+      label:focus-within {
+        border-bottom: 2px solid black;
+      }
+
+      label.active {
+        color: $yellow;
+      }
+
+      label.inactive {
+        color: rgba($color: #000000, $alpha: 0.0);
+      }
+
+    }
+
+    svg {
+      width: 2.4em;
+      height: 2.4em;
+      fill: currentColor;
+      stroke: black;
+      stroke-width: 24px;
+    }
+
+    #quality-tools-feedback-text-label {
+      width: 500px;
+
+      span {
+        display: block;
+      }
+
+      #quality-tools-feedback-text-hint {
+        font-weight: normal;
+      }
+    }
+
+    #quality-tools-feedback-text {
+      font-size: 1em;
+      width: 100%;
+      font-weight: normal;
+    }
+
+    #quality-tools-feedback-submit-btn {
+      font-size: 1em;
+      margin-bottom: 8px;
+    }
+  }
+
+  #quality-tools-feedback-post-thank-you {
+    p {
+      margin-top: 2em;
+      margin-bottom: 2em;
+    }
+
+    .hidden {
+      display: none;
+    }
+  }
+}
