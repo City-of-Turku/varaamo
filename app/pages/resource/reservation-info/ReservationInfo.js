@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import iconUser from 'hel-icons/dist/shapes/user-o.svg';
 
