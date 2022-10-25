@@ -15,33 +15,28 @@
         margin-bottom: 12px;
         border-bottom: none;
       }
-
-      label {
-        margin-left: 4px;
-        margin-right: 4px;
+      .star-label {
+        cursor: pointer;
+        margin: 0 4px;
         border-bottom: 2px solid transparent;
+        &:focus-within {
+          border-bottom: 2px solid black;
+        }
+        &.active {
+          color: $yellow;
+        }
+        &.inactive {
+          color: rgba($color: #000000, $alpha: 0.0);
+        }
+
+        svg {
+          width: 2.4em;
+          height: 2.4em;
+          fill: currentColor;
+          stroke: black;
+          stroke-width: 24px;
+        }
       }
-
-      label:focus-within {
-        border-bottom: 2px solid black;
-      }
-
-      label.active {
-        color: $yellow;
-      }
-
-      label.inactive {
-        color: rgba($color: #000000, $alpha: 0.0);
-      }
-
-    }
-
-    svg {
-      width: 2.4em;
-      height: 2.4em;
-      fill: currentColor;
-      stroke: black;
-      stroke-width: 24px;
     }
 
     #quality-tools-feedback-text-label {

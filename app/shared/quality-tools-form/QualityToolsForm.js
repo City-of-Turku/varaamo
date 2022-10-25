@@ -11,15 +11,15 @@ import { getFormFieldText } from './qualityToolsUtils';
  * @param {object} props
  * @param {string} props.currentLanguage
  * @param {object} props.formData
- * @param {func} props.handleHoverEnter
- * @param {func} props.handleHoverLeave
- * @param {func} props.handleSetStars
- * @param {func} props.handleSubmit
- * @param {func} props.handleTextChange
+ * @param {function} props.handleHoverEnter
+ * @param {function} props.handleHoverLeave
+ * @param {function} props.handleSetStars
+ * @param {function} props.handleSubmit
+ * @param {function} props.handleTextChange
  * @param {number} props.hoverTargetStar
  * @param {number} props.stars
  * @param {string} props.textFeedback
- * @param {func} props.t
+ * @param {function} props.t
  * @returns {JSX.Element} form
  */
 function QualityToolsForm({

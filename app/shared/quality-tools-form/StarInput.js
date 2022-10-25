@@ -9,11 +9,11 @@ import injectT from '../../i18n/injectT';
  * Returns a single star radio input
  * @param {object} props
  * @param {number} props.currentStars
- * @param {func} props.handleHoverEnter
- * @param {func} props.handleSetStars
+ * @param {function} props.handleHoverEnter
+ * @param {function} props.handleSetStars
  * @param {number} props.hoverTargetStar
  * @param {number} props.value
- * @param {func} props.t
+ * @param {function} props.t
  * @returns {JSX.Element} star radio input
  */
 function StarInput({
@@ -29,7 +29,7 @@ function StarInput({
 
   return (
     <label
-      className={classNames({ 'is-checked': isChecked }, { active: isActive }, { inactive: !isActive })}
+      className={classNames('star-label', { 'is-checked': isChecked }, { active: isActive }, { inactive: !isActive })}
       htmlFor={`star${value}`}
       onMouseEnter={() => handleHoverEnter(value)}
     >
