@@ -33,9 +33,13 @@ function ThankYouAndFeedback({
   );
 }
 
+ThankYouAndFeedback.defaultProps = {
+  reservationIsEdited: true,
+};
+
 ThankYouAndFeedback.propTypes = {
   reservation: PropTypes.object.isRequired,
-  reservationIsEdited: PropTypes.bool.isRequired,
+  reservationIsEdited: PropTypes.bool,
   resourceHasQualityToolsLink: PropTypes.bool.isRequired,
   feedbackHref: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,

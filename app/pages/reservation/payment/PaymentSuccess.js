@@ -14,11 +14,20 @@ function PaymentSuccess({
   isLoggedIn,
   history
 }) {
+  /*
+    Paid reservations are considered to have already been edited when
+    the reservations requires manual confirmation at this point.
+    Normal paid reservations are always at creation state at this point
+    i.e. not yet edited.
+  */
+  const isEdited = !!((resource && resource.needManualConfirmation));
+
   return (
     <div className="reservation-payment-success">
       <ReservationConfirmation
         currentLanguage={currentLanguage}
         history={history}
+        isEdited={isEdited}
         isLoggedIn={isLoggedIn}
         reservation={reservation}
         resource={resource}
