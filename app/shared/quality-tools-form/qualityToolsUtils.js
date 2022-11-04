@@ -87,10 +87,23 @@ function getFormFieldText(formData, currentLanguage, field, targetText) {
   return '';
 }
 
+/**
+ * Returns correct form title text in given language
+ * @param {object} formData object containing all form field text data
+ * @param {string} currentLanguage language code i.e. fi, en, sv
+ * @returns {string} form title text or empty string if currentLanguage or form data is missing
+ */
+function getFormTitleText(formData, currentLanguage) {
+  if (currentLanguage && formData && formData[currentLanguage]) {
+    return formData[currentLanguage].title;
+  }
+  return '';
+}
 
 export {
   checkQualityToolsLink,
   getFeedbackForm,
   postFeedback,
   getFormFieldText,
+  getFormTitleText,
 };

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { shallowWithIntl } from 'utils/testUtils';
 import QualityToolsForm from '../QualityToolsForm';
-import { getFormFieldText } from '../qualityToolsUtils';
+import { getFormFieldText, getFormTitleText } from '../qualityToolsUtils';
 import StarInput from '../StarInput';
 
 describe('shared/quality-tools-form/QualityToolsForm', () => {
@@ -43,6 +43,14 @@ describe('shared/quality-tools-form/QualityToolsForm', () => {
       expect(form).toHaveLength(1);
       expect(form.prop('className')).toBe('quality-tools-form');
       expect(form.prop('onSubmit')).toBe(defaultProps.handleSubmit);
+    });
+
+    test('title text', () => {
+      const title = getWrapper().find('#quality-tools-form-title');
+      expect(title).toHaveLength(1);
+      expect(title.text()).toBe(
+        getFormTitleText(defaultProps.formData, defaultProps.currentLanguage)
+      );
     });
 
     test('fieldset', () => {

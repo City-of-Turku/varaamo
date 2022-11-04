@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 
 import injectT from '../../i18n/injectT';
 import StarInput from './StarInput';
-import { getFormFieldText } from './qualityToolsUtils';
+import { getFormFieldText, getFormTitleText } from './qualityToolsUtils';
 
 /**
  * Returns quality tools jsx form
@@ -37,6 +37,9 @@ function QualityToolsForm({
 }) {
   return (
     <form className="quality-tools-form" onSubmit={handleSubmit}>
+      <p id="quality-tools-form-title">
+        {getFormTitleText(formData, currentLanguage)}
+      </p>
       <fieldset onMouseLeave={handleHoverLeave}>
         <legend>
           {`${

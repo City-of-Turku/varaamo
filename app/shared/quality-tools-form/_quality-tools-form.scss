@@ -6,25 +6,36 @@
   .quality-tools-form {
     text-align: center;
 
+    #quality-tools-form-title {
+      font-size: 1.2em;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+
     fieldset {
       margin-top: 8px;
       margin-bottom: 8px;
 
       legend {
-        font-size: 1.1em;
+        font-size: 1em;
         margin-bottom: 12px;
         border-bottom: none;
+        font-weight: bold;
       }
+
       .star-label {
         cursor: pointer;
         margin: 0 4px;
         border-bottom: 2px solid transparent;
+
         &:focus-within {
           border-bottom: 2px solid black;
         }
+
         &.active {
           color: $yellow;
         }
+
         &.inactive {
           color: rgba($color: #000000, $alpha: 0.0);
         }

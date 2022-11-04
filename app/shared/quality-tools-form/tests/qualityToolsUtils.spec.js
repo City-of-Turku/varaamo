@@ -1,7 +1,7 @@
 import constants from '../../../constants/AppConstants';
 import { buildAPIUrl, getHeadersCreator } from '../../../utils/apiUtils';
 import {
-  checkQualityToolsLink, getFeedbackForm, getFormFieldText, postFeedback
+  checkQualityToolsLink, getFeedbackForm, getFormFieldText, getFormTitleText, postFeedback
 } from '../qualityToolsUtils';
 
 describe('app/shared/quality-tools-form/qualityToolsUtils', () => {
@@ -114,6 +114,33 @@ describe('app/shared/quality-tools-form/qualityToolsUtils', () => {
 
     test('returns an empty string when formData is missing', () => {
       expect(getFormFieldText({}, currentLanguage, 'starRating', 'label')).toBe('');
+    });
+  });
+
+  describe('getFormTitleText', () => {
+    const label = 'star rating label fi';
+    const title = 'title text fi';
+    const formData = {
+      fi: {
+        starRating: {
+          label,
+          hint: 'star rating hint fi',
+        },
+        title
+      }
+    };
+    const currentLanguage = 'fi';
+
+    test('returns correct form string when currentLanguage and formData exists', () => {
+      expect(getFormTitleText(formData, currentLanguage)).toBe(title);
+    });
+
+    test('returns an empty string when currentLanguage is missing', () => {
+      expect(getFormTitleText(formData, undefined,)).toBe('');
+    });
+
+    test('returns an empty string when formData is missing', () => {
+      expect(getFormTitleText({}, currentLanguage)).toBe('');
     });
   });
 });
