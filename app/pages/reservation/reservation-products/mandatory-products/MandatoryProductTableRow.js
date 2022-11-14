@@ -49,7 +49,7 @@ MandatoryProductTableRow.propTypes = {
   currentCustomerGroup: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   orderLine: PropTypes.shape({
-    rounded_price: PropTypes.number,
+    rounded_price: PropTypes.string,
     product: PropTypes.object,
   }),
   t: PropTypes.func.isRequired,

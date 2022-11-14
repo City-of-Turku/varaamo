@@ -60,7 +60,7 @@ ExtraProductTableRow.propTypes = {
   currentLanguage: PropTypes.string.isRequired,
   handleQuantityChange: PropTypes.func.isRequired,
   orderLine: PropTypes.shape({
-    rounded_price: PropTypes.number,
+    rounded_price: PropTypes.string,
     product: PropTypes.object,
   }),
   t: PropTypes.func.isRequired,
