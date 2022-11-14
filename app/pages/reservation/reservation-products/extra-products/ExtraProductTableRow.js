@@ -11,7 +11,7 @@ import ProductTimeSlotPrices from '../product-time-slots/ProductTimeSlotPrices';
 function ExtraProductTableRow({
   currentCustomerGroup, currentLanguage, orderLine, handleQuantityChange, t
 }) {
-  const totalPrice = orderLine.price;
+  const totalPrice = orderLine.rounded_price;
   const name = getLocalizedFieldValue(orderLine.product.name, currentLanguage, true);
   const maxQuantity = orderLine.product.max_quantity;
 
@@ -59,7 +59,10 @@ ExtraProductTableRow.propTypes = {
   currentCustomerGroup: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   handleQuantityChange: PropTypes.func.isRequired,
-  orderLine: PropTypes.object.isRequired,
+  orderLine: PropTypes.shape({
+    rounded_price: PropTypes.number,
+    product: PropTypes.object,
+  }),
   t: PropTypes.func.isRequired,
 };
 

@@ -44,9 +44,9 @@ describe('reservation-products/ProductsSummary', () => {
     max_quantity: 1,
   });
   const orderLines = [
-    OrderLine.build({ product: rentProduct, quantity: 1, price: '8.00' }),
-    OrderLine.build({ product: extraProductOne, quantity: 3, price: '45.00' }),
-    OrderLine.build({ product: extraProductTwo, quantity: 1, price: '55.00' }),
+    OrderLine.build({ product: rentProduct, quantity: 1, price: 8.00 }),
+    OrderLine.build({ product: extraProductOne, quantity: 3, price: 45.00 }),
+    OrderLine.build({ product: extraProductTwo, quantity: 1, price: 55.00 }),
   ];
   const defaultProps = {
     changeProductQuantity: () => {},

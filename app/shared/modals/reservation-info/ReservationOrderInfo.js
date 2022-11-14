@@ -17,7 +17,7 @@ function ReservationOrderInfo({
     const name = getLocalizedFieldValue(orderLine.product.name, currentLanguage, true);
     const quantity = `${orderLine.quantity} ${t('common.unitPieces', { unitPieces: orderLine.quantity })}`;
     const vat = getRoundedVat(orderLine.product.price.taxPercentage);
-    const totalPrice = `${t('common.total')} ${t('common.priceWithVAT', { price: orderLine.price, vat })}`;
+    const totalPrice = `${t('common.total')} ${t('common.priceWithVAT', { price: orderLine.roundedPrice, vat })}`;
     return (
       <React.Fragment key={orderLine.product.id}>
         {renderInfoRow(name, `${quantity}, ${totalPrice}`)}

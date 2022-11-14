@@ -81,7 +81,7 @@ describe('reservation-products/extra-products/ExtraProductTableRow', () => {
 
     test('fourth table data has correct data', () => {
       const fourth = tableDatas.at(3);
-      const totalPrice = defaultProps.orderLine.price;
+      const totalPrice = defaultProps.orderLine.rounded_price;
       expect(fourth.text()).toBe(`${totalPrice} € ReservationProducts.price.includesVat`);
     });
   });
