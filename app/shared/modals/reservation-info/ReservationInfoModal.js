@@ -13,6 +13,7 @@ import ReservationCancelModal from 'shared/modals/reservation-cancel';
 import ReservationStateLabel from 'shared/reservation-state-label';
 import { isStaffEvent } from 'utils/reservationUtils';
 import ReservationEditForm from './ReservationEditForm';
+import constants from '../../../constants/AppConstants';
 
 class ReservationInfoModal extends Component {
   constructor(props) {
@@ -64,6 +65,7 @@ class ReservationInfoModal extends Component {
     const disabled = isSaving || isEditing;
     const showCancelButton = reservationIsEditable && (
       reservation.state === 'confirmed'
+      || reservation.state === constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT
       || (reservation.state === 'requested' && !isAdmin)
     );
 
@@ -161,6 +163,17 @@ class ReservationInfoModal extends Component {
             >
               {t('ReservationInfoModal.confirmButton')}
             </Button>
+          )}
+          {isStaff && reservationIsEditable
+           && reservation.state === constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT && (
+           <Button
+             bsStyle="success"
+             className={fontSize}
+             disabled={disabled}
+             onClick={onConfirmClick}
+           >
+             {t('common.confirmCashPayment')}
+           </Button>
           )}
           {showCancelButton && (
             <Button

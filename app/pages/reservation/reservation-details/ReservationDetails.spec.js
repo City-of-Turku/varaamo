@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { shallowWithIntl } from 'utils/testUtils';
+import constants from '../../../constants/AppConstants';
 import ReservationDetails from './ReservationDetails';
 import SingleReservationDetail from './SingleReservationDetail';
 
@@ -8,6 +9,7 @@ describe('pages/reservation/reservation-details/ReservationDetails', () => {
   const defaultProps = {
     customerGroupName: 'Test group',
     orderPrice: '',
+    paymentMethod: constants.PAYMENT_METHODS.ONLINE,
     resourceName: 'test-resource-name',
     selectedTime: {
       begin: '2021-10-21T08:35:00.000Z',
@@ -38,7 +40,7 @@ describe('pages/reservation/reservation-details/ReservationDetails', () => {
       const details = getWrapper().find(SingleReservationDetail);
 
       test('correct amount', () => {
-        expect(details).toHaveLength(5);
+        expect(details).toHaveLength(6);
       });
 
       test('first detail', () => {
@@ -67,6 +69,12 @@ describe('pages/reservation/reservation-details/ReservationDetails', () => {
 
       test('fifth detail', () => {
         const detail = details.at(4);
+        expect(detail.prop('label')).toBe('common.paymentMethod');
+        expect(detail.prop('value')).toBe(defaultProps.paymentMethod);
+      });
+
+      test('sixth detail', () => {
+        const detail = details.at(5);
         expect(detail.prop('label')).toBe('ReservationPage.detailsTime');
         expect(detail.prop('value')).toBe(defaultReservationTime);
       });

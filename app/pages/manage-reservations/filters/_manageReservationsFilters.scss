@@ -1,4 +1,8 @@
 .app-ManageReservationsFilters {
+  .app-ButtonGroupField {
+    margin-bottom: 24px;
+  }
+
   &__datePickers {
     display: flex;
 
@@ -30,7 +34,12 @@
   }
 
   &__resetButton {
-    margin-top: 24px;
+    font-size: 1em;
+    padding-top: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    padding-left: 0;
+    margin-bottom: 12px;
     color: #0065AD !important;
 
     @media (max-width: $screen-sm-max) {

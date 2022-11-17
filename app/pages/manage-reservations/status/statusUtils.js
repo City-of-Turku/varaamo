@@ -18,6 +18,7 @@ export function getLabelStyle(status) {
     case constants.RESERVATION_STATE.REQUESTED:
     case constants.RESERVATION_STATE.READY_FOR_PAYMENT:
     case constants.RESERVATION_STATE.WAITING_FOR_PAYMENT:
+    case constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT:
       return 'warning';
     default:
       return '';

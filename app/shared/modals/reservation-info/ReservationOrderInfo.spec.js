@@ -5,6 +5,7 @@ import { Well } from 'react-bootstrap';
 import OrderLine from 'utils/fixtures/OrderLine';
 import Product from 'utils/fixtures/Product';
 import { shallowWithIntl } from 'utils/testUtils';
+import constants from '../../../constants/AppConstants';
 import ReservationOrderInfo from './ReservationOrderInfo';
 
 
@@ -15,7 +16,8 @@ describe('shared/modals/reservation-info/ReservationOrderInfo', () => {
       begin: '2021-09-24T11:00:00+03:00',
       end: '2021-09-24T11:30:00+03:00',
       orderLines: [decamelizeKeys(OrderLine.build({ product: Product.build(), quantity: 1 }))],
-      price: '5.00'
+      price: '5.00',
+      paymentMethod: constants.PAYMENT_METHODS.ONLINE,
     },
     renderHeading: () => {},
     renderInfoRow: () => {},
@@ -76,6 +78,28 @@ describe('shared/modals/reservation-info/ReservationOrderInfo', () => {
       test('for total price', () => {
         getWrapper({ renderInfoRow });
         expect(renderInfoRow).toHaveBeenCalledWith('common.priceTotalLabel', `${defaultProps.order.price} €`);
+      });
+
+      describe('when payment method exists', () => {
+        test('for payment method', () => {
+          getWrapper({ renderInfoRow });
+          expect(renderInfoRow).toHaveBeenCalledWith('common.paymentMethod', 'common.paymentMethod.online');
+          expect(renderInfoRow).not.toHaveBeenCalledWith('common.paymentMethod', 'common.paymentMethod.cash');
+        });
+      });
+
+      describe('when payment method does not exist', () => {
+        const order = {
+          begin: '2021-09-24T11:00:00+03:00',
+          end: '2021-09-24T11:30:00+03:00',
+          orderLines: [decamelizeKeys(OrderLine.build({ product: Product.build(), quantity: 1 }))],
+          price: '5.00',
+        };
+        test('not for payment method', () => {
+          getWrapper({ renderInfoRow, order });
+          expect(renderInfoRow).not.toHaveBeenCalledWith('common.paymentMethod', 'common.paymentMethod.online');
+          expect(renderInfoRow).not.toHaveBeenCalledWith('common.paymentMethod', 'common.paymentMethod.cash');
+        });
       });
     });
   });

@@ -36,5 +36,19 @@ describe('pages/reservation/payment/PaymentFailed', () => {
       expect(reservationConf.prop('resource')).toBe(defaultProps.resource);
       expect(reservationConf.prop('user')).toBe(defaultProps.user);
     });
+
+    describe('ReservationConfirmation with correct isEdited prop', () => {
+      test('when resource needManualConfirmation is true', () => {
+        const resource = { id: 'test-resource', needManualConfirmation: true };
+        const reservationConf = getWrapper({ resource }).find(ReservationConfirmation);
+        expect(reservationConf.prop('isEdited')).toBe(true);
+      });
+
+      test('when resource needManualConfirmation is false', () => {
+        const resource = { id: 'test-resource', needManualConfirmation: false };
+        const reservationConf = getWrapper({ resource }).find(ReservationConfirmation);
+        expect(reservationConf.prop('isEdited')).toBe(false);
+      });
+    });
   });
 });

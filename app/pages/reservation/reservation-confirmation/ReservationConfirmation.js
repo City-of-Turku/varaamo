@@ -11,6 +11,9 @@ import { injectT } from 'i18n';
 import ReservationDate from 'shared/reservation-date';
 import { getFeedbackLink } from 'utils/languageUtils';
 import { getReservationCustomerGroupName } from 'utils/reservationUtils';
+import constants from '../../../constants/AppConstants';
+import { checkQualityToolsLink } from '../../../shared/quality-tools-form/qualityToolsUtils';
+import ThankYouAndFeedback from './ThankYouAndFeedback';
 
 class ReservationConfirmation extends Component {
   static propTypes = {
@@ -23,6 +26,27 @@ class ReservationConfirmation extends Component {
     user: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      resourceHasQualityToolsLink: false
+    };
+  }
+
+  componentDidMount() {
+    const { resource } = this.props;
+    if (resource && resource.id) {
+      checkQualityToolsLink(resource.id)
+        .then((hasQualityToolLink) => {
+          this.setState({
+            resourceHasQualityToolsLink: hasQualityToolLink
+          });
+        })
+        .catch(() => this.setState({ resourceHasQualityToolsLink: false }));
+    }
+  }
 
   handleReservationsButton(isLoggedIn) {
     if (isLoggedIn) this.props.history.replace('/my-reservations');
@@ -61,7 +85,7 @@ class ReservationConfirmation extends Component {
     const {
       currentLanguage, isEdited, isLoggedIn, reservation, resource, t, user
     } = this.props;
-
+    const { resourceHasQualityToolsLink } = this.state;
     // if resource has feedback url defined, use it instead of default urls
     const resourceFeedbackUrl = 'reservationFeedbackUrl' in resource ? resource.reservationFeedbackUrl : '';
     const href = resourceFeedbackUrl || getFeedbackLink(currentLanguage);
@@ -100,9 +124,12 @@ class ReservationConfirmation extends Component {
                 />
               </p>
             )}
-            <p>
-              <FormattedHTMLMessage id="ReservationConfirmation.feedbackText" values={{ href }} />
-            </p>
+            <ThankYouAndFeedback
+              feedbackHref={href}
+              reservation={reservation}
+              reservationIsEdited={isEdited}
+              resourceHasQualityToolsLink={resourceHasQualityToolsLink}
+            />
             <p className="app-ReservationConfirmation__button-wrapper">
               {this.renderReturnButton(isLoggedIn, t)}
             </p>
@@ -206,6 +233,13 @@ class ReservationConfirmation extends Component {
                 'reservationPrice',
                 t('common.priceTotalLabel'),
                 `${reservation.order.price}€`,
+              )}
+            {reservation.order
+              && this.renderField(
+                'reservationPaymentMethod',
+                t('common.paymentMethod'),
+                reservation.order.paymentMethod === constants.PAYMENT_METHODS.CASH
+                  ? t('common.paymentMethod.cash') : t('common.paymentMethod.online')
               )}
             {(reservation.billingFirstName
               || reservation.billingLastName

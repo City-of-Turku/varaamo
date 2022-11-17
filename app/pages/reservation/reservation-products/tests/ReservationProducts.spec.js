@@ -18,6 +18,8 @@ import CustomerGroupSelect from '../CustomerGroupSelect';
 import ProductCustomerGroup from 'utils/fixtures/ProductCustomerGroup';
 import CustomerGroup from 'utils/fixtures/CustomerGroup';
 import ProductsValidationErrors from '../ProductsValidationErrors';
+import PaymentMethodSelect from '../PaymentMethodSelect';
+import constants from '../../../../constants/AppConstants';
 
 describe('reservation-products/ProductsSummary', () => {
   const resource = Immutable(Resource.build());
@@ -42,13 +44,14 @@ describe('reservation-products/ProductsSummary', () => {
     max_quantity: 1,
   });
   const orderLines = [
-    OrderLine.build({ product: rentProduct, quantity: 1, price: '8.00' }),
-    OrderLine.build({ product: extraProductOne, quantity: 3, price: '45.00' }),
-    OrderLine.build({ product: extraProductTwo, quantity: 1, price: '55.00' }),
+    OrderLine.build({ product: rentProduct, quantity: 1, price: 8.00 }),
+    OrderLine.build({ product: extraProductOne, quantity: 3, price: 45.00 }),
+    OrderLine.build({ product: extraProductTwo, quantity: 1, price: 55.00 }),
   ];
   const defaultProps = {
     changeProductQuantity: () => {},
     currentCustomerGroup: '',
+    currentPaymentMethod: constants.PAYMENT_METHODS.ONLINE,
     currentLanguage: 'fi',
     customerGroupError: false,
     isEditing: false,
@@ -57,6 +60,7 @@ describe('reservation-products/ProductsSummary', () => {
     onCancel: () => {},
     onConfirm: () => {},
     onCustomerGroupChange: () => {},
+    onPaymentMethodChange: () => {},
     onStaffSkipChange: () => {},
     order: {
       begin: '2021-09-24T11:00:00+03:00',
@@ -169,6 +173,24 @@ describe('reservation-products/ProductsSummary', () => {
         const productsSummary = getWrapper().find(ProductsSummary);
         expect(productsSummary).toHaveLength(1);
         expect(productsSummary.prop('order')).toBe(defaultProps.order);
+      });
+
+      describe('PaymentMethodSelect', () => {
+        test('when resource allows cash payments', () => {
+          const resourceA = Resource.build();
+          resourceA.cashPaymentsAllowed = true;
+          const select = getWrapper({ resource: resourceA }).find(PaymentMethodSelect);
+          expect(select).toHaveLength(1);
+          expect(select.prop('currentPaymentMethod')).toBe(defaultProps.currentPaymentMethod);
+          expect(select.prop('onPaymentMethodChange')).toBe(defaultProps.onPaymentMethodChange);
+        });
+
+        test('when resource does not allow cash payments', () => {
+          const resourceA = Resource.build();
+          resourceA.cashPaymentsAllowed = false;
+          const select = getWrapper({ resource: resourceA }).find(PaymentMethodSelect);
+          expect(select).toHaveLength(0);
+        });
       });
     });
 

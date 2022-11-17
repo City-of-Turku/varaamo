@@ -367,5 +367,55 @@ describe('shared/reservation-controls/ReservationControls', () => {
         });
       });
     });
+
+    describe('with preliminary reservation in waiting for cash payment state', () => {
+      describe('when user can modify', () => {
+        const userPermissions = { canModify: true, canDelete: true };
+        const reservation = Reservation.build({
+          needManualConfirmation: true,
+          state: constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT,
+          userPermissions
+        });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+        test('renders three buttons', () => {
+          expect(buttons.length).toBe(3);
+        });
+
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
+        });
+
+        describe('the third button', () => {
+          makeButtonTests(buttons.at(2), 'cancel', 'ReservationControls.cancel', onCancelClick);
+        });
+      });
+
+      describe('when user can not modify', () => {
+        const userPermissions = { canModify: false, canDelete: false };
+        const reservation = Reservation.build({
+          needManualConfirmation: true,
+          state: constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT,
+          userPermissions
+        });
+        const buttons = getWrapper(reservation, isAdmin).find(Button);
+
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
+        });
+
+        describe('the first button', () => {
+          makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+
+        describe('the second button', () => {
+          makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
+        });
+      });
+    });
   });
 });

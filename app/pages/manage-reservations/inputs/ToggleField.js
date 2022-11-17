@@ -7,14 +7,14 @@ function ToggleField({
   id, label, onChange, value
 }) {
   return (
-    <React.Fragment>
+    <div className="app-ToggleField">
       <Toggle
         checked={value}
         id={id}
         onChange={onChange}
       />
       <ControlLabel className="app-ToggleFieldLabel" htmlFor={id}>{label}</ControlLabel>
-    </React.Fragment>
+    </div>
   );
 }
 

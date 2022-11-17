@@ -40,7 +40,7 @@ export function calculateTax(price, taxPercentage) {
 
 /**
  * Calculates tax breakdown from order lines
- * @param {array} orderLines containing products, prices, quantities etc
+ * @param {Object[]} orderLines containing products, prices, quantities etc
  * @returns {object} tax breakdown
  */
 export function getOrderTaxTotals(orderLines) {
@@ -48,11 +48,11 @@ export function getOrderTaxTotals(orderLines) {
   orderLines.forEach((orderLine) => {
     if (orderLine.quantity > 0) {
       const taxPercentage = orderLine.product.price.tax_percentage;
-      const taxPrice = calculateTax(orderLine.price, taxPercentage);
+      const taxPrice = calculateTax(orderLine.rounded_price, taxPercentage);
       const taxData = {
         taxPercentage,
         taxPrice,
-        taxlessPrice: orderLine.price - taxPrice,
+        taxlessPrice: orderLine.rounded_price - taxPrice,
       };
       orderTaxData.push(taxData);
     }

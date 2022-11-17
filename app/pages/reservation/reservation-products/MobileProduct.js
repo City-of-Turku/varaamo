@@ -23,7 +23,8 @@ const ORDER_TYPE = {
     }),
     type: PropTypes.string,
   }),
-  price: PropTypes.string,
+  price: PropTypes.number,
+  rounded_price: PropTypes.string,
   quantity: PropTypes.number,
 };
 
@@ -36,7 +37,7 @@ const ORDER_TYPE = {
  * @returns {JSX.Element}
  */
 function MandatoryProduct({ filteredtimeSlotPrices, order, t }) {
-  const totalPrice = order.price;
+  const totalPrice = order.rounded_price;
   const {
     type, period, amount: basePrice, tax_percentage: vat
   } = order.product.price;
@@ -79,7 +80,7 @@ function ExtraProduct({
   filteredtimeSlotPrices, order, t, handleChange
 }) {
   const { amount: unitPrice, tax_percentage: vat } = order.product.price;
-  const { quantity, price: totalPrice } = order;
+  const { quantity, rounded_price: totalPrice } = order;
   const maxQuantity = order.product.max_quantity;
   const vatText = t('ReservationProducts.price.includesVat', { vat: getRoundedVat(vat) });
 

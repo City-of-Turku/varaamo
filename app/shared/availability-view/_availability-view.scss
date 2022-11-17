@@ -17,28 +17,35 @@
       overflow-x: auto;
     }
   }
+
   // Changed "left" and "right" div widths on smaller pads
   .left {
     width: 19%;
+
     @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
       width: 29%;
     }
   }
+
   .right {
     width: 80%;
+
     @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
       width: 70%;
     }
   }
+
   // max-width calculated based on width: 19% and width: 120px
   @media (max-width: 630px) {
     .left {
       width: 120px;
     }
+
     .right {
       width: calc(100% - 122px);
     }
   }
+
   .top-left,
   .date-selector {
     display: flex;
@@ -50,6 +57,7 @@
     padding: 0 $padding-small-horizontal;
     font-size: $font-size-small;
   }
+
   .date-selector {
     justify-content: space-between;
     text-transform: lowercase;
@@ -68,15 +76,18 @@
       overflow-x: hidden;
       white-space: nowrap;
     }
+
     .previous::before,
     .next::after {
       font-family: 'Glyphicons Halflings';
       vertical-align: middle;
     }
+
     .previous::before {
       content: '\e079';
       padding-right: 5px;
     }
+
     .next::after {
       content: '\e080';
       padding-left: 5px;
@@ -88,6 +99,7 @@
     color: black;
     cursor: pointer;
     line-height: $av-header-height;
+
     input {
       background: none;
       color: white;
@@ -98,22 +110,28 @@
       box-sizing: content-box;
       z-index: 3;
     }
+
     .react-date-field__calendar-icon {
       z-index: 10;
       border: none;
+
       &:hover {
         background-color: transparent;
+
         .react-date-field__calendar-icon-inner {
           background-color: transparent;
         }
       }
+
       &:active {
         border: none;
       }
+
       &::before,
       &::after {
         visibility: hidden;
       }
+
       .react-date-field__calendar-icon-inner {
         line-height: $av-header-height;
         height: $av-header-height;
@@ -139,6 +157,7 @@
         }
       }
     }
+
     &.react-date-field--expanded {
       .react-date-field__calendar-icon-inner {
         &::after {
@@ -147,6 +166,7 @@
       }
     }
   }
+
   .group-info {
     background-color: $gray-lighter;
 
@@ -154,6 +174,7 @@
     .resource-info {
       height: $slot-height;
     }
+
     .group-name {
       display: flex;
       align-items: center;
@@ -170,6 +191,7 @@
       }
     }
   }
+
   // Fixes to alignment, sizing, borders and text overflow
   .resource-info {
     display: flex;
@@ -183,14 +205,17 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     border: 1px solid $white;
+
     &-selected {
       background-color: $gray-light;
     }
+
     .favorite-icon {
       color: $favorite-color;
       padding: 3px;
       font-size: 12px;
     }
+
     .name {
       text-align: left;
       overflow: hidden;
@@ -204,19 +229,24 @@
         font-weight: $headings-font-weight;
       }
     }
+
     .details {
       color: $gray;
+
       .unpublished-label {
         margin-left: 10px;
       }
     }
   }
+
   .timeline-groups {
     width: 100%;
     overflow-x: auto;
   }
+
   .timeline-group {
     position: relative;
+
     &-current-time {
       position: absolute;
       height: 100%;
@@ -225,10 +255,12 @@
       opacity: 0.25;
       z-index: 30;
     }
+
     .sticky {
       overflow: hidden;
       z-index: 10;
     }
+
     .hours {
       display: flex;
 
@@ -244,13 +276,12 @@
         font-size: $font-size-small;
 
         &-start-selected {
-          background: linear-gradient(
-            to right,
-            $gray-light 49.9%,
-            $gray-lighter 50%
-          );
+          background: linear-gradient(to right,
+              $gray-light 49.9%,
+              $gray-lighter 50%);
         }
-/*        &-end-selected {
+
+        /*        &-end-selected {
           background: linear-gradient(
             to left,
             $gray-light 49.9%,
@@ -263,9 +294,11 @@
       }
     }
   }
+
   .availability-timeline {
     display: flex;
   }
+
   .reservation-link,
   .reservation-slot {
     height: $slot-height;
@@ -274,6 +307,7 @@
     padding: 0;
     border: none;
   }
+
   .reservation-link.with-comments::after {
     font-family: 'Glyphicons Halflings';
     content: '\e111';
@@ -293,6 +327,7 @@
     z-index: 1;
     box-sizing: content-box;
   }
+
   .reservation,
   .reservation-slot {
     display: inline-flex;
@@ -302,6 +337,7 @@
     flex-shrink: 0;
     @include add-focus;
   }
+
   .reservation {
     height: $slot-height;
     background-color: $theme-info;
@@ -315,18 +351,27 @@
     &-link:hover {
       text-decoration: none;
     }
+
     &.requested {
       background-color: $theme-warning;
     }
+
     &.ready_for_payment {
       background-color: $theme-warning;
     }
+
+    &.waiting_for_cash_payment {
+      background-color: $theme-warning;
+    }
+
     &.disabled {
       background-color: $red;
     }
+
     &.reserved {
       background-color: $brand-success;
     }
+
     .names {
       height: 100%;
       overflow: hidden;
@@ -334,6 +379,7 @@
       white-space: nowrap;
     }
   }
+
   .reservation-slot {
     background-color: $gray-lighter;
     overflow: hidden;
@@ -342,6 +388,7 @@
       background-color: $gray-light;
       cursor: pointer;
     }
+
     &-selected {
       background-color: $brand-primary;
     }
@@ -361,10 +408,12 @@
     margin-bottom: 5px;
   }
 }
+
 .label {
   @media (min-width: $screen-md-min) {
     padding: 0 5px;
   }
+
   @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
     padding: 2px 5px;
   }

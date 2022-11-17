@@ -5,6 +5,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 
 import { resourcesSelector, unitsSelector } from 'state/selectors/dataSelectors';
 import urlSearchFiltersSelector from 'state/selectors/urlSearchFiltersSelector';
+import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 
 const contrastSelector = state => state.ui.accessibility.isHighContrast;
 const positionSelector = state => state.ui.search.position;
@@ -83,6 +84,7 @@ const boundariesSelector = createSelector(
 
 export default createStructuredSelector({
   boundaries: boundariesSelector,
+  currentLanguage: currentLanguageSelector,
   useHighContrast: contrastSelector,
   shouldMapFitBoundaries: shouldMapFitBoundariesSelector,
   markers: markersSelector,

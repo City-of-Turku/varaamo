@@ -71,7 +71,7 @@ describe('reservation-products/mandatory-products/MandatoryProductTableRow', () 
 
     test('third table data has correct data', () => {
       const third = tableDatas.at(2);
-      const totalPrice = defaultProps.orderLine.price;
+      const totalPrice = defaultProps.orderLine.rounded_price;
       expect(third.text()).toBe(`${totalPrice} € ReservationProducts.price.includesVat`);
     });
   });

@@ -29,19 +29,20 @@ describe('reservation-products/MobileProduct', () => {
           type: 'fixed', tax_percentage: '24.00', amount: '8.00'
         }
       });
+      const order = OrderLine.build({
+        product: rentProduct,
+        price: 8.00,
+        quantity: 1
+      });
       const wrapper = getWrapper(
         {
-          order: OrderLine.build({
-            product: rentProduct,
-            price: '8.00',
-            quantity: 1
-          })
+          order
         }
       );
       const expectedValues = [
         rentProduct.name[defaultProps.currentLanguage],
-        `ReservationProducts.table.heading.price: ${rentProduct.price.amount} €`,
-        `ReservationProducts.table.heading.total: ${rentProduct.price.amount} € ReservationProducts.price.includesVat`,
+        `ReservationProducts.table.heading.price: ${order.rounded_price} €`,
+        `ReservationProducts.table.heading.total: ${order.rounded_price} € ReservationProducts.price.includesVat`,
       ];
       expect(wrapper.find('p')).toHaveLength(3);
       wrapper.find('p').forEach((element, index) => {
@@ -59,23 +60,21 @@ describe('reservation-products/MobileProduct', () => {
           type: 'per_period', tax_percentage: '24.00', amount: '10.00', period: '00:30:00'
         }
       });
-      const orderPrice = '50.00';
-      // eslint-disable-next-line max-len
-      const orderQuantity = Number.parseInt(orderPrice, 10) / Number.parseInt(rentProduct.price.amount, 10);
-
+      const orderPrice = 50.00;
+      const order = OrderLine.build({
+        product: rentProduct,
+        price: orderPrice,
+        quantity: orderPrice / Number.parseInt(rentProduct.price.amount, 10)
+      });
       const wrapper = getWrapper(
         {
-          order: OrderLine.build({
-            product: rentProduct,
-            price: orderPrice,
-            quantity: orderQuantity,
-          })
+          order
         }
       );
       const expectedValues = [
         rentProduct.name[defaultProps.currentLanguage],
         `ReservationProducts.table.heading.price: ${rentProduct.price.amount} € / ${getPrettifiedPeriodUnits(rentProduct.price.period)}`,
-        `ReservationProducts.table.heading.total: ${orderPrice} € ReservationProducts.price.includesVat`,
+        `ReservationProducts.table.heading.total: ${order.rounded_price} € ReservationProducts.price.includesVat`,
       ];
       expect(wrapper.find('p')).toHaveLength(3);
       wrapper.find('p').forEach((element, index) => {
@@ -92,23 +91,21 @@ describe('reservation-products/MobileProduct', () => {
         },
         max_quantity: 10,
       });
-      const orderPrice = '45.00';
-      // eslint-disable-next-line max-len
-      const orderQuantity = Number.parseInt(orderPrice, 10) / Number.parseInt(extraProduct.price.amount, 10);
-
+      const orderPrice = 45.00;
+      const order = OrderLine.build({
+        product: extraProduct,
+        price: orderPrice,
+        quantity: orderPrice / Number.parseInt(extraProduct.price.amount, 10)
+      });
       const wrapper = getWrapper(
         {
-          order: OrderLine.build({
-            product: extraProduct,
-            price: orderPrice,
-            quantity: orderQuantity
-          })
+          order
         }
       );
       const expectedValues = [
         extraProduct.name[defaultProps.currentLanguage],
         `ReservationProducts.table.heading.unitPrice: ${extraProduct.price.amount} €`,
-        `ReservationProducts.table.heading.total: ${orderPrice} € ReservationProducts.price.includesVat`,
+        `ReservationProducts.table.heading.total: ${order.rounded_price} € ReservationProducts.price.includesVat`,
       ];
       expect(wrapper.find('p')).toHaveLength(3);
       wrapper.find('p').forEach((element, index) => {
@@ -121,7 +118,7 @@ describe('reservation-products/MobileProduct', () => {
       expect(quantityElement.prop('handleAdd')).toBeDefined();
       expect(quantityElement.prop('handleReduce')).toBeDefined();
       expect(quantityElement.prop('maxQuantity')).toEqual(extraProduct.max_quantity);
-      expect(quantityElement.prop('quantity')).toEqual(orderQuantity);
+      expect(quantityElement.prop('quantity')).toEqual(order.quantity);
     });
 
     describe('when product contains time slot prices', () => {

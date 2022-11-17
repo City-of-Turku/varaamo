@@ -3,6 +3,9 @@ import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
 import Lightbox from 'lightbox-react';
 import Panel from 'react-bootstrap/lib/Panel';
+import { Button } from 'react-bootstrap';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import { shallow } from 'enzyme';
 
 import NotFoundPage from 'pages/not-found/NotFoundPage';
 import PageWrapper from 'pages/PageWrapper';
@@ -418,6 +421,67 @@ describe('pages/resource/ResourcePage', () => {
 
       const lightbox = wrapper.find(Lightbox);
       expect(lightbox.length).toBe(1);
+    });
+  });
+
+  describe('renderLogin', () => {
+    test('is not rendered if resource is not reservable', () => {
+      const tempResource = Immutable(Resource.build({ reservable: false }));
+      const wrapper = getWrapper({ resource: tempResource });
+      expect(wrapper.find('.login-text')).toHaveLength(0);
+    });
+
+    test('returns null and is not rendered when StrongAuthSatisfied and isLoggedIn are true', () => {
+      const wrapper = getWrapper();
+      const instance = wrapper.instance();
+      expect(instance.renderLogin()).toBe(null);
+      expect(wrapper.find('.login-text')).toHaveLength(0);
+    });
+
+    test('returns null and is not rendered when StrongAuthSatisfied and resource.authentication === unauthenticated', () => {
+      const unauthResource = Immutable(Resource.build({
+        authentication: 'unauthenticated'
+      }));
+      const wrapper = getWrapper({ resource: unauthResource, isLoggedIn: false });
+      const instance = wrapper.instance();
+      expect(instance.renderLogin()).toBe(null);
+      expect(wrapper.find('.login-text')).toHaveLength(0);
+    });
+
+    test('returns correct elements when user is not logged in but resource requires normal auth login', () => {
+      const noLoginProps = {
+        isLoggedIn: false,
+        isStrongAuthSatisfied: true,
+      };
+      const wrapper = getWrapper(noLoginProps);
+      const instance = wrapper.instance();
+      const elements = shallow(<div>{instance.renderLogin()}</div>);
+      expect(elements.find('p')).toHaveLength(1);
+      expect(elements.find(Glyphicon)).toHaveLength(1);
+      const glyphElement = elements.find(Glyphicon).first();
+      expect(glyphElement.prop('glyph')).toBe('exclamation-sign');
+      expect(elements.find(Button)).toHaveLength(1);
+      const buttonElement = elements.find(Button).first();
+      expect(buttonElement.prop('onClick')).toBeDefined();
+      expect(buttonElement.prop('children')).toBe('ReservationInfo.loginMessage');
+    });
+
+    test('returns correct elements when user is logged in but resource requires strong auth login', () => {
+      const normalLoginProps = {
+        isLoggedIn: true,
+        isStrongAuthSatisfied: false,
+      };
+      const wrapper = getWrapper(normalLoginProps);
+      const instance = wrapper.instance();
+      const elements = shallow(<div>{instance.renderLogin()}</div>);
+      expect(elements.find('p')).toHaveLength(1);
+      expect(elements.find(Glyphicon)).toHaveLength(1);
+      const glyphElement = elements.find(Glyphicon).first();
+      expect(glyphElement.prop('glyph')).toBe('exclamation-sign');
+      expect(elements.find(Button)).toHaveLength(1);
+      const buttonElement = elements.find(Button).first();
+      expect(buttonElement.prop('onClick')).toBeDefined();
+      expect(buttonElement.prop('children')).toBe('ReservationInfo.loginMessageStrongAuth');
     });
   });
 });

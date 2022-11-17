@@ -12,7 +12,7 @@ function MandatoryProductTableRow({
 }) {
   const name = getLocalizedFieldValue(orderLine.product.name, currentLanguage, true);
   const basePrice = orderLine.product.price.amount;
-  const totalPrice = orderLine.price;
+  const totalPrice = orderLine.rounded_price;
 
   const type = orderLine.product.price.type;
   const period = orderLine.product.price.period;
@@ -48,7 +48,10 @@ function MandatoryProductTableRow({
 MandatoryProductTableRow.propTypes = {
   currentCustomerGroup: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
-  orderLine: PropTypes.object.isRequired,
+  orderLine: PropTypes.shape({
+    rounded_price: PropTypes.string,
+    product: PropTypes.object,
+  }),
   t: PropTypes.func.isRequired,
 };
 

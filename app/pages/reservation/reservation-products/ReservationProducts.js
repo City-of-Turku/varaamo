@@ -14,11 +14,13 @@ import ReservationDetails from '../reservation-details/ReservationDetails';
 import CustomerGroupSelect from './CustomerGroupSelect';
 import { getProductsOfType, PRODUCT_TYPES, getUniqueCustomerGroups } from './ReservationProductsUtils';
 import ProductsValidationErrors from './ProductsValidationErrors';
+import PaymentMethodSelect from './PaymentMethodSelect';
 
 function ReservationProducts({
-  changeProductQuantity, currentCustomerGroup, customerGroupError, currentLanguage, isEditing,
-  isStaff, onBack, onCancel, onConfirm, onCustomerGroupChange,
-  onStaffSkipChange, order, resource, selectedTime, skipMandatoryProducts, t, unit
+  changeProductQuantity, currentCustomerGroup, customerGroupError, currentPaymentMethod,
+  currentLanguage, isEditing, isStaff, onBack, onCancel, onConfirm, onCustomerGroupChange,
+  onPaymentMethodChange, onStaffSkipChange, order, resource, selectedTime,
+  skipMandatoryProducts, t, unit
 }) {
   const orderLines = order.order_lines || [];
   const uniqueCustomerGroups = getUniqueCustomerGroups(resource);
@@ -61,6 +63,12 @@ function ReservationProducts({
                 orderLines={extraOrders}
               />
               <ProductsSummary order={order} />
+              {(resource && resource.cashPaymentsAllowed) && (
+                <PaymentMethodSelect
+                  currentPaymentMethod={currentPaymentMethod}
+                  onPaymentMethodChange={onPaymentMethodChange}
+                />
+              )}
             </Loader>
           )
             : <p id="products-error-message">{t('Notifications.errorMessage')}</p>
@@ -113,12 +121,14 @@ ReservationProducts.propTypes = {
   currentCustomerGroup: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   customerGroupError: PropTypes.bool.isRequired,
+  currentPaymentMethod: PropTypes.string.isRequired,
   isEditing: PropTypes.bool.isRequired,
   isStaff: PropTypes.bool.isRequired,
   onBack: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   onCustomerGroupChange: PropTypes.func.isRequired,
+  onPaymentMethodChange: PropTypes.func.isRequired,
   onStaffSkipChange: PropTypes.func.isRequired,
   order: PropTypes.object.isRequired,
   resource: PropTypes.object.isRequired,

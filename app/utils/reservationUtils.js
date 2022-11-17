@@ -224,11 +224,12 @@ function createOrderLines(products) {
  * Creates an order object with order lines and return url.
  * @param {Array} products array
  * @param {string} [customerGroup] customer group's id
+ * @param {string} [paymentMethod] payment method e.g. cash or online
  * @returns {object} order object e.g.
  * {order_lines: {...}, returnUrl: 'mysite/reservation-payment-return'}
  * or null if given products is empty
  */
-function createOrder(products, customerGroup = '') {
+function createOrder(products, customerGroup = '', paymentMethod = '') {
   if (products && products.length > 0) {
     const orderLines = createOrderLines(products);
 
@@ -236,6 +237,9 @@ function createOrder(products, customerGroup = '') {
     const order = { order_lines: orderLines, return_url: returnUrl };
     if (customerGroup) {
       order.customer_group = customerGroup;
+    }
+    if (paymentMethod) {
+      order.payment_method = paymentMethod;
     }
     return order;
   }

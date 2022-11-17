@@ -26,12 +26,12 @@ const constants = {
     MAX_SHOWN_PAGINATION_BUTTONS: 9,
   },
   MAP_TILE_URLS: {
-    DEFAULT_TILES: 'https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}.png',
-    HIGH_CONTRAST_TILES: 'https://maptiles.turku.fi/styles/hel-osm-high-contrast/{z}/{x}/{y}.png'
+    DEFAULT_TILES: 'https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}',
+    HIGH_CONTRAST_TILES: 'https://maptiles.turku.fi/styles/high-contrast-map-layer/{z}/{x}/{y}'
   },
   NAV_ADMIN_URLS: {
-    gitbook: 'https://digipoint-turku.gitbook.io/varaamo-turku/',
-    gitbook_sv: 'https://digipoint-turku.gitbook.io/varaamo-turku/v/v.1.0.0-swedish/',
+    gitbook: 'https://city-of-turku.gitbook.io/varaamo-turku/',
+    gitbook_sv: 'https://city-of-turku.gitbook.io/varaamo-turku/v/v.1.0.0-swedish/',
     respa: SETTINGS.ADMIN_URL,
   },
   NOTIFICATION_DEFAULTS: {
@@ -39,6 +39,10 @@ const constants = {
     type: 'info',
     timeOut: 5000,
     hidden: false,
+  },
+  PAYMENT_METHODS: {
+    CASH: 'cash',
+    ONLINE: 'online',
   },
   PRODUCT_TYPES: {
     MANDATORY: 'mandatory',
@@ -72,6 +76,7 @@ const constants = {
     DENIED: 'denied',
     READY_FOR_PAYMENT: 'ready_for_payment',
     WAITING_FOR_PAYMENT: 'waiting_for_payment',
+    WAITING_FOR_CASH_PAYMENT: 'waiting_for_cash_payment',
   },
   RESERVATION_STATE_LABELS: {
     cancelled: {
@@ -97,6 +102,10 @@ const constants = {
     waiting_for_payment: {
       labelBsStyle: 'danger',
       labelTextId: 'common.paymentAborted',
+    },
+    waiting_for_cash_payment: {
+      labelBsStyle: 'primary',
+      labelTextId: 'common.waitingForCashPayment',
     },
   },
   RESOURCE_PRICE_TYPES: {

@@ -1,3 +1,15 @@
 .app-ToggleFieldLabel {
   padding-right: 18px;
 }
+
+.__font-size-medium {
+  .app-ToggleField {
+    padding-top: 7px;
+  }
+}
+
+.__font-size-large {
+  .app-ToggleField {
+    padding-top: 20px;
+  }
+}

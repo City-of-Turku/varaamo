@@ -18,6 +18,12 @@ describe('ToggleField', () => {
   }
 
   describe('renders', () => {
+    test('wrapping div', () => {
+      const div = getWrapper().find('div');
+      expect(div).toHaveLength(1);
+      expect(div.prop('className')).toBe('app-ToggleField');
+    });
+
     test('Toggle', () => {
       const toggle = getWrapper().find(Toggle);
       expect(toggle).toHaveLength(1);

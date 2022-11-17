@@ -25,6 +25,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     isMakingReservations: false,
     isStaff: false,
     currentCustomerGroup: '',
+    currentPaymentMethod: '',
     onBack: simple.stub(),
     onCancel: simple.stub(),
     onConfirm: simple.stub(),
@@ -108,10 +109,14 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       price: '3.50'
     };
     const currentCustomerGroup = cgB.id;
-    const details = getWrapper({ currentCustomerGroup, resource, order }).find(ReservationDetails);
+    const currentPaymentMethod = constants.PAYMENT_METHODS.ONLINE;
+    const details = getWrapper({
+      currentCustomerGroup, currentPaymentMethod, resource, order
+    }).find(ReservationDetails);
     expect(details).toHaveLength(1);
     expect(details.prop('customerGroupName')).toBe(cgB.name);
     expect(details.prop('orderPrice')).toBe(`${order.price} €`);
+    expect(details.prop('paymentMethod')).toBe(`common.paymentMethod.${currentPaymentMethod}`);
     expect(details.prop('selectedTime')).toBe(defaultProps.selectedTime);
     expect(details.prop('resourceName')).toBe(resource.name);
     expect(details.prop('unitName')).toBe(defaultProps.unit.name);

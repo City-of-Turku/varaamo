@@ -16,11 +16,13 @@ function ManageReservationsDropdown({
 }) {
   const reservationStates = constants.RESERVATION_STATE;
   const isRequestedReservation = reservation.state === reservationStates.REQUESTED;
+  const isWaitingForCashPayment = reservation.state === reservationStates.WAITING_FOR_CASH_PAYMENT;
 
   return (
     <div className="app-ManageReservationDropdown">
       <DropdownButton
         id={`ManageReservationDropdown-${reservation.id}`}
+        pullRight
         title={t('ManageReservationsList.actionsHeader')}
       >
         <MenuItem onClick={onInfoClick}>
@@ -40,6 +42,13 @@ function ManageReservationsDropdown({
               {t('ManageReservationsList.actionLabel.deny')}
             </MenuItem>
           </React.Fragment>
+        )}
+        {userCanModify && isWaitingForCashPayment && (
+          <MenuItem
+            onClick={() => onEditReservation(reservation, reservationStates.CONFIRMED)}
+          >
+            {t('common.confirmCashPayment')}
+          </MenuItem>
         )}
         {userCanModify && (
           <MenuItem

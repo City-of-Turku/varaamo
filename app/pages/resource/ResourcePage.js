@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Loader from 'react-loader';
 import { connect } from 'react-redux';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import { bindActionCreators } from 'redux';
 import Col from 'react-bootstrap/lib/Col';
 import Panel from 'react-bootstrap/lib/Panel';
 import Lightbox from 'lightbox-react';
 import 'lightbox-react/style.css';
+import { Button } from 'react-bootstrap';
 
 import { addNotification } from 'actions/notificationsActions';
 import { fetchResource } from 'actions/resourceActions';
@@ -20,6 +22,7 @@ import NotFoundPage from 'pages/not-found/NotFoundPage';
 import ResourceCalendar from 'shared/resource-calendar';
 import ResourceMap from 'shared/resource-map';
 import { injectT } from 'i18n';
+import userManager from 'utils/userManager';
 import {
   getMaxPeriodText, getResourcePageUrl, getMinPeriodText, getEquipment
 } from 'utils/resourceUtils';
@@ -48,6 +51,7 @@ class UnconnectedResourcePage extends Component {
     this.createResourceOutlookCalendarLink = this.createResourceOutlookCalendarLink.bind(this);
     this.removeResourceOutlookCalendarLink = this.removeResourceOutlookCalendarLink.bind(this);
     this.fetchResourceOutlookCalendarLinks = this.fetchResourceOutlookCalendarLinks.bind(this);
+    this.handleLoginClick = this.handleLoginClick.bind(this);
   }
 
   componentDidMount() {
@@ -135,6 +139,26 @@ class UnconnectedResourcePage extends Component {
     return this.props.actions.removeResourceOutlookCalendarLink(link.resource, link.id);
   }
 
+  async handleLoginClick() {
+    const { currentLanguage, actions } = this.props;
+    try {
+      await userManager.signinRedirect({
+        data: {
+          redirectUrl: window.location.pathname
+        },
+        extraQueryParams: {
+          ui_locales: currentLanguage
+        },
+      });
+    } catch (error) {
+      actions.addNotification({
+        messageId: 'Notifications.loginErrorMessage',
+        type: 'error',
+        timeOut: 10000,
+      });
+    }
+  }
+
   fetchResource(date = this.props.date) {
     const { actions, id } = this.props;
     const start = moment(date)
@@ -147,6 +171,36 @@ class UnconnectedResourcePage extends Component {
       .format();
 
     actions.fetchResource(id, { start, end });
+  }
+
+  /**
+   * Return text prompting user to login using strong authentication
+   * if the resource requires it in order to make reservations.
+   * @returns {JSX.Element}
+   */
+  renderLogin() {
+    const {
+      isLoggedIn, isStrongAuthSatisfied, resource, t
+    } = this.props;
+    /**
+     * login text is only displayed on reservable resources
+     * when the user does not fulfill strong auth requirement needed to make a reservation.
+     */
+    if (isStrongAuthSatisfied && (isLoggedIn || resource.authentication === 'unauthenticated')) {
+      return null;
+    }
+    const message = isStrongAuthSatisfied ? t('ReservationInfo.loginMessage') : t('ReservationInfo.loginMessageStrongAuth');
+    const messageParts = message.split('<a>');
+    // if message has three parts e.g. "start of message <a>link text<a> end of message"
+    const isMultiPartMessage = messageParts.length === 3;
+    return (
+      <p className="login-text">
+        <Glyphicon aria-hidden="true" glyph="exclamation-sign" />
+        {isMultiPartMessage && messageParts[0]}
+        <Button bsStyle="link" className="login-button" onClick={this.handleLoginClick}>{isMultiPartMessage ? messageParts[1] : message}</Button>
+        {isMultiPartMessage && messageParts[2]}
+      </p>
+    );
   }
 
   render() {
@@ -268,7 +322,7 @@ class UnconnectedResourcePage extends Component {
                         <p>{`${t('ReservationInfo.reservationMaxLength')} ${maxPeriodText}`}</p>
                       </div>
                       )}
-
+                      {resource.reservable && this.renderLogin()}
                       <ResourceCalendar
                         disableDays={this.disableDays}
                         onDateChange={this.handleDateChange}

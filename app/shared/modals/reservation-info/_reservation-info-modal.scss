@@ -10,15 +10,35 @@
     font-size: 2.4rem;
     margin-bottom: 10px;
 
+    @media (max-width: $screen-sm-min) {
+      font-size: 1.4rem;
+
+      .app-Label {
+        display: inline-block;
+        width: 100%;
+
+        .label {
+          display: inline-block;
+          width: 100%;
+          font-size: inherit;
+          white-space: normal;
+        }
+      }
+    }
+
+
     .label-success {
       background-color: #008540;
     }
+
     .label-danger {
       background-color: #ab1204;
     }
+
     .label-primary {
       background-color: #c15801;
     }
+
     .label-default {
       background-color: #37475e;
     }
@@ -29,6 +49,7 @@
     margin-left: -10px;
     margin-right: -10px;
     margin-bottom: 15px;
+
     @media (min-width: $screen-sm-min) {
       margin-left: 0;
       margin-right: 0;
@@ -49,7 +70,7 @@
     }
 
     .form-controls {
-      button + button {
+      button+button {
         margin-left: 5px;
       }
     }
