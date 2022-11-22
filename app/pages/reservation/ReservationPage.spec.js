@@ -84,6 +84,7 @@ describe('pages/reservation/ReservationPage', () => {
     state: {},
     unit: Immutable(Unit.build()),
     user: Immutable(User.build()),
+    uniqueCustomerGroups: [],
   };
 
   function getWrapper(extraProps) {
@@ -227,6 +228,7 @@ describe('pages/reservation/ReservationPage', () => {
       expect(reservationProducts.prop('resource')).toBe(defaultProps.resource);
       expect(reservationProducts.prop('selectedTime')).toStrictEqual(expectedSelectedTime);
       expect(reservationProducts.prop('skipMandatoryProducts')).toBe(instance.state.skipMandatoryProducts);
+      expect(reservationProducts.prop('uniqueCustomerGroups')).toBe(defaultProps.uniqueCustomerGroups);
       expect(reservationProducts.prop('unit')).toBe(defaultProps.unit);
     });
   });
@@ -445,16 +447,27 @@ describe('pages/reservation/ReservationPage', () => {
         expect(instance.fetchResource.lastCall.args).toEqual([]);
       });
 
-      test('calls handleCheckOrderPrice', () => {
-        const { selected, reservationToEdit } = instance.props;
-        const { mandatoryProducts, extraProducts } = instance.state;
-        expect(instance.handleCheckOrderPrice.callCount).toBe(1);
-        expect(instance.handleCheckOrderPrice.lastCall.args[0]).toStrictEqual(resource);
-        expect(instance.handleCheckOrderPrice.lastCall.args[1]).toStrictEqual(selected);
-        expect(instance.handleCheckOrderPrice.lastCall.args[2]).toStrictEqual(mandatoryProducts);
-        expect(instance.handleCheckOrderPrice.lastCall.args[3]).toStrictEqual(extraProducts);
-        expect(instance.handleCheckOrderPrice.lastCall.args[4])
+      const customerGroupA = CustomerGroup.build();
+      const customerGroupB = CustomerGroup.build();
+      test.each([
+        [[], ''],
+        [[customerGroupA], customerGroupA.id],
+        [[customerGroupA, customerGroupB], ''],
+      ])('calls handleCheckOrderPrice, cgs: %p', (uniqueCustomerGroups, expectedCg) => {
+        const instanceA = getWrapper({ uniqueCustomerGroups }).instance();
+        instanceA.handleCheckOrderPrice = simple.mock();
+        instanceA.componentDidMount();
+        const { selected, reservationToEdit } = instanceA.props;
+        const { mandatoryProducts, extraProducts } = instanceA.state;
+        expect(instanceA.handleCheckOrderPrice.callCount).toBe(1);
+        expect(instanceA.handleCheckOrderPrice.lastCall.args[0]).toStrictEqual(resource);
+        expect(instanceA.handleCheckOrderPrice.lastCall.args[1]).toStrictEqual(selected);
+        expect(instanceA.handleCheckOrderPrice.lastCall.args[2]).toStrictEqual(mandatoryProducts);
+        expect(instanceA.handleCheckOrderPrice.lastCall.args[3]).toStrictEqual(extraProducts);
+        expect(instanceA.handleCheckOrderPrice.lastCall.args[4])
           .toStrictEqual(!isEmpty(reservationToEdit));
+        expect(instanceA.handleCheckOrderPrice.lastCall.args[5]).toStrictEqual(expectedCg);
+        simple.restore();
       });
     });
 
@@ -797,13 +810,31 @@ describe('pages/reservation/ReservationPage', () => {
   describe('handleProductsConfirm', () => {
     test('sets correct state when customer group is required and missing', () => {
       const cgA = CustomerGroup.build();
+      const cgB = CustomerGroup.build();
       const pcgA = ProductCustomerGroup.build({ customerGroup: cgA });
-      const prodA = Product.build({ productCustomerGroups: [pcgA] });
+      const pcgB = ProductCustomerGroup.build({ customerGroup: cgB });
+      const prodA = Product.build({ productCustomerGroups: [pcgA, pcgB] });
       const resourceA = Resource.build({ products: [prodA] });
-      const instance = getWrapper({ resource: resourceA }).instance();
+      const instance = getWrapper(
+        { resource: resourceA, uniqueCustomerGroups: [cgA, cgB] }
+      ).instance();
       instance.state.currentCustomerGroup = '';
       instance.handleProductsConfirm();
       expect(instance.state.customerGroupError).toBe(true);
+    });
+
+    test('sets correct state when there is only one unique customer group', () => {
+      const cgA = CustomerGroup.build();
+      const pcgA = ProductCustomerGroup.build({ customerGroup: cgA });
+      const prodA = Product.build({ productCustomerGroups: [pcgA] });
+      const resourceA = Resource.build({ products: [prodA] });
+      const instance = getWrapper(
+        { resource: resourceA, uniqueCustomerGroups: [cgA] }
+      ).instance();
+      instance.state.currentCustomerGroup = '';
+      instance.handleProductsConfirm();
+      expect(instance.state.currentCustomerGroup).toBe(cgA.id);
+      expect(instance.state.view).toBe('information');
     });
 
     test('sets correct state when there are no validation errors', () => {

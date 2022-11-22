@@ -83,8 +83,19 @@ function createIsStaffSelector(resourceSelector) {
   );
 }
 
+const authUserAmrSelector = createSelector(
+  authUserSelector,
+  (user) => {
+    if (user && 'profile' in user && 'amr' in user.profile) {
+      return user.profile.amr;
+    }
+    return '';
+  }
+);
+
 export {
   authUserSelector,
+  authUserAmrSelector,
   createIsStaffSelector,
   currentUserSelector,
   isAdminSelector,

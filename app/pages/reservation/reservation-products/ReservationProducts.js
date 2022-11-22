@@ -12,18 +12,20 @@ import ProductsSummary from './ProductsSummary';
 import ExtraProducts from './extra-products/ExtraProducts';
 import ReservationDetails from '../reservation-details/ReservationDetails';
 import CustomerGroupSelect from './CustomerGroupSelect';
-import { getProductsOfType, PRODUCT_TYPES, getUniqueCustomerGroups } from './ReservationProductsUtils';
+import {
+  getProductsOfType, PRODUCT_TYPES
+} from './ReservationProductsUtils';
 import ProductsValidationErrors from './ProductsValidationErrors';
 import PaymentMethodSelect from './PaymentMethodSelect';
+import CustomerGroupNoOption from './CustomerGroupNoOption';
 
 function ReservationProducts({
   changeProductQuantity, currentCustomerGroup, customerGroupError, currentPaymentMethod,
   currentLanguage, isEditing, isStaff, onBack, onCancel, onConfirm, onCustomerGroupChange,
   onPaymentMethodChange, onStaffSkipChange, order, resource, selectedTime,
-  skipMandatoryProducts, t, unit
+  skipMandatoryProducts, t, unit, uniqueCustomerGroups
 }) {
   const orderLines = order.order_lines || [];
-  const uniqueCustomerGroups = getUniqueCustomerGroups(resource);
   const mandatoryOrders = getProductsOfType(orderLines, PRODUCT_TYPES.MANDATORY);
   const extraOrders = getProductsOfType(orderLines, PRODUCT_TYPES.EXTRA);
 
@@ -39,7 +41,12 @@ function ReservationProducts({
         <Col lg={8} sm={12}>
           {!order.error ? (
             <Loader loaded={!order.loadingData}>
-              {uniqueCustomerGroups.length > 0 && (
+              {uniqueCustomerGroups.length === 1 && (
+                <CustomerGroupNoOption
+                  customerGroup={uniqueCustomerGroups[0]}
+                />
+              )}
+              {uniqueCustomerGroups.length > 1 && (
                 <CustomerGroupSelect
                   currentlySelectedGroup={currentCustomerGroup}
                   customerGroups={uniqueCustomerGroups}
@@ -136,6 +143,7 @@ ReservationProducts.propTypes = {
   skipMandatoryProducts: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
   unit: PropTypes.object.isRequired,
+  uniqueCustomerGroups: PropTypes.array.isRequired,
 };
 
 export default injectT(ReservationProducts);

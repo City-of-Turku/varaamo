@@ -11,6 +11,7 @@ import {
   staffUnitsSelector,
   loginExpiresAtSelector,
   hasStrongAuthSelector,
+  authUserAmrSelector,
 } from './authSelectors';
 
 describe('state/selectors/authSelectors', () => {
@@ -282,5 +283,20 @@ describe('state/selectors/authSelectors', () => {
         expect(selected).toEqual([]);
       }
     );
+  });
+
+  describe('authUserAmrSelector', () => {
+    test('returns user profile amr value if it exists', () => {
+      const amr = 'test-amr-1';
+      const user = { profile: { amr } };
+      const state = getState({ auth: { user } });
+      expect(authUserAmrSelector(state)).toEqual(amr);
+    });
+
+    test('returns empty string if amr value does not exist', () => {
+      const user = { profile: { } };
+      const state = getState({ auth: { user } });
+      expect(authUserAmrSelector(state)).toEqual('');
+    });
   });
 });
