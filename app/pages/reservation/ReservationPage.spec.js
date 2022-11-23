@@ -469,6 +469,22 @@ describe('pages/reservation/ReservationPage', () => {
         expect(instanceA.handleCheckOrderPrice.lastCall.args[5]).toStrictEqual(expectedCg);
         simple.restore();
       });
+
+      test.each([
+        [[], '', false],
+        [[customerGroupA], customerGroupA.id, true],
+        [[customerGroupA, customerGroupB], '', false],
+      ])('setState is only called when expected', (uniqueCustomerGroups, callValue, isCallExpected) => {
+        const instanceA = getWrapper({ uniqueCustomerGroups }).instance();
+        const spy = jest.spyOn(instanceA, 'setState');
+        instanceA.componentDidMount();
+        expect(spy).toHaveBeenCalledTimes(isCallExpected ? 1 : 0);
+        if (isCallExpected) {
+          expect(spy).toHaveBeenCalledWith({
+            currentCustomerGroup: callValue,
+          });
+        }
+      });
     });
 
     test('calls handleSigninRefresh', () => {

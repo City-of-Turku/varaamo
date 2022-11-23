@@ -97,10 +97,14 @@ class UnconnectedReservationPage extends Component {
     } else {
       // handle price ops only when reservation info exists
       const isEditing = !isEmpty(reservationToEdit);
-      const { mandatoryProducts, extraProducts } = this.state;
+      const { mandatoryProducts, extraProducts, currentCustomerGroup } = this.state;
 
-      const initialCustomerGroup = uniqueCustomerGroups.length === 1 ? uniqueCustomerGroups[0].id : '';
-      this.setState({ currentCustomerGroup: initialCustomerGroup });
+      const initialCustomerGroup = uniqueCustomerGroups.length === 1
+        ? uniqueCustomerGroups[0].id : currentCustomerGroup;
+
+      if (initialCustomerGroup) {
+        this.setState({ currentCustomerGroup: initialCustomerGroup });
+      }
       this.handleCheckOrderPrice(
         this.props.resource, selected, mandatoryProducts, extraProducts,
         isEditing, initialCustomerGroup
