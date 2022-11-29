@@ -1,4 +1,3 @@
-import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Col from 'react-bootstrap/lib/Col';
@@ -9,6 +8,7 @@ import { injectT } from 'i18n';
 import WrappedText from 'shared/wrapped-text';
 import { getServiceMapUrl } from 'utils/unitUtils';
 import ReservationInfo from '../reservation-info';
+import ZipAndMunicipality from './ZipAndMunicipality';
 
 function ResourceInfo({
   addNotification, currentLanguage, isLoggedIn, isStrongAuthSatisfied, resource, unit, t, equipment
@@ -48,7 +48,7 @@ function ResourceInfo({
             <Col className="app-ResourceInfo__address" lg={6} md={6} sm={6} xs={12}>
               {unit && unit.name && <span>{unit.name}</span>}
               {unit && unit.streetAddress && <span>{unit.streetAddress}</span>}
-              {unit && <span>{`${unit.addressZip} ${upperFirst(unit.municipality)}`.trim()}</span>}
+              <ZipAndMunicipality unit={unit} />
             </Col>
             <Col className="app-ResourceInfo__web" lg={6} md={6} sm={6} xs={12}>
               {serviceMapUrl && (
