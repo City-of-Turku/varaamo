@@ -61,9 +61,11 @@ class ConfirmReservationModal extends Component {
       formFields.push('reserverPhoneNumber');
     }
 
+    /* Field hidden until it is needed again
     if (resource.needManualConfirmation && isStaff) {
       formFields.push('staffEvent');
     }
+    */
 
     if (termsAndConditions) {
       formFields.push('termsAndConditions');

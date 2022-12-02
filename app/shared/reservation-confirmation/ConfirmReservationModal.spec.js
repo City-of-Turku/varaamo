@@ -179,6 +179,7 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
       });
     });
 
+    /* Field hidden until it is needed again
     describe('staffEvent', () => {
       test('is not included if resource does not need manual confirmation', () => {
         const props = {
@@ -207,6 +208,7 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
         }
       );
     });
+    */
 
     describe('termsAndConditions', () => {
       test('is included if resource contains terms', () => {

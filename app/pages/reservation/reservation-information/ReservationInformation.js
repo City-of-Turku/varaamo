@@ -24,7 +24,6 @@ class ReservationInformation extends Component {
     isAdmin: PropTypes.bool.isRequired,
     isEditing: PropTypes.bool.isRequired,
     isMakingReservations: PropTypes.bool.isRequired,
-    isStaff: PropTypes.bool.isRequired,
     onBack: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
@@ -47,7 +46,6 @@ class ReservationInformation extends Component {
   getFormFields = (termsAndConditions) => {
     const {
       isAdmin,
-      isStaff,
       resource,
       order,
       reservation,
@@ -77,9 +75,11 @@ class ReservationInformation extends Component {
       // formFields.push('reserverPhoneNumber');
     }
 
+    /* Field hidden until it is needed again
     if (resource.needManualConfirmation && isStaff) {
       formFields.push('staffEvent');
     }
+    */
 
     if (termsAndConditions) {
       formFields.push('termsAndConditions');

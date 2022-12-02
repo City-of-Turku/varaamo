@@ -164,8 +164,10 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }
     );
 
+    /* Field staffEvent hidden until it is needed again
     test(
-      'returns supportedReservationExtraFields and staffEvent when needManualConfirmation and is staff',
+      'returns supportedReservationExtraFields and staffEvent when
+       needManualConfirmation and is staff',
       () => {
         const wrapper = getWrapper({ isStaff: true, resource });
         const instance = wrapper.instance();
@@ -174,6 +176,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
         expect(actual).toEqual([...supportedFields, 'staffEvent']);
       }
     );
+    */
 
     test('returns supportedReservationExtraFields and termsAndConditions', () => {
       const termsAndConditions = 'some terms and conditions';
