@@ -29,6 +29,7 @@ class UnconnectedReservationEditForm extends Component {
     this.renderHeading = this.renderHeading.bind(this);
     this.renderInfoRow = this.renderInfoRow.bind(this);
     this.renderReservationTime = this.renderReservationTime.bind(this);
+    this.getUniversalData = this.getUniversalData.bind(this);
   }
 
   getAddress(street, zip, city) {
@@ -37,6 +38,50 @@ class UnconnectedReservationEditForm extends Component {
       return `${street}, ${ending}`;
     }
     return `${street} ${ending}`;
+  }
+
+  /**
+   * Returns universal field data if it exists in the resource or reservation.
+   * @returns {{displayValue: string, displayLabel: string, hasUniversalData: boolean}}
+   */
+  getUniversalData() {
+    const {
+      resource: { universalField },
+      reservation: { universalData }
+    } = this.props;
+    let displayValue = '';
+    let displayLabel = '';
+    let hasUniversalData = false;
+    if (universalData && Object.keys(universalData).length === 3) {
+      // id of selected option that existed when reservation was created.
+      const selectedOptionId = Number.parseInt(universalData.selectedOption, 10);
+      const data = {};
+      if (universalField && universalField.length) {
+        // use options and label from resource
+        data.options = universalField.reduce((acc, curr) => {
+          acc.push(...curr.options);
+          return acc;
+        }, []);
+        data.labels = universalField.reduce((acc, curr) => {
+          acc.push(curr.label);
+          return acc;
+        }, []);
+      } else {
+        // use options and label from reservation
+        data.options = universalData.field.options;
+        data.labels = [universalData.field.label];
+      }
+      // find selected option
+      const selectedOption = data.options.find(option => option.id === selectedOptionId);
+      // text from selected option or find text from reservation.
+      // eslint-disable-next-line max-len
+      displayValue = selectedOption || universalData.field.options.find(opt => opt.id === selectedOptionId);
+      displayValue = displayValue ? displayValue.text : '';
+      // use first label from array
+      displayLabel = data.labels[0];
+      hasUniversalData = !!displayValue;
+    }
+    return { hasUniversalData, displayValue, displayLabel };
   }
 
   renderAddressRow(addressType) {
@@ -158,6 +203,7 @@ class UnconnectedReservationEditForm extends Component {
     const orderLine = (order && 'orderLines' in order) ? order.orderLines[0] : null;
     const price = (order && 'price' in order) ? order.price : null;
     const customerGroupName = getReservationCustomerGroupName(reservation, currentLanguage);
+    const { hasUniversalData, displayValue, displayLabel } = this.getUniversalData();
 
     return (
       <Form
@@ -173,6 +219,9 @@ class UnconnectedReservationEditForm extends Component {
         )}
         {this.renderEditableInfoRow('eventSubject', 'text')}
         {this.renderStaticInfoRow('reserverName')}
+        {hasUniversalData && (
+          this.renderInfoRow(displayLabel, displayValue)
+        )}
         {customerGroupName && (
           this.renderInfoRow(t('common.customerGroup'), customerGroupName)
         )}
@@ -251,7 +300,21 @@ UnconnectedReservationEditForm.propTypes = {
   isStaff: PropTypes.bool.isRequired,
   onCancelEditClick: PropTypes.func.isRequired,
   onStartEditClick: PropTypes.func.isRequired,
-  reservation: PropTypes.object.isRequired,
+  reservation: PropTypes.shape({
+    universalData: PropTypes.shape({
+      field: PropTypes.shape({
+        description: PropTypes.string,
+        id: PropTypes.number,
+        label: PropTypes.string,
+        options: PropTypes.arrayOf(PropTypes.shape({
+          id: PropTypes.number,
+          text: PropTypes.string,
+        })),
+      }),
+      selectOption: PropTypes.string,
+      type: PropTypes.string,
+    })
+  }),
   reservationIsEditable: PropTypes.bool.isRequired,
   resource: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,

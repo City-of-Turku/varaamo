@@ -7,7 +7,17 @@ import FormControlCheckbox from './FormControlCheckbox';
 import SelectField from './SelectField';
 
 function ReduxFormField({
-  controlProps = {}, fieldName, help, info, input, label, labelErrorPrefix, meta, type, altCheckbox
+  controlProps = {},
+  fieldName,
+  help,
+  info,
+  input,
+  label,
+  labelErrorPrefix,
+  meta,
+  type,
+  altCheckbox,
+  universalFieldData
 }) {
   const showError = meta.error && meta.touched;
   const childProps = {
@@ -20,6 +30,7 @@ function ReduxFormField({
     fieldName: fieldName || input.name,
     type,
     validationState: showError ? 'error' : undefined,
+    universalFieldData
   };
 
   if (type === 'checkbox') {
@@ -48,6 +59,7 @@ ReduxFormField.propTypes = {
   labelErrorPrefix: PropTypes.string.isRequired,
   meta: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
+  universalFieldData: PropTypes.object
 };
 
 export default ReduxFormField;

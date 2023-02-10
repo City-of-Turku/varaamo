@@ -23,5 +23,26 @@ const Resource = new Factory()
   .attr('supportedReservationExtraFields', [])
   .attr('userPermissions', { isAdmin: false, canMakeReservations: true })
   .attr('isFavorite', false)
-  .attr('slotSize', DEFAULT_SLOT_SIZE);
+  .attr('slotSize', DEFAULT_SLOT_SIZE)
+  .attr('universalField', []);
+
+const UniversalField = new Factory()
+  .sequence('id')
+  .attr('fieldType', 'Select')
+  .attr('data', null)
+  .attr('description', 'universal field description text')
+  .attr('label', 'universal field label text')
+  .attr('resource', '')
+  .attr('options', ['id'], (id) => {
+    const opts = [];
+    for (let i = 1; i < 5; i += 1) {
+      opts.push({
+        id: i,
+        text: `option-${i}`
+      });
+    }
+    return opts;
+  });
+
+export { UniversalField };
 export default Resource;

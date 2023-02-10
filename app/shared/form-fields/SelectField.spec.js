@@ -10,13 +10,13 @@ import { shallowWithIntl } from 'utils/testUtils';
 
 describe('shared/form-fields/SelectField', () => {
   const options = [
-    { id: 'option-1-id', name: { fi: 'option-1-name-fi', en: 'option-1-name-en', sv: 'option-1-name-sv', } },
-    { id: 'option-2-id', name: { fi: 'option-2-name-fi', en: 'option-2-name-en', sv: 'option-2-name-sv', } },
-    { id: 'option-3-id', name: { fi: 'option-3-name-fi', en: 'option-3-name-en', sv: 'option-3-name-sv', } },
+    { id: 'option-1-id', name: 'option-1-name-fi' },
+    { id: 'option-2-id', name: 'option-2-name-fi' },
+    { id: 'option-3-id', name: 'option-3-name-fi' },
   ];
 
   const defaultProps = {
-    controlProps: { someProp: 'some', otherProp: 'other', options },
+    controlProps: { someprop: 'some', otherprop: 'other', options },
     fieldName: 'home-municipality-name',
     id: 'home-municipality-id',
     label: 'Home municipality',
@@ -143,6 +143,54 @@ describe('shared/form-fields/SelectField', () => {
     test('displays the help text given in props', () => {
       const helpBlock = getWrapper({ help }).find(HelpBlock);
       expect(helpBlock.props().children).toBe(help);
+    });
+  });
+  describe('Additional Universal fields', () => {
+    let universalFieldData;
+    beforeEach(() => {
+      universalFieldData = {
+        data: null,
+        description: 'This is the description text of a universal field.'
+      };
+    });
+    test('description p element is rendered if it exists', () => {
+      const wrapper = getWrapper({ universalFieldData });
+      const element = wrapper.find('p');
+      expect(element).toHaveLength(1);
+      expect(element.text()).toBe(universalFieldData.description);
+    });
+    test('an img element is rendered if data & data.url exists', () => {
+      universalFieldData.data = {
+        url: 'url to an image that is rendered',
+      };
+      const wrapper = getWrapper({ universalFieldData });
+      const element = wrapper.find('img');
+      expect(element).toHaveLength(1);
+      expect(element.prop('alt')).toBe('ReservationForm.universalField.pictureAlt');
+      expect(element.prop('className')).toBe('universal-data-image');
+      expect(element.prop('src')).toBe(universalFieldData.data.url);
+    });
+    test('an iframe is rendered if data & data.iframe exist', () => {
+      universalFieldData.data = {
+        iframe: '<iframe title="example iframe" src="www.google.com"></iframe>'
+      };
+      const wrapper = getWrapper({ universalFieldData });
+      const element = wrapper.html();
+      // expect(element.html()).toBe('www.google.com');
+      expect(element).toContain(universalFieldData.data.iframe);
+    });
+    test('two skip-link anchor elements are rendered if an iframe is rendered', () => {
+      universalFieldData.data = {
+        iframe: '<iframe title="example iframe" src="www.google.com"></iframe>'
+      };
+      const wrapper = getWrapper({ universalFieldData });
+      // expect(wrapper.find('iframe')).toHaveLength(1);
+      const anchors = wrapper.find('a');
+      expect(anchors).toHaveLength(2);
+      expect(anchors.at(0).prop('id')).toBe('skip-start');
+      // eslint-disable-next-line no-script-url
+      expect(anchors.at(0).prop('href')).toBe("javascript:document.getElementById('skip-end').focus()");
+      expect(anchors.at(0).prop('className')).toBe('visually-hidden');
     });
   });
 });

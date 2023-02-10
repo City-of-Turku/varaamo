@@ -4,15 +4,15 @@ import Form from 'react-bootstrap/lib/Form';
 import Immutable from 'seamless-immutable';
 import { Field, Fields } from 'redux-form';
 
-import Reservation from 'utils/fixtures/Reservation';
-import Resource from 'utils/fixtures/Resource';
+import Reservation, { UniversalData } from 'utils/fixtures/Reservation';
+import Resource, { UniversalField } from 'utils/fixtures/Resource';
 import User from 'utils/fixtures/User';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedReservationEditForm as ReservationEditForm } from './ReservationEditForm';
 import ReservationOrderInfo from './ReservationOrderInfo';
 
 describe('shared/modals/reservation-info/ReservationEditForm', () => {
-  const resource = Resource.build();
+  const resource = Resource.build({ universalField: [UniversalField.build()] });
   const reservation = Reservation.build({
     billingAddressCity: 'New York',
     billingAddressStreet: 'Billing Street 11',
@@ -33,6 +33,7 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
     requireAssistance: undefined,
     requireWorkstation: undefined,
     reservationExtraQuestions: undefined,
+    universalData: UniversalData.build(),
   });
   const defaultProps = {
     currentLanguage: 'fi',
@@ -284,6 +285,33 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
             const orderInfo = getWrapper({ reservation: userReservation })
               .find(ReservationOrderInfo);
             expect(orderInfo).toHaveLength(0);
+          });
+        });
+      });
+      describe('Reservation UniversalData', () => {
+        describe('is rendered if it exists', () => {
+          test('label is correct', () => {
+            expect(getData()).toContain(reservation.universalData.field.label);
+          });
+          test('selected option text is correct', () => {
+            const expectedText = reservation.universalData.field.options
+              .find(
+                option => option.id === Number
+                  .parseInt(reservation.universalData.selectedOption, 10)
+              ).text;
+            expect(getData()).toContain(expectedText);
+            expect(getData()).toEqual(expect.stringContaining(expectedText));
+          });
+        });
+        describe('is not rendered if it doesnt exist', () => {
+          test('label and selected option text is not rendered', () => {
+            const plainReservation = Reservation.build();
+            const plainResource = Resource.build();
+            const plainData = getData({ reservation: plainReservation, resource: plainResource });
+            const { reservation: defaultReservation } = defaultProps;
+            expect(plainData).not.toContain(defaultReservation.universalData.field.label);
+            const textValues = defaultReservation.universalData.field.options.map(opt => opt.text);
+            expect(plainData).toEqual(expect.not.stringContaining(textValues[0]));
           });
         });
       });

@@ -9,7 +9,7 @@ import simple from 'simple-mock';
 import TermsField from 'shared/form-fields/TermsField';
 import { shallowWithIntl } from 'utils/testUtils';
 import Product from 'utils/fixtures/Product';
-import Resource from 'utils/fixtures/Resource';
+import Resource, { UniversalField } from 'utils/fixtures/Resource';
 import {
   UnconnectedReservationInformationForm as ReservationInformationForm,
   validate,
@@ -259,6 +259,7 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
       resource: Resource.build(),
       paymentTermsAndConditions: '',
       termsAndConditions: '',
+      universalField: []
     };
 
     function getWrapper(extraProps) {
@@ -480,6 +481,35 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           const field = wrapper.find(Field).filter({ component: TermsField });
 
           expect(field.length).toBe(0);
+        });
+      });
+    });
+
+    describe('universalData', () => {
+      describe('when resource has universalField field', () => {
+        test('renders Field with correct props', () => {
+          const uniData = UniversalField.build({ data: { url: 'url-to-a-picture' } });
+          const resource = Resource.build({ universalField: [uniData] });
+          const props = {
+            fields: ['universalData'],
+            resource
+          };
+          const wrapper = getWrapper(props);
+
+          const field = wrapper.find(Field);
+          expect(field.prop('name')).toBe('universalData');
+          expect(field.prop('label')).toBe(uniData.label);
+          expect(Object.keys(field.prop('universalFieldData'))).toHaveLength(2);
+          expect(field.prop('universalFieldData').description).toBe(uniData.description);
+          expect(field.prop('universalFieldData').data).toBe(uniData.data);
+
+          const options = field.prop('controlProps').options;
+          expect(options).toHaveLength(uniData.options.length);
+          options.forEach((option, index) => {
+            expect(option.id).toBe(uniData.options[index].id);
+            expect(option.value).toBe(uniData.options[index].id);
+            expect(option.name).toBe(uniData.options[index].text);
+          });
         });
       });
     });

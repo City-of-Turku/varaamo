@@ -370,5 +370,21 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
 
       expect(actual).toEqual(['someField1', 'someField2', 'termsAndConditions']);
     });
+
+    test('returns required form field and universalData if resource has universalField with content', () => {
+      let resource = Resource.build({
+        requiredReservationExtraFields: ['some_field_1', 'some_field_2'],
+        universalField: [],
+      });
+      const instance = getWrapper().instance();
+      let actual = instance.getRequiredFormFields(resource);
+      expect(actual).toEqual(['someField1', 'someField2']);
+      resource = Resource.build({
+        requiredReservationExtraFields: ['some_field_1', 'some_field_2'],
+        universalField: [{ key: 'value' }],
+      });
+      actual = instance.getRequiredFormFields(resource);
+      expect(actual).toEqual(['someField1', 'someField2', 'universalData']);
+    });
   });
 });

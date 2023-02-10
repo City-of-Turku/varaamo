@@ -24,4 +24,21 @@ const Reservation = new Factory()
     `http://api.hel.fi/respa/v1/reservation/${index}/`
   ));
 
+const UniversalData = new Factory()
+  .option('generateOptions', false)
+  .attr('type', 'select')
+  .attr('selectedOption', '1')
+  .attr('field', ['selectedOption'], () => ({
+    id: 1,
+    label: 'universal field label text',
+    description: 'universal field description text',
+    options: [
+      { id: 1, text: 'option-1' },
+      { id: 2, text: 'option-2' },
+      { id: 3, text: 'option-3' },
+      { id: 4, text: 'option-4' },
+    ]
+  }));
+
+export { UniversalData };
 export default Reservation;

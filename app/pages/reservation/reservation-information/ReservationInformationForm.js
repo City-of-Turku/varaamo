@@ -107,8 +107,10 @@ export function validate(values, {
       }
     }
     if (includes(currentRequiredFields, field)) {
+      // TODO: doesn't work correctly, returns error msg but ReduxForm doesnt show it on field.
+      const noUniversalSelectValue = field === 'universalData' && typeof values[field] === 'object' && values[field] && !values[field].selectedOption;
       // required fields cant be empty or have only white space in them
-      if (!values[field] || (typeof (values[field]) === 'string' && values[field].trim().length === 0)) {
+      if (!values[field] || (typeof (values[field]) === 'string' && values[field].trim().length === 0) || noUniversalSelectValue) {
         switch (field) {
           case 'termsAndConditions':
             errors[field] = t('ReservationForm.termsAndConditionsError');
@@ -129,14 +131,41 @@ export function validate(values, {
 class UnconnectedReservationInformationForm extends Component {
   // name is required by the Field component and is used to point to field's value.
   // fieldName is the actual html attribute name which is used for autocomplete etc.
+  // eslint-disable-next-line react/sort-comp
   renderField(
-    name, fieldName, type, label, controlProps = {}, help = null, info = null, altCheckbox = false
+    name, fieldName, type, label, controlProps = {}, help = null, info = null, altCheckbox = false,
+    universalProps = undefined
   ) {
     const { t } = this.props;
-    if (!includes(this.props.fields, name)) {
+    if (!includes(this.props.fields, name) && name !== 'universalData') {
       return null;
     }
     const isRequired = includes(this.requiredFields, name);
+
+
+    const opts = {};
+    // field is from resource universalField
+    if ((fieldName.includes('componenttype') || fieldName.includes('universalData')) && universalProps) {
+      // TODO: currently only works for <select> elements
+      // normalize values
+      // eslint-disable-next-line max-len
+      opts.normalize = value => (value.length ? ({ type, selectedOption: value, field: { ...universalProps } }) : null);
+      // format displayed values
+      opts.format = value => (value && typeof value === 'object' ? value.selectedOption : '');
+      // set random enough key
+      opts.key = Math.floor(Math.random() * (10000 - 1) + 1);
+      // TODO: find correct universalField object based on unique id instead of label string.
+      opts.universalFieldData = {
+        // find correct description text based on label
+        description: this.props.resource.universalField.find(
+          field => field.label.includes(label)
+        ).description,
+        // find correct data based on label
+        data: this.props.resource.universalField.find(
+          field => field.label.includes(label)
+        ).data
+      };
+    }
 
     return (
       <Field
@@ -150,6 +179,7 @@ class UnconnectedReservationInformationForm extends Component {
         name={name}
         props={{ fieldName }}
         type={type}
+        {...opts}
       />
     );
   }
@@ -174,6 +204,43 @@ class UnconnectedReservationInformationForm extends Component {
         }
       />
     );
+  }
+
+  renderUniversalFields() {
+    const { resource } = this.props;
+    const elements = resource.universalField.reduce((allElements, curr) => {
+      // what sort of element, select? radio?
+      const fieldType = curr.fieldType ? curr.fieldType.toLowerCase() : '';
+      const currentOptions = curr.options;
+      // normalize options
+      const options = currentOptions.reduce((allOpts, option) => {
+        allOpts.push({ id: option.id, name: option.text, value: option.id });
+        return allOpts;
+      }, []);
+      // the key name that redux-form uses, currently only works for 1 universal field per resource.
+      const nameValue = resource.universalField.length > 1 ? `universalData-${curr.id}` : 'universalData';
+      const universalProps = {
+        id: curr.id,
+        description: curr.description,
+        label: curr.label,
+        options: currentOptions,
+      };
+      allElements.push(this.renderField(
+        nameValue,
+        `componenttype-${curr.id}`,
+        fieldType,
+        curr.label,
+        {
+          options
+        },
+        null,
+        null,
+        false,
+        universalProps,
+      ));
+      return allElements;
+    }, []);
+    return elements;
   }
 
   render() {
@@ -249,6 +316,9 @@ class UnconnectedReservationInformationForm extends Component {
             t('common.reserverEmailAddressLabel'),
             { autoComplete: 'email' }
           )}
+          {resource.universalField && resource.universalField.length > 0
+            && this.renderUniversalFields()
+          }
           {includes(this.props.fields, 'reserverAddressStreet')
             && this.renderField(
               'reserverAddressStreet',
@@ -487,7 +557,23 @@ UnconnectedReservationInformationForm.propTypes = {
   openResourceTermsModal: PropTypes.func.isRequired,
   openResourcePaymentTermsModal: PropTypes.func.isRequired,
   requiredFields: PropTypes.array.isRequired,
-  resource: PropTypes.object.isRequired,
+  resource: PropTypes.shape({
+    universalField: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        universalField: PropTypes.string,
+        description: PropTypes.string,
+        label: PropTypes.string,
+        options: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.number,
+            text: PropTypes.string,
+          })
+        ),
+      }),
+    ),
+    includedReservationHomeMunicipalityFields: PropTypes.array,
+  }),
   staffEventSelected: PropTypes.bool,
   t: PropTypes.func.isRequired,
   termsAndConditions: PropTypes.string.isRequired,
