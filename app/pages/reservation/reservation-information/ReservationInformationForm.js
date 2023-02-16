@@ -152,8 +152,11 @@ class UnconnectedReservationInformationForm extends Component {
       opts.normalize = value => (value.length ? ({ type, selectedOption: value, field: { ...universalProps } }) : null);
       // format displayed values
       opts.format = value => (value && typeof value === 'object' ? value.selectedOption : '');
-      // set random enough key
-      opts.key = Math.floor(Math.random() * (10000 - 1) + 1);
+      const fieldId = this.props.resource.universalField.find(
+        field => field.label.includes(label)
+      ).id;
+      // set random enough key, consists of universal-field id and field name.
+      opts.key = `${fieldId}-${name}`;
       // TODO: find correct universalField object based on unique id instead of label string.
       opts.universalFieldData = {
         // find correct description text based on label
