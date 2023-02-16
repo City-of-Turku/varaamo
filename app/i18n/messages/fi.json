@@ -304,7 +304,7 @@
   "ReservationForm.termsAndConditionsHeader": "Tilan käyttösäännöt",
   "ReservationForm.termsAndConditionsLabel": "Olen lukenut ja hyväksynyt tilan käyttösäännöt",
   "ReservationForm.universalField.pictureAlt": "Kuva joka liittyy '{label}' kenttään.",
-  "ReservationForm.universalField.iframe.skipToAfter": "Siirry iframe-upotuksen jälkeen.",
+  "ReservationForm.universalField.iframe.skipToAfter": "Siirry iframe-upotuksen yli.",
   "ReservationForm.universalField.iframe.skipToBefore": "Siirry takaisin ennen iframe-upotusta.",
   "ReservationInfo.loginMessage": "Sinun täytyy <a>kirjautua sisään<a>, jotta voit tehdä varauksen tähän tilaan.",
   "ReservationInfo.loginMessageStrongAuth": "Sinun täytyy <a>kirjautua sisään<a> Suomi.fi:llä, jotta voit tehdä varauksen tähän tilaan.",

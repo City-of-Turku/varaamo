@@ -84,7 +84,7 @@ class ReservationInformation extends Component {
     if (termsAndConditions) {
       formFields.push('termsAndConditions');
     }
-    if (resource.universalField.length) {
+    if (resource.universalField && resource.universalField.length) {
       // resource.universalField.forEach(val => formFields.push(`universalData-${val.id}`));
       // TODO: atm only works with one field, change to above to support multiple ones.
       formFields.push('universalData');
@@ -152,7 +152,7 @@ class ReservationInformation extends Component {
       field => camelCase(field)
     )];
 
-    if (resource.universalField.length) {
+    if (resource.universalField && resource.universalField.length) {
       requiredFormFields.push('universalData');
     }
 

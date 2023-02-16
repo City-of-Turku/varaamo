@@ -56,13 +56,34 @@ function getAdditionalUniversalFields(t, label, universalFieldData) {
   return (
     <React.Fragment>
       {description && wrapper(<p>{description}</p>)}
-      {data && data.url && wrapper(<img alt={t('ReservationForm.universalField.pictureAlt', { label })} className="universal-data-image" src={data.url} />)}
+      {data && data.url && wrapper(
+        <img
+          alt={t('ReservationForm.universalField.pictureAlt', { label })}
+          className="universal-data-image"
+          src={data.url}
+        />
+      )}
       {/* eslint-disable-next-line react/no-danger */}
       {data && data.iframe && wrapper(
         <React.Fragment>
-          <a className="visually-hidden" href={skipTo('skip-end')} id="skip-start" target="_self">{t('ReservationForm.universalField.iframe.skipToAfter')}</a>
+          <a
+            className="visually-hidden"
+            href={skipTo('skip-end')}
+            id="skip-start"
+            target="_self"
+          >
+            {t('ReservationForm.universalField.iframe.skipToAfter')}
+          </a>
+          {/* eslint-disable-next-line react/no-danger */}
           <div dangerouslySetInnerHTML={{ __html: data.iframe }} />
-          <a className="visually-hidden" href={skipTo('skip-start')} id="skip-end" target="_self">{t('ReservationForm.universalField.iframe.skipToBefore')}</a>
+          <a
+            className="visually-hidden"
+            href={skipTo('skip-start')}
+            id="skip-end"
+            target="_self"
+          >
+            {t('ReservationForm.universalField.iframe.skipToBefore')}
+          </a>
         </React.Fragment>
       )
       }
