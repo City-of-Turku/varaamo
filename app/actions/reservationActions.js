@@ -90,7 +90,7 @@ function fetchReservations(params = {}) {
  * @param {Object} reservation reservation values
  * @returns reservation values in JSON form
  */
-function parseReservationData(reservation) {
+function parseReservationData(reservation, bulk = false) {
   const trimmedValues = mapValues(reservation, (value) => {
     if (typeof (value) === 'string') {
       return value.trim();
@@ -99,12 +99,19 @@ function parseReservationData(reservation) {
   });
 
   const parsed = pickBy(trimmedValues, value => value || value === 0 || typeof (value) === 'boolean');
+  if (bulk) {
+    const data = Object.values(parsed).reduce((acc, curr) => {
+      acc.push(decamelizeKeys(curr));
+      return acc;
+    }, []);
+    return JSON.stringify(data);
+  }
   return JSON.stringify(decamelizeKeys(parsed));
 }
 
 
 function postRecurringReservations(reservations) {
-  const url = buildAPIUrl('reservation_bulk');
+  const url = buildAPIUrl('reservation');
 
   return {
     [RSAA]: {
@@ -113,7 +120,7 @@ function postRecurringReservations(reservations) {
           types.API.RESERVATION_POST_REQUEST,
           {
             countable: true,
-            meta: { track: getTrackingInfo('add', reservations.resource) },
+            meta: { track: getTrackingInfo('add', reservations[0].resource) },
           }
         ),
         getSuccessTypeDescriptor(
@@ -128,7 +135,7 @@ function postRecurringReservations(reservations) {
       endpoint: url,
       method: 'POST',
       headers: getHeadersCreator(),
-      body: parseReservationData(reservations),
+      body: parseReservationData(reservations, true),
     },
   };
 }
