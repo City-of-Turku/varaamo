@@ -38,3 +38,5 @@ jobs:
         export TZ=Europe/Helsinki
         npm ci
         npm test
+    - name: Codecov
+      uses: codecov/codecov-action@v3.1.1
