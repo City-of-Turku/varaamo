@@ -30,7 +30,7 @@
     "import/no-extraneous-dependencies": "off",
 
     "import/order": [
-      "error",
+      "warn",
       {
         "groups": [
           "builtin",
@@ -70,13 +70,13 @@
     "linebreak-style": 0,
 
     "no-restricted-globals": ["error", "history"],
-    
+
     "prefer-destructuring": "off",
 
     "react/destructuring-assignment": "off",
 
     "react/require-default-props": "off",
-    
+
     "jsx-a11y/click-events-have-key-events": "off",
 
     "jsx-a11y/anchor-is-valid": "off",
@@ -84,11 +84,42 @@
     "jsx-a11y/label-has-for": "off",
 
     "jsx-a11y/no-static-element-interactions": "off",
-    
+
     "jsx-a11y/no-noninteractive-tabindex": "off",
-    
+
     "react/no-array-index-key": "off",
 
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+
+    "arrow-parens": "off",
+    "function-paren-newline": "off",
+    "prefer-object-spread": "off",
+    "default-param-last": "off",
+    "function-call-argument-newline": "off",
+    "no-restricted-exports": "off",
+    "no-multiple-empty-lines": "off",
+
+    "react/function-component-definition": "off",
+    "react/jsx-curly-newline": "off",
+    "react/jsx-no-constructed-context-values": "off",
+    "react/jsx-no-script-url": "off",
+    "react/jsx-no-useless-fragment": "off",
+    "react/jsx-no-props-spreading": "off",
+    "react/no-arrow-function-lifecycle": "off",
+    "react/no-invalid-html-attribute": "off",
+    "react/no-namespace": "off",
+    "react/no-unstable-nested-components": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-unused-class-component-methods": "off",
+    "react/prefer-exact-props": "off",
+    "react/state-in-constructor": "off",
+    "react/static-property-placement": "off",
+    "react/jsx-fragments": "off",
+    "react/sort-comp": "off",
+    "react/prop-types": "off",
+    "react/jsx-indent": "warn",
+
+    "import/no-import-module-exports": "off",
+    "jsx-a11y/control-has-associated-label": "off"
   }
 }

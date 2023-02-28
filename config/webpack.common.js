@@ -10,39 +10,23 @@ module.exports = {
     rules: [
       {
         test: /\.png$/,
-        loader: 'url-loader',
-        options: {
-          mimetype: 'image/png',
-        },
+        type: 'asset/inline'
       },
       {
         test: /\.gif$/,
-        loader: 'url-loader',
-        options: {
-          mimetype: 'image/gif',
-        },
+        type: 'asset/inline'
       },
       {
         test: /\.ico$/,
-        loader: 'url-loader',
-        options: {
-          mimetype: 'image/x-icon',
-        },
+        type: 'asset/inline'
       },
       {
         test: /\.(jpg|webp)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-            },
-          },
-        ],
+        type: 'asset/resource',
       },
       {
         test: /\.woff|\.woff2|\.svg|.eot|\.ttf/,
-        loader: 'url-loader?prefix=font/&limit=10000',
+        type: 'asset'
       },
     ],
   },

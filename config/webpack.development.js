@@ -5,9 +5,17 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const autoprefixer = require('autoprefixer');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const common = require('./webpack.common');
 
+const eslintOptions = {
+  // extensions: ['js', 'jsx'],
+  // exclude: ['node_modules', ],
+  // files: [path.resolve(__dirname, '../app'), path.resolve(__dirname, '../src')],
+  overrideConfigFile: path.resolve(__dirname, '../.eslintrc'),
+  eslintPath: require.resolve('eslint'),
+};
 module.exports = merge(common, {
   mode: 'development',
   entry: [
@@ -23,16 +31,6 @@ module.exports = merge(common, {
   },
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.(js|jsx)$/,
-        include: [path.resolve(__dirname, '../app'), path.resolve(__dirname, '../src')],
-        loader: 'eslint-loader',
-        options: {
-          configFile: path.resolve(__dirname, '../.eslintrc'),
-          eslintPath: require.resolve('eslint'),
-        },
-      },
       {
         test: /\.(js|jsx)$/,
         include: [path.resolve(__dirname, '../app'), path.resolve(__dirname, '../src')],
@@ -56,7 +54,7 @@ module.exports = merge(common, {
           'style-loader',
           'css-loader',
           'resolve-url-loader',
-          { loader: 'sass-loader', options: { sourceMap: true, sourceMapContents: false } },
+          { loader: 'sass-loader', options: { sourceMap: true } },
           { loader: 'postcss-loader', options: { plugins: [autoprefixer({ browsers: ['last 2 version', 'ie 9'] })] } },
         ],
       },
@@ -82,5 +80,6 @@ module.exports = merge(common, {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new ESLintPlugin(eslintOptions)
   ],
 });
