@@ -10,7 +10,7 @@ User interface for the City of Turku [varaamo.turku.fi](https://varaamo.turku.fi
 Recommended requirements
 ------------
 
-- [node](http://nodejs.org/) `>=14.19` | Suggestion: `14.19.0`
+- [node](http://nodejs.org/) `>=18.14.2` | Suggestion: `18.14.2`
 - [npm](https://www.npmjs.com/) `>=6.14` | Suggestion: `6.14.16`
 - [yarn](https://yarnpkg.com/) Optional, if `yarn` is not included as part of your current node version. `npm` can be used.
 
