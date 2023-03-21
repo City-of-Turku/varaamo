@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
@@ -7,6 +6,7 @@ import simple from 'simple-mock';
 import Button from 'react-bootstrap/lib/Button';
 import Row from 'react-bootstrap/lib/Row';
 
+import constants from 'constants/AppConstants';
 import ReservationDate from 'shared/reservation-date';
 import Reservation, { UniversalData } from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';

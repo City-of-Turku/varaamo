@@ -1,4 +1,3 @@
-import AppConstants from 'constants/AppConstants';
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -10,7 +9,7 @@ import MomentLocaleUtils, {
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-
+import AppConstants from 'constants/AppConstants';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 
 const defaultDateFormat = 'YYYY-MM-DD';

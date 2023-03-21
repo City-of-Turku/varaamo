@@ -1,10 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
 import moment from 'moment';
 import queryString from 'query-string';
 
+import constants from 'constants/AppConstants';
 import { getDateStartAndEndTimes, getDateString } from 'utils/timeUtils';
 
 function getFetchParamsFromFilters(filters) {

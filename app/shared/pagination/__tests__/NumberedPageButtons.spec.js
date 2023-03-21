@@ -1,10 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Button } from 'react-bootstrap';
 import classNames from 'classnames';
 
+import constants from 'constants/AppConstants';
 import NumberedPageButtons from '../NumberedPageButtons';
 
 

@@ -1,9 +1,8 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
 
-
+import constants from 'constants/AppConstants';
 import PageWrapper from 'pages/PageWrapper';
 import { shallowWithIntl } from 'utils/testUtils';
 import AboutPage from './AboutPage';

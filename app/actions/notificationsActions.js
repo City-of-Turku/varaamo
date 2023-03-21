@@ -1,6 +1,7 @@
+import { createAction } from 'redux-actions';
+
 import types from 'constants/ActionTypes';
 
-import { createAction } from 'redux-actions';
 
 
 const addNotification = createAction(types.UI.ADD_NOTIFICATION);

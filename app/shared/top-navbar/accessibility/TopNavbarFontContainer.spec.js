@@ -1,5 +1,4 @@
 import ACC from 'constants/AppConstants';
-
 import { selector } from './TopNavbarFontContainer';
 
 describe('shared/top-navbar/accessibility/TopNavbarFontContainer', () => {

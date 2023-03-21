@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import { get } from 'lodash';
 import React from 'react';
@@ -9,6 +8,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import moment from 'moment';
 
+import constants from 'constants/AppConstants';
 import ButtonGroupField from '../inputs/ButtonGroupField';
 import injectT from '../../../i18n/injectT';
 import {

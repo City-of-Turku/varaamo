@@ -1,8 +1,8 @@
-import FormTypes from 'constants/FormTypes';
 
 import { connect } from 'react-redux';
 import { reset as resetForm } from 'redux-form';
 
+import FormTypes from 'constants/FormTypes';
 import {
   commentReservation,
   confirmPreliminaryReservation,

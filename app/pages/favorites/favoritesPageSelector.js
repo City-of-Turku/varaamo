@@ -1,7 +1,6 @@
-import ActionTypes from 'constants/ActionTypes';
-
 import { createSelector, createStructuredSelector } from 'reselect';
 
+import ActionTypes from 'constants/ActionTypes';
 import { resourcesSelector } from 'state/selectors/dataSelectors';
 import { getDateString } from 'utils/timeUtils';
 import { isLargerFontSizeSelector } from 'state/selectors/accessibilitySelectors';

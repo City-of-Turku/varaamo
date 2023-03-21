@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import currentFavicon from '@city-assets/images/favicon.ico';
 
+import currentFavicon from '@city-assets/images/favicon.ico';
 import { getCurrentCustomization } from 'utils/customizationUtils';
 import espooFavicon from './espoo-favicon.ico';
 import vantaaFavicon from './vantaa-favicon.ico';

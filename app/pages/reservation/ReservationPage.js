@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import first from 'lodash/first';
 import isEmpty from 'lodash/isEmpty';
@@ -13,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
+import constants from 'constants/AppConstants';
 import { postReservation, putReservation } from 'actions/reservationActions';
 import { fetchResource } from 'actions/resourceActions';
 import {

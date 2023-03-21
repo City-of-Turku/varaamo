@@ -1,8 +1,9 @@
-import types from 'constants/ActionTypes';
 
 import reject from 'lodash/reject';
 import mapValues from 'lodash/mapValues';
 import Immutable from 'seamless-immutable';
+
+import types from 'constants/ActionTypes';
 
 
 const initialState = Immutable({

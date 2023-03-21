@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import range from 'lodash/range';
 import capitalize from 'lodash/capitalize';
@@ -16,6 +15,7 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Panel from 'react-bootstrap/lib/Panel';
 import Row from 'react-bootstrap/lib/Row';
 
+import constants from 'constants/AppConstants';
 import { fetchPurposes } from 'actions/purposeActions';
 import {
   changeSearchFilters,

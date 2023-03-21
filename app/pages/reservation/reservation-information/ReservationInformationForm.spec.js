@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import Button from 'react-bootstrap/lib/Button';
@@ -6,6 +5,7 @@ import Form from 'react-bootstrap/lib/Form';
 import { Field } from 'redux-form';
 import simple from 'simple-mock';
 
+import constants from 'constants/AppConstants';
 import TermsField from 'shared/form-fields/TermsField';
 import { shallowWithIntl } from 'utils/testUtils';
 import Product from 'utils/fixtures/Product';

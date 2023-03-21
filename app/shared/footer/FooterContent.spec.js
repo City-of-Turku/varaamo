@@ -1,9 +1,9 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
+import constants from 'constants/AppConstants';
 import { shallowWithIntl } from 'utils/testUtils';
 import FooterContent from './FooterContent';
 

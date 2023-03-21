@@ -1,4 +1,3 @@
-import FormTypes from 'constants/FormTypes';
 
 import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
@@ -14,6 +13,7 @@ import Well from 'react-bootstrap/lib/Well';
 import { Field, Fields, reduxForm } from 'redux-form';
 import { Row } from 'react-bootstrap';
 
+import FormTypes from 'constants/FormTypes';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import ReservationTimeControls from 'shared/form-fields/ReservationTimeControls';
 import TimeRange from 'shared/time-range';

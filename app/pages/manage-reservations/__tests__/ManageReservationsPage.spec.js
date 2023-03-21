@@ -1,9 +1,9 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import Loader from 'react-loader';
 import moment from 'moment';
 
+import constants from 'constants/AppConstants';
 import { shallowWithIntl } from 'utils/testUtils';
 import { getFiltersFromUrl, getSearchFromFilters } from 'utils/searchUtils';
 import ManageReservationsFilters from '../filters/ManageReservationsFilters';

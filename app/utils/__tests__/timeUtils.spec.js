@@ -1,10 +1,10 @@
-import constants from 'constants/AppConstants';
-import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
 
 import MockDate from 'mockdate';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
+import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
+import constants from 'constants/AppConstants';
 import {
   addToDate,
   calculateDuration,

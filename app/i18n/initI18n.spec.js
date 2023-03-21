@@ -1,5 +1,4 @@
 import constants from 'constants/AppConstants';
-
 import * as persistState from 'store/middleware/persistState';
 import enMessages from 'i18n/messages/en.json';
 import fiMessages from 'i18n/messages/fi.json';

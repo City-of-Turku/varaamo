@@ -1,11 +1,10 @@
 
-import ActionTypes from 'constants/ActionTypes';
-import FormTypes from 'constants/FormTypes';
-import ModalTypes from 'constants/ModalTypes';
-
 import { createSelector, createStructuredSelector } from 'reselect';
 import { formValueSelector } from 'redux-form';
 
+import ActionTypes from 'constants/ActionTypes';
+import FormTypes from 'constants/FormTypes';
+import ModalTypes from 'constants/ModalTypes';
 import recurringReservations from 'state/recurringReservations';
 import { isAdminSelector } from 'state/selectors/authSelectors';
 import { createResourceSelector } from 'state/selectors/dataSelectors';

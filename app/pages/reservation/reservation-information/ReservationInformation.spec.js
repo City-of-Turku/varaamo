@@ -1,10 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
 import { camelCase } from 'lodash';
 
+import constants from 'constants/AppConstants';
 import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';

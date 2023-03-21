@@ -1,12 +1,11 @@
-import types from 'constants/ActionTypes';
-import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
 
 import { createAction } from 'redux-actions';
 import Immutable from 'seamless-immutable';
 import first from 'lodash/first';
 import last from 'lodash/last';
 
-
+import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
+import types from 'constants/ActionTypes';
 import {
   cancelReservationEdit,
   changeAdminReservationFilters,

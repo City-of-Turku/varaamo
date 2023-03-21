@@ -1,9 +1,9 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import NumericInput from 'react-numeric-input';
 import simple from 'simple-mock';
 
+import constants from 'constants/AppConstants';
 import DatePicker from 'shared/date-picker';
 import { shallowWithIntl } from 'utils/testUtils';
 import SelectControl from 'pages/search/controls/SelectControl';

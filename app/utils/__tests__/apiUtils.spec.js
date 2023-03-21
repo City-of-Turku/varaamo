@@ -1,7 +1,6 @@
-import constants from 'constants/AppConstants';
-
 import { RSAA } from 'redux-api-middleware';
 
+import constants from 'constants/AppConstants';
 import {
   buildAPIUrl,
   createTransformFunction,

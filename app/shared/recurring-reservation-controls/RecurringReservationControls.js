@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -8,6 +7,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Row from 'react-bootstrap/lib/Row';
 import NumericInput from 'react-numeric-input';
 
+import constants from 'constants/AppConstants';
 import { injectT } from 'i18n';
 import DatePicker from 'shared/date-picker';
 import SelectControl from 'pages/search/controls/SelectControl';

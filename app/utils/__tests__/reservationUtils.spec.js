@@ -1,8 +1,8 @@
-import constants from 'constants/AppConstants';
 
 import MockDate from 'mockdate';
 import moment from 'moment';
 
+import constants from 'constants/AppConstants';
 import Reservation from 'utils/fixtures/Reservation';
 import {
   combine,

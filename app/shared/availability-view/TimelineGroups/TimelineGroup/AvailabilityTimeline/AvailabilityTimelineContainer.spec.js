@@ -1,8 +1,8 @@
-import { slotSize } from 'constants/SlotConstants';
 
 import mockDate from 'mockdate';
 import moment from 'moment';
 
+import { slotSize } from 'constants/SlotConstants';
 import { selector } from './AvailabilityTimelineContainer';
 
 function getState() {

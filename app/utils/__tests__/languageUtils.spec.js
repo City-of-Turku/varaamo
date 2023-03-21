@@ -1,5 +1,4 @@
 import constants from 'constants/AppConstants';
-
 import { getFeedbackLink, getLocalizedFieldValue } from '../languageUtils';
 
 describe('getFeedbackLink', () => {

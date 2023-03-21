@@ -1,8 +1,9 @@
-import constants from 'constants/AppConstants';
 
 import PropTypes from 'prop-types';
 import React from 'react';
 import Linkify from 'react-linkify';
+
+import constants from 'constants/AppConstants';
 
 // matches content: "[text](url)"
 const linkRegex = constants.REGEX.namedLink;

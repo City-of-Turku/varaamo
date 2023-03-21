@@ -1,7 +1,6 @@
-import ActionTypes from 'constants/ActionTypes';
-
 import { createSelector, createStructuredSelector } from 'reselect';
 
+import ActionTypes from 'constants/ActionTypes';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
 import { isAdminSelector } from 'state/selectors/authSelectors';
 import { userFavouriteResourcesSelector, unitsSelector } from 'state/selectors/dataSelectors';

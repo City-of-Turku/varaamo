@@ -1,8 +1,8 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import Immutable from 'seamless-immutable';
 
+import constants from 'constants/AppConstants';
 import Label from 'shared/label';
 import Reservation from 'utils/fixtures/Reservation';
 import { shallowWithIntl } from 'utils/testUtils';

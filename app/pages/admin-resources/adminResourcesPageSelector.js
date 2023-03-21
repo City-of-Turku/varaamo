@@ -1,4 +1,3 @@
-import ActionTypes from 'constants/ActionTypes';
 
 import includes from 'lodash/includes';
 import sortBy from 'lodash/sortBy';
@@ -6,6 +5,7 @@ import uniq from 'lodash/uniq';
 import moment from 'moment';
 import { createSelector, createStructuredSelector } from 'reselect';
 
+import ActionTypes from 'constants/ActionTypes';
 import {
   isSuperUserSelector,
   isAdminSelector,

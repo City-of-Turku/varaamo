@@ -1,9 +1,9 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { Col, Grid, Row } from 'react-bootstrap';
 import { get } from 'lodash';
 
+import constants from 'constants/AppConstants';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnwrappedManageReservationsFilters } from '../ManageReservationsFilters';
 import Unit from 'utils/fixtures/Unit';

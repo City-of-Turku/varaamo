@@ -1,5 +1,4 @@
 import constants from 'constants/AppConstants';
-
 import { getFilteredReservations, getHiddenReservationCount, getPageResultsText } from '../manageReservationsPageUtils';
 import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';

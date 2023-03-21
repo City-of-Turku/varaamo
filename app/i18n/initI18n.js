@@ -3,20 +3,20 @@ import 'moment/locale/fi';
 import 'moment/locale/sv';
 import 'moment-timezone/builds/moment-timezone-with-data-10-year-range';
 
-import constants from 'constants/AppConstants';
 
 import moment from 'moment';
 import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import fi from 'react-intl/locale-data/fi';
 import se from 'react-intl/locale-data/se';
+
+import constants from 'constants/AppConstants';
 // eslint-disable-next-line import/no-unresolved
 import fiMessagesFromTheme from '@city-i18n/fi.json';
 // eslint-disable-next-line import/no-unresolved
 import svMessagesFromTheme from '@city-i18n/sv.json';
 // eslint-disable-next-line import/no-unresolved
 import enMessagesFromTheme from '@city-i18n/en.json';
-
 import { loadPersistedLocale } from 'store/middleware/persistState';
 import enMessages from 'i18n/messages/en.json';
 import fiMessages from 'i18n/messages/fi.json';

@@ -1,5 +1,3 @@
-import constants from 'constants/AppConstants';
-import FormTypes from 'constants/FormTypes';
 
 import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
@@ -10,7 +8,8 @@ import Well from 'react-bootstrap/lib/Well';
 import { Field, reduxForm } from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
 
-
+import FormTypes from 'constants/FormTypes';
+import constants from 'constants/AppConstants';
 import { isValidPhoneNumber, hasProducts } from 'utils/reservationUtils';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import TermsField from 'shared/form-fields/TermsField';

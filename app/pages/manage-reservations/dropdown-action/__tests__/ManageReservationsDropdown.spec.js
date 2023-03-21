@@ -1,8 +1,8 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
+import constants from 'constants/AppConstants';
 import { shallowWithIntl } from 'utils/testUtils';
 import Reservation from '../../../../utils/fixtures/Reservation';
 import ManageReservationsDropdown from '../ManageReservationsDropdown';

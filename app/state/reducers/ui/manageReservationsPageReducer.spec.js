@@ -1,7 +1,6 @@
-import types from 'constants/ActionTypes';
-
 import Immutable from 'seamless-immutable';
 
+import types from 'constants/ActionTypes';
 import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 import reducer, { updateResults } from './manageReservationsPageReducer';

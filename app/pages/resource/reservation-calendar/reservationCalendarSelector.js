@@ -1,5 +1,3 @@
-import ActionTypes from 'constants/ActionTypes';
-import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
 
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
@@ -8,6 +6,8 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
+import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
+import ActionTypes from 'constants/ActionTypes';
 import {
   createIsStaffSelector,
   isAdminSelector,

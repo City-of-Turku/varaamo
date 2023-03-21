@@ -1,9 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+
+import constants from 'constants/AppConstants';
 
 
 function NumberedPageButtons({ pages, currentPage, onChange }) {

@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -9,6 +8,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 
+import constants from 'constants/AppConstants';
 import injectT from '../../i18n/injectT';
 import PageWrapper from '../PageWrapper';
 import ManageReservationsFilters from './filters/ManageReservationsFilters';

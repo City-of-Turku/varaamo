@@ -1,10 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import MockDate from 'mockdate';
 import moment from 'moment';
 import queryString from 'query-string';
 import simple from 'simple-mock';
 
+import constants from 'constants/AppConstants';
 import Resource from '../fixtures/Resource';
 import {
   hasMaxReservations,

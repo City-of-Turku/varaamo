@@ -1,5 +1,4 @@
 import constants from 'constants/AppConstants';
-
 import { getStatusOptions } from '../../filters/filterUtils';
 import { getLabelStyle, getLabelText } from '../statusUtils';
 

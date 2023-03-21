@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import pick from 'lodash/pick';
 import uniq from 'lodash/uniq';
@@ -7,6 +6,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/lib/Col';
 
+import constants from 'constants/AppConstants';
 import { injectT } from 'i18n';
 import {
   isStaffEvent, hasPayment, hasProducts

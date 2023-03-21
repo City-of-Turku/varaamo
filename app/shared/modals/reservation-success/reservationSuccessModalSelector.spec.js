@@ -1,5 +1,4 @@
 import ModalTypes from 'constants/ModalTypes';
-
 import { getState } from 'utils/testUtils';
 import reservationSuccessModalSelector from './reservationSuccessModalSelector';
 

@@ -1,7 +1,6 @@
-import ActionTypes from 'constants/ActionTypes';
-
 import { createSelector, createStructuredSelector } from 'reselect';
 
+import ActionTypes from 'constants/ActionTypes';
 import { isAdminSelector, isLoggedInSelector } from 'state/selectors/authSelectors';
 import { createResourceSelector, unitsSelector, createStrongAuthSatisfiedSelector } from 'state/selectors/dataSelectors';
 import { contrastSelector } from 'state/selectors/accessibilitySelectors';

@@ -107,7 +107,7 @@ class ReservationInfoModal extends Component {
                 <FormGroup controlId="commentsTextarea">
                   <ControlLabel>
                     {t('common.commentsLabel')}
-                      :
+                    :
                   </ControlLabel>
                   <FormControl
                     componentClass="textarea"

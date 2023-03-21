@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import Loader from 'react-loader';
@@ -6,6 +5,7 @@ import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
 import { first, isEmpty, last } from 'lodash';
 
+import constants from 'constants/AppConstants';
 import PageWrapper from 'pages/PageWrapper';
 import { shallowWithIntl } from 'utils/testUtils';
 import Reservation from 'utils/fixtures/Reservation';

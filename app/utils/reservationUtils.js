@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import camelCase from 'lodash/camelCase';
 import clone from 'lodash/clone';
@@ -11,6 +10,7 @@ import get from 'lodash/get';
 import moment from 'moment';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
+import constants from 'constants/AppConstants';
 import { buildAPIUrl, getHeadersCreator } from './apiUtils';
 import { getLocalizedFieldValue } from './languageUtils';
 
