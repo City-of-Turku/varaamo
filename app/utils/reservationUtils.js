@@ -375,6 +375,43 @@ function isManuallyConfirmedWithOrderAllowed(reservation) {
   return false;
 }
 
+/**
+ * Returns array with obj values for each option.
+ * @param {Object[]} universalField
+ * @param {Object} resource
+ */
+function normalizeUniversalFieldOptions(universalField, resource) {
+  return universalField.reduce((acc, curr) => {
+    // what sort of element, select? radio?
+    const fieldType = curr.fieldType ? curr.fieldType.toLowerCase() : '';
+    const currentOptions = curr.options;
+    // normalize options
+    const options = currentOptions.reduce((allOpts, option) => {
+      allOpts.push({ id: option.id, name: option.text, value: option.id });
+      return allOpts;
+    }, []);
+    // the key name that redux-form uses, currently only works for 1 universal field per resource.
+    const nameValue = resource.universalField.length > 1 ? `universalData-${curr.id}` : 'universalData';
+    const universalProps = {
+      id: curr.id,
+      description: curr.description,
+      label: curr.label,
+      options: currentOptions,
+    };
+    acc.push(
+      {
+        name: nameValue,
+        fieldName: `componenttype-${curr.id}`,
+        type: fieldType,
+        label: curr.label,
+        controlProps: { options },
+        universalProps
+      }
+    );
+    return acc;
+  }, []);
+}
+
 export {
   combine,
   isStaffEvent,
@@ -399,4 +436,5 @@ export {
   getPaymentReturnUrl,
   getReservationCustomerGroupName,
   isManuallyConfirmedWithOrderAllowed,
+  normalizeUniversalFieldOptions,
 };

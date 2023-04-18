@@ -30,6 +30,8 @@
   "AdminResourcesPage.noRightsMessage": "För att visa den här sidan krävs tjänstemannabehörighet.",
   "AdminResourcesPage.adminTitle": "Egna utrymmen",
   "AdminResourcesPage.favoriteTitle": "Egna favoriter",
+  "AdminResourcesPage.external.toggle": "Externa utrymmen",
+  "AdminResourcesPage.external.label": "Extern",
   "AvailabilityViewDateSelector.nextDay": "följande dag",
   "AvailabilityViewDateSelector.previousDay": "föregående dag",
   "CommentForm.label": "Kommentarer:",

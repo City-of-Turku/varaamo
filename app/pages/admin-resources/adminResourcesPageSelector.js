@@ -83,6 +83,21 @@ const filteredAdminResourceSelector = createSelector(
   )
 );
 
+// resources in which the user can make reservations for a customer but isn't staff.
+const externalResourcesSelector = createSelector(
+  adminResourcesSelectors,
+  filteredAdminResourceSelector,
+  (resources, filteredResources) => resources.filter(
+    resource => (
+      resource.userPermissions.canMakeReservationsForCustomer
+      && !filteredResources.includes(resource))
+  )
+);
+
+const filteredExternalResourcesSelector = createSelector(
+  externalResourcesSelector,
+  resources => sortBy(resources, 'name').map(res => ({ id: res.id, name: res.name }))
+);
 const filteredAdminResourcesIdsSelector = createSelector(
   filteredAdminResourceSelector,
   resources => sortBy(resources, 'name').map(res => res.id),
@@ -98,6 +113,7 @@ const adminResourcesPageSelector = createStructuredSelector({
   isFetchingResources: requestIsActiveSelectorFactory(ActionTypes.API.RESOURCES_GET_REQUEST),
   resources: filteredAdminResourcesIdsSelector,
   resourceTypes: adminResourceTypesSelector,
+  externalResources: filteredExternalResourcesSelector,
 });
 
 export default adminResourcesPageSelector;

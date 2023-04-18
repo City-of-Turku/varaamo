@@ -52,25 +52,32 @@ function isInsideOpeningHours(item, openingHours) {
   ));
 }
 
-function markItemSelectable(item, isSelectable, openingHours) {
-  const selectable = (
+function markItemSelectable(item, isSelectable, openingHours, ext, after) {
+  let selectable = (
     isSelectable
     && moment().isSameOrBefore(item.data.end)
     && (!openingHours || isInsideOpeningHours(item, openingHours))
   );
+  const isExternalAndBeforeAfter = !ext && moment(item.data.begin).isSameOrBefore(after);
+  if (isExternalAndBeforeAfter) {
+    selectable = false;
+  }
   return { ...item, data: { ...item.data, isSelectable: selectable } };
 }
 
-function markItemsSelectable(items, isSelectable, openingHours) {
+function markItemsSelectable(items, isSelectable, openingHours, external, after) {
   return items.map((item) => {
     if (item.type === 'reservation') return item;
-    return markItemSelectable(item, isSelectable, openingHours);
+    return markItemSelectable(item, isSelectable, openingHours, external, after);
   });
 }
 
 function addSelectionData(selection, resource, items) {
+  const canIgnoreOpeningHours = resource.userPermissions.canIgnoreOpeningHours;
+  const reservableAfter = resource.reservableAfter;
   if (!selection) {
-    return markItemsSelectable(items, true, resource.openingHours);
+    return markItemsSelectable(
+      items, true, resource.openingHours, canIgnoreOpeningHours, reservableAfter);
   } if (selection.resourceId !== resource.id) {
     // isSelectable is false by default, so nothing needs to be done.
     // This is a pretty important performance optimization when there are tons of
@@ -91,7 +98,8 @@ function addSelectionData(selection, resource, items) {
       lastSelectableFound = true;
       return item;
     }
-    return markItemSelectable(item, true, resource.openingHours);
+    return markItemSelectable(
+      item, true, resource.openingHours);
   });
 }
 

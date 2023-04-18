@@ -39,6 +39,10 @@ describe('shared/availability-view/utils', () => {
   });
 
   describe('addSelectionData', () => {
+    // canIgnoreOpeningHours is true when user has staff rights to resource.
+    const userPermissions = {
+      canIgnoreOpeningHours: true,
+    };
     const items = [
       {
         data: {
@@ -102,35 +106,35 @@ describe('shared/availability-view/utils', () => {
 
     test('marks all selectable if no selection', () => {
       const expected = getItems(true, true, true, true);
-      const actual = utils.addSelectionData(null, { id: 'r1' }, items);
+      const actual = utils.addSelectionData(null, { id: 'r1', userPermissions, }, items);
       expect(actual).toEqual(expected);
     });
 
     test('marks all not selectable if selection in another resource', () => {
       const expected = getItems(false, false, false, false);
       const selection = { begin: '2016-01-01T11:30:00Z', resourceId: 'r2' };
-      const actual = utils.addSelectionData(selection, { id: 'r1' }, items);
+      const actual = utils.addSelectionData(selection, { id: 'r1', userPermissions, }, items);
       expect(actual).toEqual(expected);
     });
 
     test('marks selectable if selection in this resource', () => {
       const expected = getItems(false, false, false, true);
       const selection = { begin: '2016-01-01T13:00:00Z', resourceId: 'r1' };
-      const actual = utils.addSelectionData(selection, { id: 'r1' }, items);
+      const actual = utils.addSelectionData(selection, { id: 'r1', userPermissions, }, items);
       expect(actual).toEqual(expected);
     });
 
     test('only marks selectable until next reservation', () => {
       const expected = getItems(true, true, false, false);
       const selection = { begin: '2016-01-01T11:00:00Z', resourceId: 'r1' };
-      const actual = utils.addSelectionData(selection, { id: 'r1' }, items);
+      const actual = utils.addSelectionData(selection, { id: 'r1', userPermissions, }, items);
       expect(actual).toEqual(expected);
     });
 
     test('marks not selectable if in the past', () => {
       mockDate.set('2016-02-01T10:00:00Z');
       const expected = getItems(false, false, false, false);
-      const actual = utils.addSelectionData(null, { id: 'r1' }, items);
+      const actual = utils.addSelectionData(null, { id: 'r1', userPermissions, }, items);
       expect(actual).toEqual(expected);
     });
 
@@ -138,6 +142,7 @@ describe('shared/availability-view/utils', () => {
       const expected = getItems(false, true, false, true);
       const resource = {
         id: 'r1',
+        userPermissions,
         openingHours: [
           { opens: '2016-01-01T11:30:00Z', closes: '2016-01-01T12:30:00Z' },
           { opens: '2016-01-01T13:00:00Z', closes: '2016-01-01T13:30:00Z' },
@@ -145,6 +150,54 @@ describe('shared/availability-view/utils', () => {
       };
       const actual = utils.addSelectionData(null, resource, items);
       expect(actual).toEqual(expected);
+    });
+
+    describe('selectable depending on if user can ignore opening hours', () => {
+      const generateItem = (day = '02', start = '10:00', end = '10:30', selectable = false) => ({
+        data: {
+          begin: `2016-01-${day}T${start}:00Z`,
+          end: `2016-01-${day}T${end}:00Z`,
+          isSelectable: selectable,
+        },
+        type: 'reservation-slot',
+      });
+      const times = [
+        ['10:00', '11:00'],
+        ['11:00', '12:00'],
+        ['12:00', '13:00'],
+        ['13:00', '14:00'],
+        ['14:00', '15:00'],
+        ['15:00', '16:00'],
+        ['16:00', '17:00'],
+        ['17:00', '18:00'],
+      ];
+      const generatedItems = times.map(time => generateItem('02', time[0], time[1]));
+      const resource = {
+        id: 'r1',
+        reservableAfter: '2016-01-03T10:00:00Z',
+        userPermissions,
+        openingHours: [
+          { opens: '2016-01-02T10:00:00Z', closes: '2016-01-02T18:00:00Z' },
+        ],
+      };
+      test('marks not selectable if user cant ignore hours and time is before reservableAfter', () => {
+        mockDate.set('2016-01-01T08:00:00Z');
+        const newPerms = {
+          userPermissions: {
+            canIgnoreOpeningHours: false,
+          },
+        };
+        const actual = utils.addSelectionData(null, { ...resource, ...newPerms }, generatedItems);
+        const nothingIsSelectable = actual.every(item => !item.data.isSelectable);
+        expect(nothingIsSelectable).toBe(true);
+      });
+
+      test('marks selectable if user can ignore hours and time is before reservableAfter', () => {
+        mockDate.set('2016-01-01T08:00:00Z');
+        const actual = utils.addSelectionData(null, resource, generatedItems);
+        const everythingIsSelectable = actual.every(item => item.data.isSelectable);
+        expect(everythingIsSelectable).toBe(true);
+      });
     });
   });
 

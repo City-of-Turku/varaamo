@@ -11,6 +11,7 @@ function getState() {
       resources: {
         'resource-1': {
           id: 'resource-1',
+          userPermissions: {},
           reservations: [
             {
               id: 111,
@@ -46,7 +47,7 @@ function getState() {
             },
           ],
         },
-        'resource-2': { id: 'resource-2' },
+        'resource-2': { id: 'resource-2', userPermissions: {}, },
       },
     },
   };

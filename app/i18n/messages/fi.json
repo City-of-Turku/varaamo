@@ -30,6 +30,8 @@
   "AdminResourcesPage.noRightsMessage": "Tarvitset virkailijan oikeudet nähdäksesi tämän sivun.",
   "AdminResourcesPage.adminTitle": "Omat tilat",
   "AdminResourcesPage.favoriteTitle": "Suosikit",
+  "AdminResourcesPage.external.toggle": "Ulkoiset tilat",
+  "AdminResourcesPage.external.label": "Ulkoinen",
   "AvailabilityViewDateSelector.nextDay": "seuraava päivä",
   "AvailabilityViewDateSelector.previousDay": "edellinen päivä",
   "CommentForm.label": "Kommentit:",

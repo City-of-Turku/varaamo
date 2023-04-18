@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { createSelector } from 'reselect';
 
 import UnpublishedLabel from 'shared/label/Unpublished';
+import Label from 'shared/label';
 import { injectT } from 'i18n';
 import { resourcesSelector } from 'state/selectors/dataSelectors';
 
@@ -17,11 +18,19 @@ ResourceInfo.propTypes = {
   name: PropTypes.string.isRequired,
   peopleCapacity: PropTypes.number,
   public: PropTypes.bool.isRequired,
+  hasStaffRights: PropTypes.bool,
+  t: PropTypes.func.isRequired,
 };
 export function ResourceInfo(props) {
   return (
     <div
-      className={classNames('resource-info', { 'resource-info-selected': props.isSelected })}
+      className={classNames(
+        'resource-info',
+        {
+          'resource-info-selected': props.isSelected,
+          'is-external': !props.hasStaffRights
+        })
+    }
       title={props.name}
     >
       <div className="name">
@@ -33,6 +42,11 @@ export function ResourceInfo(props) {
         {props.peopleCapacity}
         {!props.public && (
           <UnpublishedLabel />
+        )}
+        {!props.hasStaffRights && (
+          <Label bsStyle="default" className="unpublished-label">
+            {props.t('AdminResourcesPage.external.label')}
+          </Label>
         )}
       </div>
     </div>
@@ -50,11 +64,15 @@ export function selector() {
   );
   return createSelector(
     resourceSelector,
-    resource => ({
-      name: resource.name,
-      peopleCapacity: resource.peopleCapacity,
-      public: resource.public,
-    })
+    resource => {
+      const { isAdmin, isManager, isViewer } = resource.userPermissions;
+      return {
+        name: resource.name,
+        peopleCapacity: resource.peopleCapacity,
+        public: resource.public,
+        hasStaffRights: isAdmin || isManager || isViewer
+      };
+    }
   );
 }
 

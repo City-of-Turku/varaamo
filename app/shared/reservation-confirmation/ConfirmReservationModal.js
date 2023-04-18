@@ -60,6 +60,11 @@ class ConfirmReservationModal extends Component {
       formFields.push('reserverEmailAddress');
       formFields.push('reserverPhoneNumber');
     }
+    if (resource.universalField && resource.universalField.length) {
+      // resource.universalField.forEach(val => formFields.push(`universalData-${val.id}`));
+      // TODO: atm only works with one field, change to above to support multiple ones.
+      formFields.push('universalData');
+    }
 
     /* Field hidden until it is needed again
     if (resource.needManualConfirmation && isStaff) {

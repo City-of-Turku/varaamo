@@ -10,7 +10,7 @@ import isEmail from 'validator/lib/isEmail';
 
 import FormTypes from 'constants/FormTypes';
 import constants from 'constants/AppConstants';
-import { isValidPhoneNumber, hasProducts } from 'utils/reservationUtils';
+import { isValidPhoneNumber, hasProducts, normalizeUniversalFieldOptions } from 'utils/reservationUtils';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import TermsField from 'shared/form-fields/TermsField';
 import { injectT } from 'i18n';
@@ -210,39 +210,18 @@ class UnconnectedReservationInformationForm extends Component {
 
   renderUniversalFields() {
     const { resource } = this.props;
-    const elements = resource.universalField.reduce((allElements, curr) => {
-      // what sort of element, select? radio?
-      const fieldType = curr.fieldType ? curr.fieldType.toLowerCase() : '';
-      const currentOptions = curr.options;
-      // normalize options
-      const options = currentOptions.reduce((allOpts, option) => {
-        allOpts.push({ id: option.id, name: option.text, value: option.id });
-        return allOpts;
-      }, []);
-      // the key name that redux-form uses, currently only works for 1 universal field per resource.
-      const nameValue = resource.universalField.length > 1 ? `universalData-${curr.id}` : 'universalData';
-      const universalProps = {
-        id: curr.id,
-        description: curr.description,
-        label: curr.label,
-        options: currentOptions,
-      };
-      allElements.push(this.renderField(
-        nameValue,
-        `componenttype-${curr.id}`,
-        fieldType,
-        curr.label,
-        {
-          options
-        },
+    return normalizeUniversalFieldOptions(resource.universalField, resource)
+      .map(element => this.renderField(
+        element.name,
+        element.fieldName,
+        element.type,
+        element.label,
+        element.controlProps,
         null,
         null,
         false,
-        universalProps,
+        element.universalProps
       ));
-      return allElements;
-    }, []);
-    return elements;
   }
 
   render() {

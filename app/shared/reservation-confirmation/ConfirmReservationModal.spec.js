@@ -7,7 +7,7 @@ import simple from 'simple-mock';
 import CompactReservationList from 'shared/compact-reservation-list';
 import RecurringReservationControls from 'shared/recurring-reservation-controls';
 import Reservation from 'utils/fixtures/Reservation';
-import Resource from 'utils/fixtures/Resource';
+import Resource, { UniversalField } from 'utils/fixtures/Resource';
 import { shallowWithIntl } from 'utils/testUtils';
 import ConfirmReservationModal from './ConfirmReservationModal';
 import ReservationForm from './ReservationForm';
@@ -219,6 +219,18 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
       test('is not included if resource does not contain any terms', () => {
         const resource = Resource.build({ genericTerms: null });
         expect(getFormFields({ resource })).toEqual(expect.not.arrayContaining(['termsAndConditions']));
+      });
+    });
+
+    describe('universalData', () => {
+      test('is included if resource contains universalField', () => {
+        const resource = Resource.build({ universalField: [UniversalField.build()] });
+        expect(getFormFields({ resource })).toEqual(expect.arrayContaining(['universalData']));
+      });
+
+      test('is not included if resource does not contain universalField', () => {
+        const resource = Resource.build();
+        expect(getFormFields({ resource })).toEqual(expect.not.arrayContaining(['universalData']));
       });
     });
   });

@@ -30,6 +30,8 @@
   "AdminResourcesPage.noRightsMessage": "Official rights are required to see this page.",
   "AdminResourcesPage.adminTitle": "My premises",
   "AdminResourcesPage.favoriteTitle": "My favorites",
+  "AdminResourcesPage.external.toggle": "External resources",
+  "AdminResourcesPage.external.label": "External",
   "AvailabilityViewDateSelector.nextDay": "next day",
   "AvailabilityViewDateSelector.previousDay": "previous day",
   "CommentForm.label": "Comments:",

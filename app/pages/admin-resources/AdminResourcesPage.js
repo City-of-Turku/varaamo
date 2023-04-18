@@ -25,7 +25,7 @@ import adminResourcesPageSelector from './adminResourcesPageSelector';
 class UnconnectedAdminResourcesPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { selection: null };
+    this.state = { selection: null, showExternalResources: false };
     this.fetchResources = this.fetchResources.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
   }
@@ -66,16 +66,26 @@ class UnconnectedAdminResourcesPage extends Component {
     this.props.actions.openConfirmReservationModal();
   }
 
+  toggleShowExternalResources = () => {
+    this.setState(prevState => ({ showExternalResources: !prevState.showExternalResources }));
+  }
+
   render() {
     const {
       selectedResourceTypes,
       isAdmin,
       isLoggedin,
       isFetchingResources,
-      resources,
+      resources: rawResources,
       t,
       resourceTypes,
+      externalResources,
     } = this.props;
+    const { showExternalResources } = this.state;
+    let resources = rawResources;
+    if (showExternalResources) {
+      resources = resources.concat(externalResources.map(res => res.id));
+    }
     return (
       <PageWrapper className="admin-resources-page" fluid title={(t('AdminResourcesPage.adminTitle'))}>
         {isAdmin && <h1>{t('AdminResourcesPage.adminTitle')}</h1>}
@@ -84,10 +94,13 @@ class UnconnectedAdminResourcesPage extends Component {
           {isLoggedin && (
             <div>
               <ResourceTypeFilter
+                externalResources={externalResources}
                 onSelectResourceType={this.props.actions.selectAdminResourceType}
                 onUnselectResourceType={this.props.actions.unselectAdminResourceType}
                 resourceTypes={resourceTypes}
                 selectedResourceTypes={selectedResourceTypes}
+                showExternalResources={showExternalResources}
+                toggleShowExternalResources={this.toggleShowExternalResources}
               />
               <AvailabilityView
                 date={this.props.date}
@@ -130,6 +143,7 @@ UnconnectedAdminResourcesPage.propTypes = {
   resources: PropTypes.array.isRequired,
   t: PropTypes.func.isRequired,
   resourceTypes: PropTypes.array.isRequired,
+  externalResources: PropTypes.array,
 };
 
 UnconnectedAdminResourcesPage = injectT(UnconnectedAdminResourcesPage);  // eslint-disable-line

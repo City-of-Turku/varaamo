@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import constants from 'constants/AppConstants';
 import Reservation from 'utils/fixtures/Reservation';
+import Resource, { UniversalField } from 'utils/fixtures/Resource';
 import {
   combine,
   isStaffEvent,
@@ -29,6 +30,7 @@ import {
   getInitialProducts,
   getReservationCustomerGroupName,
   isManuallyConfirmedWithOrderAllowed,
+  normalizeUniversalFieldOptions,
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 import Product from '../fixtures/Product';
@@ -765,6 +767,33 @@ describe('Utils: reservationUtils', () => {
       const state = states.READY_FOR_PAYMENT;
       const reservation = Reservation.build({ needManualConfirmation, order, state });
       expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(false);
+    });
+  });
+  describe('normalizeUniversalFieldOptions', () => {
+    test('returns array with objects where values have been normalized', () => {
+      const universalField = UniversalField.build();
+      const resource = Resource.build({ universalField: [universalField] });
+      const returnValues = normalizeUniversalFieldOptions(resource.universalField, resource);
+      const expectedValues = {
+        fieldName: `componenttype-${universalField.id}`,
+        label: universalField.label,
+        name: 'universalData',
+        type: 'select',
+        controlProps: {
+          options: universalField.options.map(opt => ({
+            id: opt.id,
+            value: opt.id,
+            name: opt.text,
+          })),
+        },
+        universalProps: {
+          id: universalField.id,
+          description: universalField.description,
+          label: universalField.label,
+          options: universalField.options,
+        },
+      };
+      expect(returnValues).toEqual([expectedValues]);
     });
   });
 });
