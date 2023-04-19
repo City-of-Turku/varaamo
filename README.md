@@ -96,6 +96,9 @@ By default the running app can be found at `localhost:3000`.
       Custom config to override global application's styling and texts.
       Expected value is a valid string that is the name of the theme package, e.g. `THEME_PMG='varaamo-theme'`. Default styles and texts will be used if not set.
 
+    - `BLOCK_SEARCH_ENGINE_INDEXING`:
+      Adding this setting prevents most search engines from indexing the site. This can be useful for preventing test instances from showing up in search results.
+
 
 3. Then, start the development server:
 

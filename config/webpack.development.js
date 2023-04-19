@@ -76,6 +76,7 @@ module.exports = merge(common, {
         OG_IMG_URL: JSON.stringify(process.env.OG_IMG_URL || 'https://testivaraamo.turku.fi/static/images/aurajoki.jpg'),
         COOKIE_POLICY_BASE_URL: JSON.stringify(process.env.COOKIE_POLICY_BASE_URL || 'https://testivaraamo.turku.fi/cookie-policy/'),
         THEME_PKG: JSON.stringify(process.env.THEME_PKG),
+        BLOCK_SEARCH_ENGINE_INDEXING: Boolean(process.env.BLOCK_SEARCH_ENGINE_INDEXING),
       },
     }),
     new webpack.HotModuleReplacementPlugin(),

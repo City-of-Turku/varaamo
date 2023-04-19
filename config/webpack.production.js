@@ -66,6 +66,7 @@ module.exports = merge(common, {
         OPENID_AUTHORITY: JSON.stringify(process.env.OPENID_AUTHORITY),
         OG_IMG_URL: JSON.stringify(process.env.OG_IMG_URL || 'https://varaamo.turku.fi/static/images/aurajoki.jpg'),
         COOKIE_POLICY_BASE_URL: JSON.stringify(process.env.COOKIE_POLICY_BASE_URL || 'https://varaamo.turku.fi/cookie-policy/'),
+        BLOCK_SEARCH_ENGINE_INDEXING: Boolean(process.env.BLOCK_SEARCH_ENGINE_INDEXING),
       },
     }),
     new MiniCssExtractPlugin({
