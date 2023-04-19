@@ -309,14 +309,16 @@ class UnconnectedReservationInformationForm extends Component {
             'phone',
             'text',
             t('common.reserverPhoneNumberLabel'),
-            { autoComplete: 'tel' }
+            { autoComplete: 'tel' },
+            t('common.contactPurposeHelp'),
           )}
           {this.renderField(
             'reserverEmailAddress',
             'email',
             'email',
             t('common.reserverEmailAddressLabel'),
-            { autoComplete: 'email' }
+            { autoComplete: 'email' },
+            t('common.contactPurposeHelp'),
           )}
           {resource.universalField && resource.universalField.length > 0
             && this.renderUniversalFields()
