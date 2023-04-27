@@ -40,11 +40,14 @@ describe('shared/reservation-controls/ReservationControls', () => {
         const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
         const buttons = getWrapper(reservation, isAdmin).find(Button);
 
-        test('renders one button', () => {
-          expect(buttons.length).toBe(1);
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
         });
         describe('the first button', () => {
           makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+        describe('the 2nd button', () => {
+          makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
         });
       });
 
@@ -53,14 +56,17 @@ describe('shared/reservation-controls/ReservationControls', () => {
         const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
         const buttons = getWrapper(reservation, isAdmin).find(Button);
 
-        test('renders two buttons', () => {
-          expect(buttons.length).toBe(2);
+        test('renders three buttons', () => {
+          expect(buttons.length).toBe(3);
         });
         describe('the first button', () => {
           makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
         });
         describe('the second button', () => {
           makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
+        });
+        describe('the 3rd button', () => {
+          makeButtonTests(buttons.at(2), 'cancel', 'ReservationControls.cancel', onCancelClick);
         });
       });
 
@@ -145,11 +151,11 @@ describe('shared/reservation-controls/ReservationControls', () => {
         });
 
         describe('the second button', () => {
-          makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
+          makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
         });
 
         describe('the third button', () => {
-          makeButtonTests(buttons.at(2), 'edit', 'ReservationControls.edit', onEditClick);
+          makeButtonTests(buttons.at(2), 'cancel', 'ReservationControls.cancel', onCancelClick);
         });
       });
 
@@ -186,11 +192,14 @@ describe('shared/reservation-controls/ReservationControls', () => {
         const reservation = Reservation.build({ needManualConfirmation: false, state: 'confirmed', userPermissions });
         const buttons = getWrapper(reservation, isAdmin).find(Button);
 
-        test('renders one button', () => {
-          expect(buttons.length).toBe(1);
+        test('renders two buttons', () => {
+          expect(buttons.length).toBe(2);
         });
         describe('the first button', () => {
           makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
+        });
+        describe('the 2nd button', () => {
+          makeButtonTests(buttons.at(1), 'cancel', 'ReservationControls.cancel', onCancelClick);
         });
       });
 
@@ -200,13 +209,16 @@ describe('shared/reservation-controls/ReservationControls', () => {
         const buttons = getWrapper(reservation, isAdmin).find(Button);
 
         test('renders two buttons', () => {
-          expect(buttons.length).toBe(2);
+          expect(buttons.length).toBe(3);
         });
         describe('the first button', () => {
           makeButtonTests(buttons.at(0), 'info', 'ReservationControls.info', onInfoClick);
         });
         describe('the second button', () => {
           makeButtonTests(buttons.at(1), 'edit', 'ReservationControls.edit', onEditClick);
+        });
+        describe('the 3rd button', () => {
+          makeButtonTests(buttons.at(2), 'cancel', 'ReservationControls.cancel', onCancelClick);
         });
       });
 
@@ -343,8 +355,8 @@ describe('shared/reservation-controls/ReservationControls', () => {
       describe('when paymentUrlData is defined and its reservation id matches given reservation id', () => {
         const paymentUrlData = { paymentUrl: 'https://google.fi', reservationId: reservation.id };
         const buttons = getWrapper(reservation, isAdmin, paymentUrlData).find(Button);
-        test('renders two buttons', () => {
-          expect(buttons.length).toBe(2);
+        test('renders three buttons', () => {
+          expect(buttons.length).toBe(3);
         });
 
         describe('the first button', () => {
@@ -353,6 +365,10 @@ describe('shared/reservation-controls/ReservationControls', () => {
 
         describe('the second button', () => {
           makeButtonTests(buttons.at(1), 'pay', 'ReservationControls.pay', onPayClick);
+        });
+
+        describe('the 3rd button', () => {
+          makeButtonTests(buttons.at(2), 'cancel', 'ReservationControls.cancel', onCancelClick);
         });
       });
 

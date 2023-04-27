@@ -76,9 +76,8 @@ class ReservationControls extends Component {
       if (canModify) {
         givenButtons.push(buttons.edit);
       }
-      if (canDelete) {
-        givenButtons.push(buttons.cancel);
-      }
+
+      givenButtons.push(buttons.cancel);
       return givenButtons;
     }
 
@@ -92,7 +91,7 @@ class ReservationControls extends Component {
       case 'confirmed': {
         if (isAdmin) {
           return canModify
-            ? [buttons.cancel, buttons.edit]
+            ? [buttons.edit, buttons.cancel]
             : [buttons.cancel];
         }
         return [buttons.cancel];
@@ -111,7 +110,7 @@ class ReservationControls extends Component {
       case constants.RESERVATION_STATE.WAITING_FOR_PAYMENT: {
         if (paymentUrlData) {
           if (paymentUrlData.paymentUrl && paymentUrlData.reservationId === reservation.id) {
-            return [buttons.pay];
+            return [buttons.pay, buttons.cancel];
           }
         }
 
