@@ -197,6 +197,8 @@ class TimeSlot extends PureComponent {
       onClick({
         begin: slot.start,
         end: slot.end,
+        resourceOpen: slot.resourceOpen,
+        resourceClose: slot.resourceClose,
         resource,
       });
     }

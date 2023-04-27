@@ -142,6 +142,8 @@ function reservationsReducer(state = initialState, action) {
       const startSlot = {
         begin: action.payload.begin,
         end: action.payload.end,
+        open: action.payload.resourceOpen,
+        close: action.payload.resourceClose,
         resource: id
       };
       // Remove minPeriod of slot information from payload.

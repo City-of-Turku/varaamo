@@ -22,7 +22,7 @@ export function selector() {
     resourceIdSelector,
     (resources, id) => resources[id]
   );
-  const reservationsSelector = createSelector(
+  const reservationsSelector2 = createSelector(
     resourceSelector,
     dateSelector,
     (resource, date) => resource.reservations && sortBy(
@@ -30,6 +30,19 @@ export function selector() {
         .filter(reservation => reservation.state !== 'cancelled'
           && reservation.state !== 'denied')
         .filter(reservation => reservation.begin.slice(0, 10) === date),
+      'begin'
+    )
+  );
+  const reservationsSelector = createSelector(
+    resourceSelector,
+    dateSelector,
+    (resource, date) => resource.reservations && sortBy(
+      resource.reservations
+        .filter(reservation => reservation.state !== 'cancelled'
+          && reservation.state !== 'denied')
+        // eslint-disable-next-line max-len
+        .filter(reservation => moment(reservation.begin).startOf('day').isSame(moment(date).startOf('day'))
+          || (!moment(reservation.begin).startOf('day').isSame(moment(date).startOf('day')) && moment(reservation.end).startOf('day').isSame(moment(date).startOf('day')))),
       'begin'
     )
   );

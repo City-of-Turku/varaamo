@@ -39,7 +39,7 @@ export default class AvailabilityTimeline extends React.Component {
     } = this.props;
     return (
       <div className="availability-timeline">
-        {this.props.items.map((item) => {
+        {this.props.items.map((item, index) => {
           if (item.type === 'reservation-slot') {
             return (
               <ReservationSlot
@@ -59,6 +59,7 @@ export default class AvailabilityTimeline extends React.Component {
               {...item.data}
               key={item.key}
               onClick={onReservationClick}
+              pos={[index, this.props.items.length - 1]}
             />
           );
         })}

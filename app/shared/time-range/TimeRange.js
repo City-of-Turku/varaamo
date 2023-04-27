@@ -14,7 +14,10 @@ class TimeRange extends Component {
     } = this.props;
     const beginMoment = moment(begin);
     const endMoment = moment(end);
-    const rangeString = `${beginMoment.format(beginFormat)} \u2013 ${endMoment.format(endFormat)}`;
+    const sameDay = beginMoment.day() === endMoment.day();
+    const foo = endMoment.day() > beginMoment.day() ? 'LLL' : endFormat;
+    const bar = sameDay ? beginFormat : 'LLL';
+    const rangeString = `${beginMoment.format(bar)} \u2013 ${endMoment.format(foo)}`;
     const ISORangeString = `${begin}/${end}`;
 
     return (

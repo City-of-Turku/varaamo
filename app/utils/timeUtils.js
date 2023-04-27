@@ -200,6 +200,8 @@ function getTimeSlots(
         start: startMoment.toISOString(),
         end: endMoment.toISOString(),
         onCooldown,
+        resourceOpen: start,
+        resourceClose: end
       };
     }
   );

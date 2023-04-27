@@ -82,8 +82,31 @@ function isSlotSelectable(slot, selected, resource, lastSelectableFound, isAdmin
       return false;
     }
   }
+  /*
+  const fooa = moment.duration(moment(selected[1].end).diff(moment(selected[0].begin)));
+  const bar = moment.duration(resource.maxPeriod).subtract(fooa).asMinutes();
+
+    if (moment(selected[1].close)
+      .isSame(moment(selected[1].end))
+      && bar && moment(slot.start).isAfter(moment(selected[1].end))) {
+      console.log(bar);
+      console.log('menee yli');
+      console.log(slot.start);
+      return true;
+    }
+
+   */
   const firstSelectedDate = new Date(firstSelected.begin);
   const slotStartDate = new Date(slot.start);
+  const resourceMaxTime = moment.duration(resource.maxPeriod);
+  const isBetweenStartAndMax = moment(slot.start)
+    .isBetween(
+      moment(firstSelected.begin),
+      moment(firstSelected.begin).utc().add(resourceMaxTime.days(), 'd').add(resourceMaxTime.hours(), 'h')
+    );
+  if (isBetweenStartAndMax) {
+    return isBetweenStartAndMax;
+  }
   return (
     firstSelectedDate <= slotStartDate && firstSelectedDate.getDate() === slotStartDate.getDate()
   );
@@ -106,7 +129,7 @@ function isFirstSelected(slot, selected) {
   return firstSelected.begin === slot.start;
 }
 
-function isHighlighted(slot, selected, hovered) {
+function isHighlighted(slot, selected, hovered, maxPeriod = null) {
   if (!slot || !selected || !hovered || !selected.length) {
     return false;
   }
@@ -114,10 +137,20 @@ function isHighlighted(slot, selected, hovered) {
   const firstSelectedDate = new Date(firstSelected.begin);
   const slotStartDate = new Date(slot.start);
   const hoveredDate = new Date(hovered.start);
+
+  let lastCheck = firstSelectedDate.getDate() === slotStartDate.getDate();
+  if (maxPeriod) {
+    const maxDur = moment.duration(maxPeriod);
+    lastCheck = moment(hovered.start)
+      .isBetween(
+        moment(firstSelected.begin),
+        moment(firstSelected.begin).utc().add(maxDur.days(), 'd').add(maxDur.hours(), 'h')
+      );
+  }
   return (
     slotStartDate > firstSelectedDate
     && slotStartDate < hoveredDate
-    && firstSelectedDate.getDate() === slotStartDate.getDate()
+    && lastCheck
   );
 }
 /**

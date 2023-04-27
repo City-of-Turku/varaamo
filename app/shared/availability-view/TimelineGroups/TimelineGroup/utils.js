@@ -7,19 +7,31 @@ import { slotSize, slotWidth, slotMargin } from 'constants/SlotConstants';
 function getTimeSlotWidth({ startTime, endTime } = {}) {
   const diff = endTime ? endTime.diff(startTime, 'minutes') : slotSize;
   const slots = Math.floor(diff / slotSize);
-
+  if (endTime && endTime.diff(startTime, 'minutes')) {
+    console.log('endtimeä');
+    console.log(startTime);
+    console.log(endTime);
+    console.log(endTime.diff(startTime, 'minutes'));
+  } else {
+    console.log('defaulttia');
+  }
   return (slotWidth * slots) - slotMargin;
 }
 
 function getTimelineItems(date, reservations, resourceId) {
   const items = [];
+  console.log(`getTimeLineItems - resource: ${resourceId}`);
+  console.log(reservations);
   let reservationPointer = 0;
   let timePointer = date.clone().startOf('day');
   const end = date.clone().endOf('day');
   while (timePointer.isBefore(end)) {
     const reservation = reservations && reservations[reservationPointer];
     const isSlotReservation = reservation && timePointer.isSame(reservation.begin);
+    // eslint-disable-next-line max-len
+    const isDuringReservation = reservation && timePointer.isBetween(reservation.begin, reservation.end);
     if (isSlotReservation) {
+      // reservation starts
       items.push({
         key: String(items.length),
         type: 'reservation',
@@ -28,6 +40,17 @@ function getTimelineItems(date, reservations, resourceId) {
       timePointer = moment(reservation.end);
       reservationPointer += 1;
     } else {
+      if (isDuringReservation) {
+        // the remainder of a reservation that started the previous day?
+        // console.log(`is during: ${timePointer.toISOString()}`);
+        items.push({
+          key: String(items.length),
+          type: 'reservation',
+          data: reservation,
+        });
+        timePointer = moment(reservation.end);
+        reservationPointer += 1;
+      }
       items.push({
         key: String(items.length),
         type: 'reservation-slot',
@@ -43,6 +66,8 @@ function getTimelineItems(date, reservations, resourceId) {
       timePointer.add(slotSize, 'minutes');
     }
   }
+  console.log('itemit');
+  console.log(items);
   return items;
 }
 
@@ -67,7 +92,7 @@ function markItemSelectable(item, isSelectable, openingHours, ext, after) {
 
 function markItemsSelectable(items, isSelectable, openingHours, external, after) {
   return items.map((item) => {
-    if (item.type === 'reservation') return item;
+    if (item.type === 'reservation') return { ...item, openingHours };
     return markItemSelectable(item, isSelectable, openingHours, external, after);
   });
 }
@@ -90,13 +115,13 @@ function addSelectionData(selection, resource, items) {
   let lastSelectableFound = false;
   return items.map((item) => {
     if (lastSelectableFound || item.data.begin < selection.begin) {
-      if (item.type === 'reservation') return item;
+      if (item.type === 'reservation') return { ...item, open: resource.open, close: resource.close };
       // isSelectable is false by default.
       return item;
     }
     if (item.type === 'reservation') {
       lastSelectableFound = true;
-      return item;
+      return { ...item, open: resource.open, close: resource.close };
     }
     return markItemSelectable(
       item, true, resource.openingHours);

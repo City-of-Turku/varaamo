@@ -41,11 +41,17 @@ class TimeSlots extends Component {
     super();
 
     this.state = {
-      showSkip: false
+      showSkip: false,
+      selectionDuration: null,
+      durationLeft: null,
     };
 
     this.handleSkipFocus = this.handleSkipFocus.bind(this);
     this.handleSkipBlur = this.handleSkipBlur.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.updateStuff();
   }
 
   onClear = () => {
@@ -94,6 +100,35 @@ class TimeSlots extends Component {
     }
     return hoveredTimeSlot.end;
   };
+
+
+  updateStuff = () => {
+    const {
+      durationLeft, selectionDuration
+    } = this.state;
+    const { selected, resource } = this.props;
+    if (selected && selected.length === 2) {
+      console.log(selected);
+      const foo = moment.duration(moment(selected[1].end).diff(moment(selected[0].begin)));
+
+      if (selectionDuration !== foo.asMinutes()) {
+        if (selected[1].open && (selected[0].open !== selected[1].open)) {
+          const diffi = moment.duration(moment(selected[1].open).diff(moment(selected[0].close)));
+          console.log('diffi');
+          console.log(diffi.asHours());
+        }
+        // console.log(foo.asMinutes());
+        // console.log(durationLeft);
+        const bar = moment.duration(resource.maxPeriod)
+          .subtract(foo).asMinutes() / moment.duration(resource.slotSize).asMinutes();
+        // console.log(bar);
+        this.setState({
+          selectionDuration: foo.asMinutes(),
+          durationLeft: bar
+        });
+      }
+    }
+  }
 
   handleSkipFocus() {
     this.setState({ showSkip: true });
@@ -149,6 +184,7 @@ class TimeSlots extends Component {
     };
   }
 
+
   renderTimeSlots = (selectedDateHeaderId) => {
     const {
       selected, selectedDate, slots, resource
@@ -159,7 +195,6 @@ class TimeSlots extends Component {
       selectedDate,
       slots
     );
-
     return slots.map((timeSlots, index) => {
       if (!timeSlots.length) {
         return null;
@@ -220,13 +255,19 @@ class TimeSlots extends Component {
       t,
       time,
     } = this.props;
-    const { hoveredTimeSlot } = this.state;
+    const { hoveredTimeSlot, durationLeft } = this.state;
     if (!slot.end) {
       return (
         <p className="app-TimeSlots--closed" key={slot.start}>
           {t('TimeSlots.closedMessage')}
         </p>
       );
+    }
+    let bar = null;
+    if (selected && selected.length) {
+      const foo = moment.duration(moment(selected[1].end).diff(moment(selected[0].begin)));
+      bar = moment.duration(resource.maxPeriod).subtract(foo).asMinutes();
+      // console.log(bar);
     }
     const scrollTo = time && time === slot.start;
     const isSelectable = utils.isSlotSelectable(
@@ -243,17 +284,20 @@ class TimeSlots extends Component {
     const shouldShowReservationPopover = hoveredTimeSlot
       && isFirstSelected && !isHoveredSlotSelected;
 
-    const isHighlighted = utils.isHighlighted(slot, selected, hoveredTimeSlot);
+    const isHighlighted = utils.isHighlighted(slot, selected, hoveredTimeSlot, resource.maxPeriod);
     const resBegin = this.getReservationBegin();
     const resEnd = this.getReservationEnd();
 
     let isMaxExceeded = false;
 
     if (!isAdmin && resBegin && resource.maxPeriod) {
+      const fooaa = moment.duration(moment(selected[1].end).diff(moment(selected[0].begin)));
       const resLengthInMins = moment(slot.end).diff(resBegin, 'minutes');
       const maxPeriodInMins = moment.duration(resource.maxPeriod).asMinutes();
+      const some = bar || maxPeriodInMins;
       isMaxExceeded = resLengthInMins > maxPeriodInMins;
     }
+    const slotDetailedTime = { alku: selected.length ? selected[0] : '', loppu: hoveredTimeSlot || selected[1] || '' };
 
     const timeSlot = (
       <TimeSlot
@@ -286,6 +330,7 @@ class TimeSlots extends Component {
         end={resEnd}
         key="timeslots-reservation-popover"
         onCancel={this.onCancel}
+        timeDetails={slotDetailedTime}
       >
         {timeSlot}
       </ReservationPopover>

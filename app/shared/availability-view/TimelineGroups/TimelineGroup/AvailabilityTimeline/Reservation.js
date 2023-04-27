@@ -29,12 +29,32 @@ Reservation.propTypes = {
     displayName: PropTypes.string,
     email: PropTypes.string,
   }),
+  pos: PropTypes.array, // [num, num] used to determine reservation slot
 };
 
 function Reservation({ onClick, ...reservation }) {
   const startTime = moment(reservation.begin);
   const endTime = moment(reservation.end);
-  const width = utils.getTimeSlotWidth({ startTime, endTime });
+  let width = utils.getTimeSlotWidth({ startTime, endTime });
+  // console.log(`width: ${width}`);
+  // let width2 = 0;
+  // reservation is the last slot of the day -> width extends to midnight.
+  if (reservation.pos[0] === reservation.pos[1]) {
+    const eka = moment(reservation.begin);
+    const toka = moment(reservation.begin).add(1, 'd').startOf('day');
+    width = utils.getTimeSlotWidth({ startTime: eka, endTime: toka });
+    // width = (48 - (reservation.pos[1] + 1)) * 30;
+  }
+  if (reservation.pos[0] === 0 && (reservation.pos[0] !== reservation.pos[1])) {
+    // res is the first slot of the day -> reservation started yesterday and extends to this one.
+    const eka = moment(reservation.end).startOf('day');
+    const toka = moment(reservation.end);
+    width = utils.getTimeSlotWidth({ startTime: eka, endTime: toka });
+    console.log(`widthi: ${width}`);
+    console.log(eka.toISOString());
+    console.log(toka.toISOString());
+  }
+  // console.log(`width2: ${width}`);
   const reserverName = getReserverName(reservation.reserverName, reservation.user);
   const popover = (
     <Popover className="reservation-info-popover" id={`popover-${reservation.id}`} title={reservation.eventSubject}>

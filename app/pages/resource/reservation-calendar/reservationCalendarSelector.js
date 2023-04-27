@@ -64,7 +64,8 @@ const resourceByDates = createSelector(
         ),
         reservations: filter(
           resource.reservations,
-          ({ begin }) => begin.substring(0, 10) === rangeDate
+          // eslint-disable-next-line max-len
+          ({ begin, end }) => begin.substring(0, 10) === rangeDate || end.substring(0, 10) === rangeDate
         ),
       }));
     }
