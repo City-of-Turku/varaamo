@@ -13,13 +13,15 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
 import constants from 'constants/AppConstants';
-import { postReservation, putReservation } from 'actions/reservationActions';
-import { fetchResource } from 'actions/resourceActions';
+import { postReservation, postRecurringReservations, putReservation } from 'actions/reservationActions';
+import { fetchResource, fetchResourceDate } from 'actions/resourceActions';
 import {
   clearReservations,
   closeReservationSuccessModal,
   openResourceTermsModal,
   openResourcePaymentTermsModal,
+  testSeriesAdd,
+  testSeriesChangeFreq,
 } from 'actions/uiActions';
 import { addNotification } from 'actions/notificationsActions';
 import PageWrapper from 'pages/PageWrapper';
@@ -128,8 +130,11 @@ class UnconnectedReservationPage extends Component {
   componentWillUpdate(nextProps) {
     // changes to confirm page if receives correct reservation props from backend
     // if requires payment, redirect to given url
-    const { reservationCreated: nextCreated, reservationEdited: nextEdited } = nextProps;
-    const { reservationCreated, reservationEdited, isStaff } = this.props;
+    // eslint-disable-next-line max-len
+    const { reservationCreated: nextCreated, reservationEdited: nextEdited, state: nextState } = nextProps;
+    const {
+      reservationCreated, reservationEdited, isStaff, state
+    } = this.props;
     if (
       (!isEmpty(nextCreated) || !isEmpty(nextEdited))
       && (nextCreated !== reservationCreated || nextEdited !== reservationEdited)
@@ -150,6 +155,48 @@ class UnconnectedReservationPage extends Component {
         view: 'confirmation',
       });
       window.scrollTo(0, 0);
+    }
+    const { testSeries: nextSeries } = nextState.ui.reservations;
+    const { testSeries: currSeries } = state.ui.reservations;
+    if (nextSeries && currSeries) {
+      if (nextSeries.occur !== currSeries.occur) {
+        if (nextSeries.occur.length > 1) {
+          if (
+            currSeries.occur
+            // eslint-disable-next-line max-len
+            && currSeries.occur.length > nextSeries.occur.length
+          ) {
+            return;
+          }
+          // eslint-disable-next-line max-len
+          const currLen = currSeries.occur ? currSeries.occur.length : 0;
+          console.log(`current length: ${currLen}`);
+          console.log(`next length: ${nextSeries.occur.length}`);
+          const maxLen = nextSeries.occur.length;
+          // eslint-disable-next-line max-len
+          const start = moment(nextSeries.occur[0].start).format();
+          const end = moment(nextSeries.occur[maxLen - 1].end).format();
+          const startDay = moment(nextSeries.occur[0].start).day() + 1;
+          const endDay = moment(nextSeries.occur[maxLen - 1].end).isoWeekday();
+          const times = {
+            timeStart: moment(nextSeries.occur[0].start).format(),
+            timeEnd: moment(nextSeries.occur[0].end).format()
+          };
+          const paramit = {
+            start, end, startDay, endDay, ...times
+          };
+          if (nextSeries.value === 'days') {
+            this.props.actions.fetchResourceDate(this.props.resource.id, paramit);
+          } else {
+            this.props.actions.fetchResourceDate(this.props.resource.id, paramit);
+          }
+        }
+      }
+      if (
+        (nextSeries.data && (nextSeries.data.length >= 1))
+        && (!currSeries.data || !currSeries.data.length)) {
+        this.handleCreateErrorNotification();
+      }
     }
   }
 
@@ -224,7 +271,7 @@ class UnconnectedReservationPage extends Component {
    */
   handleReservation = (values = {}) => {
     const {
-      actions, currentLanguage, reservationToEdit, resource, selected
+      actions, currentLanguage, reservationToEdit, resource, selected, state
     } = this.props;
     if (!isEmpty(selected)) {
       const { begin } = first(selected);
@@ -260,6 +307,12 @@ class UnconnectedReservationPage extends Component {
           end,
         });
       } else {
+        const reservations = state.ui.reservations.testSeries.occur.map(occ => ({
+          ...values, end: occ.end, begin: occ.start, preferredLanguage, resource: resource.id
+        }));
+        console.log(reservations);
+        actions.postRecurringReservations(reservations);
+        /*
         actions.postReservation({
           ...values,
           order,
@@ -268,6 +321,7 @@ class UnconnectedReservationPage extends Component {
           end,
           resource: resource.id,
         });
+         */
       }
     }
   };
@@ -536,6 +590,8 @@ class UnconnectedReservationPage extends Component {
                     resource={resource}
                     selectedTime={selectedTime}
                     state={this.props.state}
+                    testAdd={actions.testSeriesAdd}
+                    testChange={actions.testSeriesChangeFreq}
                     unit={unit}
                     user={user}
                   />
@@ -593,10 +649,14 @@ function mapDispatchToProps(dispatch) {
     clearReservations,
     closeReservationSuccessModal,
     fetchResource,
+    fetchResourceDate,
     openResourceTermsModal,
     openResourcePaymentTermsModal,
     putReservation,
     postReservation,
+    postRecurringReservations,
+    testSeriesAdd,
+    testSeriesChangeFreq
   };
 
   return { actions: bindActionCreators(actionCreators, dispatch) };

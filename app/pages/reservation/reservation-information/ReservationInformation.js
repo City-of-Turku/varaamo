@@ -33,7 +33,10 @@ class ReservationInformation extends Component {
     reservation: PropTypes.object,
     resource: PropTypes.object.isRequired,
     selectedTime: PropTypes.object.isRequired,
+    state: PropTypes.object,
     t: PropTypes.func.isRequired,
+    testAdd: PropTypes.func,
+    testChange: PropTypes.func,
     unit: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
   };
@@ -222,7 +225,11 @@ class ReservationInformation extends Component {
             paymentTermsAndConditions={paymentTermsAndConditions}
             requiredFields={this.getRequiredFormFields(resource, termsAndConditions)}
             resource={resource}
+            selectedTime={selectedTime}
+            state={this.props.state.ui.reservations.testSeries}
             termsAndConditions={termsAndConditions}
+            testAdd={this.props.testAdd}
+            testChange={this.props.testChange}
             user={user}
           />
         </Col>

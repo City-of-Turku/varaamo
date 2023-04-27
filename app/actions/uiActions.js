@@ -124,6 +124,9 @@ const changeContrast = createAction(types.UI.CHANGE_CONTRAST);
 
 const changeFontSize = createAction(types.UI.CHANGE_FONTSIZE, fontsize => fontsize);
 
+const testSeriesAdd = createAction('series-ADD-TIME');
+const testSeriesChangeFreq = createAction('series-CHANGE-FREQ');
+
 export {
   cancelReservationEdit,
   cancelReservationEditInInfoModal,
@@ -158,6 +161,8 @@ export {
   selectReservationToShow,
   showReservationInfoModal,
   startReservationEditInInfoModal,
+  testSeriesAdd,
+  testSeriesChangeFreq,
   toggleResourceMap,
   toggleTimeSlot,
   unselectAdminResourceType,

@@ -49,6 +49,24 @@ function fetchResource(id, params = {}) {
   };
 }
 
+function fetchResourceDate(id, params = {}) {
+  return {
+    [RSAA]: {
+      types: [
+        getRequestTypeDescriptor(types.API.RESOURCE_GET_REQUEST),
+        getSuccessTypeDescriptor(
+          'series-RESERVATIONS',
+          { schema: schemas.resourceSchema }
+        ),
+        getErrorTypeDescriptor(types.API.RESOURCE_GET_ERROR),
+      ],
+      endpoint: buildAPIUrl(`resource/${id}`, params),
+      method: 'GET',
+      headers: getHeadersCreator(),
+    },
+  };
+}
+
 function fetchResources(params = {}, source) {
   const fetchParams = Object.assign({}, params, { pageSize: 500 });
 
@@ -113,6 +131,7 @@ export {
   fetchFavoritedResources,
   fetchResource,
   fetchResources,
+  fetchResourceDate,
   favoriteResource,
   unfavoriteResource,
 };

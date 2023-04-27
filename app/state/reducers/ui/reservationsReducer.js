@@ -3,7 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import first from 'lodash/first';
 import last from 'lodash/last';
 import Immutable from 'seamless-immutable';
-
+import moment from 'moment';
 import ModalTypes from 'constants/ModalTypes';
 import types from 'constants/ActionTypes';
 import { getTimeSlots, getEndTimeSlotWithMinPeriod, getTimeDiff } from 'utils/timeUtils';
@@ -19,6 +19,7 @@ const initialState = Immutable({
   toEdit: [],
   toShow: [],
   toShowEdited: [],
+  testSeries: {},
 });
 
 function selectReservationToEdit(state, action) {
@@ -178,6 +179,75 @@ function reservationsReducer(state = initialState, action) {
       return state.merge({
         selected: [],
       });
+    }
+    case 'series-ADD-TIME': {
+      const { begin, end } = state.selected[0];
+      const occur = [];
+      let startTime = moment(begin);
+      let endTime = moment(end);
+      // eslint-disable-next-line no-plusplus
+      for (let iii = 0; iii < action.payload; iii++) {
+        occur.push({ start: startTime.toISOString(), end: endTime.toISOString() });
+        startTime = startTime.add(1, state.testSeries.value);
+        endTime = endTime.add(1, state.testSeries.value);
+      }
+      return state.merge({
+        testSeries: { ...state.testSeries, times: action.payload, occur }
+      });
+    }
+
+    case 'series-CHANGE-FREQ': {
+      if (action.payload.value === '') {
+        return state.merge({
+          testSeries: {
+            ...state.testSeries, ...action.payload, times: 0, occur: []
+          }
+        });
+      }
+      if (state.testSeries.occur && state.testSeries.occur.length > 1) {
+        const eka = state.testSeries.occur[0];
+        let startTime = moment(eka.start);
+        let endTime = moment(eka.end);
+        const occur = [];
+        // eslint-disable-next-line no-plusplus
+        for (let iii = 0; iii < state.testSeries.occur.length; iii++) {
+          occur.push({ start: startTime.toISOString(), end: endTime.toISOString() });
+          startTime = startTime.add(1, action.payload.value);
+          endTime = endTime.add(1, action.payload.value);
+        }
+        return state.merge({
+          testSeries: { ...state.testSeries, ...action.payload, occur }
+        });
+      }
+      return state.merge({
+        testSeries: { ...state.testSeries, ...action.payload }
+      });
+    }
+
+    case 'series-RESERVATIONS': {
+      if (action.payload.entities.resources) {
+        const resoKey = Object.keys(action.payload.entities.resources)[0];
+        const reservations = action.payload.entities.resources[resoKey].reservations;
+        if (state.testSeries.data) {
+          const oldData = state.testSeries.data;
+          const existingIDs = oldData.map(data => data.id);
+          const newIDs = reservations.map(data => data.id);
+          const finalstuff = reservations.reduce((acc, curr) => {
+            if (!existingIDs.includes(curr.id)) {
+              acc.push(curr);
+            }
+            return acc;
+          }, []);
+          console.log(existingIDs);
+          console.log(newIDs);
+          // eslint-disable-next-line max-len
+          return state.merge({ testSeries: { ...state.testSeries, data: [...oldData, ...finalstuff] } }, { deep: true });
+        }
+        // eslint-disable-next-line max-len
+        return state.merge({ testSeries: { ...state.testSeries, data: reservations } }, { deep: true });
+      }
+      // eslint-disable-next-line max-len
+      return state.merge({ testSeries: { ...state.testSeries, data: action.payload.entities } }, { deep: true });
     }
 
     default: {

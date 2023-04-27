@@ -17,6 +17,8 @@ import { injectT } from 'i18n';
 import ReservationTermsModal from 'shared/modals/reservation-terms';
 import WrappedText from 'shared/wrapped-text/WrappedText';
 import ReservationSubmitButton from './ReservationSubmitButton';
+import DatePickerMulti from 'shared/date-picker/DatePickerMulti';
+import RecurringReservationControls from 'shared/recurring-reservation-controls/RecurringReservationControls';
 
 const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {
@@ -235,7 +237,9 @@ class UnconnectedReservationInformationForm extends Component {
       onConfirm,
       requiredFields,
       resource,
+      selectedTime,
       staffEventSelected,
+      state,
       t,
       termsAndConditions,
       paymentTermsAndConditions,
@@ -245,8 +249,45 @@ class UnconnectedReservationInformationForm extends Component {
       ? constants.REQUIRED_STAFF_EVENT_FIELDS
       : requiredFields;
 
+    const freqOpts = [
+      { label: 'RecurringReservationControls.frequencyNone', value: '' },
+      { label: 'RecurringReservationControls.frequencyDaily', value: 'days' },
+      { label: 'RecurringReservationControls.frequencyWeekly', value: 'weeks' },
+      { label: 'RecurringReservationControls.frequencyMonthly', value: 'months' },
+    ];
+    // eslint-disable-next-line max-len
+    const lastTimeVal = state.occur && state.occur.length ? state.occur[state.occur.length - 1].start : selectedTime.begin;
     return (
       <div>
+        <div>
+          {state.data && state.data.length
+            ? state.data.map(ele => (
+              <div key={ele.begin}>
+                {`${new Date(ele.begin).toDateString()} on varattu.`}
+              </div>
+            )) : <div />
+          }
+        </div>
+        <div>
+          <RecurringReservationControls
+            changeFrequency={this.props.testChange}
+            changeLastTime={() => console.log('change last time')}
+            changeNumberOfOccurrences={this.props.testAdd}
+            frequency={state.value || ''}
+            frequencyOptions={freqOpts}
+            isVisible
+            lastTime={lastTimeVal}
+            numberOfOccurrences={state.times || 1}
+          />
+        </div>
+        <div>
+          <DatePickerMulti
+            daysInAdvance={resource.reservableBefore}
+            onChange={data => console.log(data)}
+            selectedValues={state.occur}
+            value={selectedTime.begin}
+          />
+        </div>
         <Form className="reservation-form" horizontal onSubmit={handleSubmit(onConfirm)}>
           { includes(this.props.fields, 'reserverName') && (
             <h3 className="reservationers-Info">{t('ReservationInformationForm.reserverInformationTitle')}</h3>
@@ -557,8 +598,12 @@ UnconnectedReservationInformationForm.propTypes = {
     ),
     includedReservationHomeMunicipalityFields: PropTypes.array,
   }),
+  selectedTime: PropTypes.object,
   staffEventSelected: PropTypes.bool,
+  state: PropTypes.object,
   t: PropTypes.func.isRequired,
+  testAdd: PropTypes.func,
+  testChange: PropTypes.func,
   termsAndConditions: PropTypes.string.isRequired,
   paymentTermsAndConditions: PropTypes.string.isRequired,
 };
