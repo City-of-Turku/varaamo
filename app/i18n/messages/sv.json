@@ -300,7 +300,7 @@
   "ReservationForm.numberOfParticipants.overError": "Antalet deltagare är över det tillåtna {peopleCapacity}",
   "ReservationForm.numberOfParticipants.underError": "Det måste vara minst en deltagare",
   "ReservationForm.maxLengthError": "Den maximala längden på fältet är {maxLength} tecken",
-  "ReservationForm.phoneNumberError": "Ange ett giltigt telefonnummer som kan börja med ett '+' tecken och som endast innehåller nummer",
+  "ReservationForm.phoneNumberError": "Ange ett telefonnummer som kan börja med ett '+', inte innehåller några mellanslag och innehåller endast nummer t.ex. 0401234567",
   "ReservationForm.requiredError": "Obligatorisk information",
   "ReservationForm.staffEventHelp": "Verkets egna evenemang godkänns automatiskt och de enda obligatoriska uppgifterna är namnet på personen som bokar utrymmet och beskrivningen av evenemanget.",
   "ReservationForm.staffEventLabel": "Verkets eget evenemang",
