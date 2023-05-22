@@ -16,6 +16,7 @@ import {
 } from './ReservationInformationForm';
 import ReservationSubmitButton from './ReservationSubmitButton';
 import { hasProducts } from 'utils/reservationUtils';
+import ReservationValidationErrors from './ReservationValidationErrors';
 
 describe('pages/reservation/reservation-information/ReservationInformationForm', () => {
   describe('validation', () => {
@@ -243,7 +244,7 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
     });
   });
 
-  describe('rendering', () => {
+  describe('rendering and methods', () => {
     const defaultProps = {
       fields: [],
       hasPayment: false,
@@ -533,13 +534,14 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
         });
 
         test('renders ReservationSubmitButton with correct props', () => {
-          const submitButton = getWrapper().find(ReservationSubmitButton);
+          const wrapper = getWrapper();
+          const instance = wrapper.instance();
+          const submitButton = wrapper.find(ReservationSubmitButton);
           expect(submitButton).toHaveLength(1);
-          expect(submitButton.prop('handleSubmit')).toBe(defaultProps.handleSubmit);
+          expect(submitButton.prop('handleFormSubmit')).toBe(instance.handleFormSubmit);
           expect(submitButton.prop('hasPayment')).toBe(hasProducts(defaultProps.resource));
           expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
           expect(submitButton.prop('needManualConfirmation')).toBe(defaultProps.resource.needManualConfirmation);
-          expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
         });
       });
 
@@ -591,12 +593,57 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
         });
 
         test('renders ReservationSubmitButton with correct props', () => {
-          const submitButton = getWrapper({ isEditing: true }).find(ReservationSubmitButton);
+          const wrapper = getWrapper({ isEditing: true });
+          const instance = wrapper.instance();
+          const submitButton = wrapper.find(ReservationSubmitButton);
           expect(submitButton).toHaveLength(1);
-          expect(submitButton.prop('handleSubmit')).toBe(defaultProps.handleSubmit);
+          expect(submitButton.prop('handleFormSubmit')).toBe(instance.handleFormSubmit);
           expect(submitButton.prop('hasPayment')).toBe(defaultProps.hasPayment);
           expect(submitButton.prop('isMakingReservations')).toBe(defaultProps.isMakingReservations);
-          expect(submitButton.prop('onConfirm')).toBe(defaultProps.onConfirm);
+        });
+      });
+    });
+
+    test('renders ReservationValidationErrors', () => {
+      const wrapper = getWrapper();
+      const instance = wrapper.instance();
+      const validationErrors = wrapper.find(ReservationValidationErrors);
+      expect(validationErrors).toHaveLength(1);
+      expect(validationErrors.prop('formErrors')).toBe(instance.state.formErrors);
+      expect(validationErrors.prop('showFormErrorList')).toBe(instance.state.showFormErrorList);
+      expect(validationErrors.prop('universalFields')).toBe(defaultProps.resource.universalField);
+    });
+
+    describe('methods', () => {
+      describe('componentDidUpdate', () => {
+        test('sets correct state when showFormErrorList is true and formValues has changed', () => {
+          const prevProps = { formValues: { foo: 'bar' } };
+          const instance = getWrapper({ formValues: { foo: 'baz' } }).instance();
+          instance.state.showFormErrorList = true;
+          instance.state.formErrors = ['foo'];
+          instance.componentDidUpdate(prevProps);
+          expect(instance.state.showFormErrorList).toBe(false);
+          expect(instance.state.formErrors).toEqual([]);
+        });
+      });
+
+      describe('handleFormSubmit', () => {
+        test('calls setState with correct params when there are form errors', () => {
+          const instance = getWrapper({ formSyncErrors: { foo: 'bar' } }).instance();
+          const spy = jest.spyOn(instance, 'setState');
+          instance.handleFormSubmit();
+          expect(spy).toHaveBeenCalledTimes(1);
+          expect(spy).toHaveBeenCalledWith({ showFormErrorList: true, formErrors: ['foo'] });
+        });
+
+        test('calls handleSubmit', () => {
+          const handleSubmit = jest.fn();
+          const instance = getWrapper({ handleSubmit }).instance();
+          handleSubmit.mockClear();
+
+          instance.handleFormSubmit();
+          expect(handleSubmit).toHaveBeenCalledTimes(1);
+          expect(handleSubmit).toHaveBeenCalledWith(defaultProps.onConfirm);
         });
       });
     });

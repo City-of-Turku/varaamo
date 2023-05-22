@@ -6,9 +6,8 @@ import { shallowWithIntl } from 'utils/testUtils';
 describe('pages/reservation/reservation-information/ReservationSubmitButton', () => {
   const defaultProps = {
     isMakingReservations: false,
-    handleSubmit: () => {},
+    handleFormSubmit: () => {},
     hasPayment: false,
-    onConfirm: () => {}
   };
 
   function getWrapper(extraProps) {
@@ -21,7 +20,7 @@ describe('pages/reservation/reservation-information/ReservationSubmitButton', ()
       expect(button).toHaveLength(1);
       expect(button.prop('bsStyle')).toBe('primary');
       expect(button.prop('disabled')).toBe(defaultProps.isMakingReservations);
-      expect(button.prop('onClick')).toBe(defaultProps.handleSubmit(defaultProps.onConfirm));
+      expect(button.prop('onClick')).toBe(defaultProps.handleFormSubmit);
       expect(button.prop('type')).toBe('submit');
     });
 

@@ -11,6 +11,7 @@ import moment from 'moment';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
 import constants from 'constants/AppConstants';
+import { FIELDS } from 'constants/ReservationConstants';
 import { buildAPIUrl, getHeadersCreator } from './apiUtils';
 import { getLocalizedFieldValue } from './languageUtils';
 
@@ -412,6 +413,32 @@ function normalizeUniversalFieldOptions(universalField, resource) {
   }, []);
 }
 
+/**
+ * Returns mapped and sorted reservation form errors from the given errors array.
+ * @param {Object[]} errors reservation form errors
+ * @param {Object[]} universalFields universal fields in this form
+ * @returns {Object[]} mapped and sorted reservation form errors
+ */
+function mapReservationErrors(errors, universalFields) {
+  const mappedErrors = errors.map((error, index) => {
+    // Note: only one universal field per resource is supported currently.
+    if (error === 'universalData') {
+      return {
+        id: error, label: universalFields[0].label, forBilling: false, order: 100 + index
+      };
+    }
+    const errorField = Object.values(FIELDS).find(field => field.id === error);
+    if (errorField) {
+      return errorField;
+    }
+    return {
+      id: error, label: error, forBilling: false, order: 100 + index
+    };
+  });
+
+  return mappedErrors.sort((a, b) => a.order - b.order);
+}
+
 export {
   combine,
   isStaffEvent,
@@ -437,4 +464,5 @@ export {
   getReservationCustomerGroupName,
   isManuallyConfirmedWithOrderAllowed,
   normalizeUniversalFieldOptions,
+  mapReservationErrors,
 };

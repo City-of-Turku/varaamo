@@ -311,6 +311,7 @@
   "ReservationForm.universalField.pictureAlt": "Bild som är relaterat till '{label}' fältet.",
   "ReservationForm.universalField.iframe.skipToAfter": "Hoppa över iframe-inbäddningen.",
   "ReservationForm.universalField.iframe.skipToBefore": "Hoppa tillbaka före iframe-inbäddningen.",
+  "ReservationForm.validation.payer.label": "Betalarens",
   "ReservationInfo.loginMessage": "För att kunna boka detta utrymme måste du <a>logga in<a>.",
   "ReservationInfo.loginMessageStrongAuth": "För att kunna boka detta utrymme måste du <a>logga in<a> via Suomi.fi.",
   "ReservationInfo.maxNumberOfReservations": "Maximalt antal bokningar per användare:",

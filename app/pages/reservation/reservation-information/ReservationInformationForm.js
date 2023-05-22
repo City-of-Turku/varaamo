@@ -2,10 +2,13 @@
 import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Well from 'react-bootstrap/lib/Well';
-import { Field, reduxForm } from 'redux-form';
+import {
+  Field, reduxForm, getFormSyncErrors, getFormValues
+} from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
 
 import FormTypes from 'constants/FormTypes';
@@ -17,6 +20,8 @@ import { injectT } from 'i18n';
 import ReservationTermsModal from 'shared/modals/reservation-terms';
 import WrappedText from 'shared/wrapped-text/WrappedText';
 import ReservationSubmitButton from './ReservationSubmitButton';
+import ReservationValidationErrors from './ReservationValidationErrors';
+import { FIELDS } from '../../../constants/ReservationConstants';
 
 const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {
@@ -128,6 +133,36 @@ export function validate(values, {
 }
 
 class UnconnectedReservationInformationForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showFormErrorList: false,
+      formErrors: [],
+    };
+
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { showFormErrorList } = this.state;
+    const { formValues } = this.props;
+    if (showFormErrorList) {
+      if (formValues !== prevProps.formValues) {
+        this.setState({ showFormErrorList: false, formErrors: [] });
+      }
+    }
+  }
+
+  handleFormSubmit() {
+    const { formSyncErrors, handleSubmit, onConfirm } = this.props;
+    if (formSyncErrors && Object.keys(formSyncErrors).length > 0) {
+      this.setState({ showFormErrorList: true, formErrors: Object.keys(formSyncErrors) });
+    }
+
+    handleSubmit(onConfirm);
+  }
+
+
   // name is required by the Field component and is used to point to field's value.
   // fieldName is the actual html attribute name which is used for autocomplete etc.
   // eslint-disable-next-line react/sort-comp
@@ -263,39 +298,39 @@ class UnconnectedReservationInformationForm extends Component {
             </Well>
           )}
           {this.renderField(
-            'reserverName',
+            FIELDS.RESERVER_NAME.id,
             'name',
             'text',
-            t('common.reserverNameLabel'),
+            t(FIELDS.RESERVER_NAME.label),
             { autoComplete: 'name' },
           )}
           {this.renderField(
-            'company',
+            FIELDS.COMPANY.id,
             'company',
             'text',
-            t('common.companyLabel'),
+            t(FIELDS.COMPANY.label),
             {}
           )}
           {this.renderField(
-            'reserverId',
+            FIELDS.RESERVER_ID.id,
             'reserverId',
             'text',
-            t('common.reserverIdLabel'),
+            t(FIELDS.RESERVER_ID.label),
             { placeholder: t('common.reserverIdLabel') }
           )}
           {this.renderField(
-            'reserverPhoneNumber',
+            FIELDS.RESERVER_PHONE_NUMBER.id,
             'phone',
             'text',
-            t('common.reserverPhoneNumberLabel'),
+            t(FIELDS.RESERVER_PHONE_NUMBER.label),
             { autoComplete: 'tel' },
             t('common.contactPurposeHelp'),
           )}
           {this.renderField(
-            'reserverEmailAddress',
+            FIELDS.RESERVER_EMAIL_ADDRESS.id,
             'email',
             'email',
-            t('common.reserverEmailAddressLabel'),
+            t(FIELDS.RESERVER_EMAIL_ADDRESS.label),
             { autoComplete: 'email' },
             t('common.contactPurposeHelp'),
           )}
@@ -304,35 +339,35 @@ class UnconnectedReservationInformationForm extends Component {
           }
           {includes(this.props.fields, 'reserverAddressStreet')
             && this.renderField(
-              'reserverAddressStreet',
+              FIELDS.RESERVER_ADDRESS_STREET.id,
               'address',
               'text',
-              t('common.addressStreetLabel'),
+              t(FIELDS.RESERVER_ADDRESS_STREET.label),
               { autoComplete: 'street-address' },
             )}
           {includes(this.props.fields, 'reserverAddressZip')
             && this.renderField(
-              'reserverAddressZip',
+              FIELDS.RESERVER_ADDRESS_ZIP.id,
               'zip',
               'text',
-              t('common.addressZipLabel'),
+              t(FIELDS.RESERVER_ADDRESS_ZIP.label),
               { autoComplete: 'postal-code' },
             )}
           {includes(this.props.fields, 'reserverAddressCity')
             && this.renderField(
-              'reserverAddressCity',
+              FIELDS.RESERVER_ADDRESS_CITY.id,
               'city',
               'text',
-              t('common.addressCityLabel'),
+              t(FIELDS.RESERVER_ADDRESS_CITY.label),
               { autoComplete: 'address-level2' },
             )
           }
           {includes(this.props.fields, 'homeMunicipality')
             && this.renderField(
-              'homeMunicipality',
+              FIELDS.HOME_MUNICIPALITY.id,
               'municipality',
               'select',
-              t('common.homeMunicipality'),
+              t(FIELDS.HOME_MUNICIPALITY.label),
               { options: resource.includedReservationHomeMunicipalityFields },
             )
           }
@@ -347,64 +382,64 @@ class UnconnectedReservationInformationForm extends Component {
           }
           {includes(this.props.fields, 'billingFirstName')
             && this.renderField(
-              'billingFirstName',
+              FIELDS.BILLING_FIRST_NAME.id,
               'cc-given-name',
               'text',
-              t('common.billingFirstNameLabel'),
+              t(FIELDS.BILLING_FIRST_NAME.label),
               { autoComplete: 'cc-given-name' },
             )
           }
           {includes(this.props.fields, 'billingLastName')
             && this.renderField(
-              'billingLastName',
+              FIELDS.BILLING_LAST_NAME.id,
               'cc-family-name',
               'text',
-              t('common.billingLastNameLabel'),
+              t(FIELDS.BILLING_LAST_NAME.label),
               { autoComplete: 'cc-family-name' },
             )
           }
           {includes(this.props.fields, 'billingPhoneNumber')
             && this.renderField(
-              'billingPhoneNumber',
+              FIELDS.BILLING_PHONE_NUMBER.id,
               'phone',
               'tel',
-              t('common.billingPhoneNumberLabel'),
+              t(FIELDS.BILLING_PHONE_NUMBER.label),
               { autoComplete: 'tel' },
             )
           }
           {includes(this.props.fields, 'billingEmailAddress')
             && this.renderField(
-              'billingEmailAddress',
+              FIELDS.BILLING_EMAIL_ADDRESS.id,
               'email',
               'email',
-              t('common.billingEmailAddressLabel'),
+              t(FIELDS.BILLING_EMAIL_ADDRESS.label),
               { autoComplete: 'email' },
             )
           }
           {includes(this.props.fields, 'billingAddressStreet')
             && this.renderField(
-              'billingAddressStreet',
+              FIELDS.BILLING_ADDRESS_STREET.id,
               'address',
               'text',
-              t('common.addressStreetLabel'),
+              t(FIELDS.BILLING_ADDRESS_STREET.label),
               { autoComplete: 'street-address' },
             )
           }
           {includes(this.props.fields, 'billingAddressZip')
             && this.renderField(
-              'billingAddressZip',
+              FIELDS.BILLING_ADDRESS_ZIP.id,
               'zip',
               'text',
-              t('common.addressZipLabel'),
+              t(FIELDS.BILLING_ADDRESS_ZIP.label),
               { autoComplete: 'postal-code' },
             )
           }
           {includes(this.props.fields, 'billingAddressCity')
             && this.renderField(
-              'billingAddressCity',
+              FIELDS.BILLING_ADDRESS_CITY.id,
               'city',
               'text',
-              t('common.addressCityLabel'),
+              t(FIELDS.BILLING_ADDRESS_CITY.label),
               { autoComplete: 'address-level2' },
             )
           }
@@ -416,52 +451,52 @@ class UnconnectedReservationInformationForm extends Component {
           && <h3 className="ReservationInformationForm">{t('ReservationInformationForm.eventInformationTitle')}</h3>
         }
           {this.renderField(
-            'eventSubject',
+            FIELDS.EVENT_SUBJECT.id,
             'eventSubject',
             'text',
-            t('common.eventSubjectLabel'),
+            t(FIELDS.EVENT_SUBJECT.label),
             {},
             null,
           )}
           {this.renderField(
-            'eventDescription',
+            FIELDS.EVENT_DESCRIPTION.id,
             'eventDescription',
             'textarea',
-            t('common.eventDescriptionLabel'),
+            t(FIELDS.EVENT_DESCRIPTION.label),
             { rows: 5 }
           )}
           {this.renderField(
-            'numberOfParticipants',
+            FIELDS.NUMBER_OF_PARTICIPANTS.id,
             'numberOfParticipants',
             'number',
-            t('common.numberOfParticipantsLabel'),
+            t(FIELDS.NUMBER_OF_PARTICIPANTS.label),
             { min: '1', max: resource.peopleCapacity }
           )}
           {this.renderField(
-            'requireAssistance',
+            FIELDS.REQUIRE_ASSISTANCE.id,
             'requireAssistance',
             'checkbox',
-            t('common.requireAssistanceLabel'),
+            t(FIELDS.REQUIRE_ASSISTANCE.label),
             {},
             null,
             null,
             true
           )}
           {this.renderField(
-            'requireWorkstation',
+            FIELDS.REQUIRE_WORKSTATION.id,
             'requireWorkstation',
             'checkbox',
-            t('common.requireWorkstationLabel'),
+            t(FIELDS.REQUIRE_WORKSTATION.label),
             {},
             null,
             null,
             true
           )}
           {this.renderField(
-            'comments',
+            FIELDS.COMMENTS.id,
             'comments',
             'textarea',
-            t('common.commentsLabel'),
+            t(FIELDS.COMMENTS.label),
             {
               placeholder: t('common.commentsPlaceholder'),
               rows: 5,
@@ -481,10 +516,10 @@ class UnconnectedReservationInformationForm extends Component {
             )
           }
           {this.renderField(
-            'reservationExtraQuestions',
+            FIELDS.RESERVATION_EXTRA_QUESTIONS.id,
             'reservationExtraQuestions',
             'textarea',
-            t('common.additionalInfo.label'),
+            t(FIELDS.RESERVATION_EXTRA_QUESTIONS.label),
             {
               rows: 5,
             }
@@ -513,11 +548,15 @@ class UnconnectedReservationInformationForm extends Component {
               )
             }
             <ReservationSubmitButton
-              handleSubmit={handleSubmit}
+              handleFormSubmit={this.handleFormSubmit}
               hasPayment={hasPayment}
               isMakingReservations={isMakingReservations}
               needManualConfirmation={resource.needManualConfirmation}
-              onConfirm={onConfirm}
+            />
+            <ReservationValidationErrors
+              formErrors={this.state.formErrors}
+              showFormErrorList={this.state.showFormErrorList}
+              universalFields={resource.universalField}
             />
           </div>
         </Form>
@@ -528,8 +567,15 @@ class UnconnectedReservationInformationForm extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  formSyncErrors: getFormSyncErrors(FormTypes.RESERVATION)(state),
+  formValues: getFormValues(FormTypes.RESERVATION)(state),
+});
+
 UnconnectedReservationInformationForm.propTypes = {
   fields: PropTypes.array.isRequired,
+  formSyncErrors: PropTypes.object,
+  formValues: PropTypes.object,
   hasPayment: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   isEditing: PropTypes.bool.isRequired,
@@ -565,8 +611,8 @@ UnconnectedReservationInformationForm.propTypes = {
 UnconnectedReservationInformationForm = injectT(UnconnectedReservationInformationForm);  // eslint-disable-line
 
 export { UnconnectedReservationInformationForm };
-export default injectT(reduxForm({
+export default injectT(connect(mapStateToProps, null)(reduxForm({
   form: FormTypes.RESERVATION,
   enableReinitialize: true,
   validate,
-})(UnconnectedReservationInformationForm));
+})(UnconnectedReservationInformationForm)));

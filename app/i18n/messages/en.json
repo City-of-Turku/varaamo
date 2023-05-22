@@ -309,6 +309,7 @@
   "ReservationForm.universalField.pictureAlt": "Picture that relates to the '{label}' field.",
   "ReservationForm.universalField.iframe.skipToAfter": "Skip over the embedded iframe.",
   "ReservationForm.universalField.iframe.skipToBefore": "Skip to before the embedded iframe.",
+  "ReservationForm.validation.payer.label": "Payer",
   "ReservationInfo.loginMessage": "You must <a>log in<a> to reserve these premises.",
   "ReservationInfo.loginMessageStrongAuth": "You must <a>log in<a> with Suomi.fi to reserve these premises.",
   "ReservationInfo.maxNumberOfReservations": "Maximum number of reservations per user:",

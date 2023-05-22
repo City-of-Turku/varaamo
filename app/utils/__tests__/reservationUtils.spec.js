@@ -31,10 +31,12 @@ import {
   getReservationCustomerGroupName,
   isManuallyConfirmedWithOrderAllowed,
   normalizeUniversalFieldOptions,
+  mapReservationErrors,
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 import Product from '../fixtures/Product';
 import { getLocalizedFieldValue } from '../languageUtils';
+import { FIELDS } from '../../constants/ReservationConstants';
 
 jest.mock('../languageUtils', () => ({
   getLocalizedFieldValue: jest.fn(() => 'test-localized-value'),
@@ -794,6 +796,39 @@ describe('Utils: reservationUtils', () => {
         },
       };
       expect(returnValues).toEqual([expectedValues]);
+    });
+  });
+
+  describe('mapReservationErrors', () => {
+    const universalFields = [UniversalField.build()];
+    describe('creates correct list of reservation errors', () => {
+      test('when reservation has no errors', () => {
+        const errors = [];
+        expect(mapReservationErrors(errors, universalFields)).toEqual([]);
+      });
+
+      test('when universalfield has an error', () => {
+        const errors = ['universalData'];
+        expect(mapReservationErrors(errors, universalFields)).toEqual([{
+          id: 'universalData',
+          label: universalFields[0].label,
+          forBilling: false,
+          order: 100
+        }]);
+      });
+
+      test('when reservation has multiple errors', () => {
+        const errors = ['universalData', FIELDS.RESERVER_EMAIL_ADDRESS.id, FIELDS.BILLING_PHONE_NUMBER.id];
+        expect(mapReservationErrors(errors, universalFields)).toEqual([
+          FIELDS.RESERVER_EMAIL_ADDRESS, FIELDS.BILLING_PHONE_NUMBER,
+          {
+            id: 'universalData',
+            label: universalFields[0].label,
+            forBilling: false,
+            order: 100
+          },
+        ]);
+      });
     });
   });
 });
