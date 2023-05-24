@@ -1,0 +1,27 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "name": {
+        "fi": "Kokoustila",
+        "en": "Meeting room",
+        "sv": "Mötesrum"
+      },
+      "parent": null,
+      "id": "meeting-room",
+      "image": null
+    },
+    {
+      "name": {
+        "fi": "Testikäyttötarkoitus",
+        "en": "Test purpose",
+        "sv": "Test syfte"
+      },
+      "parent": null,
+      "id": "test-purpose",
+      "image": null
+    }
+  ]
+}

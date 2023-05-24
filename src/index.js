@@ -28,6 +28,11 @@ const finalState = Immutable(initialStoreState).merge([initialServerState, initi
   deep: true,
 });
 const store = configureStore(finalState);
+
+if (window.Cypress) {
+  window.store = store;
+}
+
 const isIEBrowser = browserName === 'IE';
 
 if (window.location.pathname === '/silent-renew') {

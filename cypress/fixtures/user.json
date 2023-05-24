@@ -1,0 +1,19 @@
+{
+  "last_login": "2023-04-24T09:43:15.796501+03:00",
+  "username": "abc123",
+  "email": "test@example.com",
+  "date_joined": "2020-10-04T13:49:26.241383+02:00",
+  "first_name": "Test",
+  "last_name": "Tester",
+  "uuid": "123b6480-a639-62ab-1234-111ac567j19c",
+  "department_name": null,
+  "is_staff": false,
+  "display_name": "Test Tester",
+  "ical_feed_url": "",
+  "staff_status": {},
+  "staff_perms": {},
+  "favorite_resources": [],
+  "preferred_language": "fi",
+  "birthdate": "1985-07-12",
+  "is_strong_auth": true
+}

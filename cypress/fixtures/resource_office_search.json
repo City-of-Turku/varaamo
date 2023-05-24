@@ -1,0 +1,230 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "axwhvvq4er3a",
+      "products": [],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Kokoustila",
+            "en": "Meeting room",
+            "sv": "Mötesrum"
+          },
+          "parent": null,
+          "id": "meeting-room",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "reserver_address_street",
+        "reserver_address_zip",
+        "reserver_address_city",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "company",
+        "event_description",
+        "reserver_id",
+        "number_of_participants",
+        "reserver_email_address",
+        "event_subject",
+        "reservation_extra_questions",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number",
+        "home_municipality",
+        "host_name",
+        "participants",
+        "require_assistance",
+        "require_workstation"
+      ],
+      "required_reservation_extra_fields": [],
+      "included_reservation_home_municipality_fields": [
+        {
+          "id": "kaarina",
+          "name": {
+            "fi": "Kaarina",
+            "en": "Kaarina",
+            "sv": "S:t Karins"
+          }
+        },
+        {
+          "id": "raisio",
+          "name": {
+            "fi": "Raisio",
+            "en": "Raisio",
+            "sv": "Reso"
+          }
+        },
+        {
+          "id": "turku",
+          "name": {
+            "fi": "Turku",
+            "en": "Turku",
+            "sv": "Åbo"
+          }
+        }
+      ],
+      "is_favorite": false,
+      "generic_terms": {
+        "fi": "Tämä on testikäyttöehdot.",
+        "en": "This is a test terms of use.",
+        "sv": "Detta är ett test användarvillkor."
+      },
+      "payment_terms": {
+        "fi": "Tämä on testimaksuehdot.",
+        "en": "This is the test payment terms.",
+        "sv": "Detta är testbetalningsvillkoren."
+      },
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": null,
+      "universal_field": [
+        {
+          "id": 1,
+          "field_type": "Select",
+          "data": null,
+          "description": {
+            "fi": "Valitse mihin järjestykseen toivot tilan pöytien asetettavan",
+            "en": "Choose the order in which you want the tables in the space to be placed",
+            "sv": "Välj i vilken ordning du vill att borden i utrymmet ska placeras"
+          },
+          "label": {
+            "fi": "Pöytien järjestys",
+            "en": "Table positions",
+            "sv": "Ordningen på borden"
+          },
+          "resource": "axwhvvq4er3a",
+          "options": [
+            {
+              "id": 1,
+              "text": {
+                "fi": "Kolme riviä",
+                "en": "Three rows",
+                "sv": "Tre rader"
+              }
+            },
+            {
+              "id": 2,
+              "text": {
+                "fi": "Pöydät U-muotoisesti",
+                "en": "Tables in U-shape",
+                "sv": "Bord i U-form"
+              }
+            },
+            {
+              "id": 3,
+              "text": {
+                "fi": "Kahtena neliösaarekkeena",
+                "en": "In two square islands",
+                "sv": "På två kvadratiska öar"
+              }
+            }
+          ],
+          "name": "table positions"
+        }
+      ],
+      "reservable_by_all_staff": false,
+      "created_at": "2022-11-02T13:20:16.144927+02:00",
+      "modified_at": "2023-03-16T12:50:12.414393+02:00",
+      "public": true,
+      "name": {
+        "fi": "Toimisto 1b",
+        "en": "Office 1b",
+        "sv": "Kontor 1b"
+      },
+      "description": {
+        "fi": "Tämä on toimistotilan kuvausteksti.",
+        "en": "This is the office space's description.",
+        "sv": "Detta är kontorsutrymmets beskrivning."
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "strong",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": "00:30:00",
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": {
+        "fi": "Reservation info fi",
+        "en": "Reservation info en",
+        "sv": "Reservation info sv"
+      },
+      "responsible_contact_info": {
+        "fi": "Responsible contact info [fi]",
+        "en": "Responsible contact info [en]",
+        "sv": "Responsible contact info [sv]"
+      },
+      "specific_terms": {
+        "fi": "Resurssin specific terms fi",
+        "en": "Resource specific terms en",
+        "sv": "Resource specific terms sv"
+      },
+      "reservation_additional_information": {
+        "fi": "Reservation additional info fi",
+        "en": "Reservation additional info en",
+        "sv": "Reservation additional info sv"
+      },
+      "min_price": "0.00",
+      "max_price": "100.00",
+      "price_type": "fixed",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "axwhvuiljcdq",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          60.4436451,
+          22.2441131
+        ]
+      }
+    }
+  ]
+}
