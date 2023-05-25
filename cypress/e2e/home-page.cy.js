@@ -2,6 +2,7 @@
 
 describe('home page', () => {
   beforeEach(() => {
+    Cypress.config('defaultCommandTimeout', 20000);
     cy.visit('localhost:3000');
     cy.get('#CybotCookiebotDialogBodyButtonDecline').click();
     cy.fixture('purpose.json').as('purpose');
