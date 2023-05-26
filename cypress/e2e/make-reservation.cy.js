@@ -5,6 +5,7 @@ const {
 } = require('../utils/scripts');
 const userOidc = require('../fixtures/oidc_user.json');
 const userData = require('../fixtures/user.json');
+const reservationOffice = require('../fixtures/reservation_office.json');
 
 
 describe('make reservations', () => {
@@ -77,38 +78,31 @@ describe('make reservations', () => {
     cy.get('#reserverPhoneNumber').should('be.visible').type('0401234567');
     cy.get('#reserverEmailAddress').should('be.visible').should('have.value', userData.email);
     cy.get('#universalData').select(1);
-
     cy.get('#reservationExtraQuestions').should('be.visible').type('This is a test reservation');
     cy.get('.terms-checkbox-field input').should('be.visible').click();
+
+    const { begin, end } = formatDateTime(tomorrowDate, '08:00', '08:30');
+    const updatedReservation = { ...reservationOffice, begin, end };
+    cy.intercept('POST', '**/reservation/', { body: updatedReservation }).as('postReservation');
+
     cy.get('.form-controls button').contains('Tallenna').should('be.visible').click();
+    cy.wait('@postReservation');
 
     // reservation success page
-    cy.fixture('reservation_office.json').then(reservation => {
-      const { begin, end } = formatDateTime(tomorrowDate, '08:00', '08:30');
-      const updatedReservation = { ...reservation, begin, end };
-      cy.intercept('POST', '**/reservation/', { body: updatedReservation }).as('postReservation');
-      cy.wait('@postReservation');
-    });
-
     cy.get('h2.app-ReservationPage__header').should('be.visible').should('have.text', 'Varaus onnistui');
     cy.get('h2#reservationDetails').should('be.visible').should('have.text', 'Varauksen lisätiedot');
     cy.get('.app-ReservationConfirmation__field').first().should('be.visible')
       .should('have.text', `Varaaja / vuokraaja${userData.display_name}`);
+
+    cy.intercept('GET', '**/reservation/*', {
+      body: {
+        count: 1, next: null, previous: null, results: [updatedReservation]
+      }
+    }).as('getReservations');
     cy.get('button').contains('Palaa omiin varauksiin').click();
 
     // my reservations page
-    cy.intercept('GET', '**/reservation/*', { fixture: 'reservation_office.json' }).as('getReservations');
-    cy.fixture('reservation_office.json').then(reservation => {
-      const { begin, end } = formatDateTime(tomorrowDate, '08:00', '08:30');
-      const updatedReservation = { ...reservation, begin, end };
-      cy.intercept('GET', '**/reservation/', {
-        body: {
-          count: 1, next: null, previous: null, results: [updatedReservation]
-        }
-      }).as('getReservations');
-      cy.wait('@getReservations');
-    });
-
+    cy.wait('@getReservations');
     cy.get('h1').should('be.visible').should('have.text', 'Omat varaukset');
     cy.get('li.reservation').should('have.length', 1).contains(this.resourceDetail.name.fi);
   });

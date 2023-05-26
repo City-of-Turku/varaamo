@@ -2,22 +2,22 @@
 
 describe('search page', () => {
   beforeEach(() => {
-    cy.visit('localhost:3000/search');
-    cy.get('#CybotCookiebotDialogBodyButtonDecline').click();
     cy.fixture('purpose.json').as('purpose');
-    cy.intercept('GET', '**/purpose/', { fixture: 'purpose.json' }).as('getPurpose');
     cy.fixture('unit.json').as('unit');
-    cy.intercept('GET', '**/unit/*', { fixture: 'unit.json' }).as('getUnit');
     cy.fixture('resource.json').as('resource');
+    cy.intercept('GET', '**/purpose/', { fixture: 'purpose.json' }).as('getPurpose');
+    cy.intercept('GET', '**/unit/*', { fixture: 'unit.json' }).as('getUnit');
     cy.intercept('GET', '**/resource/*', { fixture: 'resource.json' }).as('getResource');
   });
 
   it('should have the correct headings', () => {
+    cy.visit('localhost:3000/search');
     cy.get('.app-SearchControlsContainer__content h1').should('have.text', 'Mitä haluat tehdä?');
   });
 
   // eslint-disable-next-line func-names
   it('should have correct search results', function () {
+    cy.visit('localhost:3000/search');
     cy.wait('@getPurpose');
     cy.wait('@getUnit');
     cy.wait('@getResource');
