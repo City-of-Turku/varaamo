@@ -231,8 +231,8 @@ class TimeSlot extends PureComponent {
     const reservation = slot.reservation;
     const isOwnReservation = reservation && reservation.isOwn && slot.reserved;
     const isCooldown = slot.onCooldown;
-    const start = new Date(slot.start);
-    const startTime = `${padLeft(start.getHours())}:${padLeft(start.getMinutes())}`;
+    const start = moment(slot.start);
+    const startTime = `${padLeft(start.hours())}:${padLeft(start.minutes())}`;
     const showCooldown = isAdmin
       && isCooldown
       && !isPast

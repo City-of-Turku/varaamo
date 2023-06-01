@@ -48,7 +48,8 @@ function getTimelineItems(date, reservations, resourceId) {
 
 function isInsideOpeningHours(item, openingHours) {
   return some(openingHours, opening => (
-    opening.opens <= item.data.begin && item.data.end <= opening.closes
+    moment(opening.opens) <= moment(item.data.begin)
+      && moment(item.data.end) <= moment(opening.closes)
   ));
 }
 

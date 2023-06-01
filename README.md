@@ -82,6 +82,7 @@ By default the running app can be found at `localhost:3000`.
     API_URL
     ADMIN_URL
     THEME_PKG
+    APP_TIMEZONE
     ```
 
     Environment's variable guideline:
@@ -98,6 +99,10 @@ By default the running app can be found at `localhost:3000`.
 
     - `BLOCK_SEARCH_ENGINE_INDEXING`:
       Adding this setting prevents most search engines from indexing the site. This can be useful for preventing test instances from showing up in search results.
+
+    - `APP_TIMEZONE`:
+      This config is optional. When a time zone is given e.g., `Europe/Helsinki`, all the times shown for resources, reservations etc. are in given time zone.
+      When this config is not given, Varaamo will use user's local time zone.
 
 
 3. Then, start the development server:

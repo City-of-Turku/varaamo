@@ -48,6 +48,7 @@
     "moment": "2.29.4",
     "moment-range": "4.0.1",
     "moment-timezone": "0.5.35",
+    "moment-timezone-data-webpack-plugin": "1.5.1",
     "morgan": "1.9.1",
     "nocache": "2.0.0",
     "node-sass": "8.0.0",
