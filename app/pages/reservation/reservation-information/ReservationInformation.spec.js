@@ -46,21 +46,24 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     return shallowWithIntl(<ReservationInformation {...defaultProps} {...extraProps} />);
   }
 
-  test('renders info texts when needManualConfirmation is true', () => {
+  test('renders correct info texts when needManualConfirmation is true', () => {
     const resource = Resource.build({
       needManualConfirmation: true,
     });
     const infoTexts = getWrapper({ resource }).find('.app-ReservationInformation__info-texts');
     expect(infoTexts).toHaveLength(1);
+    expect(infoTexts.text()).toContain('common.contactPurposeHelp');
     expect(infoTexts.text()).toContain('ConfirmReservationModal.priceInfo');
+    expect(infoTexts.text()).toContain('ConfirmReservationModal.formInfo');
   });
 
-  test('does not render info texts when needManualConfirmation is false', () => {
+  test('renders correct info texts when needManualConfirmation is false', () => {
     const resource = Resource.build({
       needManualConfirmation: false,
     });
     const infoTexts = getWrapper({ resource }).find('.app-ReservationInformation__info-texts');
-    expect(infoTexts).toHaveLength(0);
+    expect(infoTexts).toHaveLength(1);
+    expect(infoTexts.text()).toContain('common.contactPurposeHelp');
   });
 
   test('renders an ReservationInformationForm element', () => {

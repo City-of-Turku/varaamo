@@ -169,12 +169,15 @@ class ReservationInformation extends Component {
 
   renderInfoTexts = () => {
     const { resource, t } = this.props;
-    if (!resource.needManualConfirmation) return null;
-
     return (
       <div className="app-ReservationInformation__info-texts">
-        <p>{t('ConfirmReservationModal.priceInfo')}</p>
-        <p>{t('ConfirmReservationModal.formInfo')}</p>
+        <p>{t('common.contactPurposeHelp')}</p>
+        {resource.needManualConfirmation && (
+          <React.Fragment>
+            <p>{t('ConfirmReservationModal.priceInfo')}</p>
+            <p>{t('ConfirmReservationModal.formInfo')}</p>
+          </React.Fragment>
+        )}
       </div>
     );
   }

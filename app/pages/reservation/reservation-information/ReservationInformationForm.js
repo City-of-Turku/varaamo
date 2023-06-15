@@ -324,7 +324,6 @@ class UnconnectedReservationInformationForm extends Component {
             'text',
             t(FIELDS.RESERVER_PHONE_NUMBER.label),
             { autoComplete: 'tel' },
-            t('common.contactPurposeHelp'),
           )}
           {this.renderField(
             FIELDS.RESERVER_EMAIL_ADDRESS.id,
@@ -332,7 +331,6 @@ class UnconnectedReservationInformationForm extends Component {
             'email',
             t(FIELDS.RESERVER_EMAIL_ADDRESS.label),
             { autoComplete: 'email' },
-            t('common.contactPurposeHelp'),
           )}
           {resource.universalField && resource.universalField.length > 0
             && this.renderUniversalFields()

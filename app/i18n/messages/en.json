@@ -60,7 +60,7 @@
   "common.companyLabel": "Company",
   "common.confirmCashPayment": "Approve cash payment",
   "common.confirmed": "Approved",
-  "common.contactPurposeHelp": "Contact information can be used to contact you",
+  "common.contactPurposeHelp": "The contact information requested here is needed for communication related to the reservation. It will not be used for marketing purposes.",
   "common.continue": "Continue",
   "common.denied": "Denied",
   "common.eventDescriptionLabel": "Description of the event",

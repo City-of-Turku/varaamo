@@ -60,7 +60,7 @@
   "common.companyLabel": "Företag",
   "common.confirmCashPayment": "Godkänn kontant betalning",
   "common.confirmed": "Godkänd",
-  "common.contactPurposeHelp": "kontaktuppgifterna kan användas för att kontakta dig",
+  "common.contactPurposeHelp": "De kontaktuppgifter som efterfrågas här behövs för kommunikation relaterad till bokningen. De kommer inte att användas för marknadsföring.",
   "common.continue": "Fortsätt",
   "common.denied": "Ej godkänd",
   "common.eventDescriptionLabel": "Beskrivning av evenemanget",
