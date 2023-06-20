@@ -84,6 +84,7 @@
   "common.priceLabel": "Hinta",
   "common.priceTotalLabel": "Hinta yhteensä",
   "common.priceWithVAT": "{price}€ (sis. alv. {vat}%)",
+  "common.privateEventLabel": "Yksityinen tilaisuus",
   "common.proceedToPayment": "Siirry maksamaan",
   "common.proceedingToPayment": "Siirrytään maksamaan...",
   "common.requested": "Odottaa käsittelyä",

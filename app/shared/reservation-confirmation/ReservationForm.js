@@ -311,6 +311,16 @@ class UnconnectedReservationForm extends Component {
             null,
             true
           )}
+          {this.renderField(
+            'privateEvent',
+            'privateEvent',
+            'checkbox',
+            t('common.privateEventLabel'),
+            {},
+            null,
+            null,
+            true
+          )}
           {includes(this.props.fields, 'reservationExtraQuestions') && (
             <Well>
               <p id="additional-info-heading">{t('common.additionalInfo.heading')}</p>

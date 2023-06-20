@@ -84,6 +84,7 @@
   "common.priceLabel": "Price",
   "common.priceTotalLabel": "Total price",
   "common.priceWithVAT": "{price}€ (inc. vat. {vat}%)",
+  "common.privateEventLabel": "Private event",
   "common.proceedToPayment": "Proceed to payment",
   "common.proceedingToPayment": "Proceeding to payment...",
   "common.requested": "Waiting for processing",

@@ -244,6 +244,8 @@ class UnconnectedReservationEditForm extends Component {
            && this.renderInfoRow(t('common.requireAssistanceLabel'), reservation.requireAssistance ? t('common.yes') : t('common.no'))}
         {!(reservation.requireWorkstation === undefined)
            && this.renderInfoRow(t('common.requireWorkstationLabel'), reservation.requireWorkstation ? t('common.yes') : t('common.no'))}
+        {!(reservation.privateEvent === undefined)
+           && this.renderInfoRow(t('common.privateEventLabel'), reservation.privateEvent ? t('common.yes') : t('common.no'))}
         {this.renderInfoRow(t('common.additionalInfo.label'), reservation.reservationExtraQuestions)}
         {isAdmin && !reservationIsEditable && this.renderStaticInfoRow('comments')}
         {(orderLine && price) && (

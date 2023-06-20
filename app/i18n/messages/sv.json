@@ -84,6 +84,7 @@
   "common.priceLabel": "Pris",
   "common.priceTotalLabel": "Total pris",
   "common.priceWithVAT": "{price}€ (inkl. mons {vat}%)",
+  "common.privateEventLabel": "Privat evenemang",
   "common.proceedToPayment": "Fortsätt till betalning",
   "common.proceedingToPayment": "Fortsätter till betalning...",
   "common.requested": "Behandlas",

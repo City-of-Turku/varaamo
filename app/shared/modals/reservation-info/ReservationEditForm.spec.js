@@ -228,6 +228,22 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
         });
       });
 
+      describe('private event', () => {
+        test('is rendered if reservation supports it', () => {
+          const userReservation = Reservation.build({
+            privateEvent: false
+          });
+          expect(getData({ reservation: userReservation })).toContain('common.privateEventLabel');
+        });
+
+        test('is not rendered if reservation doesnt support it', () => {
+          const userReservation = Reservation.build({
+            privateEvent: undefined
+          });
+          expect(getData({ reservation: userReservation })).not.toContain('common.privateEventLabel');
+        });
+      });
+
       describe('reservation extra questions', () => {
         test('is rendered if reservation supports it', () => {
           const userReservation = Reservation.build({

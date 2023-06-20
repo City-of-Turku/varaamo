@@ -491,6 +491,16 @@ class UnconnectedReservationInformationForm extends Component {
             true
           )}
           {this.renderField(
+            FIELDS.PRIVATE_EVENT.id,
+            'privateEvent',
+            'checkbox',
+            t(FIELDS.PRIVATE_EVENT.label),
+            {},
+            null,
+            null,
+            true
+          )}
+          {this.renderField(
             FIELDS.COMMENTS.id,
             'comments',
             'textarea',

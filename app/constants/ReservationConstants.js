@@ -42,18 +42,21 @@ export const FIELDS = {
   REQUIRE_WORKSTATION: {
     id: 'requireWorkstation', label: 'common.requireWorkstationLabel', forBilling: false, order: 20
   },
+  PRIVATE_EVENT: {
+    id: 'privateEvent', label: 'common.privateEventLabel', forBilling: false, order: 21
+  },
   COMMENTS: {
-    id: 'comments', label: 'common.commentsLabel', forBilling: false, order: 21
+    id: 'comments', label: 'common.commentsLabel', forBilling: false, order: 22
   },
   RESERVATION_EXTRA_QUESTIONS: {
-    id: 'reservationExtraQuestions', label: 'common.additionalInfo.label', forBilling: false, order: 22
+    id: 'reservationExtraQuestions', label: 'common.additionalInfo.label', forBilling: false, order: 23
   },
   // terms fields are special, they have common starting label and unique end link label
   TERMS_AND_CONDITIONS: {
-    id: 'termsAndConditions', label: 'ReservationInformationForm.termsAndConditionsLink', forBilling: false, order: 23
+    id: 'termsAndConditions', label: 'ReservationInformationForm.termsAndConditionsLink', forBilling: false, order: 24
   },
   PAYMENT_TERMS_AND_CONDITIONS: {
-    id: 'paymentTermsAndConditions', label: 'ReservationInformationForm.paymentTermsAndConditionsLink', forBilling: false, order: 24
+    id: 'paymentTermsAndConditions', label: 'ReservationInformationForm.paymentTermsAndConditionsLink', forBilling: false, order: 25
   },
   // billing fields
   BILLING_FIRST_NAME: {
