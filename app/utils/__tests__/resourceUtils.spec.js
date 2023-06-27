@@ -1014,6 +1014,11 @@ describe('Utils: resourceUtils', () => {
       expect(getPrice(t, resource)).toBe('5 - 10 €');
     });
 
+    test('returns correct text when min is 0 and max is over 0', () => {
+      const resource = { maxPrice: 10, minPrice: 0 };
+      expect(getPrice(t, resource)).toBe('0 - 10 €');
+    });
+
     test('returns correct text if max and min price are defined and same', () => {
       const resource = { maxPrice: 5, minPrice: 5 };
       expect(getPrice(t, resource)).toBe('5 €');

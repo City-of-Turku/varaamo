@@ -155,6 +155,11 @@ function getPrice(t, resource) {
     week: t('common.unit.time.week'),
   });
 
+  const minIsEmpty = resource.minPrice === null || resource.minPrice === '' || resource.minPrice === undefined;
+  if (!minIsEmpty && minPrice === 0 && maxPrice > 0) {
+    return `${Number(minPrice)} - ${Number(maxPrice)} ${priceEnding}`;
+  }
+
   if (minPrice && maxPrice && minPrice !== maxPrice) {
     return `${Number(minPrice)} - ${Number(maxPrice)} ${priceEnding}`;
   }
