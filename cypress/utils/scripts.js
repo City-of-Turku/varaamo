@@ -64,3 +64,27 @@ export function formatDateTime(date, beginTime, endTime) {
     end,
   };
 }
+
+/**
+ * Forces given user to login
+ * @param {Object} userData user data fixture
+ * @param {Object} userOidc user oidc fixture
+ */
+export function forceUserLogin(userData, userOidc) {
+  // force user login data
+  cy.window().then((win) => {
+    const { uuid } = userData;
+    // eslint-disable-next-line no-param-reassign
+    win.INITIAL_STATE = {
+      data: {
+        users: {
+          [uuid]: userData
+        }
+      }
+    };
+  });
+  cy.window().its('store').invoke('dispatch', {
+    type: 'redux-oidc/USER_FOUND',
+    payload: userOidc
+  });
+}

@@ -1,0 +1,20 @@
+{
+  "id_token": "123abc-id-token",
+  "access_token": "123abc-access-token",
+  "token_type": "bearer",
+  "scope": "openid profile https://auth.turku.fi/respa",
+  "profile": {
+    "sub": "123b6480-a639-62ab-1234-111ac567j19c",
+    "auth_time": 1670000000,
+    "name": "Admin Tester",
+    "given_name": "Admin",
+    "family_name": "Tester",
+    "nickname": "Admin Tester",
+    "birthdate": "1985-07-12",
+    "email": "test@example.com",
+    "email_verified": false,
+    "oid": "11111",
+    "amr": "turku_suomifi"
+  },
+  "expires_at": 2536915693
+}
