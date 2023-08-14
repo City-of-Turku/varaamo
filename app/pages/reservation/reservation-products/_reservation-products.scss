@@ -152,6 +152,16 @@
     font-weight: normal;
   }
 
+  #products-customer-group-no-option {
+    p {
+      margin-bottom: 0px;
+    }
+
+    .products-customer-group-no-option-label {
+      font-weight: bold;
+    }
+  }
+
   .has-error {
     color: $varaamo-high-contrast-red;
   }

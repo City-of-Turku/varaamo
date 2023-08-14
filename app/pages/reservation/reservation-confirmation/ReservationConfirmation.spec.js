@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { FormattedHTMLMessage } from 'react-intl';
@@ -7,8 +6,9 @@ import simple from 'simple-mock';
 import Button from 'react-bootstrap/lib/Button';
 import Row from 'react-bootstrap/lib/Row';
 
+import constants from 'constants/AppConstants';
 import ReservationDate from 'shared/reservation-date';
-import Reservation from 'utils/fixtures/Reservation';
+import Reservation, { UniversalData } from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 import User from 'utils/fixtures/User';
 import { shallowWithIntl } from 'utils/testUtils';
@@ -175,6 +175,19 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
     expect(email.prop('values')).toEqual({ email: user.email });
   });
 
+  test('renders reservation universalData if it exists', () => {
+    const tempUniversalData = UniversalData.build();
+    const wrapper = getWrapper({
+      reservation: Reservation.build({ universalData: tempUniversalData }),
+    });
+    const label = wrapper.find('b').text();
+    expect(label).toBe(tempUniversalData.field.label);
+    const text = wrapper.find('.app-ReservationConfirmation__field-value').children().text();
+    const expectedText = tempUniversalData.field.options
+      .find(opt => opt.id === Number.parseInt(tempUniversalData.selectedOption, 10));
+    expect(text).toBe(expectedText.text);
+  });
+
   describe('renders Button', () => {
     test('with correct props', () => {
       const button = getWrapper().find(Button);
@@ -223,6 +236,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       reservationExtraQuestions: 'Extra information',
       homeMunicipality: { id: 'city-id', name: { fi: 'city-fi', en: 'city-en', sv: 'city-sv' } },
       user: User.build(),
+      universalData: UniversalData.build(),
       order: {
         state: 'confirmed',
         customerGroupName: { fi: 'test-group-fi', en: 'test-group-en', sv: 'test-group-sv' },
@@ -243,7 +257,7 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
       }
     });
     const fields = getWrapper({ reservation }).find('.app-ReservationConfirmation__field');
-    expect(fields).toHaveLength(26);
+    expect(fields).toHaveLength(27);
   });
 
   describe('Button onClick', () => {

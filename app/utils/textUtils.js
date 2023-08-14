@@ -45,7 +45,17 @@ function createTextSnippet(text, maxCharacters) {
   return `${text.substring(0, maxCharacters)}...`;
 }
 
+/**
+ * Capitalizes the first letter of a given string.
+ * @param {string} text
+ * @returns {string} capitalized string
+ */
+function capitalizeFirst(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 export {
+  capitalizeFirst,
   cleanseNamedLinks,
   createTextSnippet,
 };

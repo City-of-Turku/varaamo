@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import pick from 'lodash/pick';
 import uniq from 'lodash/uniq';
@@ -7,6 +6,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/lib/Col';
 
+import constants from 'constants/AppConstants';
 import { injectT } from 'i18n';
 import {
   isStaffEvent, hasPayment, hasProducts
@@ -24,7 +24,6 @@ class ReservationInformation extends Component {
     isAdmin: PropTypes.bool.isRequired,
     isEditing: PropTypes.bool.isRequired,
     isMakingReservations: PropTypes.bool.isRequired,
-    isStaff: PropTypes.bool.isRequired,
     onBack: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
@@ -47,7 +46,6 @@ class ReservationInformation extends Component {
   getFormFields = (termsAndConditions) => {
     const {
       isAdmin,
-      isStaff,
       resource,
       order,
       reservation,
@@ -77,12 +75,19 @@ class ReservationInformation extends Component {
       // formFields.push('reserverPhoneNumber');
     }
 
+    /* Field hidden until it is needed again
     if (resource.needManualConfirmation && isStaff) {
       formFields.push('staffEvent');
     }
+    */
 
     if (termsAndConditions) {
       formFields.push('termsAndConditions');
+    }
+    if (resource.universalField && resource.universalField.length) {
+      // resource.universalField.forEach(val => formFields.push(`universalData-${val.id}`));
+      // TODO: atm only works with one field, change to above to support multiple ones.
+      formFields.push('universalData');
     }
 
     if (hasProducts(resource)) {
@@ -105,11 +110,15 @@ class ReservationInformation extends Component {
       // Dont allow fields with objects unless the objects have key id in them.
       // The keys can be used as form field values eg for select input
       const nonObjectFields = this.getFormFields().filter(field => typeof (reservation[field]) !== 'object');
-
       const objectFieldsWithId = this.getFormFields().filter(
         field => (reservation[field] && typeof (reservation[field]) === 'object' && reservation[field].id)
       );
 
+      // TODO: change to field.includes('universalData') for multiple universal fields
+      // can contain multiple universal fields.
+      // ['universalData'] if reservation contains universalData key
+      const universalDataFields = this.getFormFields().filter(field => typeof reservation[field] === 'object' && field === 'universalData');
+      nonObjectFields.push(...universalDataFields);
       rv = objectFieldsWithId.map((objectField) => {
         const obj = {};
         obj[objectField] = reservation[objectField].id;
@@ -143,6 +152,10 @@ class ReservationInformation extends Component {
       field => camelCase(field)
     )];
 
+    if (resource.universalField && resource.universalField.length) {
+      requiredFormFields.push('universalData');
+    }
+
     if (termsAndConditions) {
       requiredFormFields.push('termsAndConditions');
     }
@@ -156,12 +169,15 @@ class ReservationInformation extends Component {
 
   renderInfoTexts = () => {
     const { resource, t } = this.props;
-    if (!resource.needManualConfirmation) return null;
-
     return (
       <div className="app-ReservationInformation__info-texts">
-        <p>{t('ConfirmReservationModal.priceInfo')}</p>
-        <p>{t('ConfirmReservationModal.formInfo')}</p>
+        <p>{t('common.contactPurposeHelp')}</p>
+        {resource.needManualConfirmation && (
+          <React.Fragment>
+            <p>{t('ConfirmReservationModal.priceInfo')}</p>
+            <p>{t('ConfirmReservationModal.formInfo')}</p>
+          </React.Fragment>
+        )}
       </div>
     );
   }

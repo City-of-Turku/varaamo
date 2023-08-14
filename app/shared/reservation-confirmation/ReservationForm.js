@@ -1,6 +1,3 @@
-import constants from 'constants/AppConstants';
-import FormTypes from 'constants/FormTypes';
-
 import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -13,7 +10,9 @@ import Well from 'react-bootstrap/lib/Well';
 import { Field, Fields, reduxForm } from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
 
-import { isValidPhoneNumber } from 'utils/reservationUtils';
+import FormTypes from 'constants/FormTypes';
+import constants from 'constants/AppConstants';
+import { isValidPhoneNumber, normalizeUniversalFieldOptions } from 'utils/reservationUtils';
 import WrappedText from 'shared/wrapped-text';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import { injectT } from 'i18n';
@@ -108,14 +107,40 @@ class UnconnectedReservationForm extends Component {
   // name is required by the Field component and is used to point to field's value.
   // fieldName is the actual html attribute name which is used for autocomplete etc.
   renderField(
-    name, fieldName, type, label, controlProps = {}, help = null, info = null, altCheckbox = false
+    name, fieldName, type, label, controlProps = {}, help = null, info = null, altCheckbox = false,
+    universalProps = undefined
   ) {
     const { t } = this.props;
     if (!includes(this.props.fields, name)) {
       return null;
     }
     const isRequired = includes(this.requiredFields, name);
-
+    const opts = {};
+    // field is from resource universalField
+    if ((fieldName.includes('componenttype') || fieldName.includes('universalData')) && universalProps) {
+      // TODO: currently only works for <select> elements
+      // normalize values
+      // eslint-disable-next-line max-len
+      opts.normalize = value => (value.length ? ({ type, selectedOption: value, field: { ...universalProps } }) : null);
+      // format displayed values
+      opts.format = value => (value && typeof value === 'object' ? value.selectedOption : '');
+      const fieldId = this.props.resource.universalField.find(
+        field => field.label.includes(label)
+      ).id;
+      // set random enough key, consists of universal-field id and field name.
+      opts.key = `${fieldId}-${name}`;
+      // TODO: find correct universalField object based on unique id instead of label string.
+      opts.universalFieldData = {
+        // find correct description text based on label
+        description: this.props.resource.universalField.find(
+          field => field.label.includes(label)
+        ).description,
+        // find correct data based on label
+        data: this.props.resource.universalField.find(
+          field => field.label.includes(label)
+        ).data
+      };
+    }
     return (
       <Field
         altCheckbox={altCheckbox}
@@ -128,6 +153,7 @@ class UnconnectedReservationForm extends Component {
         name={name}
         props={{ fieldName }}
         type={type}
+        {...opts}
       />
     );
   }
@@ -155,6 +181,22 @@ class UnconnectedReservationForm extends Component {
         </Col>
       </FormGroup>
     );
+  }
+
+  renderUniversalField = () => {
+    const { resource } = this.props;
+    const elements = normalizeUniversalFieldOptions(resource.universalField, resource);
+    return elements.map(element => this.renderField(
+      element.name,
+      element.fieldName,
+      element.type,
+      element.label,
+      element.controlProps,
+      null,
+      null,
+      false,
+      element.universalProps
+    ));
   }
 
   render() {
@@ -239,6 +281,9 @@ class UnconnectedReservationForm extends Component {
             t('common.eventDescriptionLabel'),
             { rows: 5 }
           )}
+          {resource.universalField && resource.universalField.length > 0
+            && this.renderUniversalField()
+          }
           {this.renderField(
             'numberOfParticipants',
             'numberOfParticipants',
@@ -261,6 +306,16 @@ class UnconnectedReservationForm extends Component {
             'requireWorkstation',
             'checkbox',
             t('common.requireWorkstationLabel'),
+            {},
+            null,
+            null,
+            true
+          )}
+          {this.renderField(
+            'privateEvent',
+            'privateEvent',
+            'checkbox',
+            t('common.privateEventLabel'),
             {},
             null,
             null,

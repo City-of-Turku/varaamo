@@ -1,10 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import Nav from 'react-bootstrap/lib/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 import NavItem from 'react-bootstrap/lib/NavItem';
 
+import constants from 'constants/AppConstants';
 import { getSearchPageUrl } from 'utils/searchUtils';
 import { shallowWithIntl } from 'utils/testUtils';
 import MainNavbar from './MainNavbar';

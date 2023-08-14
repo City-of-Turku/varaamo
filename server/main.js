@@ -34,8 +34,6 @@ if (serverConfig.isProduction) {
 
   app.use(webpackMiddleware(compiler, {
     publicPath: webpackConfig.output.publicPath,
-    quiet: false,
-    noInfo: false,
     stats: {
       assets: false,
       chunkModules: false,

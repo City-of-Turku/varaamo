@@ -1,5 +1,4 @@
 import constants from 'constants/AppConstants';
-
 import { getState } from 'utils/testUtils';
 import {
   createTranslatedSelector,

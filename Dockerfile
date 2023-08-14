@@ -1,5 +1,5 @@
 # Docker image for Varaamo
-FROM node:14-alpine AS appbase
+FROM node:18-alpine AS appbase
 
 # Install dependencies
 FROM appbase AS deps

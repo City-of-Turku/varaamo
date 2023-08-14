@@ -12,20 +12,20 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [18.x]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     - name: Cache Node.js modules
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         # npm cache files are stored in `~/.npm` on Linux/macOS
         path: ~/.npm
@@ -38,3 +38,5 @@ jobs:
         export TZ=Europe/Helsinki
         npm ci
         npm test
+    - name: Codecov
+      uses: codecov/codecov-action@v3.1.1

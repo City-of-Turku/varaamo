@@ -1,5 +1,4 @@
 import APP from 'constants/AppConstants';
-
 import { getState } from 'utils/testUtils';
 import { isLargerFontSizeSelector, contrastSelector, fontSizeSelector } from './accessibilitySelectors';
 

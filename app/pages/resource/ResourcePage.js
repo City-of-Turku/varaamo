@@ -57,7 +57,9 @@ class UnconnectedResourcePage extends Component {
   componentDidMount() {
     this.props.actions.clearReservations();
     this.fetchResource();
-    this.fetchResourceOutlookCalendarLinks();
+
+    // NOTE: uncomment to get Outlook integration back
+    // this.fetchResourceOutlookCalendarLinks();
     window.scrollTo(0, 0);
   }
 
@@ -235,6 +237,8 @@ class UnconnectedResourcePage extends Component {
     const mainImageIndex = findIndex(images, image => image.type === 'main');
     const mainImage = mainImageIndex != null ? images[mainImageIndex] : null;
     const showBackButton = !!location.state && !!location.state.fromSearchResults;
+    const showOutlookCalendarLinkButton = false;
+    /* NOTE: uncomment to get Outlook integration back
     const showOutlookCalendarLinkButton = this.props.resource.userPermissions
       && (
         this.props.resource.userPermissions.isManager
@@ -244,6 +248,7 @@ class UnconnectedResourcePage extends Component {
         !!this.props.calendarLink
         || this.props.canCreateCalendarLink
       );
+      */
 
     return (
       <div className="app-ResourcePage">
@@ -391,7 +396,7 @@ UnconnectedResourcePage.propTypes = {
   contrast: PropTypes.string,
   currentLanguage: PropTypes.string,
   calendarLink: PropTypes.object,
-  canCreateCalendarLink: PropTypes.bool,
+  // canCreateCalendarLink: PropTypes.bool, // NOTE: uncomment to get Outlook integration back
 };
 UnconnectedResourcePage = injectT(UnconnectedResourcePage); // eslint-disable-line
 

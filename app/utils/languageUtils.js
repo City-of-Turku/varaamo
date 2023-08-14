@@ -1,6 +1,7 @@
+import { get, values } from 'lodash';
+
 import constants from 'constants/AppConstants';
 
-import { get, values } from 'lodash';
 
 /**
    * Returns correct feedback link based on given current language.

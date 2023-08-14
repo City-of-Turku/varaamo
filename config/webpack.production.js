@@ -13,6 +13,7 @@ const common = require('./webpack.common');
 module.exports = merge(common, {
   entry: ['@babel/polyfill', path.resolve(__dirname, '../src/index.js')],
   devtool: 'source-map',
+  cache: true,
   mode: 'production',
   output: {
     path: path.resolve(__dirname, '../dist'),
@@ -43,7 +44,7 @@ module.exports = merge(common, {
           MiniCssExtractPlugin.loader,
           'css-loader',
           'resolve-url-loader',
-          { loader: 'sass-loader', options: { sourceMap: true, sourceMapContents: false } },
+          { loader: 'sass-loader', options: { sourceMap: true } },
           { loader: 'postcss-loader', options: { plugins: [autoprefixer({ browsers: ['last 2 version', 'ie 9'] })] } },
         ],
       },
@@ -65,6 +66,8 @@ module.exports = merge(common, {
         OPENID_AUTHORITY: JSON.stringify(process.env.OPENID_AUTHORITY),
         OG_IMG_URL: JSON.stringify(process.env.OG_IMG_URL || 'https://varaamo.turku.fi/static/images/aurajoki.jpg'),
         COOKIE_POLICY_BASE_URL: JSON.stringify(process.env.COOKIE_POLICY_BASE_URL || 'https://varaamo.turku.fi/cookie-policy/'),
+        BLOCK_SEARCH_ENGINE_INDEXING: Boolean(process.env.BLOCK_SEARCH_ENGINE_INDEXING),
+        APP_TIMEZONE: JSON.stringify(process.env.APP_TIMEZONE),
       },
     }),
     new MiniCssExtractPlugin({
@@ -72,12 +75,9 @@ module.exports = merge(common, {
     }),
   ],
   optimization: {
+    minimize: true,
     minimizer: [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // Must be set to true if using source-maps in production
-      }),
+      new TerserPlugin(),
     ],
   },
 });

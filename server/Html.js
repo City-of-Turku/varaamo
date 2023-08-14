@@ -95,6 +95,9 @@ class Html extends Component {
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" />
           {this.getConsentScripts()}
           {Boolean(process.env.MATOMO_SITE_ID) && <script dangerouslySetInnerHTML={{ __html: this.getCookieScript() }} type="text/javascript" />}
+          {Boolean(process.env.BLOCK_SEARCH_ENGINE_INDEXING) && (
+            <meta content="noindex, nofollow" name="robots" />
+          )}
           {this.renderStylesLink(appCssSrc, isProduction)}
           <title>Varaamo</title>
         </head>

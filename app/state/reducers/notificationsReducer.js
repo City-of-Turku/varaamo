@@ -1,8 +1,9 @@
 
+import Immutable from 'seamless-immutable';
+
 import types from 'constants/ActionTypes';
 import constants from 'constants/AppConstants';
 
-import Immutable from 'seamless-immutable';
 
 const initialState = Immutable([]);
 

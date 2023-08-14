@@ -1,7 +1,6 @@
-import types from 'constants/ActionTypes';
-
 import Immutable from 'seamless-immutable';
 
+import types from 'constants/ActionTypes';
 import { pickSupportedFilters } from 'utils/searchUtils';
 import { getDuration, getEndTimeString, getStartTimeString } from 'utils/timeUtils';
 

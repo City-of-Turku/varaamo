@@ -1,8 +1,8 @@
-import ActionTypes from 'constants/ActionTypes';
 
 import orderBy from 'lodash/orderBy';
 import { createStructuredSelector, createSelector } from 'reselect';
 
+import ActionTypes from 'constants/ActionTypes';
 import { contrastSelector } from 'state/selectors/accessibilitySelectors';
 import { isLoggedInSelector } from 'state/selectors/authSelectors';
 import uiSearchFiltersSelector from 'state/selectors/uiSearchFiltersSelector';

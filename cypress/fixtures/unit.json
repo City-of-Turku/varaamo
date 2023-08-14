@@ -1,0 +1,276 @@
+{
+  "count": 4,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "axwhvuiljcdq",
+      "name": {
+        "fi": "Kirjasto",
+        "en": "Library",
+        "sv": "Bibliotek"
+      },
+      "description": {},
+      "street_address": {
+        "fi": "Tehdaskatu 32b"
+      },
+      "www_url": {
+        "fi": "https://testikirjasto.fi"
+      },
+      "picture_caption": {},
+      "periods": [],
+      "opening_hours_today": {
+        "2023-05-15": [
+          {
+            "opens": null,
+            "closes": null
+          }
+        ]
+      },
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          60.450621757311666,
+          22.275183846562584
+        ]
+      },
+      "municipality": "turku",
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "hidden": false,
+      "created_at": "2022-11-02T13:05:20.802281+02:00",
+      "modified_at": "2022-11-02T13:26:04.438874+02:00",
+      "map_service_id": 148,
+      "time_zone": "Europe/Helsinki",
+      "manager_email": null,
+      "address_zip": "123456",
+      "phone": "123123123123",
+      "email": "testikirjastonspostieioikea@turku.fi",
+      "address_postal_full": null,
+      "picture_url": null,
+      "data_source": "",
+      "data_source_hours": "",
+      "disallow_overlapping_reservations": false,
+      "disallow_overlapping_reservations_per_user": false,
+      "sms_reminder": false,
+      "sms_reminder_delay": 1,
+      "payment_requested_waiting_time": 0,
+      "notification_template_group": null
+    },
+    {
+      "id": "axwhvvif5ydq",
+      "name": {
+        "fi": "Testitoimipiste 1",
+        "en": "Test unit 1",
+        "sv": "Testenhet 1"
+      },
+      "description": {},
+      "street_address": {
+        "fi": "12"
+      },
+      "www_url": {},
+      "picture_caption": {},
+      "periods": [],
+      "opening_hours_today": {
+        "2023-05-15": [
+          {
+            "opens": null,
+            "closes": null
+          }
+        ]
+      },
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          60.45207785509154,
+          22.254069497201563
+        ]
+      },
+      "municipality": null,
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "hidden": false,
+      "created_at": "2022-11-02T13:06:27.637757+02:00",
+      "modified_at": "2023-04-28T11:48:36.811911+03:00",
+      "map_service_id": null,
+      "time_zone": "Europe/Helsinki",
+      "manager_email": null,
+      "address_zip": null,
+      "phone": null,
+      "email": null,
+      "address_postal_full": null,
+      "picture_url": null,
+      "data_source": "",
+      "data_source_hours": "",
+      "disallow_overlapping_reservations": false,
+      "disallow_overlapping_reservations_per_user": false,
+      "sms_reminder": false,
+      "sms_reminder_delay": 1,
+      "payment_requested_waiting_time": 0,
+      "notification_template_group": null
+    },
+    {
+      "id": "ax3yw4zzqxqa",
+      "name": {
+        "fi": "Testitoimipiste 2",
+        "en": "Test unit 2",
+        "sv": "Testenhet 2"
+      },
+      "description": {},
+      "street_address": {
+        "fi": "Osoite 1234"
+      },
+      "www_url": {},
+      "picture_caption": {},
+      "periods": [],
+      "opening_hours_today": {
+        "2023-05-15": [
+          {
+            "opens": null,
+            "closes": null
+          }
+        ]
+      },
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          22.28119199475599,
+          60.46663525856164
+        ]
+      },
+      "municipality": null,
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "hidden": false,
+      "created_at": "2023-03-23T08:33:09.194891+02:00",
+      "modified_at": "2023-05-02T08:15:22.374537+03:00",
+      "map_service_id": null,
+      "time_zone": "Europe/Helsinki",
+      "manager_email": null,
+      "address_zip": null,
+      "phone": null,
+      "email": null,
+      "address_postal_full": null,
+      "picture_url": null,
+      "data_source": "",
+      "data_source_hours": "",
+      "disallow_overlapping_reservations": true,
+      "disallow_overlapping_reservations_per_user": true,
+      "sms_reminder": false,
+      "sms_reminder_delay": 1,
+      "payment_requested_waiting_time": 0,
+      "notification_template_group": null
+    },
+    {
+      "id": "ax5cghfdyiqq",
+      "name": {
+        "fi": "Toimipiste 3",
+        "en": "Unit 3",
+        "sv": "Enhet 3"
+      },
+      "description": {
+        "fi": "Toimipiste 3 kuvaus",
+        "en": "Unit 3 description",
+        "sv": "Enhet 3 beskrivning"
+      },
+      "street_address": {
+        "fi": "Jokukatu 3",
+        "en": "Jokukatu 3",
+        "sv": "Någonväg 3"
+      },
+      "www_url": {},
+      "picture_caption": {},
+      "periods": [
+        {
+          "id": 10,
+          "name": "alustavat",
+          "days": [
+            {
+              "weekday": 0,
+              "opens": "08:00:00",
+              "closes": "18:00:00",
+              "closed": false
+            },
+            {
+              "weekday": 1,
+              "opens": "08:00:00",
+              "closes": "18:00:00",
+              "closed": false
+            },
+            {
+              "weekday": 2,
+              "opens": "08:00:00",
+              "closes": "18:00:00",
+              "closed": false
+            },
+            {
+              "weekday": 3,
+              "opens": "08:00:00",
+              "closes": "18:00:00",
+              "closed": false
+            },
+            {
+              "weekday": 4,
+              "opens": "08:00:00",
+              "closes": "18:00:00",
+              "closed": false
+            }
+          ],
+          "start": "2023-04-01",
+          "end": "2023-11-30",
+          "description": null,
+          "closed": false
+        }
+      ],
+      "opening_hours_today": {
+        "2023-05-15": [
+          {
+            "opens": "2023-05-15T08:00:00+03:00",
+            "closes": "2023-05-15T18:00:00+03:00"
+          }
+        ]
+      },
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          22.266017130083483,
+          60.44828508889576
+        ]
+      },
+      "municipality": "turku",
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "hidden": false,
+      "created_at": "2023-04-25T09:19:54.726231+03:00",
+      "modified_at": "2023-04-25T09:19:54.846725+03:00",
+      "map_service_id": null,
+      "time_zone": "Europe/Helsinki",
+      "manager_email": null,
+      "address_zip": "12345",
+      "phone": "0411111111",
+      "email": null,
+      "address_postal_full": "Jokukatu 3, 12345 Turku",
+      "picture_url": null,
+      "data_source": "",
+      "data_source_hours": "",
+      "disallow_overlapping_reservations": false,
+      "disallow_overlapping_reservations_per_user": false,
+      "sms_reminder": false,
+      "sms_reminder_delay": 1,
+      "payment_requested_waiting_time": 0,
+      "notification_template_group": null
+    }
+  ]
+}

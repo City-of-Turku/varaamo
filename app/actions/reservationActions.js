@@ -1,10 +1,10 @@
-import types from 'constants/ActionTypes';
 
 import pickBy from 'lodash/pickBy';
 import mapValues from 'lodash/mapValues';
 import { decamelizeKeys } from 'humps';
 import { RSAA } from 'redux-api-middleware';
 
+import types from 'constants/ActionTypes';
 import schemas from 'store/middleware/Schemas';
 import {
   buildAPIUrl,

@@ -1,0 +1,1672 @@
+{
+  "count": 10,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "axwhvvq4er3a",
+      "products": [],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Kokoustila",
+            "en": "Meeting room",
+            "sv": "Mötesrum"
+          },
+          "parent": null,
+          "id": "meeting-room",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "reserver_address_street",
+        "reserver_address_zip",
+        "reserver_address_city",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "company",
+        "event_description",
+        "reserver_id",
+        "number_of_participants",
+        "reserver_email_address",
+        "event_subject",
+        "reservation_extra_questions",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number",
+        "home_municipality",
+        "host_name",
+        "participants",
+        "require_assistance",
+        "require_workstation"
+      ],
+      "required_reservation_extra_fields": [],
+      "included_reservation_home_municipality_fields": [
+        {
+          "id": "kaarina",
+          "name": {
+            "fi": "Kaarina",
+            "en": "Kaarina",
+            "sv": "S:t Karins"
+          }
+        },
+        {
+          "id": "raisio",
+          "name": {
+            "fi": "Raisio",
+            "en": "Raisio",
+            "sv": "Reso"
+          }
+        },
+        {
+          "id": "turku",
+          "name": {
+            "fi": "Turku",
+            "en": "Turku",
+            "sv": "Åbo"
+          }
+        }
+      ],
+      "is_favorite": false,
+      "generic_terms": {
+        "fi": "Tämä on testikäyttöehdot.",
+        "en": "This is a test terms of use.",
+        "sv": "Detta är ett test användarvillkor."
+      },
+      "payment_terms": {
+        "fi": "Tämä on testimaksuehdot.",
+        "en": "This is the test payment terms.",
+        "sv": "Detta är testbetalningsvillkoren."
+      },
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": null,
+      "universal_field": [
+        {
+          "id": 1,
+          "field_type": "Select",
+          "data": null,
+          "description": {
+            "fi": "Valitse mihin järjestykseen toivot tilan pöytien asetettavan",
+            "en": "Choose the order in which you want the tables in the space to be placed",
+            "sv": "Välj i vilken ordning du vill att borden i utrymmet ska placeras"
+          },
+          "label": {
+            "fi": "Pöytien järjestys",
+            "en": "Table positions",
+            "sv": "Ordningen på borden"
+          },
+          "resource": "axwhvvq4er3a",
+          "options": [
+            {
+              "id": 1,
+              "text": {
+                "fi": "Kolme riviä",
+                "en": "Three rows",
+                "sv": "Tre rader"
+              }
+            },
+            {
+              "id": 2,
+              "text": {
+                "fi": "Pöydät U-muotoisesti",
+                "en": "Tables in U-shape",
+                "sv": "Bord i U-form"
+              }
+            },
+            {
+              "id": 3,
+              "text": {
+                "fi": "Kahtena neliösaarekkeena",
+                "en": "In two square islands",
+                "sv": "På två kvadratiska öar"
+              }
+            }
+          ],
+          "name": "table positions"
+        }
+      ],
+      "reservable_by_all_staff": false,
+      "created_at": "2022-11-02T13:20:16.144927+02:00",
+      "modified_at": "2023-03-16T12:50:12.414393+02:00",
+      "public": true,
+      "name": {
+        "fi": "Toimisto 1b",
+        "en": "Office 1b",
+        "sv": "Kontor 1b"
+      },
+      "description": {
+        "fi": "Tämä on toimistotilan kuvausteksti.",
+        "en": "This is the office space's description.",
+        "sv": "Detta är kontorsutrymmets beskrivning."
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "strong",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": "00:30:00",
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": {
+        "fi": "Reservation info fi",
+        "en": "Reservation info en",
+        "sv": "Reservation info sv"
+      },
+      "responsible_contact_info": {
+        "fi": "Responsible contact info [fi]",
+        "en": "Responsible contact info [en]",
+        "sv": "Responsible contact info [sv]"
+      },
+      "specific_terms": {
+        "fi": "Resurssin specific terms fi",
+        "en": "Resource specific terms en",
+        "sv": "Resource specific terms sv"
+      },
+      "reservation_additional_information": {
+        "fi": "Reservation additional info fi",
+        "en": "Reservation additional info en",
+        "sv": "Reservation additional info sv"
+      },
+      "min_price": "0.00",
+      "max_price": "100.00",
+      "price_type": "fixed",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "axwhvuiljcdq",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          60.4436451,
+          22.2441131
+        ]
+      }
+    },
+    {
+      "id": "axxdgpitdkuq",
+      "products": [
+        {
+          "id": "axxdgtum7icq",
+          "type": "rent",
+          "name": {
+            "fi": "Testivuokra",
+            "en": "Test  rent",
+            "sv": "Test hyra"
+          },
+          "description": null,
+          "price": {
+            "type": "per_period",
+            "tax_percentage": "24.00",
+            "amount": "6.00",
+            "period": "00:30:00"
+          },
+          "max_quantity": 1,
+          "product_customer_groups": [
+            {
+              "id": "suomifi-1",
+              "price": "3.00",
+              "customer_group": {
+                "id": "axxdglu2vdla",
+                "name": {
+                  "fi": "Suomi.fi",
+                  "en": "Suomi.fi",
+                  "sv": "Suomi.fi"
+                },
+                "only_for_login_methods": [
+                  {
+                    "login_method_id": "turku_suomifi"
+                  }
+                ]
+              }
+            }
+          ],
+          "time_slot_prices": [],
+          "price_tax_free": "4.84"
+        }
+      ],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "reserver_email_address",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number"
+      ],
+      "required_reservation_extra_fields": [
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name"
+      ],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {},
+      "payment_terms": {},
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": 1.0,
+      "universal_field": [],
+      "reservable_by_all_staff": false,
+      "created_at": "2022-11-24T10:33:31.562873+02:00",
+      "modified_at": "2023-01-10T08:39:53.163796+02:00",
+      "public": true,
+      "name": {
+        "fi": "Rajattu vain Suomi.fi käyttäjille",
+        "en": "Restricted to only Suomifi users",
+        "sv": "Endast för användare av Suomi.fi"
+      },
+      "description": {
+        "fi": "test",
+        "en": "test",
+        "sv": "test"
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "strong",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": null,
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": null,
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": null,
+      "min_price": "1.00",
+      "max_price": null,
+      "price_type": "hourly",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "axwhvvif5ydq",
+      "location": null
+    },
+    {
+      "id": "axxdgngxtelq",
+      "products": [
+        {
+          "id": "axxdgssornnq",
+          "type": "rent",
+          "name": {
+            "fi": "Testivuokra",
+            "en": "Test  rent",
+            "sv": "Test hyra"
+          },
+          "description": null,
+          "price": {
+            "type": "per_period",
+            "tax_percentage": "24.00",
+            "amount": "10.00",
+            "period": "00:30:00"
+          },
+          "max_quantity": 1,
+          "product_customer_groups": [
+            {
+              "id": "city-1",
+              "price": "2.00",
+              "customer_group": {
+                "id": "axxdgkherjra",
+                "name": {
+                  "fi": "Turun kaupungin työntekijät",
+                  "en": "City of Turku employees",
+                  "sv": "Åbo stads anställda"
+                },
+                "only_for_login_methods": [
+                  {
+                    "login_method_id": "turku_adfs"
+                  }
+                ]
+              }
+            }
+          ],
+          "time_slot_prices": [],
+          "price_tax_free": "8.06"
+        }
+      ],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "reserver_email_address",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number"
+      ],
+      "required_reservation_extra_fields": [
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name"
+      ],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {},
+      "payment_terms": {},
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": 1.0,
+      "universal_field": [],
+      "reservable_by_all_staff": false,
+      "created_at": "2022-11-24T10:31:53.739005+02:00",
+      "modified_at": "2023-01-10T08:39:41.793347+02:00",
+      "public": true,
+      "name": {
+        "fi": "Rajattu vain Turun työntekijöille",
+        "en": "Restricted to only City of Turku employees",
+        "sv": "Endast anställda i Åbo stad"
+      },
+      "description": {
+        "fi": "test",
+        "en": "test",
+        "sv": "test"
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "strong",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": null,
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": null,
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": null,
+      "min_price": "1.00",
+      "max_price": null,
+      "price_type": "hourly",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "axwhvvif5ydq",
+      "location": null
+    },
+    {
+      "id": "axwhwc5ffyza",
+      "products": [
+        {
+          "id": "axwhwjcftkiq",
+          "type": "extra",
+          "name": {
+            "fi": "Lounas",
+            "en": "Lunch",
+            "sv": "Lunch"
+          },
+          "description": null,
+          "price": {
+            "type": "fixed",
+            "tax_percentage": "24.00",
+            "amount": "10.00"
+          },
+          "max_quantity": 10,
+          "product_customer_groups": [],
+          "time_slot_prices": [],
+          "price_tax_free": "8.06"
+        },
+        {
+          "id": "axwhwkrregba",
+          "type": "rent",
+          "name": {
+            "fi": "Toimiston vuokra",
+            "en": "Office rent",
+            "sv": "Kontorshyra"
+          },
+          "description": null,
+          "price": {
+            "type": "per_period",
+            "tax_percentage": "14.00",
+            "amount": "6.00",
+            "period": "00:30:00"
+          },
+          "max_quantity": 1,
+          "product_customer_groups": [],
+          "time_slot_prices": [
+            {
+              "id": 1,
+              "begin": "09:00:00",
+              "end": "10:00:00",
+              "price": "7.00",
+              "customer_group_time_slot_prices": []
+            },
+            {
+              "id": 2,
+              "begin": "12:00:00",
+              "end": "14:00:00",
+              "price": "8.00",
+              "customer_group_time_slot_prices": []
+            }
+          ],
+          "price_tax_free": "5.26"
+        },
+        {
+          "id": "axwrz55im6tq",
+          "type": "extra",
+          "name": {
+            "fi": "CG-1",
+            "en": "CG-1",
+            "sv": "CG-1"
+          },
+          "description": null,
+          "price": {
+            "type": "per_period",
+            "tax_percentage": "24.00",
+            "amount": "1.00",
+            "period": "00:30:00"
+          },
+          "max_quantity": 10,
+          "product_customer_groups": [
+            {
+              "id": "adults-1",
+              "price": "3.00",
+              "customer_group": {
+                "id": "axwrz5e6bb2a",
+                "name": {
+                  "fi": "Aikuiset",
+                  "en": "Adults",
+                  "sv": "Vuxna"
+                },
+                "only_for_login_methods": []
+              }
+            },
+            {
+              "id": "elders-1",
+              "price": "2.00",
+              "customer_group": {
+                "id": "axwrz5yprgpq",
+                "name": {
+                  "fi": "Eläkeläiset",
+                  "en": "Elders",
+                  "sv": "Äldste"
+                },
+                "only_for_login_methods": []
+              }
+            },
+            {
+              "id": "children-1",
+              "price": "1.00",
+              "customer_group": {
+                "id": "axwrz7i2rtqq",
+                "name": {
+                  "fi": "Lapset",
+                  "en": "Children",
+                  "sv": "Barn"
+                },
+                "only_for_login_methods": []
+              }
+            },
+            {
+              "id": "city-2",
+              "price": "0.00",
+              "customer_group": {
+                "id": "axxdgkherjra",
+                "name": {
+                  "fi": "Turun kaupungin työntekijät",
+                  "en": "City of Turku employees",
+                  "sv": "Åbo stads anställda"
+                },
+                "only_for_login_methods": [
+                  {
+                    "login_method_id": "turku_adfs"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "suomifi-2",
+              "price": "2.49",
+              "customer_group": {
+                "id": "axxdglu2vdla",
+                "name": {
+                  "fi": "Suomi.fi",
+                  "en": "Suomi.fi",
+                  "sv": "Suomi.fi"
+                },
+                "only_for_login_methods": [
+                  {
+                    "login_method_id": "turku_suomifi"
+                  }
+                ]
+              }
+            }
+          ],
+          "time_slot_prices": [
+            {
+              "id": 5,
+              "begin": "08:00:00",
+              "end": "16:00:00",
+              "price": "1.00",
+              "customer_group_time_slot_prices": []
+            }
+          ],
+          "price_tax_free": "0.81"
+        }
+      ],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T15:50:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "reserver_email_address",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number"
+      ],
+      "required_reservation_extra_fields": [
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name"
+      ],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {},
+      "payment_terms": {},
+      "reservable_days_in_advance": 30,
+      "reservable_max_days_in_advance": 30,
+      "reservable_before": "2023-06-14T00:00:00+03:00",
+      "reservable_min_days_in_advance": 1,
+      "reservable_after": "2023-05-16T00:00:00+03:00",
+      "tags": [],
+      "max_price_per_hour": 0.0,
+      "min_price_per_hour": 0.0,
+      "universal_field": [],
+      "reservable_by_all_staff": false,
+      "created_at": "2022-11-02T13:22:51.023280+02:00",
+      "modified_at": "2023-05-12T11:25:52.651610+03:00",
+      "public": true,
+      "name": {
+        "fi": "Testimaksullinen 1",
+        "en": "Test with payments 1",
+        "sv": "Testa med betalningar 1"
+      },
+      "description": {
+        "fi": "test",
+        "en": "test",
+        "sv": "test"
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "weak",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": "00:30:00",
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": 2,
+      "reservable": true,
+      "reservation_info": {
+        "fi": "Tämä tila on varattavissa."
+      },
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": null,
+      "min_price": "0.00",
+      "max_price": "0.00",
+      "price_type": "hourly",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "axwhvvif5ydq",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          60.4448983,
+          22.2712356
+        ]
+      }
+    },
+    {
+      "id": "axwhwd7oz27a",
+      "products": [
+        {
+          "id": "axwhwjcftkiq",
+          "type": "extra",
+          "name": {
+            "fi": "Lounas",
+            "en": "Lunch",
+            "sv": "Lunch"
+          },
+          "description": null,
+          "price": {
+            "type": "fixed",
+            "tax_percentage": "24.00",
+            "amount": "10.00"
+          },
+          "max_quantity": 10,
+          "product_customer_groups": [],
+          "time_slot_prices": [],
+          "price_tax_free": "8.06"
+        },
+        {
+          "id": "axwhwkrregba",
+          "type": "rent",
+          "name": {
+            "fi": "Toimiston vuokra",
+            "en": "Office rent",
+            "sv": "Kontorshyra"
+          },
+          "description": null,
+          "price": {
+            "type": "per_period",
+            "tax_percentage": "14.00",
+            "amount": "6.00",
+            "period": "00:30:00"
+          },
+          "max_quantity": 1,
+          "product_customer_groups": [],
+          "time_slot_prices": [
+            {
+              "id": 1,
+              "begin": "09:00:00",
+              "end": "10:00:00",
+              "price": "7.00",
+              "customer_group_time_slot_prices": []
+            },
+            {
+              "id": 2,
+              "begin": "12:00:00",
+              "end": "14:00:00",
+              "price": "8.00",
+              "customer_group_time_slot_prices": []
+            }
+          ],
+          "price_tax_free": "5.26"
+        }
+      ],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "reserver_email_address",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number"
+      ],
+      "required_reservation_extra_fields": [
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name"
+      ],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {
+        "fi": "Tämä on testikäyttöehdot.",
+        "en": "This is a test terms of use.",
+        "sv": "Detta är ett test användarvillkor."
+      },
+      "payment_terms": {
+        "fi": "Tämä on testimaksuehdot.",
+        "en": "This is the test payment terms.",
+        "sv": "Detta är testbetalningsvillkoren."
+      },
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": 100.0,
+      "min_price_per_hour": 1.0,
+      "universal_field": [],
+      "reservable_by_all_staff": false,
+      "created_at": "2022-11-02T13:24:18.507252+02:00",
+      "modified_at": "2023-05-12T11:26:37.091712+03:00",
+      "public": true,
+      "name": {
+        "fi": "Testiresurssi käteismaksuille",
+        "en": "Test resource for cash payments",
+        "sv": "Testresurs för kontantbetalningar"
+      },
+      "description": {
+        "fi": "test",
+        "en": "test",
+        "sv": "test"
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": true,
+      "authentication": "strong",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": "04:00:00",
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": null,
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": null,
+      "min_price": "1.00",
+      "max_price": "100.00",
+      "price_type": "hourly",
+      "cash_payments_allowed": true,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "axwhvvif5ydq",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          60.4703497,
+          22.2340709
+        ]
+      }
+    },
+    {
+      "id": "axwhwbunrqcq",
+      "products": [],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "reserver_address_street",
+        "reserver_address_zip",
+        "reserver_address_city",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "company",
+        "event_description",
+        "reserver_id",
+        "number_of_participants",
+        "reserver_email_address",
+        "event_subject",
+        "reservation_extra_questions",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number",
+        "home_municipality",
+        "host_name",
+        "participants",
+        "require_assistance",
+        "require_workstation"
+      ],
+      "required_reservation_extra_fields": [],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {},
+      "payment_terms": {},
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": null,
+      "universal_field": [],
+      "reservable_by_all_staff": false,
+      "created_at": "2022-11-02T13:21:41.293314+02:00",
+      "modified_at": "2023-04-17T08:52:52.247006+03:00",
+      "public": true,
+      "name": {
+        "fi": "Testiresurssi maksuton",
+        "en": "Test resource free",
+        "sv": "Testresurs gratis"
+      },
+      "description": {
+        "fi": "test",
+        "en": "test",
+        "sv": "test"
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "none",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "01:30:00",
+      "max_period": "03:00:00",
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": null,
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": null,
+      "min_price": 0,
+      "max_price": 1,
+      "price_type": "hourly",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "https://google.fi",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "axwhvvif5ydq",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          60.4562426,
+          22.2688324
+        ]
+      }
+    },
+    {
+      "id": "axxjtm7wujha",
+      "products": [],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "reserver_address_street",
+        "reserver_address_zip",
+        "reserver_address_city",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "company",
+        "event_description",
+        "reserver_id",
+        "number_of_participants",
+        "reserver_email_address",
+        "event_subject",
+        "reservation_extra_questions",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number",
+        "home_municipality",
+        "host_name",
+        "participants",
+        "require_assistance",
+        "require_workstation"
+      ],
+      "required_reservation_extra_fields": [],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {},
+      "payment_terms": {},
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": null,
+      "universal_field": [],
+      "reservable_by_all_staff": false,
+      "created_at": "2022-11-29T12:48:28.846451+02:00",
+      "modified_at": "2023-01-10T08:40:14.508539+02:00",
+      "public": true,
+      "name": {
+        "fi": "Testiresurssi PIN-koodeille",
+        "en": "Test resource for PIN codes",
+        "sv": "Test resource for PIN codes SV"
+      },
+      "description": {
+        "fi": "test",
+        "en": "test",
+        "sv": "test"
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "none",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": null,
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": null,
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": null,
+      "min_price": null,
+      "max_price": null,
+      "price_type": "hourly",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": false,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "axwhvvif5ydq",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          60.4561749,
+          22.2774154
+        ]
+      }
+    },
+    {
+      "id": "ax3yw54uwatq",
+      "products": [],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "reserver_address_street",
+        "reserver_address_zip",
+        "reserver_address_city",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "company",
+        "event_description",
+        "reserver_id",
+        "number_of_participants",
+        "reserver_email_address",
+        "event_subject",
+        "reservation_extra_questions",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number",
+        "home_municipality",
+        "host_name",
+        "participants",
+        "require_assistance",
+        "require_workstation"
+      ],
+      "required_reservation_extra_fields": [],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {},
+      "payment_terms": {},
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": null,
+      "universal_field": [],
+      "reservable_by_all_staff": false,
+      "created_at": "2023-03-23T08:36:50.194673+02:00",
+      "modified_at": "2023-05-15T09:28:06.602717+03:00",
+      "public": true,
+      "name": {
+        "fi": "Testiresurssi A",
+        "en": "Test resource A",
+        "sv": "Testresurs A"
+      },
+      "description": {
+        "fi": "Rajoitetut päällekkäiset varaukset",
+        "en": "Restricted overlapping reservations",
+        "sv": "Restricted overlapping reservations SV"
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "unauthenticated",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": "00:30:00",
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": null,
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": null,
+      "min_price": null,
+      "max_price": null,
+      "price_type": "hourly",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "ax3yw4zzqxqa",
+      "location": null
+    },
+    {
+      "id": "ax32hmxdyp5q",
+      "products": [],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Testiresurssityyppi",
+          "en": "Test resource type",
+          "sv": "Testresurs typ"
+        },
+        "main_type": "space",
+        "id": "axwhvxarnyzq"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": "2023-05-15T08:00:00+03:00",
+          "closes": "2023-05-15T16:00:00+03:00"
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "reserver_address_street",
+        "reserver_address_zip",
+        "reserver_address_city",
+        "billing_address_street",
+        "billing_address_zip",
+        "billing_address_city",
+        "company",
+        "event_description",
+        "reserver_id",
+        "number_of_participants",
+        "reserver_email_address",
+        "event_subject",
+        "reservation_extra_questions",
+        "billing_email_address",
+        "billing_first_name",
+        "billing_last_name",
+        "billing_phone_number",
+        "home_municipality",
+        "host_name",
+        "participants",
+        "require_assistance",
+        "require_workstation"
+      ],
+      "required_reservation_extra_fields": [],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {},
+      "payment_terms": {},
+      "reservable_days_in_advance": null,
+      "reservable_max_days_in_advance": null,
+      "reservable_before": null,
+      "reservable_min_days_in_advance": null,
+      "reservable_after": null,
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": null,
+      "universal_field": [],
+      "reservable_by_all_staff": false,
+      "created_at": "2023-03-24T13:30:27.075289+02:00",
+      "modified_at": "2023-05-02T08:14:28.864268+03:00",
+      "public": true,
+      "name": {
+        "fi": "Testiresurssi B",
+        "en": "Test resource B",
+        "sv": "Testresurs B"
+      },
+      "description": {
+        "fi": "Rajoitetut päällekkäiset varaukset",
+        "en": "Restricted overlapping reservations",
+        "sv": "Restricted overlapping reservations SV"
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "unauthenticated",
+      "people_capacity": 5,
+      "area": null,
+      "min_period": "00:30:00",
+      "max_period": null,
+      "cooldown": "00:00:00",
+      "slot_size": "00:30:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": null,
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": null,
+      "min_price": null,
+      "max_price": null,
+      "price_type": "hourly",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "ax3yw4zzqxqa",
+      "location": null
+    },
+    {
+      "id": "ax5cgppabkmq",
+      "products": [],
+      "purposes": [
+        {
+          "name": {
+            "fi": "Testikäyttötarkoitus",
+            "en": "Test purpose",
+            "sv": "Test syfte"
+          },
+          "parent": null,
+          "id": "test-purpose",
+          "image": null
+        }
+      ],
+      "images": [],
+      "equipment": [],
+      "type": {
+        "name": {
+          "fi": "Henkilö",
+          "en": "Person",
+          "sv": "Person"
+        },
+        "main_type": "person",
+        "id": "ax5cgj2pa3ba"
+      },
+      "opening_hours": [
+        {
+          "date": "2023-05-15",
+          "opens": null,
+          "closes": null
+        }
+      ],
+      "reservations": [],
+      "user_permissions": {
+        "can_make_reservations": true,
+        "can_ignore_opening_hours": false,
+        "is_admin": false,
+        "is_manager": false,
+        "is_viewer": false,
+        "can_bypass_payment": false
+      },
+      "supported_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number",
+        "reserver_email_address",
+        "reservation_extra_questions"
+      ],
+      "required_reservation_extra_fields": [
+        "reserver_name",
+        "reserver_phone_number"
+      ],
+      "included_reservation_home_municipality_fields": [],
+      "is_favorite": false,
+      "generic_terms": {},
+      "payment_terms": {},
+      "reservable_days_in_advance": 60,
+      "reservable_max_days_in_advance": 60,
+      "reservable_before": "2023-07-14T00:00:00+03:00",
+      "reservable_min_days_in_advance": 2,
+      "reservable_after": "2023-05-17T00:00:00+03:00",
+      "tags": [],
+      "max_price_per_hour": null,
+      "min_price_per_hour": null,
+      "universal_field": [
+        {
+          "id": 2,
+          "field_type": "Select",
+          "data": null,
+          "description": {
+            "fi": "Valitse paikka, jonne haluat digineuvojan",
+            "en": "Valitse paikka, jonne haluat digineuvojan",
+            "sv": "Väljä någonting"
+          },
+          "label": {
+            "fi": "Ohjauspaikka",
+            "en": "Ohjauspaikka",
+            "sv": "Handlednings plats"
+          },
+          "resource": "ax5cgppabkmq",
+          "options": [
+            {
+              "id": 4,
+              "text": {
+                "fi": "Kirjasto 1",
+                "en": "Kirjasto 1",
+                "sv": "Bibliotek 1"
+              }
+            },
+            {
+              "id": 6,
+              "text": {
+                "fi": "Kirjasto 3",
+                "en": "Kirjasto 3",
+                "sv": "Bibliotek 3"
+              }
+            },
+            {
+              "id": 5,
+              "text": {
+                "fi": "Kirjasto 2",
+                "en": "Kirjasto 2",
+                "sv": "Bibliotek 2"
+              }
+            }
+          ],
+          "name": "Paikkavalinta"
+        }
+      ],
+      "reservable_by_all_staff": true,
+      "created_at": "2023-04-25T09:29:12.173434+03:00",
+      "modified_at": "2023-05-09T13:37:01.691684+03:00",
+      "public": true,
+      "name": {
+        "fi": "Digineuvoja A"
+      },
+      "description": {
+        "fi": "Digineuvoja A kuvausta tähän."
+      },
+      "min_age": 0,
+      "max_age": 0,
+      "need_manual_confirmation": false,
+      "authentication": "none",
+      "people_capacity": 3,
+      "area": null,
+      "min_period": "01:00:00",
+      "max_period": "02:00:00",
+      "cooldown": "02:00:00",
+      "slot_size": "01:00:00",
+      "max_reservations_per_user": null,
+      "reservable": true,
+      "reservation_info": {
+        "fi": "Reservation info [fi]",
+        "en": "Reservation info [en]",
+        "sv": "Reservation info [sv]"
+      },
+      "responsible_contact_info": null,
+      "specific_terms": null,
+      "reservation_additional_information": {
+        "fi": "Kerro mihin asiaan tarvitset tukea",
+        "sv": "Berätta vad du behöver stöd för"
+      },
+      "min_price": null,
+      "max_price": null,
+      "price_type": "hourly",
+      "cash_payments_allowed": false,
+      "payment_requested_waiting_time": 0,
+      "generate_access_codes": true,
+      "reservation_feedback_url": "",
+      "external_reservation_url": null,
+      "is_external": false,
+      "unit": "ax5cghfdyiqq",
+      "location": null
+    }
+  ]
+}

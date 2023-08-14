@@ -138,6 +138,36 @@ export function getUniqueCustomerGroups(resource) {
 }
 
 /**
+ * Returns customer groups that are allowed for this user's login method.
+ * @param {array} customerGroups list of customer group objects
+ * @param {string} loginMethod e.g. user auth's amr value
+ * @returns {array} allowed customer group objects
+ */
+export function getAllowedCustomerGroups(customerGroups, loginMethod) {
+  const allowedCustomerGroups = [];
+  customerGroups.forEach((customerGroup) => {
+    if ('onlyForLoginMethods' in customerGroup) {
+      if (customerGroup.onlyForLoginMethods.length === 0) {
+        // cg has no restrictions, add it to allowed cgs
+        allowedCustomerGroups.push(customerGroup);
+      } else if (customerGroup.onlyForLoginMethods.length > 0) {
+        const loginMethodAllowed = customerGroup.onlyForLoginMethods.some(
+          allowedLoginMethod => allowedLoginMethod.loginMethodId === loginMethod
+        );
+        if (loginMethodAllowed) {
+          // cg has restrictions, but user's login method is allowed
+          allowedCustomerGroups.push(customerGroup);
+        }
+      }
+    } else {
+      // restrictions are missing, add cg to allowed cgs
+      allowedCustomerGroups.push(customerGroup);
+    }
+  });
+  return allowedCustomerGroups;
+}
+
+/**
  * Checks if a given customer group is found in given product customer groups
  * @param {string} customerGroup id
  * @param {Object[]} productCustomerGroups

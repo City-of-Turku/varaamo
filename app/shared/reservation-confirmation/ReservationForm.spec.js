@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import Button from 'react-bootstrap/lib/Button';
@@ -6,10 +5,11 @@ import Form from 'react-bootstrap/lib/Form';
 import { Field } from 'redux-form';
 import simple from 'simple-mock';
 
+import constants from 'constants/AppConstants';
 import WrappedText from 'shared/wrapped-text';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedReservationForm as ReservationForm, validate } from './ReservationForm';
-import Resource from 'utils/fixtures/Resource';
+import Resource, { UniversalField } from 'utils/fixtures/Resource';
 
 describe('shared/reservation-confirmation/ReservationForm', () => {
   describe('validation', () => {
@@ -378,6 +378,31 @@ describe('shared/reservation-confirmation/ReservationForm', () => {
 
           expect(inputWrapper.length).toBe(0);
         });
+      });
+    });
+    describe('universal field', () => {
+      test('is rendered when resource has a universal field', () => {
+        const mockUniversalField = UniversalField.build();
+        const resource = Resource.build({ universalField: [mockUniversalField] });
+        const fields = ['universalData'];
+        const element = getWrapper({ fields, resource }).find(Field);
+        expect(element).toHaveLength(1);
+        const elementProps = element.props();
+        expect(elementProps.type).toBe('select');
+        expect(elementProps.label).toBe(mockUniversalField.label);
+        const expectedControlProps = {
+          options: mockUniversalField.options.map(opt => ({
+            id: opt.id,
+            value: opt.id,
+            name: opt.text,
+          }))
+        };
+        expect(elementProps.controlProps).toEqual(expectedControlProps);
+        const expectedFieldData = {
+          data: null,
+          description: mockUniversalField.description,
+        };
+        expect(elementProps.universalFieldData).toEqual(expectedFieldData);
       });
     });
 

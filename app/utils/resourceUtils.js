@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import filter from 'lodash/filter';
 import find from 'lodash/find';
@@ -7,6 +6,7 @@ import forEach from 'lodash/forEach';
 import moment from 'moment';
 import queryString from 'query-string';
 
+import constants from 'constants/AppConstants';
 import { getCurrentReservation, getNextAvailableTime } from 'utils/reservationUtils';
 import { getPrettifiedPeriodUnits } from './timeUtils';
 
@@ -154,6 +154,11 @@ function getPrice(t, resource) {
     day: t('common.unit.time.day'),
     week: t('common.unit.time.week'),
   });
+
+  const minIsEmpty = resource.minPrice === null || resource.minPrice === '' || resource.minPrice === undefined;
+  if (!minIsEmpty && minPrice === 0 && maxPrice > 0) {
+    return `${Number(minPrice)} - ${Number(maxPrice)} ${priceEnding}`;
+  }
 
   if (minPrice && maxPrice && minPrice !== maxPrice) {
     return `${Number(minPrice)} - ${Number(maxPrice)} ${priceEnding}`;

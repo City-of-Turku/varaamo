@@ -1,7 +1,6 @@
-import types from 'constants/ActionTypes';
-
 import moment from 'moment';
 
+import types from 'constants/ActionTypes';
 import {
   favoriteResource,
   unfavoriteResource,

@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import moment from 'moment';
 import queryString from 'query-string';
@@ -8,6 +7,7 @@ import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
 import Panel from 'react-bootstrap/lib/Panel';
 
+import constants from 'constants/AppConstants';
 import { shallowWithIntl } from 'utils/testUtils';
 import CheckboxControl from './CheckboxControl';
 import DatePickerControl from './DatePickerControl';

@@ -1,10 +1,11 @@
+import filter from 'lodash/filter';
+import moment from 'moment';
+import { createAction, handleActions } from 'redux-actions';
+
 import actionTypes from 'constants/ActionTypes';
 import modalTypes from 'constants/ModalTypes';
 import constants from 'constants/AppConstants';
 
-import filter from 'lodash/filter';
-import moment from 'moment';
-import { createAction, handleActions } from 'redux-actions';
 
 
 // actions

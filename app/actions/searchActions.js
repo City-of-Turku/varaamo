@@ -1,10 +1,8 @@
-import types from 'constants/ActionTypes';
-import constants from 'constants/AppConstants';
-
 import { createAction } from 'redux-actions';
 import { RSAA } from 'redux-api-middleware';
 
-
+import types from 'constants/ActionTypes';
+import constants from 'constants/AppConstants';
 import schemas from 'store/middleware/Schemas';
 import {
   buildAPIUrl,

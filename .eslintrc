@@ -1,20 +1,20 @@
 {
   "extends": "airbnb",
-
   "env": {
     "browser": true,
     "node": true,
-    "jest": true
+    "jest": true,
+    "cypress/globals": true
   },
-
   "globals": {
     "SETTINGS": true
   },
-
   "parser": "babel-eslint",
-
-  "plugins": ["import", "react"],
-
+  "plugins": [
+    "import",
+    "react",
+    "cypress"
+  ],
   "settings": {
     "import/resolver": {
       "webpack": {
@@ -22,73 +22,106 @@
       }
     }
   },
-
   "rules": {
-
     "class-methods-use-this": "off",
-
     "import/no-extraneous-dependencies": "off",
-
     "import/order": [
-      "error",
+      "warn",
       {
         "groups": [
           "builtin",
           "external",
-          ["internal", "parent", "sibling", "index"]
+          [
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+          ]
         ],
         "newlines-between": "always"
       }
     ],
-
     "no-debugger": "warn",
-
     "no-unused-vars": "warn",
-
     "import/prefer-default-export": "off",
-
-    "new-cap": ["error", { "capIsNew": false, "newIsCap": true }],
-
-    "no-underscore-dangle": ["error", { "allow": ["_paq"] }],
-
+    "new-cap": [
+      "error",
+      {
+        "capIsNew": false,
+        "newIsCap": true
+      }
+    ],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_paq"
+        ]
+      }
+    ],
     "no-unused-expressions": "off",
-
-    "no-use-before-define": ["error", "nofunc"],
-
+    "no-use-before-define": [
+      "error",
+      "nofunc"
+    ],
     "react/forbid-prop-types": "off",
-
     "react/jsx-filename-extension": "off",
-
-    "react/jsx-sort-props": ["error", { "ignoreCase": true }],
-
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "ignoreCase": true
+      }
+    ],
     "react/no-string-refs": "off",
-
-    "react/no-unused-prop-types": ["error", { "skipShapeProps": true }],
-
+    "react/no-unused-prop-types": [
+      "error",
+      {
+        "skipShapeProps": true
+      }
+    ],
     "react/prefer-stateless-function": "off",
-
     "linebreak-style": 0,
-
-    "no-restricted-globals": ["error", "history"],
-    
+    "no-restricted-globals": [
+      "error",
+      "history"
+    ],
     "prefer-destructuring": "off",
-
     "react/destructuring-assignment": "off",
-
     "react/require-default-props": "off",
-    
     "jsx-a11y/click-events-have-key-events": "off",
-
     "jsx-a11y/anchor-is-valid": "off",
-
     "jsx-a11y/label-has-for": "off",
-
     "jsx-a11y/no-static-element-interactions": "off",
-    
     "jsx-a11y/no-noninteractive-tabindex": "off",
-    
     "react/no-array-index-key": "off",
-
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "arrow-parens": "off",
+    "function-paren-newline": "off",
+    "prefer-object-spread": "off",
+    "default-param-last": "off",
+    "function-call-argument-newline": "off",
+    "no-restricted-exports": "off",
+    "no-multiple-empty-lines": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-curly-newline": "off",
+    "react/jsx-no-constructed-context-values": "off",
+    "react/jsx-no-script-url": "off",
+    "react/jsx-no-useless-fragment": "off",
+    "react/jsx-no-props-spreading": "off",
+    "react/no-arrow-function-lifecycle": "off",
+    "react/no-invalid-html-attribute": "off",
+    "react/no-namespace": "off",
+    "react/no-unstable-nested-components": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-unused-class-component-methods": "off",
+    "react/prefer-exact-props": "off",
+    "react/state-in-constructor": "off",
+    "react/static-property-placement": "off",
+    "react/jsx-fragments": "off",
+    "react/sort-comp": "off",
+    "react/prop-types": "off",
+    "react/jsx-indent": "warn",
+    "import/no-import-module-exports": "off",
+    "jsx-a11y/control-has-associated-label": "off"
   }
 }

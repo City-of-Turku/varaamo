@@ -1,7 +1,8 @@
-import constants from 'constants/AppConstants';
 
 import { isEmpty, omit } from 'lodash';
 import moment from 'moment';
+
+import constants from 'constants/AppConstants';
 
 export function onDateFilterChange(start, end, filters, onSearchChange) {
   // start and end must be parseable by moment e.g. Date objs or valid date strings

@@ -1,9 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import MockDate from 'mockdate';
 import moment from 'moment';
 
+import constants from 'constants/AppConstants';
 import Reservation from 'utils/fixtures/Reservation';
+import Resource, { UniversalField } from 'utils/fixtures/Resource';
 import {
   combine,
   isStaffEvent,
@@ -29,10 +30,13 @@ import {
   getInitialProducts,
   getReservationCustomerGroupName,
   isManuallyConfirmedWithOrderAllowed,
+  normalizeUniversalFieldOptions,
+  mapReservationErrors,
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 import Product from '../fixtures/Product';
 import { getLocalizedFieldValue } from '../languageUtils';
+import { FIELDS } from '../../constants/ReservationConstants';
 
 jest.mock('../languageUtils', () => ({
   getLocalizedFieldValue: jest.fn(() => 'test-localized-value'),
@@ -765,6 +769,66 @@ describe('Utils: reservationUtils', () => {
       const state = states.READY_FOR_PAYMENT;
       const reservation = Reservation.build({ needManualConfirmation, order, state });
       expect(isManuallyConfirmedWithOrderAllowed(reservation)).toBe(false);
+    });
+  });
+  describe('normalizeUniversalFieldOptions', () => {
+    test('returns array with objects where values have been normalized', () => {
+      const universalField = UniversalField.build();
+      const resource = Resource.build({ universalField: [universalField] });
+      const returnValues = normalizeUniversalFieldOptions(resource.universalField, resource);
+      const expectedValues = {
+        fieldName: `componenttype-${universalField.id}`,
+        label: universalField.label,
+        name: 'universalData',
+        type: 'select',
+        controlProps: {
+          options: universalField.options.map(opt => ({
+            id: opt.id,
+            value: opt.id,
+            name: opt.text,
+          })),
+        },
+        universalProps: {
+          id: universalField.id,
+          description: universalField.description,
+          label: universalField.label,
+          options: universalField.options,
+        },
+      };
+      expect(returnValues).toEqual([expectedValues]);
+    });
+  });
+
+  describe('mapReservationErrors', () => {
+    const universalFields = [UniversalField.build()];
+    describe('creates correct list of reservation errors', () => {
+      test('when reservation has no errors', () => {
+        const errors = [];
+        expect(mapReservationErrors(errors, universalFields)).toEqual([]);
+      });
+
+      test('when universalfield has an error', () => {
+        const errors = ['universalData'];
+        expect(mapReservationErrors(errors, universalFields)).toEqual([{
+          id: 'universalData',
+          label: universalFields[0].label,
+          forBilling: false,
+          order: 100
+        }]);
+      });
+
+      test('when reservation has multiple errors', () => {
+        const errors = ['universalData', FIELDS.RESERVER_EMAIL_ADDRESS.id, FIELDS.BILLING_PHONE_NUMBER.id];
+        expect(mapReservationErrors(errors, universalFields)).toEqual([
+          FIELDS.RESERVER_EMAIL_ADDRESS, FIELDS.BILLING_PHONE_NUMBER,
+          {
+            id: 'universalData',
+            label: universalFields[0].label,
+            forBilling: false,
+            order: 100
+          },
+        ]);
+      });
     });
   });
 });

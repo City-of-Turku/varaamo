@@ -5,9 +5,10 @@ import ProductCustomerGroup from 'utils/fixtures/ProductCustomerGroup';
 import Resource from 'utils/fixtures/Resource';
 import TimeSlotPriceFixture from 'utils/fixtures/TimeSlotPriceFixture';
 import {
-  calculateTax, compareTaxPercentages, getOrderTaxTotals, getProductsOfType,
-  getRoundedVat, getSortedTaxPercentages, getTimeSlotMinMaxPrices, getTimeSlotsForCustomerGroup,
-  getUniqueCustomerGroups, isCustomerGroupInProductCustomerGroups, roundPriceToTwoDecimals
+  calculateTax, compareTaxPercentages, getAllowedCustomerGroups, getOrderTaxTotals,
+  getProductsOfType, getRoundedVat, getSortedTaxPercentages, getTimeSlotMinMaxPrices,
+  getTimeSlotsForCustomerGroup, getUniqueCustomerGroups,
+  isCustomerGroupInProductCustomerGroups, roundPriceToTwoDecimals
 } from '../ReservationProductsUtils';
 
 describe('reservation-products/ReservationProductsUtils', () => {
@@ -199,6 +200,45 @@ describe('reservation-products/ReservationProductsUtils', () => {
         const productB = Product.build({ productCustomerGroups: [pcgA, pcgB] });
         const resourceA = Resource.build({ products: [productA, productB] });
         expect(getUniqueCustomerGroups(resourceA)).toStrictEqual([customerGroupA, customerGroupB]);
+      });
+    });
+  });
+
+  describe('getAllowedCustomerGroups', () => {
+    describe('returns correct array', () => {
+      test('when given customer groups is an empty array', () => {
+        expect(getAllowedCustomerGroups([], '')).toStrictEqual([]);
+      });
+
+      test('when given customer groups have no customer group restrictions', () => {
+        const customerGroupA = CustomerGroup.build();
+        const customerGroupB = CustomerGroup.build();
+        const loginMethod = 'test-amr';
+        expect(getAllowedCustomerGroups(
+          [customerGroupA, customerGroupB], loginMethod
+        )).toStrictEqual([customerGroupA, customerGroupB]);
+      });
+
+      const loginMethodA = 'test-amr-a';
+      const loginMethodB = 'test-amr-b';
+      const customerGroupA = CustomerGroup.build(
+        { onlyForLoginMethods: [{ loginMethodId: loginMethodA }, { loginMethodId: loginMethodB }] }
+      );
+      const customerGroupB = CustomerGroup.build(
+        { onlyForLoginMethods: [{ loginMethodId: loginMethodA }] }
+      );
+      const customerGroupC = CustomerGroup.build(
+        { onlyForLoginMethods: [{ loginMethodId: loginMethodB }] }
+      );
+      const customerGroupD = CustomerGroup.build();
+      test.each([
+        [loginMethodA, [customerGroupA, customerGroupB, customerGroupD]],
+        [loginMethodB, [customerGroupA, customerGroupC, customerGroupD]],
+        ['', [customerGroupD]],
+      ])('when customer groups have login method restrictions', (loginMethod, expectedResult) => {
+        expect(getAllowedCustomerGroups(
+          [customerGroupA, customerGroupB, customerGroupC, customerGroupD], loginMethod
+        )).toStrictEqual(expectedResult);
       });
     });
   });

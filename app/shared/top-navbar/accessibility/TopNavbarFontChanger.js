@@ -96,7 +96,7 @@ class FontSizeChanger extends Component {
         onClick={() => this.handleFontSizeClick(fontSize)}
         type="button"
       >
-A
+        A
 
       </button>
     );

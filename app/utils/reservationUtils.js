@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import camelCase from 'lodash/camelCase';
 import clone from 'lodash/clone';
@@ -11,6 +10,8 @@ import get from 'lodash/get';
 import moment from 'moment';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
+import constants from 'constants/AppConstants';
+import { FIELDS } from 'constants/ReservationConstants';
 import { buildAPIUrl, getHeadersCreator } from './apiUtils';
 import { getLocalizedFieldValue } from './languageUtils';
 
@@ -375,6 +376,69 @@ function isManuallyConfirmedWithOrderAllowed(reservation) {
   return false;
 }
 
+/**
+ * Returns array with obj values for each option.
+ * @param {Object[]} universalField
+ * @param {Object} resource
+ */
+function normalizeUniversalFieldOptions(universalField, resource) {
+  return universalField.reduce((acc, curr) => {
+    // what sort of element, select? radio?
+    const fieldType = curr.fieldType ? curr.fieldType.toLowerCase() : '';
+    const currentOptions = curr.options;
+    // normalize options
+    const options = currentOptions.reduce((allOpts, option) => {
+      allOpts.push({ id: option.id, name: option.text, value: option.id });
+      return allOpts;
+    }, []);
+    // the key name that redux-form uses, currently only works for 1 universal field per resource.
+    const nameValue = resource.universalField.length > 1 ? `universalData-${curr.id}` : 'universalData';
+    const universalProps = {
+      id: curr.id,
+      description: curr.description,
+      label: curr.label,
+      options: currentOptions,
+    };
+    acc.push(
+      {
+        name: nameValue,
+        fieldName: `componenttype-${curr.id}`,
+        type: fieldType,
+        label: curr.label,
+        controlProps: { options },
+        universalProps
+      }
+    );
+    return acc;
+  }, []);
+}
+
+/**
+ * Returns mapped and sorted reservation form errors from the given errors array.
+ * @param {Object[]} errors reservation form errors
+ * @param {Object[]} universalFields universal fields in this form
+ * @returns {Object[]} mapped and sorted reservation form errors
+ */
+function mapReservationErrors(errors, universalFields) {
+  const mappedErrors = errors.map((error, index) => {
+    // Note: only one universal field per resource is supported currently.
+    if (error === 'universalData') {
+      return {
+        id: error, label: universalFields[0].label, forBilling: false, order: 100 + index
+      };
+    }
+    const errorField = Object.values(FIELDS).find(field => field.id === error);
+    if (errorField) {
+      return errorField;
+    }
+    return {
+      id: error, label: error, forBilling: false, order: 100 + index
+    };
+  });
+
+  return mappedErrors.sort((a, b) => a.order - b.order);
+}
+
 export {
   combine,
   isStaffEvent,
@@ -399,4 +463,6 @@ export {
   getPaymentReturnUrl,
   getReservationCustomerGroupName,
   isManuallyConfirmedWithOrderAllowed,
+  normalizeUniversalFieldOptions,
+  mapReservationErrors,
 };

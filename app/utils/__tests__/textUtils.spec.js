@@ -1,4 +1,4 @@
-import { cleanseNamedLinks, createTextSnippet } from 'utils/textUtils';
+import { cleanseNamedLinks, createTextSnippet, capitalizeFirst } from 'utils/textUtils';
 
 describe('Utils: textUtils', () => {
   describe('cleanseNamedLinks', () => {
@@ -24,6 +24,15 @@ describe('Utils: textUtils', () => {
     test('if given string is longer than given length, returns string of given length with added dots', () => {
       const testString = 'this is a test string';
       expect(createTextSnippet(testString, 4)).toEqual('this...');
+    });
+  });
+
+  describe('capitalizeFirst', () => {
+    test('returns correct capitalized string', () => {
+      expect(capitalizeFirst('test')).toEqual('Test');
+      expect(capitalizeFirst('test string')).toEqual('Test string');
+      expect(capitalizeFirst('Test String')).toEqual('Test String');
+      expect(capitalizeFirst('tEST sTRING')).toEqual('TEST sTRING');
     });
   });
 });

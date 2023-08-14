@@ -1,16 +1,16 @@
 Varaamo
 =======
 
-[![Build Status](https://travis-ci.com/codepointtku/varaamo.svg?branch=develop)](https://travis-ci.com/digipointtku/varaamo)
-[![codecov](https://codecov.io/gh/digipointtku/varaamo/branch/develop/graph/badge.svg)](https://codecov.io/gh/digipointtku/varaamo)
-[![Requirements Status](https://requires.io/github/codepointtku/varaamo/requirements.svg?branch=develop)](https://requires.io/github/digipointtku/varaamo/requirements/?branch=develop)
+[![GitHub Actions](https://github.com/city-of-turku/varaamo/actions/workflows/varaamo.yml/badge.svg?branch=develop)](https://github.com/city-of-turku/varaamo/actions/workflows/varaamo.yml)
+[![CodeQL](https://github.com/City-of-Turku/varaamo/actions/workflows/codeql-analysis.yml/badge.svg?branch=develop)](https://github.com/City-of-Turku/varaamo/actions/workflows/codeql-analysis.yml)
+[![codecov](https://codecov.io/gh/city-of-turku/varaamo/branch/develop/graph/badge.svg)](https://codecov.io/gh/city-of-turku/varaamo)
 
 User interface for the City of Turku [varaamo.turku.fi](https://varaamo.turku.fi/) resource reservation service. Uses the [respa API](https://varaamo.turku.fi:5010/v1/).
 
 Recommended requirements
 ------------
 
-- [node](http://nodejs.org/) `>=14.19` | Suggestion: `14.19.0`
+- [node](http://nodejs.org/) `>=18.14.2` | Suggestion: `18.14.2`
 - [npm](https://www.npmjs.com/) `>=6.14` | Suggestion: `6.14.16`
 - [yarn](https://yarnpkg.com/) Optional, if `yarn` is not included as part of your current node version. `npm` can be used.
 
@@ -82,6 +82,7 @@ By default the running app can be found at `localhost:3000`.
     API_URL
     ADMIN_URL
     THEME_PKG
+    APP_TIMEZONE
     ```
 
     Environment's variable guideline:
@@ -95,6 +96,14 @@ By default the running app can be found at `localhost:3000`.
     - `THEME_PKG`:
       Custom config to override global application's styling and texts.
       Expected value is a valid string that is the name of the theme package, e.g. `THEME_PMG='varaamo-theme'`. Default styles and texts will be used if not set.
+
+    - `BLOCK_SEARCH_ENGINE_INDEXING`:
+      Adding this setting prevents most search engines from indexing the site. This can be useful for preventing test instances from showing up in search results.
+
+    - `APP_TIMEZONE`:
+      This config is optional, but it's **highly recommended** to be set same as Respa's time zone.
+      When a time zone is given e.g., `Europe/Helsinki`, all the times shown for resources, reservations etc. are in given time zone.
+      When this config is not given, Varaamo will use user's local time zone.
 
 
 3. Then, start the development server:

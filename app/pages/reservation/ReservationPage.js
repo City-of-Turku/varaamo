@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import first from 'lodash/first';
 import isEmpty from 'lodash/isEmpty';
@@ -13,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
+import constants from 'constants/AppConstants';
 import { postReservation, putReservation } from 'actions/reservationActions';
 import { fetchResource } from 'actions/resourceActions';
 import {
@@ -35,7 +35,6 @@ import {
 } from '../../utils/reservationUtils';
 import userManager from 'utils/userManager';
 import ReservationProducts from './reservation-products/ReservationProducts';
-import { getUniqueCustomerGroups } from './reservation-products/ReservationProductsUtils';
 
 class UnconnectedReservationPage extends Component {
   constructor(props) {
@@ -77,7 +76,8 @@ class UnconnectedReservationPage extends Component {
       selected,
       history,
       isLoggedIn,
-      loginExpiresAt
+      loginExpiresAt,
+      uniqueCustomerGroups,
     } = this.props;
     if (
       isEmpty(reservationCreated)
@@ -97,9 +97,17 @@ class UnconnectedReservationPage extends Component {
     } else {
       // handle price ops only when reservation info exists
       const isEditing = !isEmpty(reservationToEdit);
-      const { mandatoryProducts, extraProducts } = this.state;
+      const { mandatoryProducts, extraProducts, currentCustomerGroup } = this.state;
+
+      const initialCustomerGroup = uniqueCustomerGroups.length === 1
+        ? uniqueCustomerGroups[0].id : currentCustomerGroup;
+
+      if (initialCustomerGroup) {
+        this.setState({ currentCustomerGroup: initialCustomerGroup });
+      }
       this.handleCheckOrderPrice(
-        this.props.resource, selected, mandatoryProducts, extraProducts, isEditing
+        this.props.resource, selected, mandatoryProducts, extraProducts,
+        isEditing, initialCustomerGroup
       );
     }
 
@@ -186,15 +194,24 @@ class UnconnectedReservationPage extends Component {
 
   handleProductsConfirm = () => {
     const { currentCustomerGroup } = this.state;
-    const { resource } = this.props;
-    const uniqueCustomerGroups = getUniqueCustomerGroups(resource);
-
-    // handle order/products validation before going forward
-    // customer group is required when any of the resource's products have customer group options
-    if (uniqueCustomerGroups.length > 0 && !currentCustomerGroup) {
+    const { uniqueCustomerGroups } = this.props;
+    /*
+      Handle order/products validation before going forward.
+      Customer group is required when any of the resource's products have customer group
+      options that are not all hidden from the current user.
+    */
+    if (uniqueCustomerGroups.length > 1 && !currentCustomerGroup) {
       this.setState({ customerGroupError: true });
     } else {
-      this.setState({ view: 'information' });
+      if (uniqueCustomerGroups.length === 1) {
+        // handle auto selecting cg when there is only one option
+        this.setState({
+          view: 'information',
+          currentCustomerGroup: uniqueCustomerGroups[0].id
+        });
+      } else {
+        this.setState({ view: 'information' });
+      }
       window.scrollTo(0, 0);
     }
   };
@@ -421,6 +438,7 @@ class UnconnectedReservationPage extends Component {
       selected,
       t,
       unit,
+      uniqueCustomerGroups,
       user,
       history,
     } = this.props;
@@ -496,6 +514,7 @@ class UnconnectedReservationPage extends Component {
                     resource={resource}
                     selectedTime={selectedTime}
                     skipMandatoryProducts={skipMandatoryProducts}
+                    uniqueCustomerGroups={uniqueCustomerGroups}
                     unit={unit}
                   />
                 )}
@@ -563,7 +582,8 @@ UnconnectedReservationPage.propTypes = {
   user: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  loginExpiresAt: PropTypes.number
+  loginExpiresAt: PropTypes.number,
+  uniqueCustomerGroups: PropTypes.array.isRequired,
 };
 UnconnectedReservationPage = injectT(UnconnectedReservationPage); // eslint-disable-line
 

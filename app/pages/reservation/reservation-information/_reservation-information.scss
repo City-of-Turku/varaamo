@@ -2,40 +2,72 @@
   form {
     padding-bottom: 15px;
   }
+
   .form-controls {
     text-align: right;
   }
+
   .btn {
     margin-left: 15px;
-   @media (max-width: $screen-xs-max){
-    margin-bottom: 8px;
-   }
+
+    @media (max-width: $screen-xs-max) {
+      margin-bottom: 8px;
+    }
   }
+
   .select-input {
     border: 2px solid #000000;
     margin-top: 7px;
 
-    @media(max-width: $screen-md-min){
+    @media(max-width: $screen-md-min) {
       width: 100%;
     }
   }
 
 
-  .has-error{
+  .has-error {
+
     .control-label,
     .help-block,
-    label{
+    label {
       color: $varaamo-high-contrast-red;
     }
-    .form-control{
+
+    .form-control {
       border-color: $varaamo-high-contrast-red;
     }
-    .terms-checkbox-field-link{
+
+    .terms-checkbox-field-link {
       color: $blue;
     }
   }
 
   .wrapped-text a {
     color: $blue;
+  }
+
+  #information-page-validation-and-errors {
+    color: $varaamo-high-contrast-red;
+    display: flex;
+    justify-content: flex-end;
+
+    .validation-error-label {
+      text-align: left;
+    }
+
+    @media (max-width: $screen-xs-max) {
+      text-align: left;
+      justify-content: flex-start;
+    }
+
+    p {
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    ul {
+      text-align: start;
+      padding-left: 18px;
+    }
   }
 }

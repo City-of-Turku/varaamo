@@ -185,6 +185,13 @@ describe('pages/reservation/reservationPageSelector', () => {
     expect(selected.unit).toEqual(defaultUnit);
   });
 
+  test('returns uniqueCustomerGroups', () => {
+    const state = getState();
+    const props = getProps();
+    const selected = reservationPageSelector(state, props);
+    expect(selected.uniqueCustomerGroups).toBeDefined();
+  });
+
   test('returns user', () => {
     const state = getState();
     const props = getProps();

@@ -1,10 +1,10 @@
 
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+import constants from 'constants/AppConstants';
 import injectT from 'i18n/injectT';
 
 function ManageReservationsDropdown({

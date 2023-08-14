@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
@@ -10,6 +9,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
+import constants from 'constants/AppConstants';
 import FAIcon from 'shared/fontawesome-icon';
 import { injectT } from 'i18n';
 import { getSearchPageUrl } from 'utils/searchUtils';

@@ -9,6 +9,7 @@ import { shallowWithIntl } from 'utils/testUtils';
 import { getServiceMapUrl } from 'utils/unitUtils';
 import ResourceInfo from './ResourceInfo';
 import ReservationInfo from '../reservation-info';
+import ZipAndMunicipality from './ZipAndMunicipality';
 
 describe('pages/resource/resource-info/ResourceInfo', () => {
   const defaultProps = {
@@ -115,10 +116,15 @@ describe('pages/resource/resource-info/ResourceInfo', () => {
       .find('.app-ResourceInfo__address')
       .find('span');
 
-    expect(addressSpan).toHaveLength(3);
+    expect(addressSpan).toHaveLength(2);
     expect(addressSpan.at(0).text()).toBe(unit.name);
     expect(addressSpan.at(1).text()).toBe(unit.streetAddress);
-    expect(addressSpan.at(2).text()).toBe('99999 Helsinki');
+  });
+
+  test('renders ZipAndMunicipality', () => {
+    const zipAndMunicipality = getWrapper().find(ZipAndMunicipality);
+    expect(zipAndMunicipality).toHaveLength(1);
+    expect(zipAndMunicipality.prop('unit')).toBe(defaultProps.unit);
   });
 
   test('renders web address', () => {

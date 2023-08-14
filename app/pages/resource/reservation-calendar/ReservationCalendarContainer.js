@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -13,6 +12,7 @@ import last from 'lodash/last';
 import orderBy from 'lodash/orderBy';
 import debounce from 'lodash/debounce';
 
+import constants from 'constants/AppConstants';
 import { addNotification } from 'actions/notificationsActions';
 import {
   cancelReservationEdit,

@@ -20,6 +20,7 @@ import CustomerGroup from 'utils/fixtures/CustomerGroup';
 import ProductsValidationErrors from '../ProductsValidationErrors';
 import PaymentMethodSelect from '../PaymentMethodSelect';
 import constants from '../../../../constants/AppConstants';
+import CustomerGroupNoOption from '../CustomerGroupNoOption';
 
 describe('reservation-products/ProductsSummary', () => {
   const resource = Immutable(Resource.build());
@@ -74,7 +75,8 @@ describe('reservation-products/ProductsSummary', () => {
       end: '2021-09-24T07:30:00.000Z',
     },
     skipMandatoryProducts: false,
-    unit: Unit.build()
+    unit: Unit.build(),
+    uniqueCustomerGroups: []
   };
 
   function getWrapper(extraProps) {
@@ -132,14 +134,40 @@ describe('reservation-products/ProductsSummary', () => {
           expect(select).toHaveLength(0);
         });
 
-        test('when there are unique customer groups in resource products', () => {
+        test('when there is only 1 unique customer group in resource products', () => {
+          const customerGroupA = CustomerGroup.build();
+          const pcgA = ProductCustomerGroup.build({ customerGroup: customerGroupA });
+          const productA = Product.build({ productCustomerGroups: [pcgA] });
+          const resourceA = Resource.build({ products: [productA] });
+          const wrapper = getWrapper({
+            resource: resourceA,
+            uniqueCustomerGroups: [customerGroupA]
+          });
+
+          const select = wrapper.find(CustomerGroupSelect);
+          expect(select).toHaveLength(0);
+
+          const noSelect = wrapper.find(CustomerGroupNoOption);
+          expect(noSelect).toHaveLength(1);
+          expect(noSelect.prop('customerGroup')).toBe(customerGroupA);
+        });
+
+        test('when there are more than 1 unique customer groups in resource products', () => {
           const customerGroupA = CustomerGroup.build();
           const customerGroupB = CustomerGroup.build();
           const pcgA = ProductCustomerGroup.build({ customerGroup: customerGroupA });
           const pcgB = ProductCustomerGroup.build({ customerGroup: customerGroupB });
           const productA = Product.build({ productCustomerGroups: [pcgA, pcgB] });
           const resourceA = Resource.build({ products: [productA] });
-          const select = getWrapper({ resource: resourceA }).find(CustomerGroupSelect);
+          const wrapper = getWrapper({
+            resource: resourceA,
+            uniqueCustomerGroups: [customerGroupA, customerGroupB]
+          });
+
+          const noSelect = wrapper.find(CustomerGroupNoOption);
+          expect(noSelect).toHaveLength(0);
+
+          const select = wrapper.find(CustomerGroupSelect);
           expect(select).toHaveLength(1);
           expect(select.prop('currentlySelectedGroup')).toBe(defaultProps.currentCustomerGroup);
           expect(select.prop('customerGroups')).toStrictEqual([customerGroupA, customerGroupB]);

@@ -1,8 +1,6 @@
-import constants from 'constants/AppConstants';
-
 import moment from 'moment';
 
-
+import constants from 'constants/AppConstants';
 import {
   onDateFilterChange, onFilterChange, onReset, hasFilters, getStatusOptions,
   getShowOnlyOptions, onFavoriteFilterChange

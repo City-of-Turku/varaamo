@@ -20,7 +20,30 @@ class ReservationConfirmation extends Component {
     currentLanguage: PropTypes.string,
     isEdited: PropTypes.bool,
     isLoggedIn: PropTypes.bool.isRequired,
-    reservation: PropTypes.object.isRequired,
+    reservation: PropTypes.shape({
+      begin: PropTypes.string,
+      reservation: PropTypes.string,
+      reserverEmailAddress: PropTypes.string,
+      reserverName: PropTypes.string,
+      company: PropTypes.string,
+      comments: PropTypes.string,
+      user: PropTypes.shape({
+        email: PropTypes.string,
+      }),
+      universalData: PropTypes.shape({
+        field: PropTypes.shape({
+          description: PropTypes.string,
+          id: PropTypes.number,
+          label: PropTypes.string,
+          options: PropTypes.arrayOf(PropTypes.shape({
+            id: PropTypes.number,
+            text: PropTypes.string,
+          })),
+        }),
+        selectOption: PropTypes.string,
+        type: PropTypes.string,
+      }),
+    }),
     resource: PropTypes.object.isRequired,
     t: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
@@ -51,6 +74,15 @@ class ReservationConfirmation extends Component {
   handleReservationsButton(isLoggedIn) {
     if (isLoggedIn) this.props.history.replace('/my-reservations');
     else this.props.history.replace('/');
+  }
+
+  renderUniversalData() {
+    const { universalData: { selectedOption, field } } = this.props.reservation;
+    const selectedOptionId = Number.parseInt(selectedOption, 10);
+    const label = field ? field.label : '';
+    const correctOption = field.options.find(option => option.id === selectedOptionId);
+    const value = correctOption ? correctOption.text : '';
+    return this.renderField('universalData', label, value);
   }
 
   renderField(field, label, value) {
@@ -196,6 +228,13 @@ class ReservationConfirmation extends Component {
                 t('common.yes'),
                 reservation.requireWorkstation
               )}
+            {reservation.privateEvent
+              && this.renderField(
+                'privateEvent',
+                t('common.privateEventLabel'),
+                t('common.yes'),
+                reservation.privateEvent
+              )}
             {reservation.comments
               && this.renderField('comments', t('common.commentsLabel'), reservation.comments)}
             {reservation.reserverAddressStreet
@@ -295,6 +334,7 @@ class ReservationConfirmation extends Component {
                 t('common.addressCityLabel'),
                 reservation.billingAddressCity
               )}
+            {reservation.universalData && this.renderUniversalData()}
             {reservation.reservationExtraQuestions && (
             <Col className="details-heading" xs={12}>
               <h3 id="reservationExtraQuestionsHeader">{t('common.additionalInfo.heading')}</h3>

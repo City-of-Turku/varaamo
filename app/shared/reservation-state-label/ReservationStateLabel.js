@@ -1,8 +1,8 @@
-import constants from 'constants/AppConstants';
 
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import constants from 'constants/AppConstants';
 import Label from 'shared/label';
 import { injectT } from 'i18n';
 

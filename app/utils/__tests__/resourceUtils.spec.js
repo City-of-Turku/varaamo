@@ -1,10 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import MockDate from 'mockdate';
 import moment from 'moment';
 import queryString from 'query-string';
 import simple from 'simple-mock';
 
+import constants from 'constants/AppConstants';
 import Resource from '../fixtures/Resource';
 import {
   hasMaxReservations,
@@ -1012,6 +1012,11 @@ describe('Utils: resourceUtils', () => {
     test('returns correct text if max and min price are defined and not same', () => {
       const resource = { maxPrice: 10, minPrice: 5 };
       expect(getPrice(t, resource)).toBe('5 - 10 €');
+    });
+
+    test('returns correct text when min is 0 and max is over 0', () => {
+      const resource = { maxPrice: 10, minPrice: 0 };
+      expect(getPrice(t, resource)).toBe('0 - 10 €');
     });
 
     test('returns correct text if max and min price are defined and same', () => {

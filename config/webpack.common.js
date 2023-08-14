@@ -1,48 +1,35 @@
 const path = require('path');
 
 const webpack = require('webpack');
+const MomentTimezoneDataPlugin = require('moment-timezone-data-webpack-plugin');
 
 const paths = require('./paths');
 const assetPath = require('./assetPath');
+
+const currentYear = new Date().getFullYear();
 
 module.exports = {
   module: {
     rules: [
       {
         test: /\.png$/,
-        loader: 'url-loader',
-        options: {
-          mimetype: 'image/png',
-        },
+        type: 'asset/inline'
       },
       {
         test: /\.gif$/,
-        loader: 'url-loader',
-        options: {
-          mimetype: 'image/gif',
-        },
+        type: 'asset/inline'
       },
       {
         test: /\.ico$/,
-        loader: 'url-loader',
-        options: {
-          mimetype: 'image/x-icon',
-        },
+        type: 'asset/inline'
       },
       {
         test: /\.(jpg|webp)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-            },
-          },
-        ],
+        type: 'asset/resource',
       },
       {
         test: /\.woff|\.woff2|\.svg|.eot|\.ttf/,
-        loader: 'url-loader?prefix=font/&limit=10000',
+        type: 'asset'
       },
     ],
   },
@@ -56,5 +43,10 @@ module.exports = {
   },
   plugins: [
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en-gb|fi|sv/),
+    new MomentTimezoneDataPlugin({
+      startYear: currentYear - 2,
+      endYear: currentYear + 10,
+      matchZones: JSON.stringify(process.env.APP_TIMEZONE)
+    }),
   ],
 };

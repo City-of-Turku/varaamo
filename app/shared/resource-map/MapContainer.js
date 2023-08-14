@@ -1,4 +1,3 @@
-import constants from 'constants/AppConstants';
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -6,6 +5,7 @@ import React from 'react';
 import { Map, TileLayer, ZoomControl } from 'react-leaflet';
 import { connect } from 'react-redux';
 
+import constants from 'constants/AppConstants';
 import { searchMapClick, selectUnit } from 'actions/searchActions';
 import { getCurrentCustomization } from 'utils/customizationUtils';
 import selector from './mapSelector';

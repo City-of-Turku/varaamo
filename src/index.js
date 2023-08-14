@@ -8,12 +8,13 @@ import { OidcProvider, processSilentRenew } from 'redux-oidc';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore } from 'redux';
 import Immutable from 'seamless-immutable';
-
 import '../app/assets/styles/main.scss';
 import '../app/assets/styles/customization/espoo/customization.scss';
 import '../app/assets/styles/customization/vantaa/customization.scss';
 // eslint-disable-next-line import/no-unresolved
 import '@city-assets/sass/main.scss';
+import moment from 'moment-timezone';
+
 import { initI18n } from '../app/i18n';
 import configureStore from '../app/store/configureStore';
 import rootReducer from '../app/state/rootReducer';
@@ -28,7 +29,16 @@ const finalState = Immutable(initialStoreState).merge([initialServerState, initi
   deep: true,
 });
 const store = configureStore(finalState);
+
+if (window.Cypress) {
+  window.store = store;
+}
+
 const isIEBrowser = browserName === 'IE';
+
+if (SETTINGS.APP_TIMEZONE) {
+  moment.tz.setDefault(SETTINGS.APP_TIMEZONE);
+}
 
 if (window.location.pathname === '/silent-renew') {
   processSilentRenew();

@@ -1,7 +1,6 @@
-import { openingHoursMonth } from 'constants/ResourceConstants';
-
 import Immutable from 'seamless-immutable';
 
+import { openingHoursMonth } from 'constants/ResourceConstants';
 import Resource from 'utils/fixtures/Resource';
 import resourceCalendarSelector from './resourceCalendarSelector';
 

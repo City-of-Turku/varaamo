@@ -1,10 +1,10 @@
-import constants from 'constants/AppConstants';
 
 import React from 'react';
 import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
 import { camelCase } from 'lodash';
 
+import constants from 'constants/AppConstants';
 import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
@@ -46,21 +46,24 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     return shallowWithIntl(<ReservationInformation {...defaultProps} {...extraProps} />);
   }
 
-  test('renders info texts when needManualConfirmation is true', () => {
+  test('renders correct info texts when needManualConfirmation is true', () => {
     const resource = Resource.build({
       needManualConfirmation: true,
     });
     const infoTexts = getWrapper({ resource }).find('.app-ReservationInformation__info-texts');
     expect(infoTexts).toHaveLength(1);
+    expect(infoTexts.text()).toContain('common.contactPurposeHelp');
     expect(infoTexts.text()).toContain('ConfirmReservationModal.priceInfo');
+    expect(infoTexts.text()).toContain('ConfirmReservationModal.formInfo');
   });
 
-  test('does not render info texts when needManualConfirmation is false', () => {
+  test('renders correct info texts when needManualConfirmation is false', () => {
     const resource = Resource.build({
       needManualConfirmation: false,
     });
     const infoTexts = getWrapper({ resource }).find('.app-ReservationInformation__info-texts');
-    expect(infoTexts).toHaveLength(0);
+    expect(infoTexts).toHaveLength(1);
+    expect(infoTexts.text()).toContain('common.contactPurposeHelp');
   });
 
   test('renders an ReservationInformationForm element', () => {
@@ -164,8 +167,10 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }
     );
 
+    /* Field staffEvent hidden until it is needed again
     test(
-      'returns supportedReservationExtraFields and staffEvent when needManualConfirmation and is staff',
+      'returns supportedReservationExtraFields and staffEvent when
+       needManualConfirmation and is staff',
       () => {
         const wrapper = getWrapper({ isStaff: true, resource });
         const instance = wrapper.instance();
@@ -174,6 +179,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
         expect(actual).toEqual([...supportedFields, 'staffEvent']);
       }
     );
+    */
 
     test('returns supportedReservationExtraFields and termsAndConditions', () => {
       const termsAndConditions = 'some terms and conditions';
@@ -366,6 +372,22 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       const actual = instance.getRequiredFormFields(resource, 'terms and conditions');
 
       expect(actual).toEqual(['someField1', 'someField2', 'termsAndConditions']);
+    });
+
+    test('returns required form field and universalData if resource has universalField with content', () => {
+      let resource = Resource.build({
+        requiredReservationExtraFields: ['some_field_1', 'some_field_2'],
+        universalField: [],
+      });
+      const instance = getWrapper().instance();
+      let actual = instance.getRequiredFormFields(resource);
+      expect(actual).toEqual(['someField1', 'someField2']);
+      resource = Resource.build({
+        requiredReservationExtraFields: ['some_field_1', 'some_field_2'],
+        universalField: [{ key: 'value' }],
+      });
+      actual = instance.getRequiredFormFields(resource);
+      expect(actual).toEqual(['someField1', 'someField2', 'universalData']);
     });
   });
 });

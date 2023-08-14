@@ -1,6 +1,5 @@
 import ActionTypes from 'constants/ActionTypes';
 import ModalTypes from 'constants/ModalTypes';
-
 import { getState } from 'utils/testUtils';
 import constants from '../../../constants/AppConstants';
 import reservationCancelModalSelector from './reservationCancelModalSelector';

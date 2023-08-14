@@ -1,6 +1,7 @@
+import Immutable from 'seamless-immutable';
+
 import types from 'constants/ActionTypes';
 
-import Immutable from 'seamless-immutable';
 
 /**
  * Updates reservation results array with given reservation. Keeps previous

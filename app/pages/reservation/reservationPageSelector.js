@@ -1,4 +1,3 @@
-import ActionTypes from 'constants/ActionTypes';
 
 import { createSelector, createStructuredSelector } from 'reselect';
 import first from 'lodash/first';
@@ -6,18 +5,22 @@ import isEmpty from 'lodash/isEmpty';
 import orderBy from 'lodash/orderBy';
 import queryString from 'query-string';
 
+import ActionTypes from 'constants/ActionTypes';
 import {
   createIsStaffSelector,
   currentUserSelector,
   isAdminSelector,
   isLoggedInSelector,
   loginExpiresAtSelector,
+  authUserAmrSelector,
 } from 'state/selectors/authSelectors';
 import { createResourceSelector, unitsSelector } from 'state/selectors/dataSelectors';
 import dateSelector from 'state/selectors/dateSelector';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
 import { contrastSelector } from 'state/selectors/accessibilitySelectors';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
+import { getAllowedCustomerGroups, getUniqueCustomerGroups } from './reservation-products/ReservationProductsUtils';
+import { hasProducts } from '../../utils/reservationUtils';
 
 const selectedSelector = state => orderBy(state.ui.reservations.selected, 'begin');
 const createdSelector = (state) => {
@@ -40,6 +43,19 @@ const unitSelector = createSelector(
   (resource, units) => units[resource.unit] || {}
 );
 
+const uniqueCustomerGroupsSelector = createSelector(
+  resourceSelector,
+  authUserAmrSelector,
+  (resource, loginMethod) => {
+    if (hasProducts(resource)) {
+      return getAllowedCustomerGroups(
+        getUniqueCustomerGroups(resource), loginMethod
+      );
+    }
+    return [];
+  }
+);
+
 const reservationPageSelector = createStructuredSelector({
   contrast: contrastSelector,
   currentLanguage: currentLanguageSelector,
@@ -58,6 +74,7 @@ const reservationPageSelector = createStructuredSelector({
   reservationCreated: createdSelector,
   reservationEdited: editedSelector,
   unit: unitSelector,
+  uniqueCustomerGroups: uniqueCustomerGroupsSelector,
   user: currentUserSelector,
 });
 

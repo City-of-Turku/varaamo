@@ -11,6 +11,9 @@ class ResourceTypeFilterContainer extends Component {
     onSelectResourceType: PropTypes.func.isRequired,
     onUnselectResourceType: PropTypes.func.isRequired,
     resourceTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    toggleShowExternalResources: PropTypes.func,
+    externalResources: PropTypes.array,
+    showExternalResources: PropTypes.bool,
     t: PropTypes.func.isRequired,
   };
 
@@ -28,10 +31,25 @@ class ResourceTypeFilterContainer extends Component {
   }
 
   render() {
-    const { t, selectedResourceTypes, resourceTypes } = this.props;
+    const {
+      t,
+      selectedResourceTypes,
+      resourceTypes,
+      externalResources,
+      showExternalResources,
+      toggleShowExternalResources
+    } = this.props;
     return (
       <div className="resource-type-filter-container">
         <h6>{t('ResourceTypeFilter.title')}</h6>
+        { externalResources.length > 0 && (
+          <ResourceTypeFilterButton
+            active={showExternalResources}
+            key={`resource-external-${externalResources[0]}`}
+            onClick={toggleShowExternalResources}
+            resourceType={t('AdminResourcesPage.external.toggle')}
+          />
+        )}
         { resourceTypes.map(resourceType => (
           <ResourceTypeFilterButton
             active={includes(selectedResourceTypes, resourceType)}

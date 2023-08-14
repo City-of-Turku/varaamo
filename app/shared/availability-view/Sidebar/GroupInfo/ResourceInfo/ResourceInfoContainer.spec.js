@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedResourceInfo as ResourceInfo, selector } from './ResourceInfoContainer';
 import UnpublishedLabel from 'shared/label/Unpublished';
+import Label from 'shared/label';
 
 function getState() {
   return {
@@ -16,6 +17,11 @@ function getState() {
           isFavorite: false,
           peopleCapacity: 9,
           public: true,
+          userPermissions: {
+            isAdmin: false,
+            isManager: true,
+            isViewer: false
+          }
         },
       },
     },
@@ -32,6 +38,7 @@ describe('shared/availability-view/ResourceInfoContainer', () => {
       name: 'Resource name',
       peopleCapacity: 19,
       public: true,
+      hasStaffRights: true,
     };
     return shallowWithIntl(<ResourceInfo {...defaults} {...props} />);
   }
@@ -70,6 +77,16 @@ describe('shared/availability-view/ResourceInfoContainer', () => {
     expect(label).toHaveLength(0);
   });
 
+  test('renders external label if the user does not has staff rights for the resource', () => {
+    const label = getWrapper({ hasStaffRights: false }).find(Label);
+    expect(label).toHaveLength(1);
+  });
+
+  test('does not render external label if the user does has staff rights for the resource', () => {
+    const label = getWrapper({ hasStaffRights: true }).find(Label);
+    expect(label).toHaveLength(0);
+  });
+
   describe('selector', () => {
     function getSelected(props) {
       const defaults = { id: '123456' };
@@ -82,6 +99,7 @@ describe('shared/availability-view/ResourceInfoContainer', () => {
         name: 'Resource Name',
         peopleCapacity: 9,
         public: true,
+        hasStaffRights: true,
       });
     });
   });

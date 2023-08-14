@@ -5,11 +5,11 @@ import Col from 'react-bootstrap/lib/Col';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import { Link } from 'react-router-dom';
+
 // eslint-disable-next-line import/no-unresolved
 import logoFi from '@city-assets/images/logo_footer.png';
 // eslint-disable-next-line import/no-unresolved
 import logoSv from '@city-assets/images/logo_footer_sv.png';
-
 import { injectT } from 'i18n';
 import { getFeedbackLink } from 'utils/languageUtils';
 

@@ -1,7 +1,6 @@
 
 import ActionTypes from 'constants/ActionTypes';
 import ModalTypes from 'constants/ModalTypes';
-
 import { getState } from 'utils/testUtils';
 import PaymentModalSelector from '../PaymentModalSelector';
 

@@ -1,8 +1,8 @@
-import ActionTypes from 'constants/ActionTypes';
 
 import { filter, orderBy, values } from 'lodash';
 import { createSelector, createStructuredSelector } from 'reselect';
 
+import ActionTypes from 'constants/ActionTypes';
 import { isAdminSelector } from 'state/selectors/authSelectors';
 import { resourcesSelector, unitsSelector } from 'state/selectors/dataSelectors';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';

@@ -36,6 +36,7 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
     location: { id: '123' },
     resources: [],
     resourceTypes: ['a', 'b', 'c'],
+    externalResources: [],
   };
 
   function getWrapper(extraProps = {}) {
@@ -94,28 +95,72 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
           expect(loader.prop('loaded')).toBe(true);
         });
       });
-
-      test('renders AvailabilityView with correct props', () => {
-        const resources = [{ foo: 'bar' }];
-        const wrapper = getIsAdminWrapper({ resources });
-        const view = wrapper.find(AvailabilityView);
-        expect(view).toHaveLength(1);
-        expect(view.prop('groups')).toEqual([
-          { name: '', resources },
-        ]);
-        expect(view.prop('date')).toEqual('2017-01-10');
-        expect(view.prop('onDateChange')).toBe(changeAdminResourcesPageDate);
-        expect(view.prop('onSelect')).toBe(wrapper.instance().handleSelect);
+      describe('AvailabilityView', () => {
+        test('renders with correct props', () => {
+          const resources = ['resourceID01'];
+          const wrapper = getIsAdminWrapper({ resources });
+          const view = wrapper.find(AvailabilityView);
+          expect(view).toHaveLength(1);
+          expect(view.prop('groups')).toEqual([
+            { name: '', resources },
+          ]);
+          expect(view.prop('date')).toEqual('2017-01-10');
+          expect(view.prop('onDateChange')).toBe(changeAdminResourcesPageDate);
+          expect(view.prop('onSelect')).toBe(wrapper.instance().handleSelect);
+        });
+        test('renders with correct props when state.showExternalResources is true', () => {
+          const resources = ['firstID'];
+          const externalResources = [{ id: 'viewerOnlyID1' }, { id: 'viewerOnlyID2' }];
+          const wrapper = getIsAdminWrapper({ resources, externalResources });
+          const instance = wrapper.instance();
+          let view = wrapper.find(AvailabilityView);
+          expect(view).toHaveLength(1);
+          expect(view.prop('groups')).toEqual([
+            { name: '', resources },
+          ]);
+          expect(view.prop('date')).toEqual('2017-01-10');
+          expect(view.prop('onDateChange')).toBe(changeAdminResourcesPageDate);
+          expect(view.prop('onSelect')).toBe(wrapper.instance().handleSelect);
+          instance.toggleShowExternalResources();
+          view = wrapper.find(AvailabilityView);
+          expect(view).toHaveLength(1);
+          expect(view.prop('groups')).toEqual([
+            { name: '', resources: [...resources, ...externalResources.map(res => res.id)] },
+          ]);
+          expect(view.prop('date')).toEqual('2017-01-10');
+          expect(view.prop('onDateChange')).toBe(changeAdminResourcesPageDate);
+          expect(view.prop('onSelect')).toBe(wrapper.instance().handleSelect);
+        });
       });
 
-      test('renders ResourceTypeFilter with correct props', () => {
-        const wrapper = getIsAdminWrapper();
-        const resourceTypeFilter = wrapper.find(ResourceTypeFilter);
-        expect(resourceTypeFilter).toHaveLength(1);
-        expect(resourceTypeFilter.prop('selectedResourceTypes')).toEqual(defaultProps.selectedResourceTypes);
-        expect(resourceTypeFilter.prop('resourceTypes')).toEqual(defaultProps.resourceTypes);
-        expect(resourceTypeFilter.prop('onSelectResourceType')).toBe(selectAdminResourceType);
-        expect(resourceTypeFilter.prop('onUnselectResourceType')).toBe(unselectAdminResourceType);
+      describe('ResourceTypeFilter', () => {
+        test('renders with correct default props', () => {
+          const wrapper = getIsAdminWrapper();
+          const resourceTypeFilter = wrapper.find(ResourceTypeFilter);
+          expect(resourceTypeFilter).toHaveLength(1);
+          expect(resourceTypeFilter.prop('selectedResourceTypes')).toEqual(defaultProps.selectedResourceTypes);
+          expect(resourceTypeFilter.prop('resourceTypes')).toEqual(defaultProps.resourceTypes);
+          expect(resourceTypeFilter.prop('onSelectResourceType')).toBe(selectAdminResourceType);
+          expect(resourceTypeFilter.prop('onUnselectResourceType')).toBe(unselectAdminResourceType);
+          expect(resourceTypeFilter.prop('toggleShowExternalResources')).toBe(wrapper.instance().toggleShowExternalResources);
+          expect(resourceTypeFilter.prop('externalResources')).toBe(defaultProps.externalResources);
+          expect(resourceTypeFilter.prop('showExternalResources')).toBe(false);
+        });
+        test('renders with correct props when state.showExternalResources is true', () => {
+          const externalResources = [{ id: 'viewerOnlyID1' }, { id: 'viewerOnlyID2' }];
+          const wrapper = getIsAdminWrapper({ externalResources });
+          const instance = wrapper.instance();
+          instance.toggleShowExternalResources();
+          const resourceTypeFilter = wrapper.find(ResourceTypeFilter);
+          expect(resourceTypeFilter).toHaveLength(1);
+          expect(resourceTypeFilter.prop('selectedResourceTypes')).toEqual(defaultProps.selectedResourceTypes);
+          expect(resourceTypeFilter.prop('resourceTypes')).toEqual(defaultProps.resourceTypes);
+          expect(resourceTypeFilter.prop('onSelectResourceType')).toBe(selectAdminResourceType);
+          expect(resourceTypeFilter.prop('onUnselectResourceType')).toBe(unselectAdminResourceType);
+          expect(resourceTypeFilter.prop('toggleShowExternalResources')).toBe(instance.toggleShowExternalResources);
+          expect(resourceTypeFilter.prop('externalResources')).toBe(externalResources);
+          expect(resourceTypeFilter.prop('showExternalResources')).toBe(true);
+        });
       });
     });
   });
@@ -298,7 +343,7 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
       const wrapper = getWrapper();
       const selection = { some: 'data' };
       wrapper.instance().handleSelect(selection);
-      expect(wrapper.state()).toEqual({ selection });
+      expect(wrapper.state('selection')).toEqual(selection);
     });
 
     test('calls changeRecurringBaseTime with correct time', () => {

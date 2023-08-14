@@ -1,5 +1,3 @@
-import constants from 'constants/AppConstants';
-import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
 
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -7,6 +5,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import map from 'lodash/map';
 
+import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
+import constants from 'constants/AppConstants';
 import DatePicker from 'shared/date-picker';
 import SelectControl from 'pages/search/controls/SelectControl';
 
