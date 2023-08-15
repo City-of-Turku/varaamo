@@ -7,9 +7,10 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Well from 'react-bootstrap/lib/Well';
 import {
-  Field, reduxForm, getFormSyncErrors, getFormValues
+  Field, reduxForm, getFormSyncErrors, getFormValues, change
 } from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
+import { Col, Row } from 'react-bootstrap';
 
 import FormTypes from 'constants/FormTypes';
 import constants from 'constants/AppConstants';
@@ -138,18 +139,25 @@ class UnconnectedReservationInformationForm extends Component {
     this.state = {
       showFormErrorList: false,
       formErrors: [],
+      showInfoCopied: false,
     };
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.copyReserverToPayerInfo = this.copyReserverToPayerInfo.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { showFormErrorList } = this.state;
     const { formValues } = this.props;
     if (showFormErrorList) {
       if (formValues !== prevProps.formValues) {
         this.setState({ showFormErrorList: false, formErrors: [] });
       }
+    }
+    // remove copied message after changes happen
+    if ((this.state.showInfoCopied && prevState.showInfoCopied)
+       && (formValues !== prevProps.formValues)) {
+      this.setState({ showInfoCopied: false });
     }
   }
 
@@ -160,6 +168,34 @@ class UnconnectedReservationInformationForm extends Component {
     }
 
     handleSubmit(onConfirm);
+  }
+
+  copyReserverToPayerInfo() {
+    const { formValues, dispatch } = this.props;
+    const {
+      reserverName,
+      reserverPhoneNumber,
+      reserverEmailAddress,
+      reserverAddressStreet,
+      reserverAddressZip,
+      reserverAddressCity
+    } = formValues;
+
+    // split reserverName (assuming first and last name) into firstName and lastName
+    const nameParts = reserverName ? reserverName.split(' ') : [''];
+    const firstName = nameParts[0];
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+    dispatch(change(FormTypes.RESERVATION, FIELDS.BILLING_FIRST_NAME.id, firstName));
+    dispatch(change(FormTypes.RESERVATION, FIELDS.BILLING_LAST_NAME.id, lastName));
+
+    dispatch(change(FormTypes.RESERVATION, FIELDS.BILLING_PHONE_NUMBER.id, reserverPhoneNumber));
+    dispatch(change(FormTypes.RESERVATION, FIELDS.BILLING_EMAIL_ADDRESS.id, reserverEmailAddress));
+    dispatch(change(
+      FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_STREET.id, reserverAddressStreet));
+    dispatch(change(FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_ZIP.id, reserverAddressZip));
+    dispatch(change(FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_CITY.id, reserverAddressCity));
+    // let user know that billing info has been copied
+    this.setState({ showInfoCopied: true });
   }
 
 
@@ -376,7 +412,35 @@ class UnconnectedReservationInformationForm extends Component {
             || includes(this.props.fields, 'billingAddressStreet')
             || includes(this.props.fields, 'billingAddressZip')
             || includes(this.props.fields, 'billingAddressCity'))
-            && <h3 className="app-ReservationPage__title" id="payment-info-heading">{t('common.payerInformationLabel')}</h3>
+            && (
+              <div className="payment-info-heading-container">
+                <Row>
+                  <Col sm={5}>
+                    <h3 className="app-ReservationPage__title" id="payment-info-heading">{t('common.payerInformationLabel')}</h3>
+                  </Col>
+                  <Col className="align-right" sm={7}>
+                    <Button
+                      id="copy-info-button"
+                      onClick={this.copyReserverToPayerInfo}
+                    >
+                      {t('ReservationInformationForm.copyInfoButtonLabel')}
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className="align-right" sm={12}>
+                    <span
+                      aria-hidden={!this.state.showInfoCopied}
+                      className={this.state.showInfoCopied ? 'show-info' : 'hide-info'}
+                      id="copied-info-status"
+                      role="alert"
+                    >
+                      {this.state.showInfoCopied ? t('ReservationInformationForm.copyConfirmed') : ''}
+                    </span>
+                  </Col>
+                </Row>
+              </div>
+            )
           }
           {includes(this.props.fields, 'billingFirstName')
             && this.renderField(

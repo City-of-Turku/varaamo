@@ -325,6 +325,8 @@
   "ReservationInfoModal.saveComment": "Spara kommentar",
   "ReservationInfoModal.title": "Uppgifter om bokningen",
   "ReservationInformationForm.cancelEdit": "Avbryt bearbetningen",
+  "ReservationInformationForm.copyConfirmed": "✓ Kopierat!",
+  "ReservationInformationForm.copyInfoButtonLabel": "Kopiera beställarinfo till betalningsinfo",
   "ReservationInformationForm.reserverInformationTitle": "Beställarens uppgifter",
   "ReservationInformationForm.eventInformationTitle": "Evenemangets uppgifter",
   "ReservationInformationForm.paymentTermsAndConditionsLink": "betalningsvillkoren",

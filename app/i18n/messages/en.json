@@ -323,6 +323,8 @@
   "ReservationInfoModal.saveComment": "Save comment",
   "ReservationInfoModal.title": "Reservation information.",
   "ReservationInformationForm.cancelEdit": "Cancel edit",
+  "ReservationInformationForm.copyConfirmed": "✓ Copied!",
+  "ReservationInformationForm.copyInfoButtonLabel": "Copy reserver info to payer info",
   "ReservationInformationForm.reserverInformationTitle": "Reserver information",
   "ReservationInformationForm.eventInformationTitle": "Event information",
   "ReservationInformationForm.paymentTermsAndConditionsLink": "the payment terms of the premises",

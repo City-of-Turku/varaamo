@@ -323,6 +323,8 @@
   "ReservationInfoModal.saveComment": "Tallenna kommentti",
   "ReservationInfoModal.title": "Varauksen tiedot",
   "ReservationInformationForm.cancelEdit": "Keskeytä muokkaus",
+  "ReservationInformationForm.copyConfirmed": "✓ Kopioitu!",
+  "ReservationInformationForm.copyInfoButtonLabel": "Kopioi varaajan tiedot maksajan tietoihin",
   "ReservationInformationForm.reserverInformationTitle": "Varaajan tiedot",
   "ReservationInformationForm.eventInformationTitle": "Tilaisuuden tiedot",
   "ReservationInformationForm.paymentTermsAndConditionsLink": "tilan maksuehdot",
