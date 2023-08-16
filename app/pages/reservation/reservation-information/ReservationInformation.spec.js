@@ -374,6 +374,17 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       expect(actual).toEqual(['someField1', 'someField2', 'termsAndConditions']);
     });
 
+    test('returns paymentTermsAndConditions if they are defined', () => {
+      const resource = Resource.build({
+        paymentTermsAndConditions: 'payment terms and conditions'
+      });
+      const instance = getWrapper().instance();
+      const actual = instance.getRequiredFormFields(
+        resource, undefined, resource.paymentTermsAndConditions);
+
+      expect(actual).toEqual(['paymentTermsAndConditions']);
+    });
+
     test('returns required form field and universalData if resource has universalField with content', () => {
       let resource = Resource.build({
         requiredReservationExtraFields: ['some_field_1', 'some_field_2'],
