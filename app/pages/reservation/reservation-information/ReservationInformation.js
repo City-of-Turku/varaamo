@@ -147,7 +147,8 @@ class ReservationInformation extends Component {
     return {};
   }
 
-  getRequiredFormFields(resource, termsAndConditions, paymentTermsAndConditions) {
+  getRequiredFormFields(
+    resource, termsAndConditions, paymentTermsAndConditions, hasPayments = false) {
     const requiredFormFields = [...resource.requiredReservationExtraFields.map(
       field => camelCase(field)
     )];
@@ -160,7 +161,7 @@ class ReservationInformation extends Component {
       requiredFormFields.push('termsAndConditions');
     }
 
-    if (paymentTermsAndConditions) {
+    if (paymentTermsAndConditions && hasPayments) {
       requiredFormFields.push('paymentTermsAndConditions');
     }
 
@@ -224,7 +225,7 @@ class ReservationInformation extends Component {
             openResourceTermsModal={openResourceTermsModal}
             paymentTermsAndConditions={paymentTermsAndConditions}
             requiredFields={this.getRequiredFormFields(
-              resource, termsAndConditions, paymentTermsAndConditions)}
+              resource, termsAndConditions, paymentTermsAndConditions, hasPayment(order))}
             resource={resource}
             termsAndConditions={termsAndConditions}
             user={user}

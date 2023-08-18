@@ -374,13 +374,26 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       expect(actual).toEqual(['someField1', 'someField2', 'termsAndConditions']);
     });
 
-    test('returns paymentTermsAndConditions if they are defined', () => {
+    test('does not return paymentTermsAndConditions if they are defined but reservation has no payments', () => {
       const resource = Resource.build({
         paymentTermsAndConditions: 'payment terms and conditions'
       });
       const instance = getWrapper().instance();
+      const hasPayments = false;
       const actual = instance.getRequiredFormFields(
-        resource, undefined, resource.paymentTermsAndConditions);
+        resource, undefined, resource.paymentTermsAndConditions, hasPayments);
+
+      expect(actual).toEqual([]);
+    });
+
+    test('returns paymentTermsAndConditions if they are defined and reservation has payments', () => {
+      const resource = Resource.build({
+        paymentTermsAndConditions: 'payment terms and conditions'
+      });
+      const instance = getWrapper().instance();
+      const hasPayments = true;
+      const actual = instance.getRequiredFormFields(
+        resource, undefined, resource.paymentTermsAndConditions, hasPayments);
 
       expect(actual).toEqual(['paymentTermsAndConditions']);
     });
