@@ -91,7 +91,7 @@
   "common.reservationTimeLabel": "Time and date of the reservation",
   "common.reserverAddressLabel": "Address",
   "common.reserverEmailAddressLabel": "E-mail",
-  "common.reserverIdLabel": "Business ID / social security number",
+  "common.reserverIdLabel": "Business ID",
   "common.reserverNameLabel": "The person making the reservation / lessee",
   "common.reserverPhoneNumberLabel": "Phone",
   "common.resourceLabel": "Premises",

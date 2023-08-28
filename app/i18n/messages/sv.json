@@ -91,7 +91,7 @@
   "common.reservationTimeLabel": "Tidpunkt för bokning",
   "common.reserverAddressLabel": "Adress",
   "common.reserverEmailAddressLabel": "E-post",
-  "common.reserverIdLabel": "FO-nummer / personbeteckning",
+  "common.reserverIdLabel": "FO-nummer",
   "common.reserverNameLabel": "Bokare / hyrestagare",
   "common.reserverPhoneNumberLabel": "Telefon",
   "common.resourceLabel": "Utrymme",

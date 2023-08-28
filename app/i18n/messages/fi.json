@@ -91,7 +91,7 @@
   "common.reservationTimeLabel": "Varauksen ajankohta",
   "common.reserverAddressLabel": "Osoite",
   "common.reserverEmailAddressLabel": "Sähköposti",
-  "common.reserverIdLabel": "Y-tunnus / henkilötunnus",
+  "common.reserverIdLabel": "Y-tunnus",
   "common.reserverNameLabel": "Varaaja / vuokraaja",
   "common.reserverPhoneNumberLabel": "Puhelin",
   "common.resourceLabel": "Tila",

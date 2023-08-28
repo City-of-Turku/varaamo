@@ -352,7 +352,7 @@ class UnconnectedReservationInformationForm extends Component {
             'reserverId',
             'text',
             t(FIELDS.RESERVER_ID.label),
-            { placeholder: t('common.reserverIdLabel') }
+            {}
           )}
           {this.renderField(
             FIELDS.RESERVER_PHONE_NUMBER.id,
