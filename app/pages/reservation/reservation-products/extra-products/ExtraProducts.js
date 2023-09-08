@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'react-bootstrap';
+import Table from 'react-bootstrap/lib/Table';
 
 import injectT from '../../../../i18n/injectT';
 import { PRODUCT_TYPES } from '../ReservationProductsUtils';

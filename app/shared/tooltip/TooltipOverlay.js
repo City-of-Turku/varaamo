@@ -1,5 +1,6 @@
 import React from 'react';
-import { OverlayTrigger, Tooltip as BTTooltip } from 'react-bootstrap';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import BTTooltip from 'react-bootstrap/lib/Tooltip';
 import PropTypes from 'prop-types';
 
 function TooltipOverlay({

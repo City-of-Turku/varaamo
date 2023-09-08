@@ -12,7 +12,7 @@ import Col from 'react-bootstrap/lib/Col';
 import Panel from 'react-bootstrap/lib/Panel';
 import Lightbox from 'lightbox-react';
 import 'lightbox-react/style.css';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 
 import { addNotification } from 'actions/notificationsActions';
 import { fetchResource } from 'actions/resourceActions';

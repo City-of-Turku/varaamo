@@ -1,5 +1,6 @@
 
-import { isEmpty, omit } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import omit from 'lodash/omit';
 import moment from 'moment';
 
 import constants from 'constants/AppConstants';

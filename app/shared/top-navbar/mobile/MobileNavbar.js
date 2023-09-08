@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import { Col, Row } from 'react-bootstrap';
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
 
 import FontChanger from 'shared/top-navbar/accessibility/TopNavbarFontContainer';
 import ContrastChanger from 'shared/top-navbar/accessibility/TopNavbarContrastContainer';

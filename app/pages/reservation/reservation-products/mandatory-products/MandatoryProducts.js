@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Table, Well } from 'react-bootstrap';
+import Checkbox from 'react-bootstrap/lib/Checkbox';
+import Table from 'react-bootstrap/lib/Table';
+import Well from 'react-bootstrap/lib/Well';
 
 import injectT from '../../../../i18n/injectT';
 import MandatoryProductTableRow from './MandatoryProductTableRow';

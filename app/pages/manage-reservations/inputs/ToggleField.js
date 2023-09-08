@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ControlLabel } from 'react-bootstrap';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Toggle from 'react-toggle';
 
 function ToggleField({

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import Table from 'react-bootstrap/lib/Table';
 import PropTypes from 'prop-types';
 
 import injectT from '../../../i18n/injectT';

@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
 import constants from 'constants/AppConstants';
 import { canUserModifyReservation } from 'utils/reservationUtils';

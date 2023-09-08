@@ -1,5 +1,7 @@
 
-import { filter, orderBy, values } from 'lodash';
+import filter from 'lodash/filter';
+import orderBy from 'lodash/orderBy';
+import values from 'lodash/values';
 import { createSelector, createStructuredSelector } from 'reselect';
 
 import ActionTypes from 'constants/ActionTypes';
