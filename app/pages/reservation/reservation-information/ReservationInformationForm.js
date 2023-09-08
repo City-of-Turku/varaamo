@@ -14,7 +14,7 @@ import { Col, Row } from 'react-bootstrap';
 
 import FormTypes from 'constants/FormTypes';
 import constants from 'constants/AppConstants';
-import { isValidPhoneNumber, hasProducts, normalizeUniversalFieldOptions } from 'utils/reservationUtils';
+import { hasProducts, normalizeUniversalFieldOptions } from 'utils/reservationUtils';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import TermsField from 'shared/form-fields/TermsField';
 import { injectT } from 'i18n';
@@ -23,6 +23,7 @@ import WrappedText from 'shared/wrapped-text/WrappedText';
 import ReservationSubmitButton from './ReservationSubmitButton';
 import ReservationValidationErrors from './ReservationValidationErrors';
 import { FIELDS } from '../../../constants/ReservationConstants';
+import { isValidPhoneNumber } from '../../../utils/phoneValidationUtil';
 
 const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {

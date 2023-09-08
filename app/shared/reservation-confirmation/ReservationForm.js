@@ -12,11 +12,12 @@ import isEmail from 'validator/lib/isEmail';
 
 import FormTypes from 'constants/FormTypes';
 import constants from 'constants/AppConstants';
-import { isValidPhoneNumber, normalizeUniversalFieldOptions } from 'utils/reservationUtils';
+import { normalizeUniversalFieldOptions } from 'utils/reservationUtils';
 import WrappedText from 'shared/wrapped-text';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import { injectT } from 'i18n';
 import TimeControls from './TimeControls';
+import { isValidPhoneNumber } from '../../utils/phoneValidationUtil';
 
 const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {
