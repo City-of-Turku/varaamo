@@ -70,6 +70,11 @@ describe('shared/reservation-state-label/ReservationStateLabel', () => {
       const state = 'requested';
       getTests(needManualConfirmation, state);
     });
+
+    describe('if reservation state is "waiting_for_payment"', () => {
+      const state = 'waiting_for_payment';
+      getTests(needManualConfirmation, state);
+    });
   });
 
   describe('if reservation does not need manual confirmation', () => {
@@ -77,6 +82,11 @@ describe('shared/reservation-state-label/ReservationStateLabel', () => {
 
     describe('if reservation state is "cancelled"', () => {
       const state = 'cancelled';
+      getTests(needManualConfirmation, state);
+    });
+
+    describe('if reservation state is "waiting_for_payment"', () => {
+      const state = 'waiting_for_payment';
       getTests(needManualConfirmation, state);
     });
 

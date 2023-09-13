@@ -7,7 +7,10 @@ import Label from 'shared/label';
 import { injectT } from 'i18n';
 
 function ReservationStateLabel({ reservation, t }) {
-  if (!reservation.needManualConfirmation && reservation.state !== 'cancelled') {
+  const states = constants.RESERVATION_STATE;
+  const statesToExclude = [states.CANCELLED, states.WAITING_FOR_PAYMENT];
+
+  if (!reservation.needManualConfirmation && !statesToExclude.includes(reservation.state)) {
     return <span />;
   }
   const { labelBsStyle, labelTextId } = constants.RESERVATION_STATE_LABELS[reservation.state];
