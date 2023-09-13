@@ -215,6 +215,7 @@
   "NotFoundPage.searchPage": "Jos etsit jotain tiettyä tilaa, voit etsiä sitä {searchPageLink}.",
   "NotFoundPage.searchPageLink": "hakusivulta",
   "NotFoundPage.title": "404 Sivua ei löydy",
+  "Notifications.cannotReserveDuringMaintenance": "Huoltotyön aikana ei voi tehdä varauksia.",
   "Notifications.errorMessage": "Jotain meni vikaan. Yritä hetken päästä uudelleen.",
   "Notifications.loginErrorMessage": "Kirjautuminen epäonnistui. Yritä hetken päästä uudelleen.",
   "Notifications.userFetchErrorMessage": "Käyttäjätietojen hakeminen epäonnistui. Yritä hetken päästä uudelleen.",

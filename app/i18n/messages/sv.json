@@ -217,6 +217,7 @@
   "NotFoundPage.searchPage": "Om du letar efter ett särskilt utrymme, kan du använda dig av söksidan {searchPageLink}.",
   "NotFoundPage.searchPageLink": "söksidan",
   "NotFoundPage.title": "404 Webbplatsen hittades inte",
+  "Notifications.cannotReserveDuringMaintenance": "Det går inte att göra reservationer under underhåll.",
   "Notifications.errorMessage": "Ett fel uppstod. Försök på nytt om en liten stund.",
   "Notifications.loginErrorMessage": "Inloggning misslyckades. Försök igen om en liten stund.",
   "Notifications.userFetchErrorMessage": "Användarinformations hämtning misslyckades. Försök igen om en liten stund.",

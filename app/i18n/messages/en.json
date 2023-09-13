@@ -215,6 +215,7 @@
   "NotFoundPage.searchPage": "If you are looking for a certain space, you can search for it through {searchPageLink}.",
   "NotFoundPage.searchPageLink": "search page",
   "NotFoundPage.title": "404 Page not found",
+  "Notifications.cannotReserveDuringMaintenance": "Cannot make reservations during maintenance.",
   "Notifications.errorMessage": "Something went wrong. Please try again in a moment.",
   "Notifications.loginErrorMessage": "Failed to login. Please try again in a moment.",
   "Notifications.userFetchErrorMessage": "Failed to retrieve user info. Please try again in a moment.",

@@ -70,6 +70,7 @@ describe('pages/resource/reservation-calendar/ReservationCalendarContainer', () 
     resource,
     selected: [],
     timeSlots: [[TimeSlot.build()], [TimeSlot.build()]],
+    isMaintenanceModeOn: false,
   };
   function getWrapper(props) {
     return shallowWithIntl(<ReservationCalendarContainer {...defaultProps} {...props} />);

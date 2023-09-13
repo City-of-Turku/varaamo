@@ -57,6 +57,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
     t: PropTypes.func.isRequired,
     time: PropTypes.string,
     timeSlots: PropTypes.array.isRequired,
+    isMaintenanceModeOn: PropTypes.bool.isRequired,
   };
 
   getSelectedDateSlots = (timeSlots, selected) => {
@@ -148,6 +149,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
       t,
       time,
       timeSlots,
+      isMaintenanceModeOn,
     } = this.props;
 
     const isOpen = Boolean(timeSlots.length);
@@ -164,6 +166,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
             isEditing={isEditing}
             isFetching={isFetchingResource}
             isLoggedIn={isLoggedIn || resource.authentication === 'unauthenticated'} // count as logged in if no auth needed
+            isMaintenanceModeOn={isMaintenanceModeOn}
             isStaff={isStaff}
             isStrongAuthSatisfied={isStrongAuthSatisfied}
             onClear={actions.clearTimeSlots}

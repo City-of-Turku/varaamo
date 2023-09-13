@@ -29,6 +29,9 @@ function getState(resource) {
         selectedSlot: { foo: 'bar' },
         toEdit: ['mock-reservation'],
       },
+      maintenance: {
+        isMaintenanceModeOn: false,
+      },
     }),
   };
 }
@@ -106,6 +109,14 @@ describe('pages/resource/reservation-calendar/reservationCalendarSelector', () =
     const selected = reservationCalendarSelector(state, props);
 
     expect(selected.isStrongAuthSatisfied).toBeDefined();
+  });
+
+  test('returns isMaintenanceModeOn', () => {
+    const state = getState(resource);
+    const props = getProps(resource.id);
+    const selected = reservationCalendarSelector(state, props);
+
+    expect(selected.isMaintenanceModeOn).toBeDefined();
   });
 
   test('returns isStaff', () => {

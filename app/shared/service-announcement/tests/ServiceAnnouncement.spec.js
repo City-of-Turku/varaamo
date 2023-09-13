@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 
 import { shallowWithIntl } from 'utils/testUtils';
 import { getLocalizedFieldValue } from '../../../utils/languageUtils';
-import ServiceAnnouncement from '../ServiceAnnouncement';
+import { ServiceAnnouncementWithT as ServiceAnnouncement } from '../ServiceAnnouncement';
 import { fetchAnnouncement } from '../serviceAnnouncementUtils';
 
 jest.mock('../serviceAnnouncementUtils', () => {
@@ -12,7 +12,7 @@ jest.mock('../serviceAnnouncementUtils', () => {
     __esModule: true,
     ...originalModule,
     fetchAnnouncement: jest.fn(() => Promise.resolve({
-      data: { results: [{ message: { fi: 'test' } }] },
+      data: { results: [{ message: { fi: 'test' }, is_maintenance_mode_on: true }] },
     })),
   };
 });
@@ -20,7 +20,8 @@ jest.mock('../serviceAnnouncementUtils', () => {
 describe('shared/service-announcement/ServiceAnnouncement', () => {
   const defaultProps = {
     contrast: '',
-    currentLanguage: 'fi'
+    currentLanguage: 'fi',
+    actions: { setMaintenanceMode: jest.fn() }
   };
 
   function getWrapper(extraProps) {
@@ -106,6 +107,7 @@ describe('shared/service-announcement/ServiceAnnouncement', () => {
     describe('componentDidMount', () => {
       afterEach(() => {
         fetchAnnouncement.mockClear();
+        defaultProps.actions.setMaintenanceMode.mockClear();
       });
 
       test('calls fetchAnnouncement and setState', async () => {
@@ -114,6 +116,12 @@ describe('shared/service-announcement/ServiceAnnouncement', () => {
         await instance.componentDidMount();
         expect(fetchAnnouncement).toHaveBeenCalledTimes(1);
         expect(spy).toHaveBeenCalledTimes(1);
+      });
+
+      test('calls props.actions.setMaintenanceMode', async () => {
+        const instance = getWrapper().instance();
+        await instance.componentDidMount();
+        expect(defaultProps.actions.setMaintenanceMode).toHaveBeenCalledTimes(1);
       });
     });
   });
