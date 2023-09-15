@@ -1,4 +1,5 @@
 import React from 'react';
+import Well from 'react-bootstrap/lib/Well';
 
 import PageWrapper from 'pages/PageWrapper';
 import { shallowWithIntl } from 'utils/testUtils';
@@ -18,6 +19,18 @@ describe('pages/not-found/NotFoundPage', () => {
   test('renders correct title inside h1 tags', () => {
     const h1 = getWrapper().find('h1');
     expect(h1.props().children).toBe('NotFoundPage.title');
+  });
+
+  test('renders a Well component', () => {
+    const well = getWrapper().find(Well);
+    expect(well.length).toBe(1);
+  });
+
+  test('renders correct help header text within Well', () => {
+    const p = getWrapper().find(Well).find('p');
+    expect(p.length).toBe(1);
+    expect(p.prop('className')).toBe('h4');
+    expect(p.props().children).toBe('NotFoundPage.helpHeader');
   });
 
   test('renders a list and list elements for displaying help to user', () => {
