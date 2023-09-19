@@ -18,7 +18,7 @@ import { addNotification } from 'actions/notificationsActions';
 import { fetchResource } from 'actions/resourceActions';
 import { clearReservations, toggleResourceMap } from 'actions/uiActions';
 import PageWrapper from 'pages/PageWrapper';
-import NotFoundPage from 'pages/not-found/NotFoundPage';
+import NotFoundPage from 'pages/not-found';
 import ResourceCalendar from 'shared/resource-calendar';
 import ResourceMap from 'shared/resource-map';
 import { injectT } from 'i18n';
