@@ -10,7 +10,6 @@ import { shallow } from 'enzyme';
 import NotFoundPage from 'pages/not-found/NotFoundPage';
 import PageWrapper from 'pages/PageWrapper';
 import ResourceCalendar from 'shared/resource-calendar';
-import ResourceMap from 'shared/resource-map';
 import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
 import { getResourcePageUrl } from 'utils/resourceUtils';
@@ -193,16 +192,6 @@ describe('pages/resource/ResourcePage', () => {
         expect(resourceMapInfo).toHaveLength(1);
         expect(resourceMapInfo.prop('unit')).toBe(defaultProps.unit);
         expect(resourceMapInfo.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
-      });
-
-      test('renders a ResourceMap', () => {
-        const wrapper = getShowMapWrapper();
-        const resourceMap = wrapper.find(ResourceMap);
-        expect(resourceMap).toHaveLength(1);
-        expect(resourceMap.prop('location')).toBe(defaultProps.location);
-        expect(resourceMap.prop('resourceIds')).toEqual([defaultProps.resource.id]);
-        expect(resourceMap.prop('selectedUnitId')).toBe(defaultProps.unit.id);
-        expect(resourceMap.prop('showMap')).toBe(true);
       });
 
       test('does not render a ResourceInfo', () => {

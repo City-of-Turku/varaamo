@@ -1,11 +1,12 @@
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 import { bindActionCreators } from 'redux';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
+import Loader from 'react-loader';
 
 import { searchResources, toggleMap } from 'actions/searchActions';
 import { changeSearchFilters } from 'actions/uiActions';
@@ -13,12 +14,13 @@ import { fetchPurposes } from 'actions/purposeActions';
 import { fetchUnits } from 'actions/unitActions';
 import PageWrapper from 'pages/PageWrapper';
 import { injectT } from 'i18n';
-import ResourceMap from 'shared/resource-map';
 import SearchControls from './controls';
 import searchPageSelector from './searchPageSelector';
 import SearchResults from './results/SearchResults';
 import Sort from './Sort';
 import MapToggle from './results/MapToggle';
+
+const ResourceMap = lazy(() => import('shared/resource-map'));
 
 class UnconnectedSearchPage extends Component {
   constructor(props) {
@@ -119,14 +121,15 @@ class UnconnectedSearchPage extends Component {
           </Row>
           <div className="app-SearchPage__content">
             {showMap && (
-            <ResourceMap
-              location={location}
-              resourceIds={searchResultIds}
-              selectedUnitId={selectedUnitId}
-              showMap={showMap}
-            />
+            <Suspense fallback={<Loader className="loader-ease-in" />}>
+              <ResourceMap
+                location={location}
+                resourceIds={searchResultIds}
+                selectedUnitId={selectedUnitId}
+                showMap={showMap}
+              />
+            </Suspense>
             )}
-
             {(searchDone || isFetchingSearchResults) && (
             <SearchResults
               history={history}

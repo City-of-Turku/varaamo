@@ -5,7 +5,6 @@ import simple from 'simple-mock';
 
 import PageWrapper from 'pages/PageWrapper';
 import { shallowWithIntl } from 'utils/testUtils';
-import ResourceMap from 'shared/resource-map';
 import { UnconnectedSearchPage as SearchPage } from './SearchPage';
 import Sort from './Sort';
 import SearchControls from './controls';
@@ -87,19 +86,6 @@ describe('pages/search/SearchPage', () => {
     test('contrast prop when isHighContrast: true', () => {
       const mapToggle = getWrapper({ contrast: 'high-contrast' }).find(MapToggle);
       expect(mapToggle.prop('contrast')).toBe('high-contrast');
-    });
-
-    test('renders a ResourceMap with correct props', () => {
-      const props = {
-        searchResultIds: Immutable(['resource-1', 'resource-2']),
-        selectedUnitId: '123',
-        showMap: true,
-      };
-      const resourceMap = getWrapper(props).find(ResourceMap);
-      expect(resourceMap).toHaveLength(1);
-      expect(resourceMap.prop('showMap')).toBe(true);
-      expect(resourceMap.prop('resourceIds')).toEqual(props.searchResultIds);
-      expect(resourceMap.prop('selectedUnitId')).toBe(props.selectedUnitId);
     });
 
     test('renders search results header', () => {

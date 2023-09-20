@@ -3,7 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import findIndex from 'lodash/findIndex';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
@@ -20,7 +20,6 @@ import { clearReservations, toggleResourceMap } from 'actions/uiActions';
 import PageWrapper from 'pages/PageWrapper';
 import NotFoundPage from 'pages/not-found/NotFoundPage';
 import ResourceCalendar from 'shared/resource-calendar';
-import ResourceMap from 'shared/resource-map';
 import { injectT } from 'i18n';
 import userManager from 'utils/userManager';
 import {
@@ -36,6 +35,8 @@ import {
   removeResourceOutlookCalendarLink,
   fetchResourceOutlookCalendarLinks,
 } from 'resource-outlook-linker/actions';
+
+const ResourceMap = lazy(() => import('shared/resource-map'));
 
 class UnconnectedResourcePage extends Component {
   constructor(props) {
@@ -269,12 +270,14 @@ class UnconnectedResourcePage extends Component {
           />
           {showMap && unit && <ResourceMapInfo currentLanguage={currentLanguage} unit={unit} />}
           {showMap && (
-            <ResourceMap
-              location={location}
-              resourceIds={[resource.id]}
-              selectedUnitId={unit ? unit.id : null}
-              showMap={showMap}
-            />
+            <Suspense fallback={<Loader className="loader-ease-in" />}>
+              <ResourceMap
+                location={location}
+                resourceIds={[resource.id]}
+                selectedUnitId={unit ? unit.id : null}
+                showMap={showMap}
+              />
+            </Suspense>
           )}
           {!showMap && (
             <PageWrapper
