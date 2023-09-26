@@ -2,30 +2,48 @@
 // Application specific visual customisation
 // -----------------------------------------
 
-$theme-primary-dark:    $hel-coat !default;
-$theme-primary-light:   $hel-summer !default;
+// Brand colors
 
-$theme-secondary-dark:  $hel-brick !default;
+$hel-white: #ffffff;
+$hel-black: #000000;
+$hel-copper: #00d7a7;
+$hel-bus: #0000bf;
+$hel-coat: #0072c6;
+$hel-fog: #9fc9eb;
+$hel-metro: #fd4f00;
+$hel-brick: #bd2719;
+$hel-suomenlinna: #f5a3c7;
+$hel-engel: #ffe977;
+$hel-tram: #009246;
+$hel-summer: #ffc61e;
+$hel-silver: #dedfe1;
+$hel-gold: #c2a251;
+
+
+$theme-primary-dark: $hel-coat !default;
+$theme-primary-light: $hel-summer !default;
+
+$theme-secondary-dark: $hel-brick !default;
 $theme-secondary-light: $hel-fog !default;
 
-$theme-highlight-dark:  $hel-bus !default;
+$theme-highlight-dark: $hel-bus !default;
 $theme-highlight-light: $hel-copper !default;
 
 // Non brand
-$white:         #ffffff;
-$light-gray:    #ebedf1;
-$dark-gray:     #525a65;
-$medium-gray:   #abb2bd;
-$black:         #000000;
+$white: #ffffff;
+$light-gray: #ebedf1;
+$dark-gray: #525a65;
+$medium-gray: #abb2bd;
+$black: #000000;
 
-$theme-success:       $hel-tram;
+$theme-success: $hel-tram;
 $theme-success-light: $hel-copper;
-$theme-info:          $hel-coat;
-$theme-info-light:    $hel-fog;
-$theme-warning:       $hel-summer;
+$theme-info: $hel-coat;
+$theme-info-light: $hel-fog;
+$theme-warning: $hel-summer;
 $theme-warning-light: $hel-engel;
-$theme-danger:        $hel-metro;
-$theme-danger-light:  $hel-suomenlinna;
+$theme-danger: $hel-metro;
+$theme-danger-light: $hel-suomenlinna;
 
 $blue: $hel-coat;
 $copper: $hel-copper;
@@ -48,23 +66,23 @@ $font-family-sans-serif: $turku-fonts;
 
 
 // Other variables
-$font-weight-bold:       600;
-$font-weight-regular:    400;
-$font-weight-light:      200;
+$font-weight-bold: 600;
+$font-weight-regular: 400;
+$font-weight-light: 200;
 
 
-$favorite-color:         #BF0863;
-$max-map-z-index:        1000;
+$favorite-color: #BF0863;
+$max-map-z-index: 1000;
 $input-box-shadow-focus: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 $force-open-navbar-screen-width: 1280px;
 
 
 // Buttons
-$element-size-medium:          38px;
-$element-size-small:           24px;
-$element-size-mini:            18px;
-$button-border-radius:         30px;
-$button-horizontal-padding:    15px;
+$element-size-medium: 38px;
+$element-size-small: 24px;
+$element-size-mini: 18px;
+$button-border-radius: 30px;
+$button-horizontal-padding: 15px;
 
 // Component variables
 

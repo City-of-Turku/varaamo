@@ -1,7 +1,39 @@
 @import "_turku-mixins";
 
-h1,h2,h3,h4,h5,h6,
-.h1,.h2,.h3,.h4,.h5,.h6 {
+/* open-sans-regular - latin */
+@font-face {
+  font-display: swap;
+  /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/open-sans-v36-latin-regular.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* open-sans-800 - latin */
+@font-face {
+  font-display: swap;
+  /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  src: url('../fonts/open-sans-v36-latin-800.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
   line-height: 1.5;
 }
 
@@ -21,9 +53,11 @@ p {
 }
 
 a {
-  @include add-focus{
+  @include add-focus {
     outline-offset: 0;
-  };
+  }
+
+  ;
 }
 
 .visually-hidden {
@@ -34,29 +68,36 @@ a {
   height: 1px;
   overflow: hidden;
 }
+
 body {
   #CybotCookiebotDialog * {
     font-size: 16px;
   }
-  #CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper input:focus-visible + span,
+
+  #CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper input:focus-visible+span,
   #CybotCookiebotDialog :focus-visible {
     outline-offset: 1px;
   }
+
   #CybotCookiebotDialog .CybotCookiebotDialogContentWrapper #CybotCookiebotDialogNav :focus-visible {
     outline-offset: -5px;
   }
+
   #CybotCookiebotDialogPoweredbyImage {
     max-height: 4em;
-    content:url("https://www.turku.fi/sites/default/files/thumbnails/image/turku_pysty_viiva_black_pelkka_vaakuna_1.png") !important;
+    content: url("https://www.turku.fi/sites/default/files/thumbnails/image/turku_pysty_viiva_black_pelkka_vaakuna_1.png") !important;
   }
+
   a#CybotCookiebotDialogPoweredbyCybot {
-    display:none;
+    display: none;
   }
+
   #CybotCookiebotDialog.active:not(.CybotEdge) {
     #CybotCookiebotDialogHeader {
       display: none;
     }
   }
+
   #CybotCookiebotDialog.CybotEdge.active {
     @media (max-width: 1279px) {
       #CybotCookiebotDialogHeader {
@@ -65,4 +106,3 @@ body {
     }
   }
 }
-
