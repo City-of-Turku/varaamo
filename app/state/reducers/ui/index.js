@@ -9,6 +9,7 @@ import searchReducer from './searchReducer';
 import accessibilityReducer from './accessibilityReducer';
 import favoritesPagesReducer from './favoritesPageReducer';
 import manageReservationsPageReducer from './manageReservationsPageReducer';
+import maintenanceReducer from './maintenanceReducer';
 
 const uiReducers = combineReducers({
   modals: modalsReducer,
@@ -24,6 +25,7 @@ const uiReducers = combineReducers({
   resourceMap: resourceMapReducer,
   search: searchReducer,
   accessibility: accessibilityReducer,
+  maintenance: maintenanceReducer,
 });
 
 export default uiReducers;

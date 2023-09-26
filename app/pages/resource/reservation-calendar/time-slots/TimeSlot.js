@@ -30,6 +30,7 @@ class TimeSlot extends PureComponent {
     selected: PropTypes.bool.isRequired,
     slot: PropTypes.object.isRequired,
     t: PropTypes.func.isRequired,
+    isMaintenanceModeOn: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -134,10 +135,18 @@ class TimeSlot extends PureComponent {
   }
 
   getReservationInfoNotification(isLoggedIn, isStrongAuthSatisfied, resource, slot, t) {
+    const { isMaintenanceModeOn } = this.props;
     if (new Date(slot.end) < new Date() || slot.reserved) {
       return null;
     }
 
+    if (isMaintenanceModeOn) {
+      return {
+        message: t('Notifications.cannotReserveDuringMaintenance'),
+        type: 'info',
+        timeOut: 10000,
+      };
+    }
     if (resource.reservable && !isStrongAuthSatisfied) {
       return {
         message: t('Notifications.loginToReserveStrongAuth'),

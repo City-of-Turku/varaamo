@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/lib/Col';
 import RBCheckbox from 'react-bootstrap/lib/Checkbox';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 
 function TermsField({
   input, label, labelLink, meta, onClick, isRequired

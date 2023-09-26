@@ -2,7 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'react-loader';
-import { Col, Grid, Row } from 'react-bootstrap';
+import Col from 'react-bootstrap/lib/Col';
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';

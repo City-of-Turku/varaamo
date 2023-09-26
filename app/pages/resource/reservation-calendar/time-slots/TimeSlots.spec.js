@@ -54,6 +54,7 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlots', () => {
     ],
     selectedDate: '2016-10-10',
     slots: Immutable(defaultSlots),
+    isMaintenanceModeOn: false,
   };
 
   function getWrapper(props) {
@@ -152,6 +153,7 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlots', () => {
         expect(timeSlot.props().onClick).toBe(defaultProps.onClick);
         expect(timeSlot.props().resource).toEqual(defaultProps.resource);
         expect(timeSlot.props().slot).toEqual(defaultProps.slots[index][0]);
+        expect(timeSlot.props().isMaintenanceModeOn).toEqual(defaultProps.isMaintenanceModeOn);
       });
     });
 

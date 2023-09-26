@@ -15,7 +15,7 @@ function NotFoundPage({ t }) {
         <h1>{t('NotFoundPage.title')}</h1>
         <p className="lead">{t('NotFoundPage.lead')}</p>
         <Well>
-          <h5>{t('NotFoundPage.helpHeader')}</h5>
+          <p className="h4">{t('NotFoundPage.helpHeader')}</p>
           <ul>
             <li>
               <FormattedMessage

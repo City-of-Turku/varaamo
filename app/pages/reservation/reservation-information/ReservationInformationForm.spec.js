@@ -2,7 +2,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import { Field } from 'redux-form';
+import { Field, change } from 'redux-form';
 import simple from 'simple-mock';
 
 import constants from 'constants/AppConstants';
@@ -17,6 +17,9 @@ import {
 import ReservationSubmitButton from './ReservationSubmitButton';
 import { hasProducts } from 'utils/reservationUtils';
 import ReservationValidationErrors from './ReservationValidationErrors';
+import { FIELDS } from '../../../constants/ReservationConstants';
+import FormTypes from 'constants/FormTypes';
+
 
 describe('pages/reservation/reservation-information/ReservationInformationForm', () => {
   describe('validation', () => {
@@ -307,6 +310,79 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           const fields = [];
           const billingHeading = getWrapper({ fields }).find('#payment-info-title');
           expect(billingHeading).toHaveLength(0);
+        });
+      });
+      describe('Copy reserver info to payer info button', () => {
+        test('is not rendered when no billing field is present', () => {
+          const fields = [];
+          const copyButton = getWrapper({ fields }).find('#copy-info-button');
+          expect(copyButton).toHaveLength(0);
+        });
+        describe('when billing fields are present', () => {
+          const billingFields = [
+            'billingFirstName',
+            'billingLastName',
+            'billingPhoneNumber',
+            'billingEmailAddress',
+            'billingAddressStreet',
+            'billingAddressZip',
+            'billingAddressCity'
+          ];
+          test('button is rendered', () => {
+            const fields = billingFields;
+            expect(getWrapper({ fields }).find('#copy-info-button')).toHaveLength(1);
+          });
+        });
+      });
+
+      describe('Copy reserver info status message', () => {
+        test('is not rendered when no billing field is present', () => {
+          const fields = [];
+          const statusMsg = getWrapper({ fields }).find('#copied-info-status');
+          expect(statusMsg).toHaveLength(0);
+        });
+        describe('when billing fields are present', () => {
+          const billingFields = [
+            'billingFirstName',
+            'billingLastName',
+            'billingPhoneNumber',
+            'billingEmailAddress',
+            'billingAddressStreet',
+            'billingAddressZip',
+            'billingAddressCity'
+          ];
+          test('status message is rendered', () => {
+            const fields = billingFields;
+            expect(getWrapper({ fields }).find('#copied-info-status')).toHaveLength(1);
+          });
+
+          test('status message is correctly rendered when showInfoCopied is false', () => {
+            const fields = billingFields;
+            const wrapper = getWrapper({ fields });
+            const instance = wrapper.instance();
+            instance.setState({ showInfoCopied: false });
+            const statusMsg = wrapper.find('#copied-info-status');
+            expect(statusMsg).toHaveLength(1);
+            expect(statusMsg.text()).toBe('');
+            expect(statusMsg.prop('aria-hidden')).toBe(true);
+            expect(statusMsg.prop('className')).toBe('hide-info');
+            expect(statusMsg.prop('role')).toBe('alert');
+            expect(statusMsg.prop('id')).toBe('copied-info-status');
+          });
+
+          test('status message is correctly rendered when showInfoCopied is true', () => {
+            const fields = billingFields;
+            const wrapper = getWrapper({ fields });
+            const instance = wrapper.instance();
+            instance.setState({ showInfoCopied: true });
+            const statusMsg = wrapper.find('#copied-info-status');
+            expect(statusMsg).toHaveLength(1);
+            expect(statusMsg.text()).toBe('ReservationInformationForm.copyConfirmed');
+            expect(statusMsg.prop('aria-hidden')).toBe(false);
+            expect(statusMsg.prop('className')).toBe('show-info');
+            expect(statusMsg.prop('role')).toBe('alert');
+            expect(statusMsg.prop('id')).toBe('copied-info-status');
+          });
         });
       });
 
@@ -624,6 +700,75 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
           instance.componentDidUpdate(prevProps);
           expect(instance.state.showFormErrorList).toBe(false);
           expect(instance.state.formErrors).toEqual([]);
+        });
+
+        test('sets correct state when copied state is shown and formValues has changed', () => {
+          const prevProps = { formValues: { foo: 'bar' } };
+          const prevState = { showInfoCopied: true };
+          const instance = getWrapper({ formValues: { foo: 'baz' } }).instance();
+          instance.state.showInfoCopied = true;
+          const spy = jest.spyOn(instance, 'setState');
+          instance.componentDidUpdate(prevProps, prevState);
+          expect(spy).toHaveBeenCalledTimes(1);
+          expect(spy).toHaveBeenCalledWith({ showInfoCopied: false });
+        });
+      });
+
+      describe('copyReserverToPayerInfo', () => {
+        const formValues = {
+          reserverName: 'Test Tester',
+          reserverEmailAddress: 'test.tester@provider.com',
+          reserverPhoneNumber: '+49123456789',
+          reserverAddressStreet: 'Test Street',
+          reserverAddressZip: '12345',
+          reserverAddressCity: 'Test City'
+        };
+        const dispatch = jest.fn();
+
+        afterEach(() => {
+          dispatch.mockClear();
+        });
+
+        test('sets state showInfoCopied to true', () => {
+          const instance = getWrapper({ formValues, dispatch }).instance();
+          const spy = jest.spyOn(instance, 'setState');
+          instance.copyReserverToPayerInfo();
+          expect(spy).toHaveBeenCalledTimes(1);
+          expect(spy).toHaveBeenCalledWith({ showInfoCopied: true });
+        });
+
+        test('calls dispatch change for all fields', () => {
+          const instance = getWrapper({ formValues, dispatch }).instance();
+          instance.copyReserverToPayerInfo();
+          expect(dispatch).toHaveBeenCalledTimes(7);
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_FIRST_NAME.id, 'Test'));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_LAST_NAME.id, 'Tester'));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_PHONE_NUMBER.id, '+49123456789'));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_EMAIL_ADDRESS.id, 'test.tester@provider.com'));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_STREET.id, 'Test Street'));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_ZIP.id, '12345'));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_CITY.id, 'Test City'));
+        });
+
+        test('calls dispatch change when some copy fields are missing', () => {
+          const partialFormValues = {
+            reserverName: 'Test Tester',
+            reserverEmailAddress: 'test.tester@provider.com',
+            reserverAddressCity: 'Test City'
+          };
+          const instance = getWrapper({ formValues: partialFormValues, dispatch }).instance();
+          instance.copyReserverToPayerInfo();
+          expect(dispatch).toHaveBeenCalledTimes(7);
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_FIRST_NAME.id, 'Test'));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_LAST_NAME.id, 'Tester'));
+          expect(dispatch).toHaveBeenCalledWith(
+            change(FormTypes.RESERVATION, FIELDS.BILLING_PHONE_NUMBER.id, undefined));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_EMAIL_ADDRESS.id, 'test.tester@provider.com'));
+          expect(dispatch).toHaveBeenCalledWith(
+            change(FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_STREET.id, undefined));
+          expect(dispatch).toHaveBeenCalledWith(
+            change(FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_ZIP.id, undefined));
+          expect(dispatch).toHaveBeenCalledWith(change(FormTypes.RESERVATION, FIELDS.BILLING_ADDRESS_CITY.id, 'Test City'));
         });
       });
 

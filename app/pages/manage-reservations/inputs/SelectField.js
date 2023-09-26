@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ControlLabel, FormGroup } from 'react-bootstrap';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Select from 'react-select';
 
 import injectT from '../../../i18n/injectT';

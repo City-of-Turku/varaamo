@@ -24,6 +24,33 @@
     }
   }
 
+  .payment-info-heading-container {
+    #payment-info-heading {
+      margin-top: 0;
+    }
+
+    #copy-info-button {
+      margin-left: 0;
+      white-space: normal;
+
+      @media(max-width: $screen-md-min) {
+        width: 100%;
+      }
+    }
+
+    #copied-info-status {
+      margin-left: 8px;
+    }
+
+    #copied-info-status.hide-info {
+      opacity: 0;
+    }
+
+    .align-right {
+      text-align: right;
+    }
+  }
+
 
   .has-error {
 

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import ReactNotifications from 'react-notifications';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,20 +8,18 @@ import { hideNotification } from 'actions/notificationsActions';
 import { injectT } from 'i18n';
 import notificationsSelector from './notificationsSelector';
 
-class UnconnectedNotificationsContainer extends Component {
-  render() {
-    const { actions, notifications, t } = this.props;
-    const translatedNotifications = notifications.map(notification => ({
-      ...notification,
-      message: notification.message || t(notification.messageId),
-    }));
-    return (
-      <ReactNotifications
-        notifications={translatedNotifications}
-        onRequestHide={actions.hideNotification}
-      />
-    );
-  }
+function UnconnectedNotificationsContainer(props) {
+  const { actions, notifications, t } = props;
+  const translatedNotifications = notifications.map(notification => ({
+    ...notification,
+    message: notification.message || t(notification.messageId),
+  }));
+  return (
+    <ReactNotifications
+      notifications={translatedNotifications}
+      onRequestHide={actions.hideNotification}
+    />
+  );
 }
 
 UnconnectedNotificationsContainer.propTypes = {

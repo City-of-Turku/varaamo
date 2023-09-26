@@ -27,6 +27,7 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
     selected: false,
     showClear: false,
     slot: Immutable(TimeSlotFixture.build()),
+    isMaintenanceModeOn: false,
   };
 
   function getWrapper(extraProps) {
@@ -234,6 +235,21 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
 
       expect(result).toBeNull();
       expect(t.callCount).toBe(0);
+    });
+
+    test('returns correct message when maintenance mode is on', () => {
+      const t = message => message;
+      const isMaintenanceModeOn = true;
+      const isStrongAuthSatisfied = false;
+      const resource = Resource.build({ reservable: true });
+      const instance = getWrapper({ isMaintenanceModeOn }).instance();
+      const result = instance.getReservationInfoNotification(
+        true, isStrongAuthSatisfied, resource, defaultProps.slot, t
+      );
+
+      expect(result.message).toBe(t('Notifications.cannotReserveDuringMaintenance'));
+      expect(result.type).toBe('info');
+      expect(result.timeOut).toBe(10000);
     });
 
     test('returns correct message when resource is reservable but not strong auth satisfied', () => {

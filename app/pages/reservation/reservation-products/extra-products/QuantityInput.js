@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Glyphicon } from 'react-bootstrap';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 import injectT from '../../../../i18n/injectT';
 

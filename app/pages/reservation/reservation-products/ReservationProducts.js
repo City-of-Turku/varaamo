@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button, Col, Row
-} from 'react-bootstrap';
-import { isEmpty } from 'lodash';
+import Button from 'react-bootstrap/lib/Button';
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
+import isEmpty from 'lodash/isEmpty';
 import Loader from 'react-loader';
 
 import injectT from '../../../i18n/injectT';

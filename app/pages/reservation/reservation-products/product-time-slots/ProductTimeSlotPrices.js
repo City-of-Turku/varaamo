@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel } from 'react-bootstrap';
+import Panel from 'react-bootstrap/lib/Panel';
 
 import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import { getTimeSlotMinMaxPrices, PRODUCT_PRICE_TYPES } from '../ReservationProductsUtils';

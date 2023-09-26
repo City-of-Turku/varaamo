@@ -11,7 +11,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Well from 'react-bootstrap/lib/Well';
 import { Field, Fields, reduxForm } from 'redux-form';
-import { Row } from 'react-bootstrap';
+import Row from 'react-bootstrap/lib/Row';
 
 import FormTypes from 'constants/FormTypes';
 import ReduxFormField from 'shared/form-fields/ReduxFormField';

@@ -1,4 +1,5 @@
-import { get, values } from 'lodash';
+import get from 'lodash/get';
+import values from 'lodash/values';
 
 import constants from 'constants/AppConstants';
 

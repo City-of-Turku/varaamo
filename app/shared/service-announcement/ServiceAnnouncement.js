@@ -1,10 +1,14 @@
 import React from 'react';
-import { Alert, Button } from 'react-bootstrap';
+import Alert from 'react-bootstrap/lib/Alert';
+import Button from 'react-bootstrap/lib/Button';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { injectT } from 'i18n';
 import { fetchAnnouncement } from './serviceAnnouncementUtils';
 import { getLocalizedFieldValue } from '../../utils/languageUtils';
+import { setMaintenanceMode } from '../../actions/announcementActions';
 
 class ServiceAnnouncement extends React.Component {
   constructor(props) {
@@ -19,10 +23,15 @@ class ServiceAnnouncement extends React.Component {
 
   componentDidMount() {
     fetchAnnouncement()
-      .then(data => this.setState({
-        announcement: (data.results && data.results[0]) ? data.results[0] : null,
-        show: data.results && data.results.length > 0
-      }))
+      .then(data => {
+        this.setState({
+          announcement: (data.results && data.results[0]) ? data.results[0] : null,
+          show: data.results && data.results.length > 0
+        });
+        this.props.actions.setMaintenanceMode((data.results && data.results[0])
+          ? data.results[0].is_maintenance_mode_on : false
+        );
+      })
       .catch(() => this.setState({ announcement: null, show: false }));
   }
 
@@ -67,9 +76,20 @@ class ServiceAnnouncement extends React.Component {
 }
 
 ServiceAnnouncement.propTypes = {
+  actions: PropTypes.object.isRequired,
   contrast: PropTypes.string.isRequired,
   currentLanguage: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
 };
 
-export default injectT(ServiceAnnouncement);
+function mapDispatchToProps(dispatch) {
+  const actionCreators = {
+    setMaintenanceMode
+  };
+
+  return { actions: bindActionCreators(actionCreators, dispatch) };
+}
+
+export const ServiceAnnouncementWithT = injectT(ServiceAnnouncement);
+
+export default connect(null, mapDispatchToProps)(ServiceAnnouncementWithT);

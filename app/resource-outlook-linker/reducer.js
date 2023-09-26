@@ -1,8 +1,6 @@
 import Immutable from 'seamless-immutable';
-import {
-  omit,
-  reduce,
-} from 'lodash';
+import omit from 'lodash/omit';
+import reduce from 'lodash/reduce';
 
 import {
   actionTypes

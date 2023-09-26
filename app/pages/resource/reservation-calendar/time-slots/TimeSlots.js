@@ -31,6 +31,7 @@ class TimeSlots extends Component {
     slots: PropTypes.array.isRequired,
     t: PropTypes.func.isRequired,
     time: PropTypes.string,
+    isMaintenanceModeOn: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -219,6 +220,7 @@ class TimeSlots extends Component {
       selected,
       t,
       time,
+      isMaintenanceModeOn,
     } = this.props;
     const { hoveredTimeSlot } = this.state;
     if (!slot.end) {
@@ -264,6 +266,7 @@ class TimeSlots extends Component {
         isEditing={isEditing}
         isHighlighted={isHighlighted}
         isLoggedIn={isLoggedIn}
+        isMaintenanceModeOn={isMaintenanceModeOn}
         isSelectable={isSelectable}
         isStrongAuthSatisfied={isStrongAuthSatisfied}
         isUnderMinPeriod={isUnderMinPeriod}

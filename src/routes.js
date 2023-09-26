@@ -9,7 +9,6 @@ import NotFoundPage from '../app/pages/not-found';
 import LoginCallback from '../app/pages/auth/LoginCallback';
 import LogoutCallback from '../app/pages/auth/LogoutCallback';
 import ReservationPaymentReturnPage from '../app/pages/reservation/payment/ReservationPaymentReturnPage';
-import ManageReservationsPage from '../app/pages/manage-reservations/ManageReservationsPage';
 
 // import non-landing pages dynamically
 const SearchPage = lazy(() => import('../app/pages/search'));
@@ -20,6 +19,7 @@ const AdminResourcesPage = lazy(() => import('../app/pages/admin-resources'));
 const FavoritesPage = lazy(() => import('../app/pages/favorites/favoritesPage'));
 const UserReservationsPage = lazy(() => import('../app/pages/user-reservations'));
 const ReservationPage = lazy(() => import('../app/pages/reservation'));
+const ManageReservationsPage = lazy(() => import('../app/pages/manage-reservations/ManageReservationsPage'));
 
 
 export default () => (
