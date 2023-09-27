@@ -1,5 +1,6 @@
 
 import includes from 'lodash/includes';
+import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -151,7 +152,7 @@ class UnconnectedReservationInformationForm extends Component {
     const { showFormErrorList } = this.state;
     const { formValues } = this.props;
     if (showFormErrorList) {
-      if (formValues !== prevProps.formValues) {
+      if (!isEqual(formValues, prevProps.formValues)) {
         this.setState({ showFormErrorList: false, formErrors: [] });
       }
     }
