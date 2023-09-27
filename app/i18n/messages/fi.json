@@ -427,7 +427,7 @@
   "ResourceIcons.free": "Maksuton",
   "ResourceInfo.additionalInfoTitle": "Tilan lisätiedot",
   "ResourceInfo.equipmentHeader": "Tilan varusteet",
-  "ResourceInfo.serviceMapLink": "Katso reitti Palvelukartasta",
+  "ResourceInfo.serviceMapLink": "Katso sijanti Palvelukartasta",
   "ResourceInfo.webSiteLink": "Toimipisteen Nettisivut",
   "ResourceInfo.loginMessage": "Sinun täytyy <a href=\"/login\">kirjautua sisään</a>, jotta voit tehdä varauksen tähän tilaan.",
   "ResourceInfo.reservationTitle": "Varauksen tiedot",

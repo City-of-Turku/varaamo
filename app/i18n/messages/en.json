@@ -427,7 +427,7 @@
   "ResourceIcons.free": "Free of charge",
   "ResourceInfo.additionalInfoTitle": "Additional information about the premises",
   "ResourceInfo.equipmentHeader": "Equipment available at the premises",
-  "ResourceInfo.serviceMapLink": "Search route on Service Map",
+  "ResourceInfo.serviceMapLink": "View location on Service Map",
   "ResourceInfo.webSiteLink": "Premise website",
   "ResourceInfo.loginMessage": "You must <a href=”/login”>log in</a> to reserve these premises.",
   "ResourceInfo.reservationTitle": "Reservation information",
