@@ -24,7 +24,7 @@ if (serverConfig.isProduction) {
   app.use(compression());
 
   // Serve the static assets. We can cache them as they include hashes.
-  app.use('/_assets', express.static(path.resolve(__dirname, '../dist'), { maxAge: '200d' }));
+  app.use('/_assets', express.static(path.resolve(__dirname, '../dist'), { maxAge: serverConfig.httpCacheMaxAge }));
 } else {
   const webpackConfig = require('../config/webpack.development');
   const compiler = webpack(webpackConfig);
