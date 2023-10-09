@@ -126,6 +126,12 @@
     "webpack-dev-middleware": "6.0.1",
     "webpack-hot-middleware": "2.25.3"
   },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead"
+  ],
   "scripts": {
     "build": "./node_modules/.bin/webpack --config config/webpack.production.js",
     "build:win": ".\\node_modules\\.bin\\webpack --config config\\webpack.production.js",
