@@ -5,6 +5,7 @@ import Loader from 'react-loader';
 import Col from 'react-bootstrap/lib/Col';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
+import Button from 'react-bootstrap/lib/Button';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -37,6 +38,7 @@ import { getFilteredReservations } from './manageReservationsPageUtils';
 import ReservationInfoModal from 'shared/modals/reservation-info';
 import ReservationCancelModal from 'shared/modals/reservation-cancel';
 import PageResultsText from './PageResultsText';
+import MassCancelModal from '../../shared/modals/reservation-mass-cancel/MassCancelModal';
 
 
 class ManageReservationsPage extends React.Component {
@@ -45,6 +47,7 @@ class ManageReservationsPage extends React.Component {
 
     this.state = {
       showOnlyFilters: [constants.RESERVATION_SHOWONLY_FILTERS.CAN_MODIFY],
+      showMassCancel: false,
     };
 
     this.handleFetchReservations = this.handleFetchReservations.bind(this);
@@ -54,6 +57,16 @@ class ManageReservationsPage extends React.Component {
     this.handleOpenInfoModal = this.handleOpenInfoModal.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleEditReservation = this.handleEditReservation.bind(this);
+    this.handleShowMassCancel = this.handleShowMassCancel.bind(this);
+    this.handleHideMassCancel = this.handleHideMassCancel.bind(this);
+  }
+
+  handleShowMassCancel() {
+    this.setState({ showMassCancel: true });
+  }
+
+  handleHideMassCancel() {
+    this.setState({ showMassCancel: false });
   }
 
   componentDidMount() {
@@ -171,10 +184,12 @@ class ManageReservationsPage extends React.Component {
       locale,
       isFetchingReservations,
       isFetchingUnits,
+      fontSize,
     } = this.props;
 
     const {
       showOnlyFilters,
+      showMassCancel,
     } = this.state;
 
     const filters = getFiltersFromUrl(location, false);
@@ -187,8 +202,17 @@ class ManageReservationsPage extends React.Component {
         <div className="app-ManageReservationsPage__filters">
           <Grid>
             <Row>
-              <Col sm={12}>
+              <Col sm={9}>
                 <h1>{title}</h1>
+              </Col>
+              <Col id="cancel-btn-container" sm={3}>
+                <Button
+                  className={fontSize}
+                  id="cancel-reservations-btn"
+                  onClick={this.handleShowMassCancel}
+                >
+                  {t('common.cancelReservations')}
+                </Button>
               </Col>
             </Row>
           </Grid>
@@ -241,6 +265,11 @@ class ManageReservationsPage extends React.Component {
         </div>
         <ReservationInfoModal />
         <ReservationCancelModal />
+        <MassCancelModal
+          onCancelSuccess={this.handleFetchReservations}
+          onClose={this.handleHideMassCancel}
+          show={showMassCancel}
+        />
       </div>
     );
   }
@@ -257,6 +286,7 @@ ManageReservationsPage.propTypes = {
   reservationsTotalCount: PropTypes.number.isRequired,
   isFetchingReservations: PropTypes.bool,
   isFetchingUnits: PropTypes.bool,
+  fontSize: PropTypes.string,
 };
 
 export const UnwrappedManageReservationsPage = injectT(ManageReservationsPage);

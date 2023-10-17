@@ -47,4 +47,8 @@ describe('/pages/favorites/favoritesPageSelector', () => {
   test('returns reservationsTotalCount', () => {
     expect(getSelector().reservationsTotalCount).toBeDefined();
   });
+
+  test('returns fontSize', () => {
+    expect(getSelector().fontSize).toBeDefined();
+  });
 });
