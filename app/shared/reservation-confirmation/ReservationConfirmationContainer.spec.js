@@ -9,6 +9,7 @@ import ConfirmReservationModal from './ConfirmReservationModal';
 import {
   UnconnectedReservationConfirmationContainer as ReservationConfirmationContainer,
 } from './ReservationConfirmationContainer';
+import constants from '../../constants/AppConstants';
 
 describe('pages/resource/reservation-calendar/ReservationConfirmationContainer', () => {
   const resource = Resource.build({ needManualConfirmation: false });
@@ -35,6 +36,7 @@ describe('pages/resource/reservation-calendar/ReservationConfirmationContainer',
       Reservation.build(),
       Reservation.build(),
     ]),
+    reservationType: constants.RESERVATION_TYPE.NORMAL_VALUE,
   };
 
   function getWrapper(extraProps) {
@@ -66,6 +68,7 @@ describe('pages/resource/reservation-calendar/ReservationConfirmationContainer',
         expect(actualProps.reservationsToEdit).toEqual(defaultProps.reservationsToEdit);
         expect(actualProps.selectedReservations).toEqual(defaultProps.selectedReservations);
         expect(actualProps.show).toBe(defaultProps.confirmReservationModalIsOpen);
+        expect(actualProps.reservationType).toBe(defaultProps.reservationType);
       });
     });
   });

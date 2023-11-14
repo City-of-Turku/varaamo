@@ -36,6 +36,13 @@ function isStaffEvent(reservation, resource) {
   if (!resource || !resource.requiredReservationExtraFields) {
     return false;
   }
+
+  // blocked type reservations don't require any fields. In this case
+  // don't assume reservation is staff event.
+  if (reservation && reservation.type === constants.RESERVATION_TYPE.BLOCKED_VALUE) {
+    return false;
+  }
+
   return some(resource.requiredReservationExtraFields, (field) => {
     // billing fields can be left empty when no payment is made
     if (constants.RESERVATION_BILLING_FIELDS.includes(field)) {

@@ -19,6 +19,9 @@ const toEditSelector = state => state.ui.reservations.toEdit;
 const staffEventSelectedSelector = state => (
   formValueSelector(FormTypes.RESERVATION)(state, 'staffEvent')
 );
+const reservationTypeSelector = state => (
+  formValueSelector(FormTypes.RESERVATION)(state, 'type')
+);
 const selectedReservationsSelector = createSelector(
   (state, props) => props.selectedReservations,
   selectedReservationsFromStateSelector,
@@ -35,6 +38,7 @@ const reservationConfirmationSelector = createStructuredSelector({
   resource: resourceSelector,
   selectedReservations: selectedReservationsSelector,
   staffEventSelected: staffEventSelectedSelector,
+  reservationType: reservationTypeSelector,
 });
 
 export default reservationConfirmationSelector;

@@ -171,6 +171,12 @@ describe('Utils: reservationUtils', () => {
         expect(isStaffEvent(reservation, resource)).toBe(true);
       }
     );
+
+    test('returns false if reservation exists and its type is blocked', () => {
+      const reservation = { type: constants.RESERVATION_TYPE.BLOCKED_VALUE };
+      const resource = { requiredReservationExtraFields: ['reserver_name'] };
+      expect(isStaffEvent(reservation, resource)).toBe(false);
+    });
   });
 
   describe('getCurrentReservation', () => {

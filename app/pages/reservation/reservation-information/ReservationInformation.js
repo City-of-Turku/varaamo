@@ -36,6 +36,7 @@ class ReservationInformation extends Component {
     t: PropTypes.func.isRequired,
     unit: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+    reservationType: PropTypes.string,
   };
 
   onConfirm = (values) => {
@@ -68,6 +69,7 @@ class ReservationInformation extends Component {
 
     if (isAdmin) {
       formFields.push('comments');
+      formFields.push('type');
 
       /* waiting for backend implementation */
       // formFields.push('reserverName');
@@ -132,6 +134,7 @@ class ReservationInformation extends Component {
     }
     if (!reservation) {
       rv = this.getFormInitialValuesFromUser();
+      rv = { ...rv, type: constants.RESERVATION_TYPE.NORMAL_VALUE };
     }
     return rv;
   }
@@ -148,7 +151,11 @@ class ReservationInformation extends Component {
   }
 
   getRequiredFormFields(
-    resource, termsAndConditions, paymentTermsAndConditions, hasPayments = false) {
+    resource, termsAndConditions, paymentTermsAndConditions, hasPayments = false, reservationType) {
+    if (reservationType === constants.RESERVATION_TYPE.BLOCKED_VALUE) {
+      return [];
+    }
+
     const requiredFormFields = [...resource.requiredReservationExtraFields.map(
       field => camelCase(field)
     )];
@@ -199,6 +206,7 @@ class ReservationInformation extends Component {
       t,
       unit,
       user,
+      reservationType,
     } = this.props;
 
     const termsAndConditions = getTermsAndConditions(resource);
@@ -225,7 +233,9 @@ class ReservationInformation extends Component {
             openResourceTermsModal={openResourceTermsModal}
             paymentTermsAndConditions={paymentTermsAndConditions}
             requiredFields={this.getRequiredFormFields(
-              resource, termsAndConditions, paymentTermsAndConditions, hasPayment(order))}
+              resource, termsAndConditions, paymentTermsAndConditions,
+              hasPayment(order), reservationType)}
+            reservationType={reservationType}
             resource={resource}
             termsAndConditions={termsAndConditions}
             user={user}

@@ -19,6 +19,7 @@ import { hasProducts } from 'utils/reservationUtils';
 import ReservationValidationErrors from './ReservationValidationErrors';
 import { FIELDS } from '../../../constants/ReservationConstants';
 import FormTypes from 'constants/FormTypes';
+import SingleReservationDetail from '../reservation-details/SingleReservationDetail';
 
 
 describe('pages/reservation/reservation-information/ReservationInformationForm', () => {
@@ -263,7 +264,8 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
       resource: Resource.build(),
       paymentTermsAndConditions: '',
       termsAndConditions: '',
-      universalField: []
+      universalField: [],
+      reservationType: constants.RESERVATION_TYPE.NORMAL_VALUE,
     };
 
     function getWrapper(extraProps) {
@@ -280,6 +282,52 @@ describe('pages/reservation/reservation-information/ReservationInformationForm',
     describe('form fields', () => {
       const reserverNameField = 'reserverName';
       const eventSubjectField = 'eventSubject';
+
+      describe('reservation type', () => {
+        test('when type field is included and editing', () => {
+          const fields = ['type'];
+          const fieldDetail = getWrapper({ fields, isEditing: true }).find(SingleReservationDetail);
+          expect(fieldDetail).toHaveLength(1);
+          expect(fieldDetail.prop('label')).toBe('ReservationType.label');
+          expect(fieldDetail.prop('value')).toBe('ReservationType.normal');
+        });
+
+        test('when type field is not included and editing', () => {
+          const fields = [];
+          const fieldDetail = getWrapper({ fields, isEditing: true }).find(SingleReservationDetail);
+          expect(fieldDetail).toHaveLength(0);
+        });
+
+        test('when type field is included and not editing', () => {
+          const { RESERVATION_TYPE } = constants;
+          const fields = ['type'];
+          const radioGroup = getWrapper({ fields, isEditing: false })
+            .find('RadioGroup');
+          expect(radioGroup).toHaveLength(1);
+          expect(radioGroup.prop('legend')).toBe(RESERVATION_TYPE.LEGEND_TEXT_ID);
+          expect(radioGroup.prop('legendHint')).toBe(RESERVATION_TYPE.LEGEND_HINT_TEXT_ID);
+          expect(radioGroup.prop('radioOptions')).toEqual([
+            {
+              name: RESERVATION_TYPE.TYPE_NAME,
+              value: RESERVATION_TYPE.NORMAL_VALUE,
+              label: constants.RESERVATION_TYPE.NORMAL_LABEL_ID,
+              hint: constants.RESERVATION_TYPE.NORMAL_HINT_TEXT_ID,
+            },
+            {
+              name: RESERVATION_TYPE.TYPE_NAME,
+              value: RESERVATION_TYPE.BLOCKED_VALUE,
+              label: constants.RESERVATION_TYPE.BLOCKED_LABEL_ID,
+              hint: constants.RESERVATION_TYPE.BLOCKED_HINT_TEXT_ID,
+            }
+          ]);
+        });
+
+        test('when type field is not included and not editing', () => {
+          const fields = [];
+          const radioGroup = getWrapper({ fields, isEditing: false }).find('RadioGroup');
+          expect(radioGroup).toHaveLength(0);
+        });
+      });
 
       test('renders Reservation Information Form title', () => {
         const fields = [reserverNameField];

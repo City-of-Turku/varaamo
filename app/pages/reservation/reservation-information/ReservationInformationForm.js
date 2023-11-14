@@ -25,6 +25,8 @@ import ReservationSubmitButton from './ReservationSubmitButton';
 import ReservationValidationErrors from './ReservationValidationErrors';
 import { FIELDS } from '../../../constants/ReservationConstants';
 import { isValidPhoneNumber } from '../../../utils/phoneValidationUtil';
+import RadioGroup from '../../../shared/form-fields/RadioGroup';
+import SingleReservationDetail from '../reservation-details/SingleReservationDetail';
 
 const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {
@@ -312,15 +314,50 @@ class UnconnectedReservationInformationForm extends Component {
       t,
       termsAndConditions,
       paymentTermsAndConditions,
+      reservationType,
     } = this.props;
 
     this.requiredFields = staffEventSelected
       ? constants.REQUIRED_STAFF_EVENT_FIELDS
       : requiredFields;
 
+    const showEditingReservationType = includes(this.props.fields, 'type') && isEditing;
+    const showInputReservationType = includes(this.props.fields, 'type') && !isEditing;
     return (
       <div>
         <Form className="reservation-form" horizontal onSubmit={handleSubmit(onConfirm)}>
+          { showEditingReservationType && (
+            <Well>
+              <SingleReservationDetail
+                label={t('ReservationType.label')}
+                value={reservationType === constants.RESERVATION_TYPE.BLOCKED_VALUE
+                  ? t(constants.RESERVATION_TYPE.BLOCKED_LABEL_ID)
+                  : t(constants.RESERVATION_TYPE.NORMAL_LABEL_ID)}
+              />
+            </Well>
+          )}
+          { showInputReservationType && (
+          <Well>
+            <RadioGroup
+              legend={t(constants.RESERVATION_TYPE.LEGEND_TEXT_ID)}
+              legendHint={t(constants.RESERVATION_TYPE.LEGEND_HINT_TEXT_ID)}
+              radioOptions={[
+                {
+                  name: constants.RESERVATION_TYPE.TYPE_NAME,
+                  value: constants.RESERVATION_TYPE.NORMAL_VALUE,
+                  label: t(constants.RESERVATION_TYPE.NORMAL_LABEL_ID),
+                  hint: t(constants.RESERVATION_TYPE.NORMAL_HINT_TEXT_ID),
+                },
+                {
+                  name: constants.RESERVATION_TYPE.TYPE_NAME,
+                  value: constants.RESERVATION_TYPE.BLOCKED_VALUE,
+                  label: t(constants.RESERVATION_TYPE.BLOCKED_LABEL_ID),
+                  hint: t(constants.RESERVATION_TYPE.BLOCKED_HINT_TEXT_ID),
+                }
+              ]}
+            />
+          </Well>
+          )}
           { includes(this.props.fields, 'reserverName') && (
             <h3 className="reservationers-Info">{t('ReservationInformationForm.reserverInformationTitle')}</h3>
           )}
@@ -681,6 +718,7 @@ UnconnectedReservationInformationForm.propTypes = {
   t: PropTypes.func.isRequired,
   termsAndConditions: PropTypes.string.isRequired,
   paymentTermsAndConditions: PropTypes.string.isRequired,
+  reservationType: PropTypes.string,
 };
 UnconnectedReservationInformationForm = injectT(UnconnectedReservationInformationForm);  // eslint-disable-line
 

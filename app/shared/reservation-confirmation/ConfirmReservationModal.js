@@ -14,6 +14,7 @@ import { injectT } from 'i18n';
 import { isStaffEvent } from 'utils/reservationUtils';
 import { getTermsAndConditions } from 'utils/resourceUtils';
 import ReservationForm from './ReservationForm';
+import constants from '../../constants/AppConstants';
 
 class ConfirmReservationModal extends Component {
   static propTypes = {
@@ -34,6 +35,7 @@ class ConfirmReservationModal extends Component {
     staffEventSelected: PropTypes.bool,
     t: PropTypes.func.isRequired,
     timeSlots: PropTypes.array,
+    reservationType: PropTypes.string,
   };
 
   onConfirm = (values) => {
@@ -59,6 +61,7 @@ class ConfirmReservationModal extends Component {
       formFields.push('reserverName');
       formFields.push('reserverEmailAddress');
       formFields.push('reserverPhoneNumber');
+      formFields.push('type');
     }
     if (resource.universalField && resource.universalField.length) {
       // resource.universalField.forEach(val => formFields.push(`universalData-${val.id}`));
@@ -101,6 +104,8 @@ class ConfirmReservationModal extends Component {
     let rv = reservation ? pick(reservation, this.getFormFields()) : {};
     if (isEditing) {
       rv = { ...rv, staffEvent: isStaffEvent(reservation, resource) };
+    } else {
+      rv = { ...rv, type: constants.RESERVATION_TYPE.NORMAL_VALUE };
     }
     return rv;
   }
@@ -115,7 +120,10 @@ class ConfirmReservationModal extends Component {
     return t('ConfirmReservationModal.regularReservationTitle');
   }
 
-  getRequiredFormFields(resource, termsAndConditions) {
+  getRequiredFormFields(resource, termsAndConditions, reservationType) {
+    if (reservationType === constants.RESERVATION_TYPE.BLOCKED_VALUE) {
+      return [];
+    }
     const requiredFormFields = [...resource.requiredReservationExtraFields.map(
       field => camelCase(field)
     )];
@@ -194,6 +202,7 @@ class ConfirmReservationModal extends Component {
       staffEventSelected,
       t,
       timeSlots,
+      reservationType,
     } = this.props;
 
     const termsAndConditions = isStaff ? '' : getTermsAndConditions(resource);
@@ -226,7 +235,8 @@ class ConfirmReservationModal extends Component {
             maxReservationPeriod={maxReservationPeriod}
             onCancel={this.handleCancel}
             onConfirm={this.onConfirm}
-            requiredFields={this.getRequiredFormFields(resource, termsAndConditions)}
+            requiredFields={
+              this.getRequiredFormFields(resource, termsAndConditions, reservationType)}
             resource={resource}
             staffEventSelected={staffEventSelected}
             termsAndConditions={termsAndConditions}

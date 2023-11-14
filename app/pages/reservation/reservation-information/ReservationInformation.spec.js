@@ -40,6 +40,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     },
     unit: Immutable(Unit.build()),
     user: Immutable(User.build()),
+    reservationType: constants.RESERVATION_TYPE.NORMAL_VALUE,
   };
 
   function getWrapper(extraProps) {
@@ -80,6 +81,8 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     expect(form.prop('openResourcePaymentTermsModal')).toBe(defaultProps.openResourcePaymentTermsModal);
     expect(form.prop('openResourceTermsModal')).toBe(defaultProps.openResourceTermsModal);
     expect(form.prop('paymentTermsAndConditions')).toBe(getPaymentTermsAndConditions(resource));
+    expect(form.prop('requiredFields')).toBeDefined();
+    expect(form.prop('reservationType')).toBe(defaultProps.reservationType);
     expect(form.prop('resource')).toBe(resource);
     expect(form.prop('user')).toBe(defaultProps.user);
   });
@@ -161,7 +164,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
         const actual = instance.getFormFields();
         // const adminFields = ['comments',
         // 'reserverName', 'reserverEmailAddress', 'reserverPhoneNumber'];
-        const adminFields = ['comments'];
+        const adminFields = ['comments', 'type'];
 
         expect(actual).toEqual([...supportedFields, ...adminFields]);
       }
@@ -278,7 +281,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }
     );
 
-    test('returns InitialValues from user when no reservation', () => {
+    test('returns correct initial values when there is no reservation', () => {
       const user = User.build({
         displayName: 'First Last',
         email: 'em@il.com',
@@ -288,7 +291,8 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       const actual = instance.getFormInitialValues();
       const expectedInfo = {
         reserverName: 'First Last',
-        reserverEmailAddress: 'em@il.com'
+        reserverEmailAddress: 'em@il.com',
+        type: constants.RESERVATION_TYPE.NORMAL_VALUE,
       };
       expect(instance.props.reservation).toBe(null);
       expect(actual).toEqual(expectedInfo);

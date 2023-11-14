@@ -2,6 +2,7 @@ import FormTypes from 'constants/FormTypes';
 import Resource from 'utils/fixtures/Resource';
 import { getState } from 'utils/testUtils';
 import reservationConfirmationSelector from './reservationConfirmationSelector';
+import constants from '../../constants/AppConstants';
 
 describe('shared/reservation-confirmation/reservationConfirmationSelector', () => {
   const resource = Resource.build();
@@ -10,7 +11,11 @@ describe('shared/reservation-confirmation/reservationConfirmationSelector', () =
   function getSelected(extraProps) {
     const state = getState({
       'data.resources': { [resource.id]: resource },
-      [`form.${FormTypes.RESERVATION}.values`]: { staffEvent: true },
+      form: {
+        [FormTypes.RESERVATION]: {
+          values: { staffEvent: true, type: constants.RESERVATION_TYPE.NORMAL_VALUE },
+        }
+      },
       recurringReservations: { reservations: recurringReservations },
       'ui.reservations.toEdit': ['mock-reservation'],
     });
@@ -61,5 +66,9 @@ describe('shared/reservation-confirmation/reservationConfirmationSelector', () =
 
   test('returns staffEventSelected from state', () => {
     expect(getSelected().staffEventSelected).toBe(true);
+  });
+
+  test('returns reservationType from state', () => {
+    expect(getSelected().reservationType).toBe(constants.RESERVATION_TYPE.NORMAL_VALUE);
   });
 });

@@ -150,6 +150,17 @@ const constants = {
     SMALL: '__font-size-small',
     MEDIUM: '__font-size-medium',
     LARGE: '__font-size-large',
+  },
+  RESERVATION_TYPE: {
+    LEGEND_TEXT_ID: 'ReservationType.legend',
+    LEGEND_HINT_TEXT_ID: 'ReservationType.legendHint',
+    TYPE_NAME: 'type',
+    NORMAL_VALUE: 'normal',
+    NORMAL_LABEL_ID: 'ReservationType.normal',
+    NORMAL_HINT_TEXT_ID: 'ReservationType.normalHint',
+    BLOCKED_VALUE: 'blocked',
+    BLOCKED_LABEL_ID: 'ReservationType.blocked',
+    BLOCKED_HINT_TEXT_ID: 'ReservationType.blockedHint',
   }
 };
 

@@ -35,6 +35,7 @@ export class UnconnectedReservationConfirmationContainer extends Component {
     selectedReservations: PropTypes.array.isRequired,
     staffEventSelected: PropTypes.bool,
     timeSlots: PropTypes.array,
+    reservationType: PropTypes.string,
   };
 
   handleEdit = (values = {}) => {
@@ -104,6 +105,7 @@ export class UnconnectedReservationConfirmationContainer extends Component {
       showTimeControls,
       staffEventSelected,
       timeSlots,
+      reservationType,
     } = this.props;
 
     const isEditing = Boolean(reservationsToEdit.length);
@@ -120,6 +122,7 @@ export class UnconnectedReservationConfirmationContainer extends Component {
         onRemoveReservation={actions.removeReservation}
         recurringReservations={recurringReservations}
         reservationsToEdit={reservationsToEdit}
+        reservationType={reservationType}
         resource={resource}
         selectedReservations={selectedReservations}
         show={confirmReservationModalIsOpen}

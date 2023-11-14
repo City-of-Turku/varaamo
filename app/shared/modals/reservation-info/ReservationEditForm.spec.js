@@ -10,6 +10,7 @@ import User from 'utils/fixtures/User';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedReservationEditForm as ReservationEditForm } from './ReservationEditForm';
 import ReservationOrderInfo from './ReservationOrderInfo';
+import constants from '../../../constants/AppConstants';
 
 describe('shared/modals/reservation-info/ReservationEditForm', () => {
   const resource = Resource.build({ universalField: [UniversalField.build()] });
@@ -192,6 +193,33 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
 
           test('does not render reservation user email when reserverEmailAddress is empty', () => {
             expect(getData({ reservation: userReservation, isStaff })).not.toContain(user.email);
+          });
+        });
+      });
+
+      describe('reservation type', () => {
+        const reservationA = Reservation.build(
+          { type: constants.RESERVATION_TYPE.BLOCKED_VALUE }
+        );
+        const reservationB = Reservation.build(
+          { type: constants.RESERVATION_TYPE.NORMAL_VALUE }
+        );
+
+        describe('when user is staff', () => {
+          const isStaff = true;
+
+          test('renders reservation type correctly', () => {
+            expect(getData({ reservation: reservationA, isStaff })).toContain('ReservationType.blocked');
+            expect(getData({ reservation: reservationB, isStaff })).toContain('ReservationType.normal');
+          });
+        });
+
+        describe('when user is not staff', () => {
+          const isStaff = false;
+
+          test('does not render reservation type', () => {
+            expect(getData({ reservation: reservationA, isStaff })).not.toContain('ReservationType.blocked');
+            expect(getData({ reservation: reservationB, isStaff })).not.toContain('ReservationType.normal');
           });
         });
       });
