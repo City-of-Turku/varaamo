@@ -1,13 +1,16 @@
 @import "./variables";
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,800');
-
 .vantaa-customizations {
 
   // Typography
   // ----------
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: $heading-font-family;
     font-weight: $font-weight-bold;
   }
@@ -47,7 +50,8 @@
   footer {
     background-color: $blue;
 
-    .brand-link, .brand-link:hover {
+    .brand-link,
+    .brand-link:hover {
       color: #fff;
 
       img {
@@ -80,6 +84,7 @@
       background-color: $blue-light;
     }
   }
+
   // Search-page
   // -----------
 
@@ -89,10 +94,12 @@
 
   .app-MapToggle {
     background-color: $blue-light;
+
     button {
       background-color: $blue-light;
       border-color: $blue-light;
     }
+
     button:hover,
     button:active {
       background-color: darken($blue-light, 5);
@@ -128,18 +135,23 @@
   // --------------------
 
   .availability-view {
-    .top-left, .date-selector {
+
+    .top-left,
+    .date-selector {
       background-color: $blue;
     }
+
     .reservation {
       background-color: $blue;
 
       &-link:hover {
         text-decoration: none;
       }
+
       &.requested {
         background-color: $warning;
       }
+
       &.disabled {
         background-color: $red;
       }
@@ -165,11 +177,13 @@
         margin-top: 20px;
         margin-right: 10px;
       }
+
       .eu-vipuvoimaa-logo {
         height: 60px;
         margin-top: 20px;
         margin-right: 10px;
       }
+
       .eakr-logo {
         height: 80px;
         margin-top: 20px;
@@ -184,11 +198,18 @@
       background-image: url('../../../../shared/logo/vantaa-logo.png');
     }
   }
+
   .app-DatePickerControl__modal-header,
   .app-PurposeControl__modal-header,
   .app-PositionControl__modal-header,
   .app-PeopleCapacityControl__modal-header {
-    h1, h2, h3, h4, h5, h6 {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       color: white;
     }
   }

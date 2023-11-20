@@ -5,6 +5,7 @@ import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsA
 import { isAdminSelector } from 'state/selectors/authSelectors';
 import { userFavouriteResourcesSelector, unitsSelector } from 'state/selectors/dataSelectors';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
+import { fontSizeSelector } from '../../state/selectors/accessibilitySelectors';
 
 const reservationsSelector = state => state.ui.pages.manageReservations.results;
 
@@ -30,6 +31,7 @@ const manageReservationsPageSelector = createStructuredSelector({
   units: unitsArraySelector,
   reservations: reservationsSelector,
   reservationsTotalCount: reservationsCountSelector,
+  fontSize: fontSizeSelector,
 });
 
 export default manageReservationsPageSelector;

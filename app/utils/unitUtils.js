@@ -14,13 +14,13 @@ function getServiceMapUrl(unit, currentLanguage) {
 
   switch (currentLanguage) {
     case 'sv':
-      return `https://servicekarta.turku.fi/unit/${unit.mapServiceId}#!route-details`;
+      return `https://palvelukartta.turku.fi/sv/unit/${unit.mapServiceId}`;
     case 'fi':
-      return `https://palvelukartta.turku.fi/unit/${unit.mapServiceId}#!route-details`;
+      return `https://palvelukartta.turku.fi/fi/unit/${unit.mapServiceId}`;
     case 'en':
-      return `https://servicemap.turku.fi/unit/${unit.mapServiceId}#!route-details`;
+      return `https://palvelukartta.turku.fi/en/unit/${unit.mapServiceId}`;
     default:
-      return `https://palvelukartta.turku.fi/unit/${unit.mapServiceId}#!route-details`;
+      return `https://palvelukartta.turku.fi/unit/${unit.mapServiceId}`;
   }
 }
 

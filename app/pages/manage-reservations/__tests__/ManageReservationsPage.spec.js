@@ -17,6 +17,7 @@ import PageWrapper from '../../PageWrapper';
 import Reservation from 'utils/fixtures/Reservation';
 import { getEditReservationUrl } from 'utils/reservationUtils';
 import PageResultsText from '../PageResultsText';
+import MassCancelModal from '../../../shared/modals/reservation-mass-cancel/MassCancelModal';
 
 
 describe('ManageReservationsFilters', () => {
@@ -41,6 +42,7 @@ describe('ManageReservationsFilters', () => {
     reservationsTotalCount: 0,
     isFetchingReservations: false,
     isFetchingUnits: false,
+    fontSize: '__font-size-small',
   };
 
   function getWrapper(props) {
@@ -61,6 +63,16 @@ describe('ManageReservationsFilters', () => {
       const heading = getWrapper().find('.app-ManageReservationsPage__filters').find('h1');
       expect(heading).toHaveLength(1);
       expect(heading.text()).toBe('ManageReservationsPage.title');
+    });
+
+    test('mass cancel button', () => {
+      const wrapper = getWrapper();
+      const massCancelButton = wrapper.find('.app-ManageReservationsPage__filters').find('Button');
+      expect(massCancelButton).toHaveLength(1);
+      expect(massCancelButton.prop('id')).toBe('cancel-reservations-btn');
+      expect(massCancelButton.prop('onClick')).toBe(wrapper.instance().handleShowMassCancel);
+      expect(massCancelButton.prop('className')).toBe(defaultProps.fontSize);
+      expect(massCancelButton.children().at(0).text()).toBe('common.cancelReservations');
     });
 
     test('ManageReservationsFilters', () => {
@@ -142,6 +154,16 @@ describe('ManageReservationsFilters', () => {
       const cancelModal = getWrapper().find(ReservationCancelModal);
       expect(cancelModal).toHaveLength(1);
     });
+
+    test('MassCancelModal', () => {
+      const wrapper = getWrapper();
+      const instance = wrapper.instance();
+      const massCancelModal = wrapper.find(MassCancelModal);
+      expect(massCancelModal).toHaveLength(1);
+      expect(massCancelModal.prop('onCancelSuccess')).toBe(instance.handleFetchReservations);
+      expect(massCancelModal.prop('onClose')).toBe(instance.handleHideMassCancel);
+      expect(massCancelModal.prop('show')).toBe(instance.state.showMassCancel);
+    });
   });
 
   describe('functions', () => {
@@ -150,6 +172,22 @@ describe('ManageReservationsFilters', () => {
       actionFunctions.forEach((action) => {
         action.mockClear();
       });
+    });
+
+    describe('handleShowMassCancel', () => {
+      const instance = getWrapper().instance();
+      const spy = jest.spyOn(instance, 'setState');
+      instance.handleShowMassCancel();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy.mock.calls[0][0]).toStrictEqual({ showMassCancel: true });
+    });
+
+    describe('handleHideMassCancel', () => {
+      const instance = getWrapper().instance();
+      const spy = jest.spyOn(instance, 'setState');
+      instance.handleHideMassCancel();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy.mock.calls[0][0]).toStrictEqual({ showMassCancel: false });
     });
 
     describe('componentDidMount', () => {

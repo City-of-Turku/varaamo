@@ -12,6 +12,24 @@
     margin: 32px 0 16px;
   }
 
+  #cancel-btn-container {
+    text-align: right;
+
+    @media(max-width:$screen-sm-min) {
+      text-align: initial;
+    }
+
+    #cancel-reservations-btn {
+      margin-top: 32px;
+
+      @media(max-width:$screen-sm-min) {
+        margin-top: 0px;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+
   &__filters {
     background-color: #dedfe1;
     padding: 0 0 40px;
@@ -19,5 +37,6 @@
 
   &__list {
     margin-top: 20px;
+    margin-bottom: 32px;
   }
 }

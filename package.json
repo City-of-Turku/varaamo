@@ -24,7 +24,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "autoprefixer": "9.4.7",
+    "autoprefixer": "10.4.16",
     "babel-loader": "8.0.5",
     "bootstrap-sass": "3.4.1",
     "classnames": "2.2.5",
@@ -53,8 +53,8 @@
     "nocache": "2.0.0",
     "node-sass": "8.0.0",
     "normalizr": "2.2.1",
-    "oidc-client": "1.9.1",
-    "postcss-loader": "3.0.0",
+    "oidc-client": "1.11.5",
+    "postcss-loader": "7.3.3",
     "query-string": "4.2.3",
     "rc-slider": "8.3.1",
     "react": "16.8.4",
@@ -85,7 +85,7 @@
     "redux-oidc": "3.1.5",
     "redux-thunk": "2.2.0",
     "reselect": "2.5.4",
-    "resolve-url-loader": "4.0.0",
+    "resolve-url-loader": "5.0.0",
     "sass-loader": "13.2.0",
     "seamless-immutable": "7.1.4",
     "serialize-javascript": "4.0.0",
@@ -126,6 +126,12 @@
     "webpack-dev-middleware": "6.0.1",
     "webpack-hot-middleware": "2.25.3"
   },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead"
+  ],
   "scripts": {
     "build": "./node_modules/.bin/webpack --config config/webpack.production.js",
     "build:win": ".\\node_modules\\.bin\\webpack --config config\\webpack.production.js",

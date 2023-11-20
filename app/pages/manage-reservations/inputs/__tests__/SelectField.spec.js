@@ -42,7 +42,17 @@ describe('SelectField', () => {
         const label = 'test-label';
         const controlLabel = getWrapper({ label }).find(ControlLabel);
         expect(controlLabel).toHaveLength(1);
-        expect(controlLabel.props().children).toBe(label);
+        expect(controlLabel.props().children).toStrictEqual(['test-label', undefined]);
+      });
+
+      test('when prop label is given and the field is required', () => {
+        const label = 'test-label';
+        const controlLabel = getWrapper({ label, isRequired: true }).find(ControlLabel);
+        expect(controlLabel).toHaveLength(1);
+        expect(controlLabel.props().children).toStrictEqual([
+          'test-label',
+          <span aria-hidden>*</span>,
+        ]);
       });
 
       test('when prop label is not given', () => {
@@ -66,6 +76,21 @@ describe('SelectField', () => {
       expect(select.prop('options')).toBe(defaultProps.options);
       expect(select.prop('placeholder')).toBe(defaultProps.placeholder);
       expect(select.prop('value')).toBe(getOption(defaultProps.value, defaultProps.options));
+    });
+
+    test('HelpBlock is not rendered when error is not given', () => {
+      const helpBlock = getWrapper().find('.has-error');
+      expect(helpBlock).toHaveLength(0);
+    });
+
+    test('HelpBlock is rendered when error is given', () => {
+      const error = 'MassCancel.error.required.resource';
+      const wrapper = getWrapper({ error });
+      const helpBlock = wrapper.find('.has-error');
+      expect(helpBlock).toHaveLength(1);
+      expect(helpBlock.children().at(0).text()).toBe(error);
+      expect(helpBlock.prop('id')).toBe(`${defaultProps.id}-error`);
+      expect(helpBlock.prop('role')).toBe('alert');
     });
   });
 });

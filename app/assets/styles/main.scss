@@ -1,4 +1,7 @@
+/* To avoid importing unneeded fonts especially outside hosted google fonts,
+  simply bring over needed brand colors etc. into app variables file
 @import '~hel-bootstrap-3/src/sass/helsinki-variables';
+*/
 @import './application-variables';
 @import '~hel-bootstrap-3/src/sass/theme-bootstrap-variables';
 

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
+import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 import Select from 'react-select';
 
 import injectT from '../../../i18n/injectT';
@@ -29,11 +30,18 @@ function SelectField({
   placeholder = t('common.select'),
   options,
   value,
+  isRequired,
+  error,
 }) {
   return (
     <div className="app-SelectField">
       <FormGroup controlId={id}>
-        {label && <ControlLabel>{label}</ControlLabel>}
+        {label && (
+        <ControlLabel>
+          {label}
+          {isRequired && <span aria-hidden>*</span>}
+        </ControlLabel>
+        )}
         <Select
           className="app-Select"
           classNamePrefix="app-Select"
@@ -54,6 +62,15 @@ function SelectField({
           placeholder={placeholder}
           value={getOption(value, options)}
         />
+        {error && (
+          <HelpBlock
+            className="has-error"
+            id={`${id}-error`}
+            role="alert"
+          >
+            {t(error)}
+          </HelpBlock>
+        )}
       </FormGroup>
     </div>
   );
@@ -74,6 +91,8 @@ SelectField.propTypes = {
     PropTypes.array,
     PropTypes.number,
   ]),
+  isRequired: PropTypes.bool,
+  error: PropTypes.string,
 };
 
 export default injectT(SelectField);
