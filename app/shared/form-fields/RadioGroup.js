@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
-import { HelpBlock } from 'react-bootstrap';
+import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 
 
 function RadioGroup({ legend, legendHint, radioOptions }) {
