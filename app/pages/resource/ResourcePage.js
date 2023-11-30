@@ -35,6 +35,7 @@ import {
   removeResourceOutlookCalendarLink,
   fetchResourceOutlookCalendarLinks,
 } from 'resource-outlook-linker/actions';
+import NextFreeTimesButton from './next-free-times-button/NextFreeTimesButton';
 
 const ResourceMap = lazy(() => import('shared/resource-map'));
 
@@ -335,6 +336,12 @@ class UnconnectedResourcePage extends Component {
                         disableDays={this.disableDays}
                         onDateChange={this.handleDateChange}
                         resourceId={resource.id}
+                        selectedDate={date}
+                      />
+                      <NextFreeTimesButton
+                        addNotification={actions.addNotification}
+                        handleDateChange={this.handleDateChange}
+                        resource={resource}
                         selectedDate={date}
                       />
                       <ReservationCalendar
