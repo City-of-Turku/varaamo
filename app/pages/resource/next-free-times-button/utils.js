@@ -193,8 +193,9 @@ export function hasFreeTimesDesktop(resource, selectedDate) {
   } = resource;
 
   // get all opening hours of the week that are not in the past
+  const nowMoment = moment();
   const weekDates = getAllDatesOfWeek(selectedDate).filter(
-    date => !moment(date).isBefore(moment()));
+    date => moment(date).isSameOrAfter(nowMoment, 'day'));
 
   if (weekDates.length < 1) {
     return false;
