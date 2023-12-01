@@ -75,9 +75,12 @@ function mapReservationsByDate(reservations) {
  */
 export function hasFreeTimeInDay(opens, closes, reservations, minPeriod, slotSize, cooldown) {
   const slots = getTimeSlots(opens, closes, slotSize, reservations, [], cooldown);
+  const now = moment();
+  const slotsAfterNow = now.isSame(opens, 'day') ? slots.filter(slot => moment(slot.end).isAfter(now)) : slots;
+
   // when slot size and min period matches, simply return first free slot
   if (slotSize === minPeriod) {
-    return slots.some(slot => !slot.reserved && !slot.onCooldown);
+    return slotsAfterNow.some(slot => !slot.reserved && !slot.onCooldown);
   }
 
   // when slot size and min period are different, check if min period amount of slots are free
@@ -86,10 +89,10 @@ export function hasFreeTimeInDay(opens, closes, reservations, minPeriod, slotSiz
   const numSlotsInMinPeriod = Math.floor(
     minPeriodDuration.asMinutes() / slotSizeDuration.asMinutes());
 
-  for (let i = 0; i < slots.length; i += 1) {
-    const slot = slots[i];
+  for (let i = 0; i < slotsAfterNow.length; i += 1) {
+    const slot = slotsAfterNow[i];
     if (!slot.reserved && !slot.onCooldown) {
-      if (i + numSlotsInMinPeriod - 1 < slots.length) {
+      if (i + numSlotsInMinPeriod - 1 < slotsAfterNow.length) {
         const minPeriodSlots = [];
         for (let j = 0; j < numSlotsInMinPeriod; j += 1) {
           minPeriodSlots.push(slots[i + j]);
