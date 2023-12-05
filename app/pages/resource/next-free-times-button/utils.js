@@ -115,18 +115,12 @@ export function hasFreeTimeInDay(opens, closes, reservations, minPeriod, slotSiz
  * @returns {string} 'YYYY-MM-DD' or '' if no free slot is found.
  */
 export function findNextFreeSlotDate(resource, selectedDate) {
-  const today = moment().format('YYYY-MM-DD');
-  const startingDate = selectedDate && moment(selectedDate).isBefore(today)
-    ? today : selectedDate;
-
   const {
-    minPeriod, slotSize, cooldown, openingHours, reservations
+    minPeriod, slotSize, cooldown, openingHours, reservations, reservableAfter, reservableBefore
   } = resource;
 
-  const futureOpeningHours = openingHours.filter(
-    oh => moment(oh.date).isAfter(startingDate) && oh.opens && oh.closes
-  );
-
+  const startingDate = getStartingDate(selectedDate, reservableAfter);
+  const futureOpeningHours = getFutureOpeningHrs(openingHours, startingDate, reservableBefore);
   const reservationsByDates = mapReservationsByDate(reservations);
 
   for (let i = 0; i < futureOpeningHours.length; i += 1) {
@@ -143,6 +137,46 @@ export function findNextFreeSlotDate(resource, selectedDate) {
 }
 
 /**
+ * Returns the time that is most in the future. Date options are
+ * selectedDate, reservableAfter and today.
+ * @param {string} selectedDate e.g. 'YYYY-MM-DD'
+ * @param {string} reservableAfter timestamp
+ * @returns {string} 'YYYY-MM-DD'
+ */
+export function getStartingDate(selectedDate, reservableAfter) {
+  if (reservableAfter) {
+    const dates = [moment(), moment(selectedDate), moment(reservableAfter)];
+    return moment.max(dates).format('YYYY-MM-DD');
+  }
+  const dates = [moment(), moment(selectedDate)];
+  return moment.max(dates).format('YYYY-MM-DD');
+}
+
+/**
+ * Filters and returns opening hours that are same or after starting date, before
+ * given reservableBefore and have opens and closes times.
+ * @param {object[]} openingHrs
+ * @param {string} startingDate e.g. 'YYYY-MM-DD'
+ * @param {string} reservableBefore timestamp
+ * @returns {object[]} filtered opening hours
+ */
+export function getFutureOpeningHrs(openingHrs, startingDate, reservableBefore) {
+  if (reservableBefore) {
+    return openingHrs.filter(oh => {
+      const hasOpensCloses = oh.opens && oh.closes;
+      const dateAfterStart = moment(oh.date).isSameOrAfter(startingDate, 'day');
+      const dateBeforeReservableBefore = moment(oh.date).isBefore(reservableBefore, 'day');
+      return hasOpensCloses && dateAfterStart && dateBeforeReservableBefore;
+    });
+  }
+  return openingHrs.filter(oh => {
+    const hasOpensCloses = oh.opens && oh.closes;
+    const dateAfterStart = moment(oh.date).isSameOrAfter(startingDate, 'day');
+    return hasOpensCloses && dateAfterStart;
+  });
+}
+
+/**
  * Checks if there is free time to reserve within today + 2 days range
  * @param {object} resource
  * @param {string} selectedDate e.g. 'YYYY-MM-DD'
@@ -150,7 +184,7 @@ export function findNextFreeSlotDate(resource, selectedDate) {
  */
 export function hasFreeTimesMobile(resource, selectedDate) {
   const {
-    minPeriod, slotSize, cooldown, openingHours, reservations
+    minPeriod, slotSize, cooldown, openingHours, reservations, reservableAfter, reservableBefore
   } = resource;
 
   const startIndex = openingHours.findIndex(oh => oh.date === selectedDate);
@@ -169,10 +203,14 @@ export function hasFreeTimesMobile(resource, selectedDate) {
   if (nextOpeningHours.some(oh => !oh)) {
     return false;
   }
+
+  const filteredOpeningHours = filterByReservableAfterBefore(
+    nextOpeningHours, reservableAfter, reservableBefore);
+
   const reservationsByDates = mapReservationsByDate(reservations);
 
-  for (let i = 0; i < nextOpeningHours.length; i += 1) {
-    const oh = nextOpeningHours[i];
+  for (let i = 0; i < filteredOpeningHours.length; i += 1) {
+    const oh = filteredOpeningHours[i];
     const reservationsInDate = reservationsByDates.get(oh.date) || { reservations: [] };
     if (hasFreeTimeInDay(
       oh.opens, oh.closes, reservationsInDate, minPeriod, slotSize, cooldown)
@@ -192,7 +230,7 @@ export function hasFreeTimesMobile(resource, selectedDate) {
  */
 export function hasFreeTimesDesktop(resource, selectedDate) {
   const {
-    minPeriod, slotSize, cooldown, openingHours, reservations
+    minPeriod, slotSize, cooldown, openingHours, reservations, reservableAfter, reservableBefore
   } = resource;
 
   // get all opening hours of the week that are not in the past
@@ -214,10 +252,13 @@ export function hasFreeTimesDesktop(resource, selectedDate) {
     return false;
   }
 
+  const filteredOpeningHours = filterByReservableAfterBefore(
+    nextOpeningHours, reservableAfter, reservableBefore);
+
   const reservationsByDates = mapReservationsByDate(reservations);
 
-  for (let i = 0; i < nextOpeningHours.length; i += 1) {
-    const oh = nextOpeningHours[i];
+  for (let i = 0; i < filteredOpeningHours.length; i += 1) {
+    const oh = filteredOpeningHours[i];
     const reservationsInDate = reservationsByDates.get(oh.date) || { reservations: [] };
     if (hasFreeTimeInDay(
       oh.opens, oh.closes, reservationsInDate, minPeriod, slotSize, cooldown)
@@ -312,4 +353,33 @@ export function createFoundNotification(addNotification, t, date) {
  */
 export function formatToDateObject(date) {
   return moment(date).utc(true).toDate();
+}
+
+/**
+ * Filters opening hours by reservableAfter and reservableBefore.
+ * @param {object[]} openingHrs
+ * @param {string} reservableAfter timestamp
+ * @param {string} reservableBefore timestamp
+ * @returns {object[]} filtered opening hours. If reservableAfter and reservableBefore are
+ * not given, returns the same opening hours.
+ */
+export function filterByReservableAfterBefore(openingHrs, reservableAfter, reservableBefore) {
+  if (!reservableAfter && !reservableBefore) {
+    return openingHrs;
+  }
+
+  return openingHrs.filter(oh => {
+    if (!oh || !oh.opens) {
+      return false;
+    }
+    const opensMoment = moment(oh.opens);
+    if (reservableAfter && !reservableBefore) {
+      return opensMoment.isSameOrAfter(reservableAfter, 'day');
+    }
+    if (!reservableAfter && reservableBefore) {
+      return opensMoment.isBefore(reservableBefore, 'day');
+    }
+    return opensMoment.isSameOrAfter(reservableAfter, 'day')
+      && opensMoment.isBefore(reservableBefore, 'day');
+  });
 }
