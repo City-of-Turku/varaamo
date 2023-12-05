@@ -431,6 +431,7 @@
   "ResourceFreeTime.buttonLabel": "Hae seuraavaa vapaata aikaa",
   "ResourceFreeTime.notificationFound": "Vapaata aikaa löytyi päivältä",
   "ResourceFreeTime.notificationNotFound": "Vapaata aikaa ei löytynyt",
+  "ResourceFreeTime.searchingText": "Haetaan...",
   "ResourceFreeTime.srHelpText": "Valitulla päivämäärällä ei ole vapaata aikaa",
   "ResourceHeader.purpose": "Käyttötarkoitus",
   "ResourceHeader.capacity": "Kapasiteetti",

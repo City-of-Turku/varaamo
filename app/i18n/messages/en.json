@@ -431,6 +431,7 @@
   "ResourceFreeTime.buttonLabel": "Search for next free time",
   "ResourceFreeTime.notificationFound": "Free time found on",
   "ResourceFreeTime.notificationNotFound": "No free time found",
+  "ResourceFreeTime.searchingText": "Searching...",
   "ResourceFreeTime.srHelpText": "No free time with currently selected date",
   "ResourceHeader.purpose": "Purpose",
   "ResourceHeader.capacity": "Capacity",

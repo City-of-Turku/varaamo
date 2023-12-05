@@ -433,6 +433,7 @@
   "ResourceFreeTime.buttonLabel": "Sök efter nästa lediga tid",
   "ResourceFreeTime.notificationFound": "Ledig tid hittad den",
   "ResourceFreeTime.notificationNotFound": "Ingen ledig tid hittad",
+  "ResourceFreeTime.searchingText": "Sökande...",
   "ResourceFreeTime.srHelpText": "Ingen ledig tid med det valda datumet",
   "ResourceHeader.purpose": "Ändamål",
   "ResourceHeader.capacity": "Kapacitet",

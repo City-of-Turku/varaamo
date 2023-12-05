@@ -239,7 +239,29 @@ $content-padding: 10px;
   }
 }
 
-.next-free-times-btn {
-  margin-left: 15px;
+.next-free-times {
+  margin-left: 0;
   margin-bottom: 8px;
+
+  @media (min-width: $screen-sm-min) {
+    margin-left: 13px;
+  }
+
+  @media (min-width: $screen-sm-max) {
+    margin-left: 15px;
+  }
+
+  .next-free-times-btn {
+    font-size: inherit;
+  }
+
+  .next-free-times-searching {
+    display: inline;
+    margin-left: 12px;
+
+    @media (max-width: $screen-xs-min) {
+      display: block;
+      margin-left: 0;
+    }
+  }
 }

@@ -83,7 +83,7 @@ function NextFreeTimesButton({
   };
 
   return (
-    <React.Fragment>
+    <div className="next-free-times">
       {!viewHasFreeTime && (
         <p className="visually-hidden">{t('ResourceFreeTime.srHelpText')}</p>
       )}
@@ -94,7 +94,15 @@ function NextFreeTimesButton({
       >
         {t('ResourceFreeTime.buttonLabel')}
       </Button>
-    </React.Fragment>
+      {(isSearching) && (
+        <p
+          className="next-free-times-searching"
+          role="alert"
+        >
+          {t('ResourceFreeTime.searchingText')}
+        </p>
+      )}
+    </div>
   );
 }
 
