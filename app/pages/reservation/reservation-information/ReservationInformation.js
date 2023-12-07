@@ -186,6 +186,9 @@ class ReservationInformation extends Component {
             <p>{t('ConfirmReservationModal.formInfo')}</p>
           </React.Fragment>
         )}
+        {!resource.needManualConfirmation && (
+          <p>{t('common.starFieldsAreRequired')}</p>
+        )}
       </div>
     );
   }

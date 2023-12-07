@@ -102,6 +102,7 @@
   "common.save": "Tallenna",
   "common.saving": "Tallennetaan...",
   "common.select": "Valitse",
+  "common.starFieldsAreRequired": "Tähdellä (*) merkityt tiedot ovat pakollisia.",
   "common.taxesTotal": "Verot yhteensä",
   "common.taxlessTotal": "Veroton yhteensä",
   "common.total": "yhteensä",

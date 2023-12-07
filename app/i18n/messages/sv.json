@@ -102,6 +102,7 @@
   "common.save": "Spara",
   "common.saving": "Sparas...",
   "common.select": "Välj",
+  "common.starFieldsAreRequired": "Uppgifterna markerade med en asterisk (*) är obligatoriska.",
   "common.taxesTotal": "Totala skatter",
   "common.taxlessTotal": "Skattefritt totalt",
   "common.total": "totalt",

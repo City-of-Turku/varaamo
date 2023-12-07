@@ -65,6 +65,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     const infoTexts = getWrapper({ resource }).find('.app-ReservationInformation__info-texts');
     expect(infoTexts).toHaveLength(1);
     expect(infoTexts.text()).toContain('common.contactPurposeHelp');
+    expect(infoTexts.text()).toContain('common.starFieldsAreRequired');
   });
 
   test('renders an ReservationInformationForm element', () => {

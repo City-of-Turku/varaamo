@@ -102,6 +102,7 @@
   "common.save": "Save",
   "common.saving": "Saving...",
   "common.select": "Select",
+  "common.starFieldsAreRequired": "The fields marked with an asterisk (*) are mandatory.",
   "common.taxesTotal": "Total taxes",
   "common.taxlessTotal": "Tax-free total",
   "common.total": "total",
