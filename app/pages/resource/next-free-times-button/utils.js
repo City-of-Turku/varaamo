@@ -19,17 +19,13 @@ export async function getNextFreeTimes(selectedDate, resource) {
   const now = moment();
   const fromMoment = now.isAfter(selectedDate) ? now : moment(selectedDate);
   const fetchedResource = await fetchResource(resource.id, fromMoment);
-  if (!fetchResource) {
+  if (!fetchedResource) {
     return '';
   }
 
-  const date = findNextFreeSlotDate(fetchedResource, selectedDate);
+  const date = findNextFreeSlotDate(fetchedResource, fromMoment.format('YYYY-MM-DD'));
 
-  if (!date || fromMoment.isSame(date, 'day')) {
-    return '';
-  }
-
-  return date;
+  return date || '';
 }
 
 /**
@@ -204,8 +200,15 @@ export function hasFreeTimesMobile(resource, selectedDate) {
     return false;
   }
 
+  // remove unreservable dates that are in the past and outside reservable after/before
+  const nowMoment = moment();
   const filteredOpeningHours = filterByReservableAfterBefore(
-    nextOpeningHours, reservableAfter, reservableBefore);
+    nextOpeningHours, reservableAfter, reservableBefore)
+    .filter(oh => moment(oh.date).isSameOrAfter(nowMoment, 'day'));
+
+  if (filteredOpeningHours.length < 1) {
+    return false;
+  }
 
   const reservationsByDates = mapReservationsByDate(reservations);
 
