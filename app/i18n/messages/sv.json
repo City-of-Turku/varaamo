@@ -409,7 +409,7 @@
   "ResourceAvailability.available": "Ledigt nu",
   "ResourceAvailability.availableAt": "Ledig kl. {time}",
   "ResourceAvailability.availableTime": "Ledig {hours} {hours, plural, one {timme} other {timmar}}",
-  "ResourceAvailability.closed": "Stängt",
+  "ResourceAvailability.closed": "Inte tillgängligt på vald dag",
   "ResourceAvailability.reserved": "Bokat hela dagen",
   "ResourceAvailability.reservingRestricted": "Kan inte bokas",
   "ResourceCalendar.button.imageAlt": "Datumnväljare",

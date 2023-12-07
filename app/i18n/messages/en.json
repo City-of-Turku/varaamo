@@ -407,7 +407,7 @@
   "ResourceAvailability.available": "Available right now",
   "ResourceAvailability.availableAt": "Available at {time}",
   "ResourceAvailability.availableTime": "{hours} {hours, plural, one {hour} other {hours}} available",
-  "ResourceAvailability.closed": "Closed",
+  "ResourceAvailability.closed": "Not available on selected day",
   "ResourceAvailability.reserved": "Reserved for the whole day",
   "ResourceAvailability.reservingRestricted": "Not available for reservation",
   "ResourceCalendar.button.imageAlt": "Date picker",

@@ -407,7 +407,7 @@
   "ResourceAvailability.available": "Heti vapaa",
   "ResourceAvailability.availableAt": "Vapautuu klo {time}",
   "ResourceAvailability.availableTime": "Vapaata {hours} {hours, plural, one {tunti} other {tuntia}}",
-  "ResourceAvailability.closed": "Suljettu",
+  "ResourceAvailability.closed": "Ei vapaata valittuna päivänä",
   "ResourceAvailability.reserved": "Varattu koko päivän",
   "ResourceAvailability.reservingRestricted": "Ei varattavissa",
   "ResourceCalendar.button.imageAlt": "Päivämäärävalitsin",
