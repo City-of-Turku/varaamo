@@ -75,6 +75,7 @@
   "common.ok": "OK",
   "common.optionsAllLabel": "Alla",
   "common.orderDetailsLabel": "Orderdetaljer",
+  "common.orderNumber": "Ordernummer",
   "common.payerInformationLabel": "Betalarens information",
   "common.paymentAborted": "Betalningen avbröts",
   "common.paymentMethod": "Betalningsmetod",

@@ -18,6 +18,7 @@ describe('shared/modals/reservation-info/ReservationOrderInfo', () => {
       orderLines: [decamelizeKeys(OrderLine.build({ product: Product.build(), quantity: 1 }))],
       price: '5.00',
       paymentMethod: constants.PAYMENT_METHODS.ONLINE,
+      id: 'test-id',
     },
     renderHeading: () => {},
     renderInfoRow: () => {},
@@ -100,6 +101,11 @@ describe('shared/modals/reservation-info/ReservationOrderInfo', () => {
           expect(renderInfoRow).not.toHaveBeenCalledWith('common.paymentMethod', 'common.paymentMethod.online');
           expect(renderInfoRow).not.toHaveBeenCalledWith('common.paymentMethod', 'common.paymentMethod.cash');
         });
+      });
+
+      test('for order id', () => {
+        getWrapper({ renderInfoRow });
+        expect(renderInfoRow).toHaveBeenCalledWith('common.orderNumber', defaultProps.order.id);
       });
     });
   });

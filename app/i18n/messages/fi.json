@@ -75,6 +75,7 @@
   "common.ok": "Valmis",
   "common.optionsAllLabel": "Kaikki",
   "common.orderDetailsLabel": "Tilaustiedot",
+  "common.orderNumber": "Tilausnumero",
   "common.payerInformationLabel": "Maksajan tiedot",
   "common.paymentAborted": "Maksu keskeytyi",
   "common.paymentMethod": "Maksutapa",

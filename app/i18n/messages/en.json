@@ -75,6 +75,7 @@
   "common.ok": "OK",
   "common.optionsAllLabel": "All",
   "common.orderDetailsLabel": "Order details",
+  "common.orderNumber": "Order number",
   "common.payerInformationLabel": "Payer information",
   "common.paymentAborted": "Payment aborted",
   "common.paymentMethod": "Payment method",
