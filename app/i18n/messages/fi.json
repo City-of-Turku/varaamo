@@ -89,6 +89,7 @@
   "common.proceedToPayment": "Siirry maksamaan",
   "common.proceedingToPayment": "Siirrytään maksamaan...",
   "common.requested": "Odottaa käsittelyä",
+  "common.reservationCreatedAt": "Varauksen luontiaika",
   "common.reservationTimeLabel": "Varauksen ajankohta",
   "common.reserverAddressLabel": "Osoite",
   "common.reserverEmailAddressLabel": "Sähköposti",

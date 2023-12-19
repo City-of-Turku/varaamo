@@ -11,6 +11,7 @@ import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedReservationEditForm as ReservationEditForm } from './ReservationEditForm';
 import ReservationOrderInfo from './ReservationOrderInfo';
 import constants from '../../../constants/AppConstants';
+import { formatDateTime } from '../../../utils/timeUtils';
 
 describe('shared/modals/reservation-info/ReservationEditForm', () => {
   const resource = Resource.build({ universalField: [UniversalField.build()] });
@@ -220,6 +221,32 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
           test('does not render reservation type', () => {
             expect(getData({ reservation: reservationA, isStaff })).not.toContain('ReservationType.blocked');
             expect(getData({ reservation: reservationB, isStaff })).not.toContain('ReservationType.normal');
+          });
+        });
+      });
+
+      describe('reservation created at', () => {
+        const reservationA = Reservation.build({ createdAt: '2023-11-20T15:00:00' });
+        const reservationB = Reservation.build();
+
+        describe('when user is staff', () => {
+          const isStaff = true;
+
+          test('is not rendered when created at is not included in reservation', () => {
+            expect(getData({ reservation: reservationB, isStaff })).not.toContain('common.reservationCreatedAt');
+          });
+          test('is rendered when created at is included in reservation', () => {
+            expect(getData({ reservation: reservationA, isStaff })).toContain('common.reservationCreatedAt');
+            expect(getData({ reservation: reservationA, isStaff })).toContain(formatDateTime(reservationA.createdAt, 'LLLL'));
+          });
+        });
+
+        describe('when user is not staff', () => {
+          const isStaff = false;
+
+          test('is not rendered', () => {
+            expect(getData({ reservation: reservationB, isStaff })).not.toContain('common.reservationCreatedAt');
+            expect(getData({ reservation: reservationA, isStaff })).not.toContain('common.reservationCreatedAt');
           });
         });
       });

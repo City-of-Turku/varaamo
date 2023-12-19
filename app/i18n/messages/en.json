@@ -89,6 +89,7 @@
   "common.proceedToPayment": "Proceed to payment",
   "common.proceedingToPayment": "Proceeding to payment...",
   "common.requested": "Waiting for processing",
+  "common.reservationCreatedAt": "Reservation created at",
   "common.reservationTimeLabel": "Time and date of the reservation",
   "common.reserverAddressLabel": "Address",
   "common.reserverEmailAddressLabel": "E-mail",

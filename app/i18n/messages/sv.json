@@ -89,6 +89,7 @@
   "common.proceedToPayment": "Fortsätt till betalning",
   "common.proceedingToPayment": "Fortsätter till betalning...",
   "common.requested": "Behandlas",
+  "common.reservationCreatedAt": "Bokning skapande tid",
   "common.reservationTimeLabel": "Tidpunkt för bokning",
   "common.reserverAddressLabel": "Adress",
   "common.reserverEmailAddressLabel": "E-post",
