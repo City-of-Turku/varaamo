@@ -119,6 +119,8 @@
   "common.yes": "Kyllä",
   "SelectControl.noOptions": "Ei valintoja",
   "SelectControl.clearLabel": "Poista valinta",
+  "ConfirmCashPaymentModal.title": "Käteismaksun hyväksyminen",
+  "ConfirmCashPaymentModal.body": "Haluatko varmasti hyväksyä käteismaksun?",
   "ConfirmReservationModal.beforeText": "Alkuperäinen varausaika:",
   "ConfirmReservationModal.editTitle": "Varauksen muuttaminen",
   "ConfirmReservationModal.formInfo": "Täytä vielä seuraavat tiedot alustavaa varausta varten. Tähdellä (*) merkityt tiedot ovat pakollisia.",

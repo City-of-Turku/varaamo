@@ -46,7 +46,8 @@ function ManageReservationsDropdown({
         )}
         {userCanModify && isWaitingForCashPayment && (
           <MenuItem
-            onClick={() => onEditReservation(reservation, reservationStates.CONFIRMED)}
+            onClick={
+              () => onEditReservation(reservation, reservationStates.WAITING_FOR_CASH_PAYMENT)}
           >
             {t('common.confirmCashPayment')}
           </MenuItem>

@@ -119,6 +119,8 @@
   "common.yes": "Ja",
   "SelectControl.noOptions": "Inga val",
   "SelectControl.clearLabel": "Ta bort val",
+  "ConfirmCashPaymentModal.title": "Godkännande av kontantbetalning",
+  "ConfirmCashPaymentModal.body": "Är du säker på att du vill godkänna kontantbetalning?",
   "ConfirmReservationModal.beforeText": "Ursprunglig bokningstid",
   "ConfirmReservationModal.editTitle": "Ändra bokningen",
   "ConfirmReservationModal.formInfo": "Fyll ännu i följande uppgifter för den preliminära bokningen. Uppgifterna markerade med en asterisk (*) är obligatoriska.",

@@ -119,6 +119,8 @@
   "common.yes": "Yes",
   "SelectControl.noOptions": "No options",
   "SelectControl.clearLabel": "Clear selection",
+  "ConfirmCashPaymentModal.title": "Cash payment approving",
+  "ConfirmCashPaymentModal.body": "Are you sure you want to approve the cash payment?",
   "ConfirmReservationModal.beforeText": "Original reservation time:",
   "ConfirmReservationModal.editTitle": "Changing reservation",
   "ConfirmReservationModal.formInfo": "Please fill in the following data for your preliminary reservation. The fields marked with an asterisk (*) are mandatory.",

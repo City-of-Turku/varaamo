@@ -39,6 +39,7 @@ import ReservationInfoModal from 'shared/modals/reservation-info';
 import ReservationCancelModal from 'shared/modals/reservation-cancel';
 import PageResultsText from './PageResultsText';
 import MassCancelModal from '../../shared/modals/reservation-mass-cancel/MassCancelModal';
+import ConfirmCashModal from '../../shared/modals/reservation-confirm-cash/ConfirmCashModal';
 
 
 class ManageReservationsPage extends React.Component {
@@ -48,6 +49,8 @@ class ManageReservationsPage extends React.Component {
     this.state = {
       showOnlyFilters: [constants.RESERVATION_SHOWONLY_FILTERS.CAN_MODIFY],
       showMassCancel: false,
+      showConfirmCash: false,
+      selectedReservation: null,
     };
 
     this.handleFetchReservations = this.handleFetchReservations.bind(this);
@@ -59,6 +62,9 @@ class ManageReservationsPage extends React.Component {
     this.handleEditReservation = this.handleEditReservation.bind(this);
     this.handleShowMassCancel = this.handleShowMassCancel.bind(this);
     this.handleHideMassCancel = this.handleHideMassCancel.bind(this);
+    this.handleShowConfirmCash = this.handleShowConfirmCash.bind(this);
+    this.handleHideConfirmCash = this.handleHideConfirmCash.bind(this);
+    this.handleConfirmCash = this.handleConfirmCash.bind(this);
   }
 
   handleShowMassCancel() {
@@ -67,6 +73,14 @@ class ManageReservationsPage extends React.Component {
 
   handleHideMassCancel() {
     this.setState({ showMassCancel: false });
+  }
+
+  handleShowConfirmCash(reservation) {
+    this.setState({ showConfirmCash: true, selectedReservation: reservation });
+  }
+
+  handleHideConfirmCash() {
+    this.setState({ showConfirmCash: false, selectedReservation: null });
   }
 
   componentDidMount() {
@@ -165,12 +179,23 @@ class ManageReservationsPage extends React.Component {
       case constants.RESERVATION_STATE.CONFIRMED:
         actions.confirmPreliminaryReservation(reservation);
         break;
+      case constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT:
+        this.handleShowConfirmCash(reservation);
+        break;
       case constants.RESERVATION_STATE.DENIED:
         actions.denyPreliminaryReservation(reservation);
         break;
       default:
         break;
     }
+  }
+
+  // handles confirming cash payments via cash confirm modal onSubmit
+  handleConfirmCash() {
+    const { actions } = this.props;
+    const { selectedReservation } = this.state;
+    actions.confirmPreliminaryReservation(selectedReservation);
+    this.handleHideConfirmCash();
   }
 
   render() {
@@ -190,6 +215,7 @@ class ManageReservationsPage extends React.Component {
     const {
       showOnlyFilters,
       showMassCancel,
+      showConfirmCash,
     } = this.state;
 
     const filters = getFiltersFromUrl(location, false);
@@ -269,6 +295,11 @@ class ManageReservationsPage extends React.Component {
           onCancelSuccess={this.handleFetchReservations}
           onClose={this.handleHideMassCancel}
           show={showMassCancel}
+        />
+        <ConfirmCashModal
+          onClose={this.handleHideConfirmCash}
+          onSubmit={this.handleConfirmCash}
+          show={showConfirmCash}
         />
       </div>
     );
