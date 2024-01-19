@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import Link from 'react-router-dom/Link';
 import { FormattedHTMLMessage } from 'react-intl';
 import classNames from 'classnames';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchPurposes } from 'actions/purposeActions';
 import { injectT } from 'i18n';
@@ -69,7 +70,7 @@ class UnconnectedHomePage extends Component {
 
   render() {
     const {
-      isFetchingPurposes, purposes, t, contrast
+      isFetchingPurposes, purposes, t, contrast, authUserAmr, isAdmin, currentLanguage
     } = this.props;
     return (
       <div className="app-HomePage">
@@ -87,6 +88,18 @@ class UnconnectedHomePage extends Component {
               </Row>
             </div>
           </Loader>
+          {(isAdmin || authUserAmr === 'turku_adfs') && (
+            <div className={`${contrast}`} id="home-feedback-link">
+              <a
+                href={`https://opaskartta.turku.fi/eFeedback/${currentLanguage}/Feedback/30/1039`}
+                rel="noreferrer"
+                target="_blank"
+              >
+                {t('HomePage.feedbackLinkText')}
+                <FAIcon icon={faExternalLinkAlt} />
+              </a>
+            </div>
+          )}
         </PageWrapper>
       </div>
     );
@@ -101,7 +114,9 @@ UnconnectedHomePage.propTypes = {
   history: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
   contrast: PropTypes.string,
-
+  authUserAmr: PropTypes.string.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  currentLanguage: PropTypes.string.isRequired,
 };
 
 UnconnectedHomePage = injectT(UnconnectedHomePage); // eslint-disable-line

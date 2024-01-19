@@ -39,6 +39,7 @@ class MainNavbar extends React.Component {
       t,
       contrast,
       currentLanguage,
+      authUserAmr,
     } = this.props;
 
     const gitbookURL = currentLanguage === 'sv' ? constants.NAV_ADMIN_URLS.gitbook_sv : constants.NAV_ADMIN_URLS.gitbook;
@@ -107,6 +108,17 @@ class MainNavbar extends React.Component {
                 </Fragment>
               )
             }
+            {(isAdmin || authUserAmr === 'turku_adfs') && (
+              <NavItem
+                eventKey="feedback"
+                href={`https://opaskartta.turku.fi/eFeedback/${currentLanguage}/Feedback/30/1039`}
+                rel="noreferrer"
+                target="_blank"
+              >
+                {t('Navbar.feedback')}
+                <FAIcon icon={faExternalLinkAlt} />
+              </NavItem>
+            )}
             <LinkContainer to="/about">
               <NavItem eventKey="about" onClick={() => this.collapseItem()}>
                 {t('Navbar.aboutLink')}
@@ -127,6 +139,7 @@ MainNavbar.propTypes = {
   t: PropTypes.func.isRequired,
   contrast: PropTypes.string,
   currentLanguage: PropTypes.string,
+  authUserAmr: PropTypes.string.isRequired,
 };
 
 export default injectT(MainNavbar);

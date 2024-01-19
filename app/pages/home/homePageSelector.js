@@ -7,6 +7,8 @@ import ActionTypes from 'constants/ActionTypes';
 import { contrastSelector, isLargerFontSizeSelector } from 'state/selectors/accessibilitySelectors';
 import { purposesSelector } from 'state/selectors/dataSelectors';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
+import { authUserAmrSelector, isAdminSelector } from '../../state/selectors/authSelectors';
+import { currentLanguageSelector } from '../../state/selectors/translationSelectors';
 
 const contrastOptionsSelector = state => contrastSelector(state);
 const purposeOptionsSelector = createSelector(
@@ -28,6 +30,9 @@ const homePageSelector = createStructuredSelector({
   isLargerFontSize: isLargerFontSizeSelector,
   purposes: purposeOptionsSelector,
   contrast: contrastOptionsSelector,
+  authUserAmr: authUserAmrSelector,
+  isAdmin: isAdminSelector,
+  currentLanguage: currentLanguageSelector,
 });
 
 export default homePageSelector;

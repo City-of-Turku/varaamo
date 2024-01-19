@@ -13,7 +13,7 @@ $purposeCellHeight: 350px;
 
 
   .app-PageWrapper {
-    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 99.5%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 99.5%, rgba(255, 255, 255, 0) 100%);
 
   }
 
@@ -22,11 +22,13 @@ $purposeCellHeight: 350px;
     padding-top: 30px;
     padding-bottom: 30px;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+
     h1 {
       margin: 2px 0;
     }
+
     &.container {
-      background-color: rgba(0,55,94,0.2);
+      background-color: rgba(0, 55, 94, 0.2);
     }
   }
 
@@ -35,7 +37,7 @@ $purposeCellHeight: 350px;
     display: flex;
     flex-direction: row;
 
-    @media(min-width: $screen-md-min) and (max-width:$screen-md-max){
+    @media(min-width: $screen-md-min) and (max-width:$screen-md-max) {
       padding: 10px 0 0 0;
     }
 
@@ -51,12 +53,13 @@ $purposeCellHeight: 350px;
         max-width: 300px;
       }
     }
+
     button {
       display: inline-block;
       margin-left: 12px;
       text-transform: uppercase;
 
-      @include add-focus($color: white){}
+      @include add-focus($color: white) {}
     }
   }
 
@@ -87,6 +90,7 @@ $purposeCellHeight: 350px;
 
       @media (max-width: $screen-xs-min) {
         height: 130px;
+
         &.large-font {
           height: 150px;
         }
@@ -119,11 +123,15 @@ $purposeCellHeight: 350px;
           flex-direction: row;
         }
 
-        &:hover, &:active, &:focus {
+        &:hover,
+        &:active,
+        &:focus {
           color: $black;
           background-color: $varaamo-secondary;
         }
+
         @include add-focus(4px);
+
         img {
           height: 100%;
           width: 100%;
@@ -169,6 +177,7 @@ $purposeCellHeight: 350px;
           }
         }
       }
+
       &-action {
         @media (max-width: $screen-xs-min) {
           display: flex;
@@ -183,11 +192,43 @@ $purposeCellHeight: 350px;
         @media (max-width: $screen-xs-min) {
           margin-top: 16px;
           margin-bottom: 16px;
+
           &.large-font {
             margin-top: 24px;
             margin-bottom: 24px;
           }
         }
+      }
+    }
+  }
+
+  #home-feedback-link {
+    margin-top: 42px;
+
+    a {
+      display: inline-block;
+      font-size: 1.2em;
+      background-color: $varaamo-secondary;
+      padding: 4px 24px;
+
+      @include box-shadow;
+
+      @include add-focus($color: $black) {}
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: $black;
+      }
+
+      .app-fontAwesome {
+        margin-left: 4px;
+      }
+    }
+
+    &.high-contrast {
+      a {
+        background-color: $white;
       }
     }
   }
@@ -197,11 +238,12 @@ $purposeCellHeight: 350px;
   &__content {
     &.container.high-contrast {
       background-color: $white;
-      color:$black;
+      color: $black;
       text-shadow: none;
 
     }
   }
+
   .app-HomePageContent {
     &__banner {
       &__linkWrapper.high-contrast {

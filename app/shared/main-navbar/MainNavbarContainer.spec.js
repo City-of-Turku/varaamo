@@ -39,5 +39,10 @@ describe('shared/main-navbar/MainNavbarContainer', () => {
       const selected = selector(getState());
       expect(selected.currentLanguage).toBeDefined();
     });
+
+    test('returns authUserAmr', () => {
+      const selected = selector(getState());
+      expect(selected.authUserAmr).toBeDefined();
+    });
   });
 });

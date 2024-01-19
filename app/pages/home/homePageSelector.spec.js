@@ -19,6 +19,18 @@ describe('pages/home/homePageSelector', () => {
     expect(getSelected().isLargerFontSize).toBeDefined();
   });
 
+  test('returns authUserAmr', () => {
+    expect(getSelected().authUserAmr).toBeDefined();
+  });
+
+  test('returns isAdmin', () => {
+    expect(getSelected().isAdmin).toBeDefined();
+  });
+
+  test('returns currentLanguage', () => {
+    expect(getSelected().currentLanguage).toBeDefined();
+  });
+
   describe('purposes', () => {
     function getPurposes(purposes) {
       return getSelected({

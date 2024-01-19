@@ -2,7 +2,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import { clearSearchResults } from 'actions/searchActions';
-import { isAdminSelector, isLoggedInSelector } from 'state/selectors/authSelectors';
+import { isAdminSelector, isLoggedInSelector, authUserAmrSelector } from 'state/selectors/authSelectors';
 import { contrastSelector } from 'state/selectors/accessibilitySelectors';
 import { changeLocale } from 'i18n';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
@@ -15,6 +15,7 @@ export const selector = createStructuredSelector({
   isLoggedIn: isLoggedInSelector,
   contrast: contrastOptionsSelector,
   currentLanguage: currentLanguageSelector,
+  authUserAmr: authUserAmrSelector,
 });
 
 const actions = {
