@@ -192,7 +192,6 @@
     }
   }
 
-  // Fixes to alignment, sizing, borders and text overflow
   .resource-info {
     display: flex;
     align-items: flex-start;
@@ -223,9 +222,12 @@
       max-width: 100%;
       padding-bottom: 3px;
 
+      &:focus-within {
+        outline: 2px solid currentColor;
+      }
+
       a {
         color: $text-color;
-
         font-weight: $headings-font-weight;
       }
     }
