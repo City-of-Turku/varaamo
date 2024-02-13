@@ -9,14 +9,15 @@ import MomentLocaleUtils, {
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import { injectT } from 'i18n';
 import AppConstants from 'constants/AppConstants';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 
 const defaultDateFormat = 'YYYY-MM-DD';
 const localizedDateFormat = 'D.M.YYYY';
 
-export function UnconnectedDatePicker({
-  dateFormat, onChange, currentLocale, value, rest
+function UnconnectedDatePicker({
+  dateFormat, onChange, currentLocale, value, rest, t
 }) {
   const pickerDateFormat = dateFormat || localizedDateFormat;
 
@@ -29,16 +30,22 @@ export function UnconnectedDatePicker({
       dayPickerProps={{
         showOutsideDays: true,
         localeUtils: MomentLocaleUtils,
-        locale: currentLocale
+        locale: currentLocale,
+        todayButton: t('common.today'),
       }}
       format={pickerDateFormat}
       formatDate={formatDate}
+      inputProps={{
+        'aria-label': t('DatePickerControl.buttonLabel')
+      }}
       keepFocus={false}
       onDayChange={date => onChange(formatDate(date, defaultDateFormat))}
       parseDate={parseDate}
       value={new Date(value)}
       {...rest}
-    />
+    >
+      <span className="glyphicon glyphicon-calendar" />
+    </DayPickerInput>
   );
 }
 
@@ -47,7 +54,8 @@ UnconnectedDatePicker.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   currentLocale: PropTypes.string,
-  rest: PropTypes.object
+  rest: PropTypes.object,
+  t: PropTypes.func.isRequired,
 };
 
 UnconnectedDatePicker.defaultProps = {
@@ -58,4 +66,6 @@ const languageSelector = createStructuredSelector({
   currentLocale: currentLanguageSelector
 });
 
-export default connect(languageSelector)(UnconnectedDatePicker);
+UnconnectedDatePicker = injectT(UnconnectedDatePicker);  // eslint-disable-line
+export { UnconnectedDatePicker };
+export default connect(languageSelector)(injectT(UnconnectedDatePicker));

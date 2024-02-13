@@ -107,6 +107,7 @@
   "common.starFieldsAreRequired": "Tähdellä (*) merkityt tiedot ovat pakollisia.",
   "common.taxesTotal": "Verot yhteensä",
   "common.taxlessTotal": "Veroton yhteensä",
+  "common.today": "Tänään",
   "common.total": "yhteensä",
   "common.unit.time.hour": "h",
   "common.unit.time.day": "päivä",

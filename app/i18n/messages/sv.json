@@ -107,6 +107,7 @@
   "common.starFieldsAreRequired": "Uppgifterna markerade med en asterisk (*) är obligatoriska.",
   "common.taxesTotal": "Totala skatter",
   "common.taxlessTotal": "Skattefritt totalt",
+  "common.today": "Idag",
   "common.total": "totalt",
   "common.unit.time.hour": "h",
   "common.unit.time.day": "dag",

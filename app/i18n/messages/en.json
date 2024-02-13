@@ -107,6 +107,7 @@
   "common.starFieldsAreRequired": "The fields marked with an asterisk (*) are mandatory.",
   "common.taxesTotal": "Total taxes",
   "common.taxlessTotal": "Tax-free total",
+  "common.today": "Today",
   "common.total": "total",
   "common.unit.time.hour": "h",
   "common.unit.time.day": "day",

@@ -4,16 +4,17 @@
   @include add-focus;
 
   &::after {
-    $arrow-size: 6px;
-    display: inline-block;
-    content: '';
     position: absolute;
-    top: calc(50% - #{$arrow-size / 2});
-    right: 5px;
-    border-left: $arrow-size solid transparent;
-    border-right: $arrow-size solid transparent;
-    border-top: $arrow-size solid $white;
+    top: 5.5px;
+    right: 4px;
     pointer-events: none;
+    content: '';
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    background: url('/app/assets/icons/calendar.svg');
+    background-size: 26px 26px;
+    filter: invert(100%) sepia(100%) saturate(1%) hue-rotate(285deg) brightness(105%) contrast(101%);
   }
 
   input {
@@ -25,9 +26,10 @@
     background-color: white;
     position: absolute;
     z-index: 100;
-    border: solid 2px $brand-primary;;
+    border: solid 2px $brand-primary;
     padding: 20px;
-    @media (max-width: $screen-xs-max){
+
+    @media (max-width: $screen-xs-max) {
       width: 330px;
       padding-top: 12px;
       padding-left: 8px;
@@ -41,12 +43,17 @@
     max-width: 400px;
     margin: 0 auto;
     width: 100%;
-    @media (max-width: $screen-xs-max){
+
+    @media (max-width: $screen-xs-max) {
       width: 300px;
     }
 
     &:focus {
       outline: none;
+    }
+
+    .DayPicker-wrapper {
+      padding-bottom: 0;
     }
   }
 
@@ -85,7 +92,8 @@
     margin: 0;
     border-collapse: separate;
     width: 100%;
-    @media (max-width: $screen-xs-max){
+
+    @media (max-width: $screen-xs-max) {
       border-collapse: collapse;
     }
   }
@@ -98,27 +106,33 @@
     background-color: $light-gray;
     border-radius: 0;
     font-size: 1.6rem;
-    @media (max-width: $screen-xs-max){
+
+    @media (max-width: $screen-xs-max) {
       font-size: 1.2rem;
     }
 
     &:focus {
       outline: none;
     }
+
     &--available:not(.DayPicker-Day--disabled) {
       background-color: $light-gray;
+
       &.DayPicker-Day--selected {
         background-color: $light-gray;
       }
     }
+
     &--outside {
       color: $medium-gray;
     }
+
     &--disabled {
       cursor: pointer;
       background-color: $medium-gray;
       color: $dark-gray;
     }
+
     &--selected,
     &--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
       color: $white;
@@ -138,6 +152,7 @@
   .DayPicker-Weekdays {
     text-transform: uppercase;
     font-weight: normal;
+
     abbr {
       border: none;
       cursor: default;
@@ -151,5 +166,13 @@
 
   .DayPicker-WeekNumber {
     font-size: 14px;
+  }
+
+  .DayPicker-Footer {
+    text-align: center;
+
+    .DayPicker-TodayButton {
+      color: #0072c6;
+    }
   }
 }
