@@ -8,8 +8,12 @@ import { shallowWithIntl } from 'utils/testUtils';
 import FooterContent from './FooterContent';
 
 describe('shared/footer/FooterContent', () => {
+  const defaultProps = {
+    currentLang: 'fi',
+  };
+
   function getWrapper(props) {
-    return shallowWithIntl(<FooterContent {...props} />);
+    return shallowWithIntl(<FooterContent {...defaultProps} {...props} />);
   }
 
   describe('When there is no customization in use', () => {
