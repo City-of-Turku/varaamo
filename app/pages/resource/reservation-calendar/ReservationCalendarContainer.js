@@ -28,7 +28,7 @@ import ReservationConfirmation from 'shared/reservation-confirmation';
 import recurringReservations from 'state/recurringReservations';
 import { injectT } from 'i18n';
 import { getEditReservationUrl } from 'utils/reservationUtils';
-import { hasMaxReservations, reservingIsRestricted } from 'utils/resourceUtils';
+import { hasMaxReservations, reservingIsRestricted, isStaffForResource } from 'utils/resourceUtils';
 import reservationCalendarSelector from './reservationCalendarSelector';
 import ReservingRestrictedText from './ReservingRestrictedText';
 import TimeSlots from './time-slots';
@@ -155,6 +155,8 @@ export class UnconnectedReservationCalendarContainer extends Component {
     const isOpen = Boolean(timeSlots.length);
     const showTimeSlots = isOpen && !reservingIsRestricted(resource, date);
     const selectedDateSlots = this.getSelectedDateSlots(timeSlots, selected);
+    const isResourceStaff = (isAdmin && resource) ? isStaffForResource(resource) : false;
+
     return (
       <div className="reservation-calendar">
         <h3 className="visually-hidden reservation-calendar__header">{t('ReservationCalendar.header')}</h3>
@@ -162,7 +164,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
           <TimeSlots
             addNotification={debounce(actions.addNotification, 100)}
             // TODO: Im a h@ck, remove me
-            isAdmin={isAdmin}
+            isAdmin={isResourceStaff}
             isEditing={isEditing}
             isFetching={isFetchingResource}
             isLoggedIn={isLoggedIn || resource.authentication === 'unauthenticated'} // count as logged in if no auth needed
