@@ -202,21 +202,23 @@ describe('shared/availability-view/utils', () => {
   });
 
   describe('getTimelineItems', () => {
+    const timeRestrictions = { cooldown: '00:00:00', minPeriod: '00:30:00', maxPeriod: '01:00:00' };
+    const hasStaffRights = true;
     test('returns reservation slots if reservations is undefined', () => {
-      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00Z'), undefined, '1');
+      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00Z'), undefined, '1', timeRestrictions, hasStaffRights);
       expect(actual).toHaveLength(48);
       actual.forEach(item => expect(item.type).toBe('reservation-slot'));
     });
 
     test('returns reservation slots if reservations is empty', () => {
-      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00Z'), [], '1');
+      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00Z'), [], '1', timeRestrictions, hasStaffRights);
       expect(actual).toHaveLength(48);
       actual.forEach(item => expect(item.type).toBe('reservation-slot'));
     });
 
     test('returns one reservation if entire day is a reservation', () => {
       const reservation = { id: 11, begin: '2016-01-01T00:00:00', end: '2016-01-02T00:00:00' };
-      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00'), [reservation], '1');
+      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00'), [reservation], '1', timeRestrictions, hasStaffRights);
       expect(actual).toHaveLength(1);
       expect(actual[0]).toEqual({
         key: '0',
@@ -231,7 +233,7 @@ describe('shared/availability-view/utils', () => {
         { id: 12, begin: '2016-01-01T12:30:00', end: '2016-01-01T20:00:00' },
         { id: 13, begin: '2016-01-01T20:00:00', end: '2016-01-01T20:30:00' },
       ];
-      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00'), reservations, '1');
+      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00'), reservations, '1', timeRestrictions, hasStaffRights);
       const expected = [
         {
           key: '0',
@@ -241,6 +243,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T00:30:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -251,6 +255,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T01:00:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -261,6 +267,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T01:30:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -271,6 +279,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T02:00:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         { key: '4', type: 'reservation', data: reservations[0] },
@@ -282,6 +292,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T10:30:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -292,6 +304,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T11:00:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -302,6 +316,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T11:30:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -312,6 +328,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T12:00:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -322,6 +340,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T12:30:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         { key: '10', type: 'reservation', data: reservations[1] },
@@ -334,6 +354,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T21:00:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -344,6 +366,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T21:30:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -354,6 +378,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T22:00:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -364,6 +390,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T22:30:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -374,6 +402,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T23:00:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -384,6 +414,8 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-01T23:30:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
           },
         },
         {
@@ -394,6 +426,216 @@ describe('shared/availability-view/utils', () => {
             end: moment('2016-01-02T00:00:00').format(),
             resourceId: '1',
             isSelectable: false,
+            hasStaffRights: true,
+            isWithinCooldown: false,
+          },
+        },
+      ];
+      expect(actual).toEqual(expected);
+    });
+
+    test.each([true, false])('returns slots and reservations correctly when there is cooldown and hasStaffRights is %p', hasRights => {
+      const timeRestrictions2 = { cooldown: '01:00:00', minPeriod: '00:30:00', maxPeriod: '01:00:00' };
+      const reservations = [
+        { id: 11, begin: '2016-01-01T02:00:00', end: '2016-01-01T10:00:00' },
+        { id: 12, begin: '2016-01-01T12:30:00', end: '2016-01-01T20:00:00' },
+        { id: 13, begin: '2016-01-01T20:00:00', end: '2016-01-01T20:30:00' },
+      ];
+      const actual = utils.getTimelineItems(moment('2016-01-01T00:00:00'), reservations, '1', timeRestrictions2, hasRights);
+      const expected = [
+        {
+          key: '0',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T00:00:00').format(),
+            end: moment('2016-01-01T00:30:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: false,
+          },
+        },
+        {
+          key: '1',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T00:30:00').format(),
+            end: moment('2016-01-01T01:00:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: false,
+          },
+        },
+        {
+          key: '2',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T01:00:00').format(),
+            end: moment('2016-01-01T01:30:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: !hasRights,
+          },
+        },
+        {
+          key: '3',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T01:30:00').format(),
+            end: moment('2016-01-01T02:00:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: !hasRights,
+          },
+        },
+        { key: '4', type: 'reservation', data: reservations[0] },
+        {
+          key: '5',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T10:00:00').format(),
+            end: moment('2016-01-01T10:30:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: !hasRights,
+          },
+        },
+        {
+          key: '6',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T10:30:00').format(),
+            end: moment('2016-01-01T11:00:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: !hasRights,
+          },
+        },
+        {
+          key: '7',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T11:00:00').format(),
+            end: moment('2016-01-01T11:30:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: false,
+          },
+        },
+        {
+          key: '8',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T11:30:00').format(),
+            end: moment('2016-01-01T12:00:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: !hasRights,
+          },
+        },
+        {
+          key: '9',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T12:00:00').format(),
+            end: moment('2016-01-01T12:30:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: !hasRights,
+          },
+        },
+        { key: '10', type: 'reservation', data: reservations[1] },
+        { key: '11', type: 'reservation', data: reservations[2] },
+        {
+          key: '12',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T20:30:00').format(),
+            end: moment('2016-01-01T21:00:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: !hasRights,
+          },
+        },
+        {
+          key: '13',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T21:00:00').format(),
+            end: moment('2016-01-01T21:30:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: !hasRights,
+          },
+        },
+        {
+          key: '14',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T21:30:00').format(),
+            end: moment('2016-01-01T22:00:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: false,
+          },
+        },
+        {
+          key: '15',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T22:00:00').format(),
+            end: moment('2016-01-01T22:30:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: false,
+          },
+        },
+        {
+          key: '16',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T22:30:00').format(),
+            end: moment('2016-01-01T23:00:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: false,
+          },
+        },
+        {
+          key: '17',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T23:00:00').format(),
+            end: moment('2016-01-01T23:30:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: false,
+          },
+        },
+        {
+          key: '18',
+          type: 'reservation-slot',
+          data: {
+            begin: moment('2016-01-01T23:30:00').format(),
+            end: moment('2016-01-02T00:00:00').format(),
+            resourceId: '1',
+            isSelectable: false,
+            hasStaffRights: hasRights,
+            isWithinCooldown: false,
           },
         },
       ];

@@ -1,8 +1,11 @@
 
 import some from 'lodash/some';
-import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 
 import { slotSize, slotWidth, slotMargin } from 'constants/SlotConstants';
+
+const moment = extendMoment(Moment);
 
 function getTimeSlotWidth({ startTime, endTime } = {}) {
   const diff = endTime ? endTime.diff(startTime, 'minutes') : slotSize;
@@ -11,7 +14,10 @@ function getTimeSlotWidth({ startTime, endTime } = {}) {
   return (slotWidth * slots) - slotMargin;
 }
 
-function getTimelineItems(date, reservations, resourceId) {
+function getTimelineItems(date, reservations, resourceId, timeRestrictions, hasStaffRights) {
+  const { cooldown } = timeRestrictions;
+  // skip getting cooldowns if user has perms
+  const cooldownRanges = hasStaffRights ? [] : getCooldownRanges(reservations, cooldown);
   const items = [];
   let reservationPointer = 0;
   let timePointer = date.clone().startOf('day');
@@ -28,16 +34,24 @@ function getTimelineItems(date, reservations, resourceId) {
       timePointer = moment(reservation.end);
       reservationPointer += 1;
     } else {
+      const beginMoment = timePointer.format();
+      const endMoment = timePointer.clone().add(slotSize, 'minutes').format();
+      // skip cooldown check if user has perms
+      const isWithinCooldown = hasStaffRights ? false
+        : isSlotWithinCooldown(beginMoment, endMoment, cooldownRanges);
+
       items.push({
         key: String(items.length),
         type: 'reservation-slot',
         data: {
-          begin: timePointer.format(),
-          end: timePointer.clone().add(slotSize, 'minutes').format(),
+          begin: beginMoment,
+          end: endMoment,
           resourceId,
           // isSelectable: false by default to improve selector performance by allowing
           // addSelectionData to make some assumptions.
           isSelectable: false,
+          isWithinCooldown,
+          hasStaffRights
         },
       });
       timePointer.add(slotSize, 'minutes');
@@ -58,6 +72,7 @@ function markItemSelectable(item, isSelectable, openingHours, ext, after) {
     isSelectable
     && moment().isSameOrBefore(item.data.end)
     && (!openingHours || isInsideOpeningHours(item, openingHours))
+    && !(item.data.isWithinCooldown && !item.data.hasStaffRights)
   );
   const isExternalAndBeforeAfter = !ext && moment(item.data.begin).isSameOrBefore(after);
   if (isExternalAndBeforeAfter) {
@@ -102,6 +117,27 @@ function addSelectionData(selection, resource, items) {
     return markItemSelectable(
       item, true, resource.openingHours);
   });
+}
+
+function getCooldownRanges(reservations, cooldown) {
+  if (reservations && cooldown && cooldown !== '00:00:00') {
+    return reservations.map(reservation => moment.range(
+      moment(reservation.begin).subtract(moment.duration(cooldown)),
+      moment(reservation.end).add(moment.duration(cooldown))
+    ));
+  }
+  return [];
+}
+
+function isSlotWithinCooldown(begin, end, cooldownRanges) {
+  const slotRange = moment.range(begin, end);
+  for (let index = 0; index < cooldownRanges.length; index += 1) {
+    const cooldownRange = cooldownRanges[index];
+    if (cooldownRange.overlaps(slotRange)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export default {
