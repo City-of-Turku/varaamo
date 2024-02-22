@@ -245,6 +245,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -257,6 +259,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -269,6 +273,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -281,6 +287,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         { key: '4', type: 'reservation', data: reservations[0] },
@@ -294,6 +302,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -306,6 +316,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -318,6 +330,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -330,6 +344,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -342,6 +358,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         { key: '10', type: 'reservation', data: reservations[1] },
@@ -356,6 +374,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -368,6 +388,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -380,6 +402,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -392,6 +416,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -404,6 +430,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -416,6 +444,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
         {
@@ -428,6 +458,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: true,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions.minPeriod,
+            maxPeriod: timeRestrictions.maxPeriod,
           },
         },
       ];
@@ -453,6 +485,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -465,6 +499,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -477,6 +513,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: !hasRights,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -489,6 +527,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: !hasRights,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         { key: '4', type: 'reservation', data: reservations[0] },
@@ -502,6 +542,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: !hasRights,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -514,6 +556,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: !hasRights,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -526,6 +570,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -538,6 +584,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: !hasRights,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -550,6 +598,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: !hasRights,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         { key: '10', type: 'reservation', data: reservations[1] },
@@ -564,6 +614,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: !hasRights,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -576,6 +628,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: !hasRights,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -588,6 +642,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -600,6 +656,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -612,6 +670,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -624,6 +684,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
         {
@@ -636,6 +698,8 @@ describe('shared/availability-view/utils', () => {
             isSelectable: false,
             hasStaffRights: hasRights,
             isWithinCooldown: false,
+            minPeriod: timeRestrictions2.minPeriod,
+            maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
       ];

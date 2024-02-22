@@ -15,7 +15,7 @@ function getTimeSlotWidth({ startTime, endTime } = {}) {
 }
 
 function getTimelineItems(date, reservations, resourceId, timeRestrictions, hasStaffRights) {
-  const { cooldown } = timeRestrictions;
+  const { cooldown, minPeriod, maxPeriod } = timeRestrictions;
   // skip getting cooldowns if user has perms
   const cooldownRanges = hasStaffRights ? [] : getCooldownRanges(reservations, cooldown);
   const items = [];
@@ -51,7 +51,9 @@ function getTimelineItems(date, reservations, resourceId, timeRestrictions, hasS
           // addSelectionData to make some assumptions.
           isSelectable: false,
           isWithinCooldown,
-          hasStaffRights
+          hasStaffRights,
+          minPeriod,
+          maxPeriod
         },
       });
       timePointer.add(slotSize, 'minutes');

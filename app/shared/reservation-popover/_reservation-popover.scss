@@ -15,5 +15,14 @@
 
   &__length {
     color: $brand-primary;
+
+    &.limit-alert {
+      color: $varaamo-high-contrast-red;
+    }
+  }
+
+  &__period-limit {
+    display: block;
+    text-align: center;
   }
 }

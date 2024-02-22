@@ -6,6 +6,7 @@ import Popover from 'react-bootstrap/lib/Popover';
 import moment from 'moment';
 
 import { injectT } from 'i18n/index';
+import { isDurationWithinLimits } from './reservationPopoverUtils';
 
 class ReservationPopover extends PureComponent {
   render() {
@@ -13,6 +14,10 @@ class ReservationPopover extends PureComponent {
       begin, children, end, onCancel, t, minPeriod, maxPeriod
     } = this.props;
     const reservationLength = end ? moment.duration(moment(end).diff(moment(begin))) : null;
+    const minPeriodMoment = minPeriod ? moment(minPeriod, 'hh:mm:ss') : null;
+    const maxPeriodMoment = maxPeriod ? moment(maxPeriod, 'hh:mm:ss') : null;
+    const durationWithinLimits = isDurationWithinLimits(
+      reservationLength, minPeriod, maxPeriod);
 
     const popover = (
       <Popover
@@ -29,7 +34,7 @@ class ReservationPopover extends PureComponent {
         </span>
 
         {reservationLength && (
-          <span className="reservation-popover__length">
+          <span className={`reservation-popover__length${!durationWithinLimits ? ' limit-alert' : ''}`}>
             {reservationLength.hours()
               ? `(${reservationLength.hours()}h ${reservationLength.minutes()}min)`
               : `(${reservationLength.minutes()}min)`}
@@ -38,13 +43,21 @@ class ReservationPopover extends PureComponent {
         {minPeriod && (
           <span>
               {t('ReservationPopover.minPeriod')}
-            {` ${moment(minPeriod, 'hh:mm:ss').format('H')}h`}
+            <span className="reservation-popover__period-limit">
+              {minPeriodMoment.hours()
+                ? `${minPeriodMoment.hours()}h ${minPeriodMoment.minutes()}min`
+                : `${minPeriodMoment.minutes()}min`}
+            </span>
           </span>
         )}
         {maxPeriod && (
           <span>
               {t('ReservationPopover.maxPeriod')}
-            {` ${moment(maxPeriod, 'hh:mm:ss').format('H')}h`}
+            <span className="reservation-popover__period-limit">
+              {maxPeriodMoment.hours()
+                ? `${maxPeriodMoment.hours()}h ${maxPeriodMoment.minutes()}min`
+                : `${maxPeriodMoment.minutes()}min`}
+            </span>
           </span>
         )}
 
