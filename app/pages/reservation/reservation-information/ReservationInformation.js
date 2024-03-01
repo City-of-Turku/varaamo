@@ -22,6 +22,7 @@ class ReservationInformation extends Component {
     currentCustomerGroup: PropTypes.string.isRequired,
     currentPaymentMethod: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
+    isStaff: PropTypes.bool.isRequired,
     isEditing: PropTypes.bool.isRequired,
     isMakingReservations: PropTypes.bool.isRequired,
     onBack: PropTypes.func.isRequired,
@@ -47,6 +48,7 @@ class ReservationInformation extends Component {
   getFormFields = (termsAndConditions) => {
     const {
       isAdmin,
+      isStaff,
       resource,
       order,
       reservation,
@@ -69,7 +71,6 @@ class ReservationInformation extends Component {
 
     if (isAdmin) {
       formFields.push('comments');
-      formFields.push('type');
 
       /* waiting for backend implementation */
       // formFields.push('reserverName');
@@ -82,6 +83,9 @@ class ReservationInformation extends Component {
       formFields.push('staffEvent');
     }
     */
+    if (isStaff) {
+      formFields.push('type');
+    }
 
     if (termsAndConditions) {
       formFields.push('termsAndConditions');

@@ -22,6 +22,7 @@ class ConfirmReservationModal extends Component {
     isMakingReservations: PropTypes.bool.isRequired,
     isPreliminaryReservation: PropTypes.bool.isRequired,
     isStaff: PropTypes.bool.isRequired,
+    isStaffForResource: PropTypes.bool.isRequired,
     onCancel: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
@@ -47,6 +48,7 @@ class ConfirmReservationModal extends Component {
   getFormFields = (termsAndConditions) => {
     const {
       isStaff,
+      isStaffForResource,
       resource,
       showTimeControls,
     } = this.props;
@@ -56,11 +58,15 @@ class ConfirmReservationModal extends Component {
       formFields.push('begin', 'end');
     }
 
+    // general 'is_staff' perm, not tied to unit perms
     if (isStaff) {
       formFields.push('comments');
       formFields.push('reserverName');
       formFields.push('reserverEmailAddress');
       formFields.push('reserverPhoneNumber');
+    }
+    // unit staff check
+    if (isStaffForResource) {
       formFields.push('type');
     }
     if (resource.universalField && resource.universalField.length) {

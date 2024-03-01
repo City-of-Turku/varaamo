@@ -42,6 +42,10 @@ describe('shared/reservation-confirmation/reservationConfirmationSelector', () =
     expect(getSelected().isStaff).toBeDefined();
   });
 
+  test('returns isStaffForResource', () => {
+    expect(getSelected().isStaffForResource).toBeDefined();
+  });
+
   test('returns recurringReservations from the state', () => {
     expect(getSelected().recurringReservations).toEqual(recurringReservations);
   });

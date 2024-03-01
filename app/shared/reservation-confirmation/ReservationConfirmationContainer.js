@@ -25,6 +25,7 @@ export class UnconnectedReservationConfirmationContainer extends Component {
     currentLanguage: PropTypes.string.isRequired,
     isMakingReservations: PropTypes.bool.isRequired,
     isStaff: PropTypes.bool.isRequired,
+    isStaffForResource: PropTypes.bool.isRequired,
     params: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
       id: PropTypes.string.isRequired,
     }).isRequired,
@@ -98,6 +99,7 @@ export class UnconnectedReservationConfirmationContainer extends Component {
       confirmReservationModalIsOpen,
       isMakingReservations,
       isStaff,
+      isStaffForResource,
       recurringReservations,
       reservationsToEdit,
       resource,
@@ -116,6 +118,7 @@ export class UnconnectedReservationConfirmationContainer extends Component {
         isMakingReservations={isMakingReservations}
         isPreliminaryReservation={resource.needManualConfirmation}
         isStaff={isStaff}
+        isStaffForResource={isStaffForResource}
         onCancel={actions.cancelReservationEdit}
         onClose={actions.closeConfirmReservationModal}
         onConfirm={isEditing ? this.handleEdit : this.handleReservation}

@@ -28,6 +28,7 @@ describe('pages/resource/reservation-calendar/ReservationConfirmationContainer',
     currentLanguage: 'fi',
     isMakingReservations: false,
     isStaff: false,
+    isStaffForResource: false,
     params: { id: resource.id },
     recurringReservations: [Reservation.build()],
     reservationsToEdit: [],
@@ -60,6 +61,7 @@ describe('pages/resource/reservation-calendar/ReservationConfirmationContainer',
         expect(actualProps.isPreliminaryReservation)
           .toBe(defaultProps.resource.needManualConfirmation);
         expect(actualProps.isStaff).toBeDefined();
+        expect(actualProps.isStaffForResource).toBeDefined();
         expect(actualProps.onCancel).toBe(defaultProps.actions.cancelReservationEdit);
         expect(actualProps.onClose).toBe(defaultProps.actions.closeConfirmReservationModal);
         expect(actualProps.onConfirm).toBe(wrapper.instance().handleReservation);

@@ -19,6 +19,7 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
     isMakingReservations: false,
     isPreliminaryReservation: false,
     isStaff: false,
+    isStaffForResource: false,
     onCancel: simple.stub(),
     onClose: simple.stub(),
     onConfirm: simple.stub(),
@@ -182,12 +183,12 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
     });
 
     describe('type', () => {
-      test('is included if user is staff', () => {
-        expect(getFormFields({ isStaff: true })).toEqual(expect.arrayContaining(['type']));
+      test('is included if user is staff for resource', () => {
+        expect(getFormFields({ isStaffForResource: true })).toEqual(expect.arrayContaining(['type']));
       });
 
-      test('is not included if user is not staff', () => {
-        expect(getFormFields({ isStaff: false })).toEqual(expect.not.arrayContaining(['type']));
+      test('is not included if user is not staff for resource', () => {
+        expect(getFormFields({ isStaffForResource: false })).toEqual(expect.not.arrayContaining(['type']));
       });
     });
 

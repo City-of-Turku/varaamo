@@ -163,9 +163,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
         const wrapper = getWrapper({ isAdmin: true, resource });
         const instance = wrapper.instance();
         const actual = instance.getFormFields();
-        // const adminFields = ['comments',
-        // 'reserverName', 'reserverEmailAddress', 'reserverPhoneNumber'];
-        const adminFields = ['comments', 'type'];
+        const adminFields = ['comments'];
 
         expect(actual).toEqual([...supportedFields, ...adminFields]);
       }
@@ -184,6 +182,13 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }
     );
     */
+
+    test('returns type when user is staff', () => {
+      const wrapper = getWrapper({ isStaff: true, resource });
+      const instance = wrapper.instance();
+      const actual = instance.getFormFields();
+      expect(actual).toEqual([...supportedFields, 'type']);
+    });
 
     test('returns supportedReservationExtraFields and termsAndConditions', () => {
       const termsAndConditions = 'some terms and conditions';
