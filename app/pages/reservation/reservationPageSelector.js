@@ -1,11 +1,13 @@
 
 import { createSelector, createStructuredSelector } from 'reselect';
+import { formValueSelector } from 'redux-form';
 import first from 'lodash/first';
 import isEmpty from 'lodash/isEmpty';
 import orderBy from 'lodash/orderBy';
 import queryString from 'query-string';
 
 import ActionTypes from 'constants/ActionTypes';
+import FormTypes from 'constants/FormTypes';
 import {
   createIsStaffSelector,
   currentUserSelector,
@@ -56,6 +58,10 @@ const uniqueCustomerGroupsSelector = createSelector(
   }
 );
 
+const reservationTypeSelector = state => (
+  formValueSelector(FormTypes.RESERVATION)(state, 'type')
+);
+
 const reservationPageSelector = createStructuredSelector({
   contrast: contrastSelector,
   currentLanguage: currentLanguageSelector,
@@ -76,6 +82,7 @@ const reservationPageSelector = createStructuredSelector({
   unit: unitSelector,
   uniqueCustomerGroups: uniqueCustomerGroupsSelector,
   user: currentUserSelector,
+  reservationType: reservationTypeSelector,
 });
 
 export default reservationPageSelector;

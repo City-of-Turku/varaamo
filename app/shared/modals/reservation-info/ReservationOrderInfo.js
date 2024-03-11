@@ -51,6 +51,7 @@ function ReservationOrderInfo({
       {renderInfoRow(t('common.taxesTotal'), `${nonZeroTaxTotal} €`)}
       {renderInfoRow(t('common.priceTotalLabel'), `${order.price} €`)}
       {orderPaymentMethod && (renderInfoRow(t('common.paymentMethod'), orderPaymentMethod))}
+      {renderInfoRow(t('common.orderNumber'), order.id)}
     </Well>
   );
 }

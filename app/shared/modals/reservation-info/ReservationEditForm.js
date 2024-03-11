@@ -20,6 +20,8 @@ import TimeRange from 'shared/time-range';
 import { injectT } from 'i18n';
 import ReservationOrderInfo from './ReservationOrderInfo';
 import { getReservationCustomerGroupName } from 'utils/reservationUtils';
+import constants from '../../../constants/AppConstants';
+import { formatDateTime } from '../../../utils/timeUtils';
 
 class UnconnectedReservationEditForm extends Component {
   constructor(props) {
@@ -215,6 +217,12 @@ class UnconnectedReservationEditForm extends Component {
           <Well>
             {this.renderUserInfoRow('displayName', 'userName')}
             {this.renderUserInfoRow('email', 'userEmail')}
+            {this.renderInfoRow(t('ReservationType.label'),
+              reservation.type === constants.RESERVATION_TYPE.BLOCKED_VALUE
+                ? t('ReservationType.blocked') : t('ReservationType.normal'))}
+            {reservation.createdAt && (
+              this.renderInfoRow(t('common.reservationCreatedAt'), formatDateTime(reservation.createdAt, 'LLLL'))
+            )}
           </Well>
         )}
         {this.renderEditableInfoRow('eventSubject', 'text')}

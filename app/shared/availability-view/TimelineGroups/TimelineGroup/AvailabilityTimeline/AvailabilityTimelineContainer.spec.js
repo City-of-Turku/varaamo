@@ -121,6 +121,19 @@ describe('shared/availability-view/AvailabilityTimelineContainer', () => {
         expect(actual[9]).toEqual({ key: '9', type: 'reservation', data: reservations[2] });
         expect(actual[10].data.isSelectable).toBe(false);
       });
+
+      test('contains cooldown and staff rights info', () => {
+        const state = getState();
+        const selection = {
+          begin: '2016-01-01T10:00:00',
+          end: '2016-01-01T10:30:00',
+          resourceId: 'resource-1',
+        };
+        const props = { id: 'resource-1', date: '2016-01-01', selection };
+        const actual = selector()(state, props).items;
+        expect(actual[0].data.hasStaffRights).toBeDefined();
+        expect(actual[0].data.isWithinCooldown).toBeDefined();
+      });
     });
   });
 });

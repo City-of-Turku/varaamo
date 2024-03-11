@@ -43,6 +43,9 @@ function getState(resources = [], units = [], user = defaultUser) {
         toShowEdited: [defaultReservation],
       },
     }),
+    form: {
+      RESERVATION: { values: { type: 'normal' } }
+    }
   };
 }
 
@@ -198,5 +201,13 @@ describe('pages/reservation/reservationPageSelector', () => {
     const selected = reservationPageSelector(state, props);
 
     expect(selected.user).toBeDefined();
+  });
+
+  test('returns reservationType', () => {
+    const state = getState();
+    const props = getProps();
+    const selected = reservationPageSelector(state, props);
+
+    expect(selected.reservationType).toBeDefined();
   });
 });

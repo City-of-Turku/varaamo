@@ -85,6 +85,7 @@ describe('pages/reservation/ReservationPage', () => {
     unit: Immutable(Unit.build()),
     user: Immutable(User.build()),
     uniqueCustomerGroups: [],
+    reservationType: constants.RESERVATION_TYPE.NORMAL_VALUE,
   };
 
   function getWrapper(extraProps) {
@@ -255,6 +256,7 @@ describe('pages/reservation/ReservationPage', () => {
         expect(reservationInformation.prop('openResourceTermsModal')).toBe(defaultProps.actions.openResourceTermsModal);
         expect(reservationInformation.prop('order')).toBe(instance.state.order);
         expect(reservationInformation.prop('reservation')).toBe(defaultProps.reservationToEdit);
+        expect(reservationInformation.prop('reservationType')).toBe(defaultProps.reservationType);
         expect(reservationInformation.prop('resource')).toBe(defaultProps.resource);
         expect(reservationInformation.prop('selectedTime')).toBeDefined();
         expect(reservationInformation.prop('unit')).toBe(defaultProps.unit);

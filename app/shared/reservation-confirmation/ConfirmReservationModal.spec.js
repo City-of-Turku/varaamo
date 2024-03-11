@@ -11,6 +11,7 @@ import Resource, { UniversalField } from 'utils/fixtures/Resource';
 import { shallowWithIntl } from 'utils/testUtils';
 import ConfirmReservationModal from './ConfirmReservationModal';
 import ReservationForm from './ReservationForm';
+import constants from '../../constants/AppConstants';
 
 describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
   const defaultProps = {
@@ -18,6 +19,7 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
     isMakingReservations: false,
     isPreliminaryReservation: false,
     isStaff: false,
+    isStaffForResource: false,
     onCancel: simple.stub(),
     onClose: simple.stub(),
     onConfirm: simple.stub(),
@@ -30,6 +32,7 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
       Reservation.build(),
     ]),
     show: true,
+    reservationType: constants.RESERVATION_TYPE.NORMAL_VALUE,
   };
 
   function getWrapper(extraProps = {}) {
@@ -176,6 +179,41 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
 
       test('is not included if user is not an staff', () => {
         expect(getFormFields({ isStaff: false })).toEqual(expect.not.arrayContaining(['comments']));
+      });
+    });
+
+    describe('type', () => {
+      test('is included if user is staff for resource', () => {
+        expect(getFormFields({ isStaffForResource: true })).toEqual(expect.arrayContaining(['type']));
+      });
+
+      test('is not included if user is not staff for resource', () => {
+        expect(getFormFields({ isStaffForResource: false })).toEqual(expect.not.arrayContaining(['type']));
+      });
+    });
+
+    describe('initial values', () => {
+      test('when not editing, type is set correctly', () => {
+        const instance = getWrapper().instance();
+        expect(instance.getFormInitialValues({ isEditing: false }))
+          .toEqual({ type: constants.RESERVATION_TYPE.NORMAL_VALUE });
+      });
+    });
+
+    describe('getRequiredFormFields', () => {
+      test('returns empty array when reservation type is blocked', () => {
+        const reservationType = constants.RESERVATION_TYPE.NORMAL_VALUE;
+        const instance = getWrapper({ reservationType }).instance();
+        expect(instance.getRequiredFormFields(
+          defaultProps.resource, null, reservationType)).toStrictEqual([]);
+      });
+
+      test('returns correct array when reservation type is not blocked', () => {
+        const reservationType = constants.RESERVATION_TYPE.NORMAL_VALUE;
+        const resource = Resource.build({ requiredReservationExtraFields: ['field1', 'field2'] });
+        const instance = getWrapper({ resource, reservationType }).instance();
+        expect(instance.getRequiredFormFields(
+          resource, null, reservationType)).toStrictEqual(['field1', 'field2']);
       });
     });
 

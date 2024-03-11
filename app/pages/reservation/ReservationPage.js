@@ -441,6 +441,7 @@ class UnconnectedReservationPage extends Component {
       uniqueCustomerGroups,
       user,
       history,
+      reservationType,
     } = this.props;
     const {
       currentCustomerGroup, customerGroupError, currentPaymentMethod,
@@ -533,6 +534,7 @@ class UnconnectedReservationPage extends Component {
                     openResourceTermsModal={actions.openResourceTermsModal}
                     order={order}
                     reservation={reservationToEdit}
+                    reservationType={reservationType}
                     resource={resource}
                     selectedTime={selectedTime}
                     state={this.props.state}
@@ -584,6 +586,7 @@ UnconnectedReservationPage.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   loginExpiresAt: PropTypes.number,
   uniqueCustomerGroups: PropTypes.array.isRequired,
+  reservationType: PropTypes.string,
 };
 UnconnectedReservationPage = injectT(UnconnectedReservationPage); // eslint-disable-line
 

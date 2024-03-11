@@ -2,6 +2,7 @@ import React from 'react';
 import Loader from 'react-loader';
 import simple from 'simple-mock';
 import Link from 'react-router-dom/Link';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 import PageWrapper from 'pages/PageWrapper';
 import { shallowWithIntl } from 'utils/testUtils';
@@ -21,6 +22,9 @@ describe('pages/home/HomePage', () => {
     },
     isFetchingPurposes: false,
     isLargerFontSize: false,
+    authUserAmr: '',
+    isAdmin: false,
+    currentLanguage: 'fi',
     purposes: [
       {
         label: 'Purpose 1',
@@ -144,6 +148,51 @@ describe('pages/home/HomePage', () => {
           buttons.forEach((button) => {
             expect(button.prop('className')).toBe('app-HomePageContent__button large-font');
           });
+        });
+      });
+    });
+
+    describe('Feedback link', () => {
+      describe('when user is admin', () => {
+        test('is visible', () => {
+          const wrapper = getWrapper({ isAdmin: true });
+          expect(wrapper.find('#home-feedback-link')).toHaveLength(1);
+        });
+      });
+
+      describe('when user login method is turku_adfs', () => {
+        test('is visible', () => {
+          const wrapper = getWrapper({ authUserAmr: 'turku_adfs' });
+          expect(wrapper.find('#home-feedback-link')).toHaveLength(1);
+        });
+      });
+
+      describe('when visible', () => {
+        const wrapper = getWrapper({ authUserAmr: 'turku_adfs', isAdmin: true, contrast: 'test' });
+
+        test('wrapper div is rendered correctly', () => {
+          const div = wrapper.find('div#home-feedback-link');
+          expect(div.prop('className')).toBe('test');
+        });
+
+        test('link is rendered correctly', () => {
+          const link = wrapper.find('#home-feedback-link').find('a');
+          expect(link.prop('href')).toBe(`https://opaskartta.turku.fi/eFeedback/${defaultProps.currentLanguage}/Feedback/30/1039`);
+          expect(link.prop('target')).toBe('_blank');
+          expect(link.prop('rel')).toBe('noreferrer');
+          expect(link.text()).toContain('HomePage.feedbackLinkText');
+        });
+
+        test('link icon is rendered correctly', () => {
+          const icon = wrapper.find('#home-feedback-link').find('FAIcon');
+          expect(icon.prop('icon')).toBe(faExternalLinkAlt);
+        });
+      });
+
+      describe('when user login method is not turku_adfs and user is not admin', () => {
+        test('is not visible', () => {
+          const wrapper = getWrapper({ authUserAmr: 'something', isAdmin: false });
+          expect(wrapper.find('#home-feedback-link')).toHaveLength(0);
         });
       });
     });

@@ -1,14 +1,22 @@
 .admin-resources-page {
   min-height: 600px;
 
-  .loadedContent{
+  .loadedContent {
 
     .availability-view .date-selector {
       font-size: 1em;
-       .date-picker {
-         > input {
-           min-width: 140px;
-         }
+      height: 40px;
+
+      .date-picker {
+        >input {
+          min-width: 142px;
+          border-bottom: solid white 2px;
+          padding-top: 0;
+          padding-bottom: 0;
+          margin-bottom: 2px;
+          height: 30px;
+        }
+
         .DayPicker-WeekDaysRow,
         .DayPicker-Day {
           font-size: 1em;
@@ -24,14 +32,13 @@
         text-decoration: none;
       }
     }
-
-
   }
+
   .date-picker .DayPicker-WeekDaysRow {
     font-size: 1em;
   }
 
-  @include high-contrast{
+  @include high-contrast {
     .loadedContent {
 
       .resource-type-filter-container {
@@ -45,20 +52,25 @@
           color: black;
           border: 1px solid black;
         }
-        .sidebar > .group-info {
+
+        .sidebar>.group-info {
           background-color: transparent;
           border: 1px solid black;
         }
+
         .date-selector {
           background-color: transparent;
           color: black;
           border: 1px solid black;
+
           a {
             color: black;
           }
+
           .date-picker input {
             color: black;
           }
+
           .date-picker::after {
             border-top-color: black;
           }
@@ -68,28 +80,25 @@
   }
 
   @media(max-width: $screen-sm-max) {
-    .availability-view .date-selector .current-value .date-picker{
-      > div {
-      margin-left: -150%;
-    }
-      > input {
+    .availability-view .date-selector .current-value .date-picker {
+      >div {
+        margin-left: -150%;
+      }
+
+      >input {
         min-width: 120px;
       }
     }
-
   }
 
   @media(max-width: $screen-xs-max) {
-    .availability-view  .date-selector {
+    .availability-view .date-selector {
       justify-content: center;
 
       .previous,
       .next {
         display: none;
       }
-
-
-
     }
   }
 }

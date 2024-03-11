@@ -45,6 +45,7 @@ describe('my premises page', () => {
     cy.intercept('POST', '**/reservation/', { body: updatedReservation }).as('postReservation');
 
     // fill reservation form
+    cy.get('#reserverName').scrollIntoView().should('be.visible');
     cy.get('#reserverName').should('be.visible').type('Test Tester');
     cy.get('button').contains('Tallenna').click();
 

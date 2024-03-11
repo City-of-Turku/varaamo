@@ -18,6 +18,7 @@ import ReduxFormField from 'shared/form-fields/ReduxFormField';
 import { injectT } from 'i18n';
 import TimeControls from './TimeControls';
 import { isValidPhoneNumber } from '../../utils/phoneValidationUtil';
+import RadioGroup from '../form-fields/RadioGroup';
 
 const validators = {
   reserverEmailAddress: (t, { reserverEmailAddress }) => {
@@ -222,6 +223,28 @@ class UnconnectedReservationForm extends Component {
       <div>
         <Form className="reservation-form" horizontal onSubmit={handleSubmit(onConfirm)}>
           {this.renderTimeControls()}
+          { includes(this.props.fields, 'type') && (
+            <Well>
+              <RadioGroup
+                legend={t(constants.RESERVATION_TYPE.LEGEND_TEXT_ID)}
+                legendHint={t(constants.RESERVATION_TYPE.LEGEND_HINT_TEXT_ID)}
+                radioOptions={[
+                  {
+                    name: constants.RESERVATION_TYPE.TYPE_NAME,
+                    value: constants.RESERVATION_TYPE.NORMAL_VALUE,
+                    label: t(constants.RESERVATION_TYPE.NORMAL_LABEL_ID),
+                    hint: t(constants.RESERVATION_TYPE.NORMAL_HINT_TEXT_ID),
+                  },
+                  {
+                    name: constants.RESERVATION_TYPE.TYPE_NAME,
+                    value: constants.RESERVATION_TYPE.BLOCKED_VALUE,
+                    label: t(constants.RESERVATION_TYPE.BLOCKED_LABEL_ID),
+                    hint: t(constants.RESERVATION_TYPE.BLOCKED_HINT_TEXT_ID),
+                  }
+                ]}
+              />
+            </Well>
+          )}
           { includes(this.props.fields, 'staffEvent') && (
             <Well>
               {this.renderField(

@@ -327,6 +327,18 @@ function formatTime(time, timeFormat, targetTimeFormat) {
   return moment(time, timeFormat).format(targetTimeFormat);
 }
 
+/**
+ * Parses and formats given datetime into desired target format.
+ * @param {string} datetime e.g. "2023-11-24T14:00:00"
+ * @param {string} targetFormat desired datetime format parsable by Moment for output
+ * e.g. "LLLL"
+ * @returns {string} formatted datetime string or given datetime when datetime is not valid
+ */
+function formatDateTime(datetime, targetFormat) {
+  const datetimeMoment = moment(datetime);
+  return datetimeMoment.isValid() ? datetimeMoment.format(targetFormat) : datetime;
+}
+
 export {
   addToDate,
   calculateDuration,
@@ -348,4 +360,5 @@ export {
   getEndTimeSlotWithMinPeriod,
   getTimeDiff,
   formatTime,
+  formatDateTime,
 };

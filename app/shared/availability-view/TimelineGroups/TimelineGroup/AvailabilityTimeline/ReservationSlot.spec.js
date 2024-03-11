@@ -101,6 +101,24 @@ describe('shared/availability-view/ReservationSlot', () => {
       });
       expect(popover).toHaveLength(1);
     });
+
+    test('renders with min and max prop when hasStaffRights is true', () => {
+      const popover = getPopover({
+        begin: '2016-01-01T10:00:00Z',
+        end: '2016-01-01T10:30:00Z',
+        selection: {
+          begin: '2016-01-01T10:00:00Z',
+          end: '2016-01-01T12:00:00Z',
+          resourceId: '1',
+        },
+        hasStaffRights: false,
+        minPeriod: '00:30:00',
+        maxPeriod: '01:00:00',
+      });
+      expect(popover).toHaveLength(1);
+      expect(popover.prop('minPeriod')).toBe('00:30:00');
+      expect(popover.prop('maxPeriod')).toBe('01:00:00');
+    });
   });
 
   describe('selection', () => {

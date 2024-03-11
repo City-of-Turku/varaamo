@@ -13,6 +13,7 @@ import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedReservationCalendarContainer as ReservationCalendarContainer } from './ReservationCalendarContainer';
 import ReservingRestrictedText from './ReservingRestrictedText';
 import TimeSlots from './time-slots';
+import { isStaffForResource } from '../../../utils/resourceUtils';
 
 describe('pages/resource/reservation-calendar/ReservationCalendarContainer', () => {
   const actions = {
@@ -91,7 +92,15 @@ describe('pages/resource/reservation-calendar/ReservationCalendarContainer', () 
     });
 
     test(`${renderTimeSlots ? 'renders' : 'does not render'} TimeSlots`, () => {
-      expect(wrapper.find(TimeSlots).length === 1).toBe(renderTimeSlots);
+      const timeslots = wrapper.find(TimeSlots);
+      expect(timeslots.length === 1).toBe(renderTimeSlots);
+      if (renderTimeSlots) {
+        const isResourceStaff = (defaultProps.isAdmin && defaultProps.resource)
+          ? isStaffForResource(resource) : false;
+        expect(timeslots.prop('isAdmin')).toBe(isResourceStaff);
+        expect(timeslots.prop('isEditing')).toBe(defaultProps.isEditing);
+        expect(timeslots.prop('resource')).toBe(defaultProps.resource);
+      }
     });
 
     test(`${renderClosedText ? 'renders' : 'does not render'} closed text`, () => {

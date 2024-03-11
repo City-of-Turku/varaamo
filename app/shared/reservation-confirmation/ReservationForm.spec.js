@@ -202,6 +202,36 @@ describe('shared/reservation-confirmation/ReservationForm', () => {
     describe('form fields', () => {
       const fieldName = 'reserverName';
 
+      describe('RadioGroup', () => {
+        test('renders a RadioGroup for type if it is included in props.fields', () => {
+          const fields = ['type'];
+          const radioGroup = getWrapper({ fields }).find('RadioGroup');
+          expect(radioGroup.length).toBe(1);
+          expect(radioGroup.prop('legend')).toBe(constants.RESERVATION_TYPE.LEGEND_TEXT_ID);
+          expect(radioGroup.prop('legendHint')).toBe(constants.RESERVATION_TYPE.LEGEND_HINT_TEXT_ID);
+          expect(radioGroup.prop('radioOptions')).toEqual([
+            {
+              name: constants.RESERVATION_TYPE.TYPE_NAME,
+              value: constants.RESERVATION_TYPE.NORMAL_VALUE,
+              label: constants.RESERVATION_TYPE.NORMAL_LABEL_ID,
+              hint: constants.RESERVATION_TYPE.NORMAL_HINT_TEXT_ID,
+            },
+            {
+              name: constants.RESERVATION_TYPE.TYPE_NAME,
+              value: constants.RESERVATION_TYPE.BLOCKED_VALUE,
+              label: constants.RESERVATION_TYPE.BLOCKED_LABEL_ID,
+              hint: constants.RESERVATION_TYPE.BLOCKED_HINT_TEXT_ID,
+            }
+          ]);
+        });
+
+        test('does not render a RadioGroup for type if it is not included in props.fields', () => {
+          const fields = [];
+          const radioGroup = getWrapper({ fields }).find('RadioGroup');
+          expect(radioGroup.length).toBe(0);
+        });
+      });
+
       test('renders a field if it is included in props.fields', () => {
         const fields = [fieldName];
         const input = getWrapper({ fields }).find(Field);

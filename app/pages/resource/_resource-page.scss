@@ -16,9 +16,11 @@ $content-padding: 10px;
 .app-ResourcePage {
   .login-text {
     font-weight: bold;
+
     button {
       font-weight: bold;
     }
+
     .glyphicon-exclamation-sign {
       padding-right: 5px;
     }
@@ -71,10 +73,12 @@ $content-padding: 10px;
     flex-basis: ($resource-page-width/2);
     flex-grow: 1;
     margin-left: $margin-between-items;
+
     h3 {
       margin-top: 0;
     }
   }
+
   .app-ResourceCard {
     position: fixed;
     bottom: 15px;
@@ -96,7 +100,7 @@ $content-padding: 10px;
     padding-right: 10px;
     font-size: 1.3rem;
 
-    & > div {
+    &>div {
       display: inline-block;
     }
 
@@ -107,7 +111,9 @@ $content-padding: 10px;
       vertical-align: middle;
     }
 
-    &:hover, &:focus, &:active {
+    &:hover,
+    &:focus,
+    &:active {
       background-color: $white;
     }
   }
@@ -121,14 +127,17 @@ $content-padding: 10px;
     border-top: 3px solid $silver;
     box-shadow: none;
     margin: 15px 0;
+
     .panel-heading {
       background-color: transparent;
       padding: 15px 0;
+
       .panel-title {
         a {
           color: $black;
           padding-left: 24px;
           position: relative;
+
           &::before {
             background-image: url('../search/controls/images/angle-right.svg');
             background-repeat: no-repeat;
@@ -142,14 +151,17 @@ $content-padding: 10px;
             width: $line-height-computed;
           }
         }
+
         a[aria-expanded="true"]::before {
           background-image: url('../search/controls/images//angle-down.svg');
         }
+
         a[aria-selected="true"]::before {
           background-image: url('../search/controls/images//angle-down.svg');
         }
       }
     }
+
     .panel-body {
       padding: 0;
     }
@@ -165,51 +177,91 @@ $content-padding: 10px;
 
   /* Full width page */
   @media (min-width: $screen-xs-max) {
+
     /* Fix for resource page */
-      /* Padding for turquise area */
-      .app-ResourceHeader__content {
-        padding: 15px 15px 15px 15px;
-      }
-      /*smaller header*/
-      .h1, h1 {
-         font-size: 32px;
-      }
-      /*basetext fix*/
-      .row {
-        margin: 15px 15px 0px 15px;
-      }
-      .app-ResourcePage__content {
-         padding: 0px;
-      }
+    /* Padding for turquise area */
+    .app-ResourceHeader__content {
+      padding: 15px 15px 15px 15px;
+    }
+
+    /*smaller header*/
+    .h1,
+    h1 {
+      font-size: 32px;
+    }
+
+    /*basetext fix*/
+    .row {
+      margin: 15px 15px 0px 15px;
+    }
+
+    .app-ResourcePage__content {
+      padding: 0px;
+    }
   }
+
   @media (max-width: $screen-xs-max) {
-      /* Footer must be below map or other content */
-      #footer {
-         position: relative;
-         z-index: -15;
-      }
-      /* Fix for resource page */
-      /* Padding for turquise area */
-      .app-ResourceHeader__content {
-         padding: 15px 15px 15px 15px;
-      }
-      /* smaller header */
-      .h1, h1 {
-         font-size: 24px;
-      }
-      /* basetext fix */
-      .row {
-        margin: 15px 15px 0px 15px;
-      }
-      .app-ResourcePage__content {
-         padding: 0px;
-      }
-   }
+
+    /* Footer must be below map or other content */
+    #footer {
+      position: relative;
+      z-index: -15;
+    }
+
+    /* Fix for resource page */
+    /* Padding for turquise area */
+    .app-ResourceHeader__content {
+      padding: 15px 15px 15px 15px;
+    }
+
+    /* smaller header */
+    .h1,
+    h1 {
+      font-size: 24px;
+    }
+
+    /* basetext fix */
+    .row {
+      margin: 15px 15px 0px 15px;
+    }
+
+    .app-ResourcePage__content {
+      padding: 0px;
+    }
+  }
 }
 
 #reservation-panel {
   min-height: 450px;
-  @media (min-width: $screen-md-min){
+
+  @media (min-width: $screen-md-min) {
     min-height: 680px;
+  }
+}
+
+.next-free-times {
+  margin-left: 0;
+  margin-bottom: 8px;
+
+  @media (min-width: $screen-sm-min) {
+    margin-left: 13px;
+  }
+
+  @media (min-width: $screen-sm-max) {
+    margin-left: 15px;
+  }
+
+  .next-free-times-btn {
+    font-size: inherit;
+  }
+
+  .next-free-times-searching {
+    display: inline;
+    margin-left: 12px;
+
+    @media (max-width: $screen-xs-min) {
+      display: block;
+      margin-left: 0;
+    }
   }
 }

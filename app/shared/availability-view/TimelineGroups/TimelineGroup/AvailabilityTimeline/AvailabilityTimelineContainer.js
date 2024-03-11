@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 import { showReservationInfoModal } from 'actions/uiActions';
 import AvailabilityTimeline from './AvailabilityTimeline';
 import utils from '../utils';
+import { isStaffForResource } from '../../../../../utils/resourceUtils';
 
 export function selector() {
   function dateSelector(state, props) { return props.date; }
@@ -22,6 +23,20 @@ export function selector() {
     resourceIdSelector,
     (resources, id) => resources[id]
   );
+
+  const hasStaffRightsSelector = createSelector(
+    resourceSelector,
+    resource => isStaffForResource(resource)
+  );
+
+  const timeRestrictionsSelector = createSelector(
+    resourceSelector,
+    resource => {
+      const { minPeriod, maxPeriod, cooldown } = resource;
+      return { minPeriod, maxPeriod, cooldown };
+    }
+  );
+
   const reservationsSelector = createSelector(
     resourceSelector,
     dateSelector,
@@ -37,8 +52,11 @@ export function selector() {
     reservationsSelector,
     dateSelector,
     resourceIdSelector,
-    (reservations, date, resourceId) => utils.getTimelineItems(
-      moment(date), reservations, resourceId
+    timeRestrictionsSelector,
+    hasStaffRightsSelector,
+    (reservations, date, resourceId,
+      timeRestrictions, hasStaffRights) => utils.getTimelineItems(
+      moment(date), reservations, resourceId, timeRestrictions, hasStaffRights
     )
   );
 

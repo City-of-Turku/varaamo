@@ -40,6 +40,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     },
     unit: Immutable(Unit.build()),
     user: Immutable(User.build()),
+    reservationType: constants.RESERVATION_TYPE.NORMAL_VALUE,
   };
 
   function getWrapper(extraProps) {
@@ -64,6 +65,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     const infoTexts = getWrapper({ resource }).find('.app-ReservationInformation__info-texts');
     expect(infoTexts).toHaveLength(1);
     expect(infoTexts.text()).toContain('common.contactPurposeHelp');
+    expect(infoTexts.text()).toContain('common.starFieldsAreRequired');
   });
 
   test('renders an ReservationInformationForm element', () => {
@@ -80,6 +82,8 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
     expect(form.prop('openResourcePaymentTermsModal')).toBe(defaultProps.openResourcePaymentTermsModal);
     expect(form.prop('openResourceTermsModal')).toBe(defaultProps.openResourceTermsModal);
     expect(form.prop('paymentTermsAndConditions')).toBe(getPaymentTermsAndConditions(resource));
+    expect(form.prop('requiredFields')).toBeDefined();
+    expect(form.prop('reservationType')).toBe(defaultProps.reservationType);
     expect(form.prop('resource')).toBe(resource);
     expect(form.prop('user')).toBe(defaultProps.user);
   });
@@ -159,8 +163,6 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
         const wrapper = getWrapper({ isAdmin: true, resource });
         const instance = wrapper.instance();
         const actual = instance.getFormFields();
-        // const adminFields = ['comments',
-        // 'reserverName', 'reserverEmailAddress', 'reserverPhoneNumber'];
         const adminFields = ['comments'];
 
         expect(actual).toEqual([...supportedFields, ...adminFields]);
@@ -180,6 +182,13 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }
     );
     */
+
+    test('returns type when user is staff', () => {
+      const wrapper = getWrapper({ isStaff: true, resource });
+      const instance = wrapper.instance();
+      const actual = instance.getFormFields();
+      expect(actual).toEqual([...supportedFields, 'type']);
+    });
 
     test('returns supportedReservationExtraFields and termsAndConditions', () => {
       const termsAndConditions = 'some terms and conditions';
@@ -278,7 +287,7 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       }
     );
 
-    test('returns InitialValues from user when no reservation', () => {
+    test('returns correct initial values when there is no reservation', () => {
       const user = User.build({
         displayName: 'First Last',
         email: 'em@il.com',
@@ -288,7 +297,8 @@ describe('pages/reservation/reservation-information/ReservationInformation', () 
       const actual = instance.getFormInitialValues();
       const expectedInfo = {
         reserverName: 'First Last',
-        reserverEmailAddress: 'em@il.com'
+        reserverEmailAddress: 'em@il.com',
+        type: constants.RESERVATION_TYPE.NORMAL_VALUE,
       };
       expect(instance.props.reservation).toBe(null);
       expect(actual).toEqual(expectedInfo);

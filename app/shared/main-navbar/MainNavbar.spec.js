@@ -3,6 +3,7 @@ import React from 'react';
 import Nav from 'react-bootstrap/lib/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 import constants from 'constants/AppConstants';
 import { getSearchPageUrl } from 'utils/searchUtils';
@@ -22,6 +23,7 @@ describe('shared/main-navbar/MainNavbar', () => {
       isAdmin: false,
       isLoggedIn: false,
       userName: 'Luke Skywalker',
+      authUserAmr: '',
     };
     return shallowWithIntl(<MainNavbar {...defaults} {...props} />);
   }
@@ -194,6 +196,46 @@ describe('shared/main-navbar/MainNavbar', () => {
       const gitbookLink = getNotLoggedInWrapper()
         .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.gitbook });
       expect(gitbookLink).toHaveLength(0);
+    });
+  });
+
+  describe('Feedback link', () => {
+    describe('when user is admin', () => {
+      test('is visible', () => {
+        const nav = getWrapper({ isAdmin: true }).find(NavItem).filter({ eventKey: 'feedback' });
+        expect(nav).toHaveLength(1);
+      });
+    });
+
+    describe('when user login method is turku_adfs', () => {
+      test('is visible', () => {
+        const nav = getWrapper({ authUserAmr: 'turku_adfs' }).find(NavItem).filter({ eventKey: 'feedback' });
+        expect(nav).toHaveLength(1);
+      });
+    });
+
+    describe('when visible', () => {
+      const wrapper = getWrapper({ authUserAmr: 'turku_adfs', isAdmin: true });
+
+      test('NavItem is rendered correctly', () => {
+        const link = wrapper.find(NavItem).filter({ eventKey: 'feedback' });
+        expect(link.prop('href')).toBe('https://opaskartta.turku.fi/eFeedback/fi/Feedback/30/1039');
+        expect(link.prop('target')).toBe('_blank');
+        expect(link.prop('rel')).toBe('noreferrer');
+        expect(link.prop('children')).toContain('Navbar.feedback');
+      });
+
+      test('Icon is rendered correctly', () => {
+        const icon = wrapper.find(NavItem).filter({ eventKey: 'feedback' }).find('FAIcon');
+        expect(icon.prop('icon')).toBe(faExternalLinkAlt);
+      });
+    });
+
+    describe('when user login method is not turku_adfs and user is not admin', () => {
+      test('is not visible', () => {
+        const wrapper = getWrapper({ authUserAmr: 'something', isAdmin: false });
+        expect(wrapper.find(NavItem).filter({ eventKey: 'feedback' })).toHaveLength(0);
+      });
     });
   });
 });

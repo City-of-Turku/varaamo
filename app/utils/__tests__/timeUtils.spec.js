@@ -25,7 +25,8 @@ import {
   prettifyHours,
   periodToMinute,
   getEndTimeSlotWithMinPeriod,
-  formatTime
+  formatTime,
+  formatDateTime,
 } from 'utils/timeUtils';
 
 const moment = extendMoment(Moment);
@@ -835,6 +836,17 @@ describe('Utils: timeUtils', () => {
       ['8:00', 'H:mm', 'HH', '08'],
     ])('returns correctly formatted time string with given params', (time, timeFormat, targetTimeFormat, expected) => {
       expect(formatTime(time, timeFormat, targetTimeFormat)).toBe(expected);
+    });
+  });
+
+  describe('formatDatetime', () => {
+    test.each([
+      ['2023-11-01T15:00:00Z', 'YYYY-MM-DD HH:mm', '2023-11-01 17:00'],
+      ['2023-11-01T15:00:00Z', 'YYYY.MM.DD', '2023.11.01'],
+      ['2023-11-01T15:00:00Z', 'L', '01.11.2023'],
+      ['2023-11-01T34:00:00', 'L', '2023-11-01T34:00:00'],
+    ])('returns correctly formatted datetime string with given params', (datetime, targetFormat, expected) => {
+      expect(formatDateTime(datetime, targetFormat)).toBe(expected);
     });
   });
 });

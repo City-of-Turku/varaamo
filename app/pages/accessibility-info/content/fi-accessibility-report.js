@@ -37,7 +37,7 @@ export default (`
     </p>
     <p>
       <span class="value">
-        <a href="https://opaskartta.turku.fi/eFeedback/fi/Feedback/87/1049" target="_blank" rel="noopener noreferrer">Anna saavutettavuuspalautetta tällä verkkolomakkeella</a>
+        <a href="https://opaskartta.turku.fi/eFeedback/fi/Feedback/30/1039" target="_blank" rel="noopener noreferrer">Anna saavutettavuuspalautetta tällä verkkolomakkeella</a>
       </span>
     </p>
     <p>

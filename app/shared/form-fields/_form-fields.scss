@@ -10,11 +10,12 @@
   .checkbox {
     display: inline;
 
-    input[type="checkbox"]{
+    input[type="checkbox"] {
       position: inherit;
       margin-right: 8px;
     }
   }
+
   .terms-checkbox-field-link {
     cursor: pointer;
     color: $blue;
@@ -33,12 +34,33 @@
   @media (max-width: 500px) {
     width: 100%;
   }
+
   @media (min-width: 500px) and (max-width: $screen-xs-max) {
     height: auto;
     max-width: 400px;
   }
+
   @media (min-width: $screen-xs-max) {
     height: auto;
     width: inherit;
+  }
+}
+
+.form-radio-group {
+  legend {
+    font-size: 1.17em;
+    margin-bottom: 12px;
+  }
+
+  p {
+    margin: 0 0 4px 0;
+  }
+
+  label {
+    display: block;
+  }
+
+  input {
+    margin-right: 4px;
   }
 }

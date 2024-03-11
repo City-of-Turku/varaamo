@@ -9,6 +9,7 @@ import ConfirmReservationModal from './ConfirmReservationModal';
 import {
   UnconnectedReservationConfirmationContainer as ReservationConfirmationContainer,
 } from './ReservationConfirmationContainer';
+import constants from '../../constants/AppConstants';
 
 describe('pages/resource/reservation-calendar/ReservationConfirmationContainer', () => {
   const resource = Resource.build({ needManualConfirmation: false });
@@ -27,6 +28,7 @@ describe('pages/resource/reservation-calendar/ReservationConfirmationContainer',
     currentLanguage: 'fi',
     isMakingReservations: false,
     isStaff: false,
+    isStaffForResource: false,
     params: { id: resource.id },
     recurringReservations: [Reservation.build()],
     reservationsToEdit: [],
@@ -35,6 +37,7 @@ describe('pages/resource/reservation-calendar/ReservationConfirmationContainer',
       Reservation.build(),
       Reservation.build(),
     ]),
+    reservationType: constants.RESERVATION_TYPE.NORMAL_VALUE,
   };
 
   function getWrapper(extraProps) {
@@ -58,6 +61,7 @@ describe('pages/resource/reservation-calendar/ReservationConfirmationContainer',
         expect(actualProps.isPreliminaryReservation)
           .toBe(defaultProps.resource.needManualConfirmation);
         expect(actualProps.isStaff).toBeDefined();
+        expect(actualProps.isStaffForResource).toBeDefined();
         expect(actualProps.onCancel).toBe(defaultProps.actions.cancelReservationEdit);
         expect(actualProps.onClose).toBe(defaultProps.actions.closeConfirmReservationModal);
         expect(actualProps.onConfirm).toBe(wrapper.instance().handleReservation);
@@ -66,6 +70,7 @@ describe('pages/resource/reservation-calendar/ReservationConfirmationContainer',
         expect(actualProps.reservationsToEdit).toEqual(defaultProps.reservationsToEdit);
         expect(actualProps.selectedReservations).toEqual(defaultProps.selectedReservations);
         expect(actualProps.show).toBe(defaultProps.confirmReservationModalIsOpen);
+        expect(actualProps.reservationType).toBe(defaultProps.reservationType);
       });
     });
   });

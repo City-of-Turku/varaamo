@@ -1,6 +1,8 @@
 import moment from 'moment';
 import { Factory } from 'rosie';
 
+import constants from '../../constants/AppConstants';
+
 const BASE_DATE = moment().add(2, 'days');
 
 const Reservation = new Factory()
@@ -20,6 +22,7 @@ const Reservation = new Factory()
   .attr('needManualConfirmation', false)
   .attr('resource', 'r-1')
   .attr('state', 'confirmed')
+  .attr('type', constants.RESERVATION_TYPE.NORMAL_VALUE)
   .attr('url', ['index'], index => (
     `http://api.hel.fi/respa/v1/reservation/${index}/`
   ));

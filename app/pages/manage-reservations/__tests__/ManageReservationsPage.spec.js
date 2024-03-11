@@ -18,6 +18,7 @@ import Reservation from 'utils/fixtures/Reservation';
 import { getEditReservationUrl } from 'utils/reservationUtils';
 import PageResultsText from '../PageResultsText';
 import MassCancelModal from '../../../shared/modals/reservation-mass-cancel/MassCancelModal';
+import ConfirmCashModal from '../../../shared/modals/reservation-confirm-cash/ConfirmCashModal';
 
 
 describe('ManageReservationsFilters', () => {
@@ -164,6 +165,16 @@ describe('ManageReservationsFilters', () => {
       expect(massCancelModal.prop('onClose')).toBe(instance.handleHideMassCancel);
       expect(massCancelModal.prop('show')).toBe(instance.state.showMassCancel);
     });
+
+    test('ConfirmCashModal', () => {
+      const wrapper = getWrapper();
+      const instance = wrapper.instance();
+      const confirmCashModal = wrapper.find(ConfirmCashModal);
+      expect(confirmCashModal).toHaveLength(1);
+      expect(confirmCashModal.prop('onSubmit')).toBe(instance.handleConfirmCash);
+      expect(confirmCashModal.prop('onClose')).toBe(instance.handleHideConfirmCash);
+      expect(confirmCashModal.prop('show')).toBe(instance.state.showConfirmCash);
+    });
   });
 
   describe('functions', () => {
@@ -188,6 +199,31 @@ describe('ManageReservationsFilters', () => {
       instance.handleHideMassCancel();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy.mock.calls[0][0]).toStrictEqual({ showMassCancel: false });
+    });
+
+    describe('handleShowConfirmCash', () => {
+      test('calls setState with correct params', () => {
+        const instance = getWrapper().instance();
+        const spy = jest.spyOn(instance, 'setState');
+        const reservation = { id: '123' };
+        instance.handleShowConfirmCash(reservation);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy.mock.calls[0][0]).toStrictEqual(
+          { showConfirmCash: true, selectedReservation: reservation }
+        );
+      });
+    });
+
+    describe('handleHideConfirmCash', () => {
+      test('calls setState with correct params', () => {
+        const instance = getWrapper().instance();
+        const spy = jest.spyOn(instance, 'setState');
+        instance.handleHideConfirmCash();
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy.mock.calls[0][0]).toStrictEqual(
+          { showConfirmCash: false, selectedReservation: null }
+        );
+      });
     });
 
     describe('componentDidMount', () => {
@@ -361,6 +397,15 @@ describe('ManageReservationsFilters', () => {
           .toBe(reservation);
       });
 
+      test('calls correct function when status is waiting for cash', () => {
+        const instance = getWrapper().instance();
+        const spy = jest.spyOn(instance, 'handleShowConfirmCash');
+        const status = constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT;
+        instance.handleEditReservation(reservation, status);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith(reservation);
+      });
+
       test('calls correct function when status is denied', () => {
         const instance = getWrapper().instance();
         const status = constants.RESERVATION_STATE.DENIED;
@@ -378,6 +423,27 @@ describe('ManageReservationsFilters', () => {
         expect(defaultProps.actions.openReservationCancelModal.mock.calls.length).toBe(0);
         expect(defaultProps.actions.confirmPreliminaryReservation.mock.calls.length).toBe(0);
         expect(defaultProps.actions.denyPreliminaryReservation.mock.calls.length).toBe(0);
+      });
+    });
+
+    describe('handleConfirmCash', () => {
+      test('calls confirmPreliminaryReservation with correct params', () => {
+        const reservation = Reservation.build();
+        const instance = getWrapper().instance();
+        instance.setState({ selectedReservation: reservation });
+        instance.handleConfirmCash();
+        expect(defaultProps.actions.confirmPreliminaryReservation.mock.calls.length).toBe(1);
+        expect(defaultProps.actions.confirmPreliminaryReservation.mock.calls[0][0])
+          .toBe(reservation);
+      });
+
+      test('sets correct state values', () => {
+        const reservation = Reservation.build();
+        const instance = getWrapper().instance();
+        instance.setState({ selectedReservation: reservation, showConfirmCash: true });
+        instance.handleConfirmCash();
+        expect(instance.state.showConfirmCash).toBe(false);
+        expect(instance.state.selectedReservation).toBe(null);
       });
     });
   });
