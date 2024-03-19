@@ -436,7 +436,7 @@
   "ResourceCard.infoTitle.removeFavorite": "Remove from favorites",
   "ResourceCompactList.button.label.next": "Next premise",
   "ResourceCompactList.button.label.previous": "Previous premise",
-  "ResourceFreeTime.buttonLabel": "Search for next free time",
+  "ResourceFreeTime.buttonLabel": "Find next available time",
   "ResourceFreeTime.notificationFound": "Free time found on",
   "ResourceFreeTime.notificationNotFound": "No free time found",
   "ResourceFreeTime.searchingText": "Searching...",
