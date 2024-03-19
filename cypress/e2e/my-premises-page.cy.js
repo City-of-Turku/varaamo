@@ -47,6 +47,8 @@ describe('my premises page', () => {
     // fill reservation form
     cy.get('#reserverName').scrollIntoView().should('be.visible');
     cy.get('#reserverName').should('be.visible').type('Test Tester');
+    cy.get('#universalData').scrollIntoView().should('be.visible').select(1);
+    cy.get('#universalData').should('have.value', '1');
     cy.get('button').contains('Tallenna').click();
 
     // check success message
