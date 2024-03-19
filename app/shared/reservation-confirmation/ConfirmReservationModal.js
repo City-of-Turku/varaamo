@@ -134,6 +134,10 @@ class ConfirmReservationModal extends Component {
       field => camelCase(field)
     )];
 
+    if (resource.universalField && resource.universalField.length) {
+      requiredFormFields.push('universalData');
+    }
+
     if (termsAndConditions) {
       requiredFormFields.push('termsAndConditions');
     }
