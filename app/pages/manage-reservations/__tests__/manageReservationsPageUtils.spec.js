@@ -1,5 +1,7 @@
 import constants from 'constants/AppConstants';
-import { getFilteredReservations, getHiddenReservationCount, getPageResultsText } from '../manageReservationsPageUtils';
+import {
+  getFilteredReservations, getHiddenReservationCount, getPageResultsText, getResourceSlotSize
+} from '../manageReservationsPageUtils';
 import Reservation from 'utils/fixtures/Reservation';
 import Resource from 'utils/fixtures/Resource';
 
@@ -109,6 +111,38 @@ describe('pages/manage-reservations/manageReservationsPageUtils', () => {
         expect(getPageResultsText(currentPage, resultsPerPage, currentPageResults, totalResults))
           .toBe(expected);
       });
+    });
+  });
+
+  describe('getResourceSlotSize', () => {
+    const resources = {
+      1: {
+        id: 'one',
+        slotSize: '01:00:00'
+      },
+      2: {
+        id: 'two',
+        slotSize: '01:30:00'
+      }
+    };
+
+    test('returns slotSize of resource', () => {
+      const resourceId = '1';
+      expect(getResourceSlotSize(resources, resourceId)).toBe('01:00:00');
+    });
+
+    test('returns empty string if resource is not found', () => {
+      const resourceId = '3';
+      expect(getResourceSlotSize(resources, resourceId)).toBe('');
+    });
+
+    test('returns empty string if resources is not given', () => {
+      const resourceId = '1';
+      expect(getResourceSlotSize(undefined, resourceId)).toBe('');
+    });
+
+    test('returns empty string if resource id is not given', () => {
+      expect(getResourceSlotSize(resources, undefined)).toBe('');
     });
   });
 });

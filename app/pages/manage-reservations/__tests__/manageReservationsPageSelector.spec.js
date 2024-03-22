@@ -10,7 +10,7 @@ jest.mock('state/selectors/dataSelectors', () => {
   };
 });
 
-describe('/pages/favorites/favoritesPageSelector', () => {
+describe('/pages/manage-reservations/manageReservationsPageSelector', () => {
   function getSelector() {
     const state = getState();
     return manageReservationsPageSelector(state);
@@ -46,6 +46,14 @@ describe('/pages/favorites/favoritesPageSelector', () => {
 
   test('returns reservationsTotalCount', () => {
     expect(getSelector().reservationsTotalCount).toBeDefined();
+  });
+
+  test('returns resources', () => {
+    expect(getSelector().resources).toBeDefined();
+  });
+
+  test('returns isFetchingResource', () => {
+    expect(getSelector().isFetchingResource).toBeDefined();
   });
 
   test('returns fontSize', () => {

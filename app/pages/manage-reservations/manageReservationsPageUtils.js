@@ -62,3 +62,15 @@ export function getPageResultsText(currentPage, resultsPerPage, currentPageResul
   const to = resultsPerPage * currentPage + currentPageResults;
   return `${from} - ${to} / ${totalResults}`;
 }
+
+/**
+ * Gets slot size of resource
+ * @param {object} resources
+ * @param {string} resourceId
+ * @returns {string} slot size if resource is found in resources, empty string otherwise.
+ */
+export function getResourceSlotSize(resources, resourceId) {
+  const resource = !!resources && resourceId ? resources[resourceId] : undefined;
+  if (resource) return resource.slotSize;
+  return '';
+}

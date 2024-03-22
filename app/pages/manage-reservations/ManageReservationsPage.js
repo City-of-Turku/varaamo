@@ -34,7 +34,7 @@ import {
   denyPreliminaryReservation
 } from 'actions/reservationActions';
 import manageReservationsPageSelector from './manageReservationsPageSelector';
-import { getFilteredReservations } from './manageReservationsPageUtils';
+import { getFilteredReservations, getResourceSlotSize } from './manageReservationsPageUtils';
 import ReservationInfoModal from 'shared/modals/reservation-info';
 import ReservationCancelModal from 'shared/modals/reservation-cancel';
 import PageResultsText from './PageResultsText';
@@ -51,6 +51,8 @@ class ManageReservationsPage extends React.Component {
       showMassCancel: false,
       showConfirmCash: false,
       selectedReservation: null,
+      openingEditPage: false,
+      editPayload: {},
     };
 
     this.handleFetchReservations = this.handleFetchReservations.bind(this);
@@ -65,6 +67,7 @@ class ManageReservationsPage extends React.Component {
     this.handleShowConfirmCash = this.handleShowConfirmCash.bind(this);
     this.handleHideConfirmCash = this.handleHideConfirmCash.bind(this);
     this.handleConfirmCash = this.handleConfirmCash.bind(this);
+    this.handleOpenEditPage = this.handleOpenEditPage.bind(this);
   }
 
   handleShowMassCancel() {
@@ -92,6 +95,12 @@ class ManageReservationsPage extends React.Component {
     const { location } = this.props;
     if (prevProps.location !== location) {
       this.handleFetchReservations();
+    }
+    if (prevProps.isFetchingResource && !this.props.isFetchingResource) {
+      const { openingEditPage } = this.state;
+      if (openingEditPage) {
+        this.handleOpenEditPage();
+      }
     }
   }
 
@@ -149,21 +158,33 @@ class ManageReservationsPage extends React.Component {
     actions.showReservationInfoModal(reservation);
   }
 
-  // opens reservation page in edit mode
+  // starts process of opening reservation edit page
   handleEditClick(reservation) {
-    const { history, actions } = this.props;
-
     const normalizedReservation = Object.assign(
       {}, reservation, { resource: reservation.resource.id }
     );
+    this.handleFetchResource(reservation.resource.id, reservation.begin);
+    const payload = { reservation: normalizedReservation };
+    this.setState({ openingEditPage: true, editPayload: payload });
+  }
+
+  handleOpenEditPage() {
+    const { actions, resources, history } = this.props;
+    const { editPayload } = this.state;
+
+    this.setState({ openingEditPage: false });
+
     // clear old selected reservations before selecting new reservation to edit
     actions.clearReservations();
 
-    // fetch resource before changing page to make sure reservation page has
-    // all needed info to function
-    this.handleFetchResource(reservation.resource.id, reservation.begin);
-    actions.editReservation({ reservation: normalizedReservation });
-    const nextUrl = `${getEditReservationUrl(normalizedReservation)}&path=manage-reservations`;
+    const payload = { ...editPayload };
+    const slotSize = getResourceSlotSize(resources, payload.reservation.resource);
+    if (slotSize) {
+      payload.slotSize = slotSize;
+    }
+
+    actions.editReservation(payload);
+    const nextUrl = `${getEditReservationUrl(editPayload.reservation)}&path=manage-reservations`;
     history.push(nextUrl);
   }
 
@@ -315,6 +336,8 @@ ManageReservationsPage.propTypes = {
   units: PropTypes.array,
   reservations: PropTypes.array,
   reservationsTotalCount: PropTypes.number.isRequired,
+  resources: PropTypes.object,
+  isFetchingResource: PropTypes.bool,
   isFetchingReservations: PropTypes.bool,
   isFetchingUnits: PropTypes.bool,
   fontSize: PropTypes.string,

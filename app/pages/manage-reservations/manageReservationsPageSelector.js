@@ -3,7 +3,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import ActionTypes from 'constants/ActionTypes';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
 import { isAdminSelector } from 'state/selectors/authSelectors';
-import { userFavouriteResourcesSelector, unitsSelector } from 'state/selectors/dataSelectors';
+import { userFavouriteResourcesSelector, unitsSelector, resourcesSelector } from 'state/selectors/dataSelectors';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 import { fontSizeSelector } from '../../state/selectors/accessibilitySelectors';
 
@@ -31,6 +31,8 @@ const manageReservationsPageSelector = createStructuredSelector({
   units: unitsArraySelector,
   reservations: reservationsSelector,
   reservationsTotalCount: reservationsCountSelector,
+  resources: resourcesSelector,
+  isFetchingResource: requestIsActiveSelectorFactory(ActionTypes.API.RESOURCE_GET_REQUEST),
   fontSize: fontSizeSelector,
 });
 
