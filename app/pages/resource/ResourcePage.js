@@ -36,6 +36,7 @@ import {
   fetchResourceOutlookCalendarLinks,
 } from 'resource-outlook-linker/actions';
 import NextFreeTimesButton from './next-free-times-button/NextFreeTimesButton';
+import OvernightCalendar from '../../shared/overnight-calendar/OvernightCalendar';
 
 const ResourceMap = lazy(() => import('shared/resource-map'));
 
@@ -332,26 +333,37 @@ class UnconnectedResourcePage extends Component {
                       </div>
                       )}
                       {resource.reservable && this.renderLogin()}
-                      <ResourceCalendar
-                        disableDays={this.disableDays}
-                        onDateChange={this.handleDateChange}
-                        resourceId={resource.id}
-                        selectedDate={date}
-                      />
-                      <NextFreeTimesButton
-                        addNotification={actions.addNotification}
-                        handleDateChange={this.handleDateChange}
-                        resource={resource}
-                        selectedDate={date}
-                      />
-                      <ReservationCalendar
-                        history={history}
-                        location={location}
-                        params={params}
-                      />
+                      {resource.overnightReservations ? (
+                        <OvernightCalendar
+                          currentLanguage={currentLanguage}
+                          history={history}
+                          resource={resource}
+                        />
+                      )
+                        : (
+                          <React.Fragment>
+                            <ResourceCalendar
+                              disableDays={this.disableDays}
+                              onDateChange={this.handleDateChange}
+                              resourceId={resource.id}
+                              selectedDate={date}
+                            />
+                            <NextFreeTimesButton
+                              addNotification={actions.addNotification}
+                              handleDateChange={this.handleDateChange}
+                              resource={resource}
+                              selectedDate={date}
+                            />
+                            <ReservationCalendar
+                              history={history}
+                              location={location}
+                              params={params}
+                            />
+                          </React.Fragment>
+                        )
+                      }
                     </div>
                     )}
-
                   </Panel>
                 </Col>
                 <Col className="app-ResourceInfo__images" lg={3} md={3} xs={12}>

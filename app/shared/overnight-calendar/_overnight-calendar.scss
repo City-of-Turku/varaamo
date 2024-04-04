@@ -1,0 +1,310 @@
+.overnight-calendar {
+  $available-color: $light-gray;
+  $busy-color: $yellow;
+  $booked-color: $red;
+  $available-color-green: #00d7a7;
+  $highlighted-color: cyan;
+
+  .DayPicker-NavBar {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin: 12px 0;
+  }
+
+  .DayPicker-NavButton--prev {
+    @include icon-angle-left($black);
+    width: $line-height-computed;
+    height: $line-height-computed;
+    position: static;
+    margin-left: 5px;
+
+    @include add-focus(2px, $black) {}
+  }
+
+  .DayPicker-NavButton--next {
+    @include icon-angle-right($black);
+    width: $line-height-computed;
+    height: $line-height-computed;
+    position: static;
+    margin-right: 5px;
+
+    @include add-focus(2px, $black) {}
+  }
+
+  .DayPicker-Caption {
+    height: auto;
+    font-weight: 600;
+    line-height: 3rem;
+    font-size: 16px;
+    text-transform: capitalize;
+    text-align: center;
+  }
+
+  .DayPicker-Month {
+    margin: 0;
+    border-collapse: separate;
+    width: 100%;
+  }
+
+  .DayPicker-Day {
+    border: 2px solid $white;
+    padding: 1.2rem;
+    margin: 1px;
+    line-height: 1rem;
+    color: $black;
+    background-color: $available-color;
+    border-radius: 0;
+    font-size: 1.6rem;
+
+    @media (max-width: $screen-xs-max) {
+      padding: 19.2px 0px;
+    }
+
+    &:focus {
+      outline: initial;
+    }
+
+    &--disabled {
+      cursor: pointer;
+      text-decoration: line-through;
+      background-color: $medium-gray;
+      color: $dark-gray;
+    }
+
+    &--available:not(.DayPicker-Day--disabled) {
+      background-color: $available-color-green;
+
+      &.DayPicker-Day--selected {
+        background-color: $available-color;
+      }
+    }
+
+    &--busy:not(.DayPicker-Day--disabled) {
+      background-color: $busy-color;
+
+      &.DayPicker-Day--selected {
+        background-color: $busy-color;
+      }
+    }
+
+    &--booked:not(.DayPicker-Day--disabled) {
+      background-color: $booked-color;
+      text-decoration: line-through;
+
+      &.DayPicker-Day--selected {
+        background-color: $booked-color;
+      }
+
+      &:hover {
+        background-color: $booked-color !important;
+      }
+    }
+
+    &--highlighted:not(.DayPicker-Day--disabled) {
+      background-color: $highlighted-color;
+
+      &.DayPicker-Day--selected {
+        background-color: $highlighted-color;
+      }
+
+      &:hover {
+        background-color: $highlighted-color !important;
+      }
+    }
+
+    &--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      color: $black;
+      border: 2px solid $black;
+    }
+
+    &--start:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      background: linear-gradient(140deg, $medium-gray 49%, $highlighted-color 50%);
+
+      &.DayPicker-Day--prevBooked {
+        background: linear-gradient(140deg, $medium-gray 49%, $highlighted-color 50%);
+      }
+
+      &.DayPicker-Day--prevClosed {
+        background: linear-gradient(140deg, $medium-gray 49%, $highlighted-color 50%);
+      }
+    }
+
+    &--end:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      background: linear-gradient(140deg, $highlighted-color 49%, $available-color 50%);
+
+      &.DayPicker-Day--nextBooked {
+        background: linear-gradient(140deg, $highlighted-color 49%, $medium-gray 50%);
+      }
+
+      &.DayPicker-Day--nextClosed {
+        background: linear-gradient(140deg, $highlighted-color 49%, $medium-gray 50%);
+      }
+    }
+
+    &--nextBooked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      background: linear-gradient(140deg, $available-color 49%, $booked-color 50%);
+    }
+
+    &--nextBookedStartSelected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      background: linear-gradient(140deg, $available-color 49%, $medium-gray 50%);
+    }
+
+    &--prevBooked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      background: linear-gradient(140deg, $booked-color 49%, $available-color 50%);
+    }
+
+    &--nextClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      background: linear-gradient(140deg, $available-color 49%, $medium-gray 50%);
+    }
+
+    &--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      background: linear-gradient(140deg, $medium-gray 49%, $available-color 50%);
+    }
+
+    &--outside {
+      color: $dark-gray;
+    }
+
+    @include add-focus(2px, $black) {}
+  }
+
+  .DayPicker-Day--nextClosed.DayPicker-Day--prevBooked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    background: linear-gradient(140deg, $booked-color 49%, $medium-gray 50%);
+  }
+
+  .DayPicker-Day--nextBooked.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    background: linear-gradient(140deg, $medium-gray 49%, $booked-color 50%);
+  }
+
+  .DayPicker-Day--booked.DayPicker-Day--nextClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    background: linear-gradient(140deg, $booked-color 49%, $medium-gray 50%);
+  }
+
+  .DayPicker-Day--booked.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    background: linear-gradient(140deg, $medium-gray 49%, $booked-color 50%);
+  }
+
+  .DayPicker-Day--nextBooked.DayPicker-Day--prevBooked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    background: initial;
+    background-color: $booked-color;
+    text-decoration: line-through;
+
+    &:hover {
+      background-color: $booked-color !important;
+    }
+  }
+
+  .DayPicker-Day--prevBooked.DayPicker-Day--booked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    background: initial;
+    background-color: $booked-color;
+    text-decoration: line-through;
+
+    &:hover {
+      background-color: $booked-color !important;
+    }
+  }
+
+  .DayPicker-Day--nextClosed.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    background: initial;
+    background-color: $medium-gray;
+    text-decoration: line-through;
+    color: #525a65;
+
+    &:hover {
+      background-color: $medium-gray !important;
+    }
+  }
+
+  .DayPicker-WeekdaysRow {
+    padding: 0.2rem;
+    font-size: 1.4rem;
+  }
+
+  .DayPicker-Weekdays {
+    text-transform: uppercase;
+    font-weight: normal;
+
+    abbr {
+      border: none;
+      cursor: default;
+      vertical-align: text-top;
+    }
+  }
+
+  .DayPicker-Weekday {
+    color: $black;
+    padding: 0px;
+  }
+
+  .DayPicker-Footer {
+    text-align: center;
+  }
+
+  .DayPicker-TodayButton {
+    text-decoration: none;
+    color: #000000;
+    font-weight: 500;
+    background-color: transparent;
+    border: 2px solid #000000;
+    padding: 6px 12px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 0;
+  }
+
+  .overnight-legends {
+    display: flex;
+    margin-bottom: 24px;
+
+    .overnight-legend {
+      display: flex;
+      margin-bottom: 8px;
+
+      .overnight-row {
+        display: flex;
+        flex: 1;
+        margin-right: 24px;
+      }
+
+      .overnight-legend-box {
+        width: 60px;
+        height: 55px;
+        padding: 1.2rem;
+        line-height: 1rem;
+        color: #000000;
+        border-radius: 0;
+        font-size: 1.3rem;
+        vertical-align: middle;
+        text-align: center;
+        color: #000000;
+      }
+
+      .overnight-free {
+        background-color: $light-gray;
+      }
+
+      .overnight-disabled {
+        color: #525a65;
+        background-color: $medium-gray;
+        text-decoration: line-through;
+      }
+
+      .overnight-booked {
+        background-color: $booked-color;
+        text-decoration: line-through;
+      }
+
+      .overnight-selection {
+        background-color: $highlighted-color;
+      }
+
+      .overnight-legend-text {
+        align-self: center;
+        font-size: 1.2rem;
+        padding: 0 8px;
+      }
+    }
+  }
+}
