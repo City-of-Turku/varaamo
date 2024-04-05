@@ -114,12 +114,12 @@
       }
     }
 
-    &--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    &--selected:not(.DayPicker-Day--disabled) {
       color: $black;
       border: 2px solid $black;
     }
 
-    &--start:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    &--start:not(.DayPicker-Day--disabled) {
       background: linear-gradient(140deg, $medium-gray 49%, $highlighted-color 50%);
 
       &.DayPicker-Day--prevBooked {
@@ -131,7 +131,7 @@
       }
     }
 
-    &--end:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    &--end:not(.DayPicker-Day--disabled) {
       background: linear-gradient(140deg, $highlighted-color 49%, $available-color 50%);
 
       &.DayPicker-Day--nextBooked {
@@ -143,50 +143,46 @@
       }
     }
 
-    &--nextBooked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    &--nextBooked:not(.DayPicker-Day--disabled) {
       background: linear-gradient(140deg, $available-color 49%, $booked-color 50%);
     }
 
-    &--nextBookedStartSelected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    &--nextBookedStartSelected:not(.DayPicker-Day--disabled) {
       background: linear-gradient(140deg, $available-color 49%, $medium-gray 50%);
     }
 
-    &--prevBooked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    &--prevBooked:not(.DayPicker-Day--disabled) {
       background: linear-gradient(140deg, $booked-color 49%, $available-color 50%);
     }
 
-    &--nextClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    &--nextClosed:not(.DayPicker-Day--disabled) {
       background: linear-gradient(140deg, $available-color 49%, $medium-gray 50%);
     }
 
-    &--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    &--prevClosed:not(.DayPicker-Day--disabled) {
       background: linear-gradient(140deg, $medium-gray 49%, $available-color 50%);
-    }
-
-    &--outside {
-      color: $dark-gray;
     }
 
     @include add-focus(2px, $black) {}
   }
 
-  .DayPicker-Day--nextClosed.DayPicker-Day--prevBooked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  .DayPicker-Day--nextClosed.DayPicker-Day--prevBooked:not(.DayPicker-Day--disabled) {
     background: linear-gradient(140deg, $booked-color 49%, $medium-gray 50%);
   }
 
-  .DayPicker-Day--nextBooked.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  .DayPicker-Day--nextBooked.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled) {
     background: linear-gradient(140deg, $medium-gray 49%, $booked-color 50%);
   }
 
-  .DayPicker-Day--booked.DayPicker-Day--nextClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  .DayPicker-Day--booked.DayPicker-Day--nextClosed:not(.DayPicker-Day--disabled) {
     background: linear-gradient(140deg, $booked-color 49%, $medium-gray 50%);
   }
 
-  .DayPicker-Day--booked.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  .DayPicker-Day--booked.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled) {
     background: linear-gradient(140deg, $medium-gray 49%, $booked-color 50%);
   }
 
-  .DayPicker-Day--nextBooked.DayPicker-Day--prevBooked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  .DayPicker-Day--nextBooked.DayPicker-Day--prevBooked:not(.DayPicker-Day--disabled) {
     background: initial;
     background-color: $booked-color;
     text-decoration: line-through;
@@ -196,7 +192,7 @@
     }
   }
 
-  .DayPicker-Day--prevBooked.DayPicker-Day--booked:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  .DayPicker-Day--prevBooked.DayPicker-Day--booked:not(.DayPicker-Day--disabled) {
     background: initial;
     background-color: $booked-color;
     text-decoration: line-through;
@@ -206,7 +202,7 @@
     }
   }
 
-  .DayPicker-Day--nextClosed.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  .DayPicker-Day--nextClosed.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled) {
     background: initial;
     background-color: $medium-gray;
     text-decoration: line-through;
