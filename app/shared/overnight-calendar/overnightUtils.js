@@ -104,18 +104,24 @@ export function reservationsModifier(day, reservations) {
 }
 
 export function nextDayBookedModifier(day, reservations) {
-  const firstBooked = findFirstClosestReservation(day, reservations);
-  if (firstBooked && moment(day).add(1, 'day').isSame(firstBooked.begin, 'day')) {
-    return true;
+  if (day && reservations) {
+    const firstBooked = findFirstClosestReservation(day, reservations);
+    if (firstBooked && moment(day).add(1, 'day').isSame(firstBooked.begin, 'day')) {
+      return true;
+    }
   }
+
   return false;
 }
 
 export function prevDayBookedModifier(day, reservations) {
-  const firstBooked = findPrevFirstClosestReservation(day, reservations);
-  if (firstBooked && moment(day).subtract(1, 'day').isSame(firstBooked.end, 'day')) {
-    return true;
+  if (day && reservations) {
+    const firstBooked = findPrevFirstClosestReservation(day, reservations);
+    if (firstBooked && moment(day).subtract(1, 'day').isSame(firstBooked.end, 'day')) {
+      return true;
+    }
   }
+
   return false;
 }
 
