@@ -245,6 +245,8 @@
   "Notifications.loginToReserveStrongAuth": "Log in with Suomi.fi to reserve these premises.",
   "Notifications.massCancelSuccessful": "Cancellations of the reservations were successful.",
   "Notifications.noPermission": "You do not have permission to perform this action.",
+  "Notifications.overnight.notSelectable": "The specified day is not selectable.",
+  "Notifications.overnight.notSelectableStart": "The specified day cannot be chosen as the start date.",
   "Notifications.noRightToReserve": "You do not have the right to make this reservation.",
   "Notifications.reservationDeleteSuccessMessage": "Your reservation was successfully cancelled.",
   "Notifications.reservationUpdateSuccessMessage": "Your reservation has been updated.",

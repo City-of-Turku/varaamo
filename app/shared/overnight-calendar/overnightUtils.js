@@ -266,3 +266,73 @@ export function handleFormattingSelected(startDate, endDate, startTime, endTime,
 export function getReservationUrl(reservation, resourceId) {
   return `/reservation?id=${reservation ? reservation.id : ''}&resource=${resourceId}`;
 }
+
+/**
+ * Returns true if reservation is allowed
+ * @param {Object} params
+ * @param {boolean} params.isLoggedIn
+ * @param {boolean} params.isStrongAuthSatisfied
+ * @param {boolean} params.isMaintenanceModeOn
+ * @param {Object} params.resource
+ * @returns {boolean} true if reservation is allowed
+ */
+export function isReservingAllowed({
+  isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn, resource
+}) {
+  if (isMaintenanceModeOn || !resource) {
+    return false;
+  }
+  const { authentication, reservable } = resource;
+  if (!reservable) {
+    return false;
+  }
+  const authRequired = authentication !== 'unauthenticated';
+
+  if (authRequired && (!isLoggedIn || !isStrongAuthSatisfied)) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Returns correct general notification text e.g. user needs to login or maintenance mode is on
+ * @param {Object} params
+ * @param {boolean} params.isLoggedIn
+ * @param {boolean} params.isStrongAuthSatisfied
+ * @param {boolean} params.isMaintenanceModeOn
+ * @param {Object} params.resource
+ * @param {function} params.t
+ * @returns {string} notification text
+ */
+export function getNotificationText({
+  isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn, resource, t
+}) {
+  if (isMaintenanceModeOn) {
+    return t('Notifications.cannotReserveDuringMaintenance');
+  }
+  if (resource.reservable && !isStrongAuthSatisfied) {
+    return t('Notifications.loginToReserveStrongAuth');
+  }
+  if (!isLoggedIn && resource.reservable) {
+    return t('Notifications.loginToReserve');
+  }
+  return t('Notifications.noRightToReserve');
+}
+
+/**
+ * Returns correct not selectable text
+ * @param {boolean} isDateDisabled
+ * @param {boolean} booked
+ * @param {boolean} isNextBlocked
+ * @param {function} t
+ * @returns {string} not selectable text
+ */
+export function getNotSelectableNotificationText({
+  isDateDisabled, booked, isNextBlocked, t
+}) {
+  if (!isDateDisabled && !booked && isNextBlocked) {
+    return t('Notifications.overnight.notSelectableStart');
+  }
+  return t('Notifications.overnight.notSelectable');
+}

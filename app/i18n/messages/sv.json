@@ -248,6 +248,8 @@
   "Notifications.massCancelSuccessful": "Avbokningarna lyckades.",
   "Notifications.noPermission": "Du har inte behörighet att utföra denna åtgärd.",
   "Notifications.noRightToReserve": "Du har inte rätt att göra denna bokning.",
+  "Notifications.overnight.notSelectable": "Den angivna dagen går inte att välja.",
+  "Notifications.overnight.notSelectableStart": "Den angivna dagen kan inte väljas som startdatum.",
   "Notifications.reservationDeleteSuccessMessage": "Bokningen avbokades.",
   "Notifications.reservationUpdateSuccessMessage": "Bokningen uppdaterades.",
   "Notifications.selectTimeToReserve.warning": "Bokningen överlappar med befintlig bokning eller ligger utanför öppettiderna.",

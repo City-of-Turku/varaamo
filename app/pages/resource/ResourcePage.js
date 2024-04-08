@@ -337,6 +337,8 @@ class UnconnectedResourcePage extends Component {
                         <OvernightCalendar
                           currentLanguage={currentLanguage}
                           history={history}
+                          isLoggedIn={isLoggedIn}
+                          isStrongAuthSatisfied={isStrongAuthSatisfied}
                           resource={resource}
                         />
                       )

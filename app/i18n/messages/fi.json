@@ -246,6 +246,8 @@
   "Notifications.massCancelSuccessful": "Varausten peruminen onnistui.",
   "Notifications.noPermission": "Sinulla ei ole oikeutta suorittaa tätä toimintoa.",
   "Notifications.noRightToReserve": "Sinulla ei ole oikeutta tehdä tätä varausta.",
+  "Notifications.overnight.notSelectable": "Kyseinen päivä ei ole valittavissa",
+  "Notifications.overnight.notSelectableStart": "Kyseistä päivää ei voi valita aloituspäiväksi",
   "Notifications.reservationDeleteSuccessMessage": "Varauksen peruminen onnistui.",
   "Notifications.reservationUpdateSuccessMessage": "Varaus päivitetty.",
   "Notifications.selectTimeToReserve.warning": "Varaus menee päällekkäin olemassa olevan varauksen kanssa tai se on aukioloaikojen ulkopuolella.",

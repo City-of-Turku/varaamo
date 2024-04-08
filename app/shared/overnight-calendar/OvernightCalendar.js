@@ -8,11 +8,14 @@ import { bindActionCreators } from 'redux';
 
 import { injectT } from 'i18n';
 import {
+  getNotSelectableNotificationText,
+  getNotificationText,
   getOvernightDatetime,
   getReservationUrl,
   handleDateSelect,
   handleDisableDays,
   handleFormattingSelected,
+  isReservingAllowed,
   nextDayBookedModifier,
   nextDayClosedModifier,
   prevDayBookedModifier,
@@ -23,9 +26,11 @@ import OvernightCalendarSelector from './OvernightCalendarSelector';
 import OvernightSummary from './OvernightSummary';
 import { setSelectedDatetimes } from '../../actions/uiActions';
 import OvernightLegends from './OvernightLegends';
+import { addNotification } from 'actions/notificationsActions';
 
 function OvernightCalendar({
-  currentLanguage, resource, t, selected, actions, history
+  currentLanguage, resource, t, selected, actions,
+  history, isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn
 }) {
   // TODO: how to handle fetching reservations far in the future?
   // fetch on every month change?
@@ -44,6 +49,9 @@ function OvernightCalendar({
   const end = endDate;
 
   const now = moment();
+  const reservingIsAllowed = isReservingAllowed({
+    isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn, resource
+  });
 
   const validateAndSelect = (day, { booked, nextBooked, nextClosed }) => {
     const isNextBlocked = !startDate && (nextBooked || nextClosed);
@@ -57,11 +65,30 @@ function OvernightCalendar({
       openingHours,
       reservations,
     });
+
+    if (!reservingIsAllowed) {
+      actions.addNotification({
+        message: getNotificationText({
+          isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn, resource, t
+        }),
+        type: 'info',
+        timeOut: 10000,
+      });
+      return;
+    }
+
     if (!isDateDisabled && !booked && !isNextBlocked) {
       handleDateSelect(day, startDate, setStartDate, endDate, setEndDate);
-    } else {
-      console.log('date is not selectable!');
+      return;
     }
+
+    actions.addNotification({
+      message: getNotSelectableNotificationText({
+        isDateDisabled, booked, isNextBlocked, t
+      }),
+      type: 'info',
+      timeOut: 10000,
+    });
   };
 
   const handleSelectDatetimes = () => {
@@ -130,6 +157,9 @@ OvernightCalendar.propTypes = {
   selected: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  isStrongAuthSatisfied: PropTypes.bool.isRequired,
+  isMaintenanceModeOn: PropTypes.bool.isRequired,
 };
 
 OvernightCalendar = injectT(OvernightCalendar); // eslint-disable-line
@@ -138,7 +168,8 @@ export { OvernightCalendar as UnconnectedOvernightCalendar };
 
 function mapDispatchToProps(dispatch) {
   const actionCreators = {
-    setSelectedDatetimes
+    setSelectedDatetimes,
+    addNotification,
   };
 
   return { actions: bindActionCreators(actionCreators, dispatch) };
