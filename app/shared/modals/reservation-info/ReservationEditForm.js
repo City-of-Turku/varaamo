@@ -21,7 +21,7 @@ import { injectT } from 'i18n';
 import ReservationOrderInfo from './ReservationOrderInfo';
 import { getReservationCustomerGroupName } from 'utils/reservationUtils';
 import constants from '../../../constants/AppConstants';
-import { formatDateTime } from '../../../utils/timeUtils';
+import { formatDateTime, isMultiday } from '../../../utils/timeUtils';
 
 class UnconnectedReservationEditForm extends Component {
   constructor(props) {
@@ -163,7 +163,12 @@ class UnconnectedReservationEditForm extends Component {
     const {
       isEditing, reservation, resource, t
     } = this.props;
-    if (isEditing) {
+
+    const isReservationMultiday = isMultiday(reservation.begin, reservation.end);
+    const beginFormat = isReservationMultiday ? 'D.M.YYYY HH:mm' : 'dddd, LLL';
+    const endFormat = isReservationMultiday ? 'D.M.YYYY HH:mm' : 'LT';
+
+    if (isEditing && !isReservationMultiday) {
       return (
         <FormGroup id="reservation-time">
           <Col sm={3}>
@@ -179,7 +184,14 @@ class UnconnectedReservationEditForm extends Component {
         </FormGroup>
       );
     }
-    const staticReservationTime = <TimeRange begin={reservation.begin} end={reservation.end} />;
+    const staticReservationTime = (
+      <TimeRange
+        begin={reservation.begin}
+        beginFormat={beginFormat}
+        end={reservation.end}
+        endFormat={endFormat}
+      />
+    );
     return this.renderInfoRow(t('common.reservationTimeLabel'), staticReservationTime);
   }
 
