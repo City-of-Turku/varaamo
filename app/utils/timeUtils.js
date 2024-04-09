@@ -352,7 +352,7 @@ function formatDateTime(datetime, targetFormat) {
  * @returns {string} formatted datetime string
  */
 function formatDetailsDatetimes(begin, end) {
-  if (!moment(begin).isSame(moment(end), 'day')) {
+  if (isMultiday(begin, end)) {
     const beginText = moment(begin).format('D.M.YYYY HH:mm');
     const endText = moment(end).format('D.M.YYYY HH:mm');
     const duration = getPrettifiedDuration(begin, end);
@@ -363,6 +363,16 @@ function formatDetailsDatetimes(begin, end) {
   const endText = moment(end).format('HH:mm');
   const duration = getPrettifiedDuration(begin, end);
   return `${beginText}–${endText} (${duration})`;
+}
+
+/**
+ * Check whether begin and end are on different days
+ * @param {string} begin datetime
+ * @param {string} end datetime
+ * @returns {boolean} true if begin and end are on different days
+ */
+function isMultiday(begin, end) {
+  return !moment(begin).isSame(moment(end), 'day');
 }
 
 export {
@@ -388,4 +398,5 @@ export {
   formatTime,
   formatDateTime,
   formatDetailsDatetimes,
+  isMultiday,
 };
