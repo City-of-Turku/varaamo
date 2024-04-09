@@ -12,6 +12,7 @@ import TimeRange from 'shared/time-range';
 import { injectT } from 'i18n';
 import { getMainImage } from 'utils/imageUtils';
 import { getResourcePageUrl } from 'utils/resourceUtils';
+import { isMultiday } from '../../../utils/timeUtils';
 
 class ReservationListItem extends Component {
   renderImage(image) {
@@ -27,6 +28,9 @@ class ReservationListItem extends Component {
     } = this.props;
 
     const nameSeparator = isEmpty(resource) || isEmpty(unit) ? '' : ', ';
+    const isReservationMultiday = isMultiday(reservation.begin, reservation.end);
+    const beginFormat = isReservationMultiday ? 'D.M.YYYY HH:mm' : 'dddd, LLL';
+    const endFormat = isReservationMultiday ? 'D.M.YYYY HH:mm' : 'LT';
 
     return (
       <li className="reservation container">
@@ -52,7 +56,12 @@ class ReservationListItem extends Component {
           </div>
           <div>
             <img alt={t('common.reservationTimeLabel')} className="timeslot" src={iconCalendar} />
-            <TimeRange begin={reservation.begin} end={reservation.end} />
+            <TimeRange
+              begin={reservation.begin}
+              beginFormat={beginFormat}
+              end={reservation.end}
+              endFormat={endFormat}
+            />
           </div>
           <ReservationAccessCode
             reservation={reservation}
