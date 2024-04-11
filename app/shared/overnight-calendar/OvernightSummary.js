@@ -14,8 +14,7 @@ function OvernightSummary({
       <h3 className="visually-hidden" id="timetable-summary">{t('ReservationCalendar.Confirmation.header')}</h3>
       <div>
         <strong>
-          {t('TimeSlots.selectedDate')}
-          {' '}
+          {`${t('TimeSlots.selectedDate')} `}
         </strong>
         {timeRange}
       </div>

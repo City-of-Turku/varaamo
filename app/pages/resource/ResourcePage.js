@@ -335,9 +335,7 @@ class UnconnectedResourcePage extends Component {
                       {resource.reservable && this.renderLogin()}
                       {resource.overnightReservations ? (
                         <OvernightCalendar
-                          currentLanguage={currentLanguage}
                           history={history}
-                          isLoggedIn={isLoggedIn}
                           isStrongAuthSatisfied={isStrongAuthSatisfied}
                           resource={resource}
                         />

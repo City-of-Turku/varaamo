@@ -336,3 +336,13 @@ export function getNotSelectableNotificationText({
   }
   return t('Notifications.overnight.notSelectable');
 }
+
+/**
+ * Removes the given reservation from reservations list
+ * @param {number} reservationId
+ * @param {Object[]} reservations
+ * @returns {Object[]} filtered reservations
+ */
+export function filterSelectedReservation(reservationId, reservations) {
+  return reservations.filter(reservation => reservation.id !== reservationId);
+}

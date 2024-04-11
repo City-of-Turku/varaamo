@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { injectT } from 'i18n';
 import {
+  filterSelectedReservation,
   getNotSelectableNotificationText,
   getNotificationText,
   getOvernightDatetime,
@@ -27,21 +28,38 @@ import OvernightSummary from './OvernightSummary';
 import { setSelectedDatetimes } from '../../actions/uiActions';
 import OvernightLegends from './OvernightLegends';
 import { addNotification } from 'actions/notificationsActions';
+import OvernightEditSummary from './OvernightEditSummary';
 
 function OvernightCalendar({
   currentLanguage, resource, t, selected, actions,
-  history, isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn
+  history, isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn,
+  reservationId, onEditCancel, onEditConfirm
 }) {
   // TODO: how to handle fetching reservations far in the future?
   // fetch on every month change?
 
-  const [startDate, setStartDate] = React.useState(null);
-  const [endDate, setEndDate] = React.useState(null);
+  if (!resource || !resource.reservations) {
+    return null;
+  }
+
+  let initialStart = null;
+  let initialEnd = null;
+
+  if (selected && selected.length > 1) {
+    initialStart = moment(selected[0].begin).toDate();
+    initialEnd = moment(selected[1].end).toDate();
+  }
+
+  const [startDate, setStartDate] = React.useState(initialStart);
+  const [endDate, setEndDate] = React.useState(initialEnd);
 
   const {
     reservable, reservableAfter, reservableBefore, openingHours, reservations,
     overnightStartTime, overnightEndTime
   } = resource;
+
+  const filteredReservations = reservationId
+    ? filterSelectedReservation(reservationId, reservations) : reservations;
 
   const highlighted = { from: startDate, to: endDate };
   const available = { from: new Date(2024, 2, 4), to: new Date(2024, 2, 8) };
@@ -63,7 +81,7 @@ function OvernightCalendar({
       reservableBefore,
       startDate,
       openingHours,
-      reservations,
+      reservations: filteredReservations,
     });
 
     if (!reservingIsAllowed) {
@@ -91,14 +109,24 @@ function OvernightCalendar({
     });
   };
 
+  const isEditing = !!initialStart;
+
   const handleSelectDatetimes = () => {
     const formattedSelected = handleFormattingSelected(
       startDate, endDate, overnightStartTime, overnightEndTime, resource.id);
     actions.setSelectedDatetimes([formattedSelected, formattedSelected]);
-    const nextUrl = getReservationUrl(undefined, resource.id);
-    history.push(nextUrl);
+    if (isEditing) {
+      onEditConfirm();
+    } else {
+      const nextUrl = getReservationUrl(undefined, resource.id);
+      history.push(nextUrl);
+    }
   };
 
+  const initialMonth = initialStart || new Date();
+  const showSummary = !isEditing && startDate && endDate;
+  const showEditSummary = isEditing;
+  // TODO: make work in mobile
   return (
     <div className="overnight-calendar">
       <DayPicker
@@ -110,11 +138,11 @@ function OvernightCalendar({
           reservableBefore,
           startDate,
           openingHours,
-          reservations,
+          reservations: filteredReservations,
         })}
         enableOutsideDays
         firstDayOfWeek={1}
-        initialMonth={new Date()}
+        initialMonth={initialMonth}
         labels={{ previousMonth: t('Overnight.prevMonth'), nextMonth: t('Overnight.nextMonth') }}
         locale={currentLanguage}
         localeUtils={MomentLocaleUtils}
@@ -124,12 +152,12 @@ function OvernightCalendar({
           end,
           highlighted,
           available,
-          booked: (day) => reservationsModifier(day, reservations),
-          nextBooked: (day) => nextDayBookedModifier(day, reservations),
+          booked: (day) => reservationsModifier(day, filteredReservations),
+          nextBooked: (day) => nextDayBookedModifier(day, filteredReservations),
           nextBookedStartSelected: (day) => (
-            startDate ? nextDayBookedModifier(day, reservations) : null),
+            startDate ? nextDayBookedModifier(day, filteredReservations) : null),
           nextClosed: (day) => nextDayClosedModifier(day, openingHours),
-          prevBooked: (day) => prevDayBookedModifier(day, reservations),
+          prevBooked: (day) => prevDayBookedModifier(day, filteredReservations),
           prevClosed: (day) => prevDayClosedModifier(day, openingHours),
         }}
         onDayClick={validateAndSelect}
@@ -138,7 +166,7 @@ function OvernightCalendar({
         todayButton={t('Overnight.currentMonth')}
       />
       <OvernightLegends />
-      {((selected && selected.length > 0) || (startDate && endDate)) && (
+      {showSummary && (
         <OvernightSummary
           endDatetime={getOvernightDatetime(endDate, overnightEndTime)}
           handleSelectDatetimes={handleSelectDatetimes}
@@ -146,9 +174,22 @@ function OvernightCalendar({
           startDatetime={getOvernightDatetime(startDate, overnightStartTime)}
         />
       )}
+      {showEditSummary && (
+        <OvernightEditSummary
+          endDatetime={getOvernightDatetime(endDate, overnightEndTime)}
+          onCancel={onEditCancel}
+          onConfirm={handleSelectDatetimes}
+          selected={selected}
+          startDatetime={getOvernightDatetime(startDate, overnightStartTime)}
+        />
+      )}
     </div>
   );
 }
+
+OvernightCalendar.defaultProps = {
+  reservationId: 0,
+};
 
 OvernightCalendar.propTypes = {
   currentLanguage: PropTypes.string.isRequired,
@@ -160,6 +201,9 @@ OvernightCalendar.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   isStrongAuthSatisfied: PropTypes.bool.isRequired,
   isMaintenanceModeOn: PropTypes.bool.isRequired,
+  reservationId: PropTypes.number,
+  onEditCancel: PropTypes.func,
+  onEditConfirm: PropTypes.func,
 };
 
 OvernightCalendar = injectT(OvernightCalendar); // eslint-disable-line
