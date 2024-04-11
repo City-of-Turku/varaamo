@@ -335,9 +335,11 @@ class UnconnectedResourcePage extends Component {
                       {resource.reservable && this.renderLogin()}
                       {resource.overnightReservations ? (
                         <OvernightCalendar
+                          handleDateChange={this.handleDateChange}
                           history={history}
                           isStrongAuthSatisfied={isStrongAuthSatisfied}
                           resource={resource}
+                          selectedDate={date}
                         />
                       )
                         : (

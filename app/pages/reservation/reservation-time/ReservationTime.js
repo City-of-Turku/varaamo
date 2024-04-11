@@ -66,6 +66,7 @@ class ReservationTime extends Component {
           <Col lg={8} sm={12}>
             {resource.overnightReservations ? (
               <OvernightCalendar
+                handleDateChange={this.handleDateChange}
                 history={history}
                 isStrongAuthSatisfied
                 onEditCancel={onCancel}

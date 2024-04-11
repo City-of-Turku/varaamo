@@ -33,11 +33,8 @@ import OvernightEditSummary from './OvernightEditSummary';
 function OvernightCalendar({
   currentLanguage, resource, t, selected, actions,
   history, isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn,
-  reservationId, onEditCancel, onEditConfirm
+  reservationId, onEditCancel, onEditConfirm, handleDateChange, selectedDate
 }) {
-  // TODO: how to handle fetching reservations far in the future?
-  // fetch on every month change?
-
   if (!resource || !resource.reservations) {
     return null;
   }
@@ -123,7 +120,8 @@ function OvernightCalendar({
     }
   };
 
-  const initialMonth = initialStart || new Date();
+  // for init month use redux's selected > url date > current date
+  const initialMonth = initialStart || moment(selectedDate).toDate() || new Date();
   const showSummary = !isEditing && startDate && endDate;
   const showEditSummary = isEditing;
 
@@ -146,7 +144,6 @@ function OvernightCalendar({
         labels={{ previousMonth: t('Overnight.prevMonth'), nextMonth: t('Overnight.nextMonth') }}
         locale={currentLanguage}
         localeUtils={MomentLocaleUtils}
-        // TODO: accessibility for different modifiers
         modifiers={{
           start,
           end,
@@ -161,6 +158,7 @@ function OvernightCalendar({
           prevClosed: (day) => prevDayClosedModifier(day, openingHours),
         }}
         onDayClick={validateAndSelect}
+        onMonthChange={handleDateChange}
         selectedDays={[startDate, endDate]}
         showOutsideDays
         todayButton={t('Overnight.currentMonth')}
@@ -189,6 +187,7 @@ function OvernightCalendar({
 
 OvernightCalendar.defaultProps = {
   reservationId: 0,
+  selectedDate: '',
 };
 
 OvernightCalendar.propTypes = {
@@ -204,6 +203,8 @@ OvernightCalendar.propTypes = {
   reservationId: PropTypes.number,
   onEditCancel: PropTypes.func,
   onEditConfirm: PropTypes.func,
+  handleDateChange: PropTypes.func.isRequired,
+  selectedDate: PropTypes.string,
 };
 
 OvernightCalendar = injectT(OvernightCalendar); // eslint-disable-line
