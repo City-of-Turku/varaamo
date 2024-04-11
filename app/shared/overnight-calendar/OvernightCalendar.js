@@ -126,7 +126,7 @@ function OvernightCalendar({
   const initialMonth = initialStart || new Date();
   const showSummary = !isEditing && startDate && endDate;
   const showEditSummary = isEditing;
-  // TODO: make work in mobile
+
   return (
     <div className="overnight-calendar">
       <DayPicker
