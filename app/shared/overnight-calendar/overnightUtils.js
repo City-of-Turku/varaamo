@@ -2,29 +2,32 @@ import moment from 'moment';
 
 /**
  * Handles setting the start and end dates when selecting a date range.
- * @param {Date} value new date to set
- * @param {Date|null} startDate starting date or null
- * @param {function} setStartDate function to set start date
- * @param {Date|null} endDate ending date or null
- * @param {function} setEndDate function to set end date
+ * @param {Object} params
+ * @param {Date} params.value new date to set
+ * @param {Date|null} params.startDate starting date or null
+ * @param {function} params.setStartDate function to set start date
+ * @param {Date|null} params.endDate ending date or null
+ * @param {function} params.setEndDate function to set end date
  */
-export function handleDateSelect(value, startDate, setStartDate, endDate, setEndDate) {
+export function handleDateSelect({
+  value, startDate, setStartDate, endDate, setEndDate, overnightStartTime, overnightEndTime
+}) {
   if (!value) {
     return;
   }
 
   if (!startDate) {
-    setStartDate(value);
+    setStartDate(setDatesTime(value, overnightStartTime).toDate());
   } else if (value.getTime() === startDate.getTime()) {
     setStartDate(null);
     setEndDate(null);
   } else if (!endDate) {
-    setEndDate(value);
+    setEndDate(setDatesTime(value, overnightEndTime).toDate());
   } else if (value.getTime() === endDate.getTime()) {
     setStartDate(null);
     setEndDate(null);
   } else {
-    setStartDate(value);
+    setStartDate(setDatesTime(value, overnightStartTime).toDate());
     setEndDate(null);
   }
 }
@@ -405,4 +408,19 @@ export function getSelectedDuration(startDate, endDate, overnightStartTime, over
  */
 export function isDurationBelowMin(duration, minPeriod) {
   return duration < moment.duration(minPeriod);
+}
+
+/**
+ * Returns true if dates are same as initial dates
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @param {Date} initialStart
+ * @param {Date} initialEnd
+ * @returns {boolean} true if dates are same as initial dates
+ */
+export function areDatesSameAsInitialDates(startDate, endDate, initialStart, initialEnd) {
+  if (!startDate || !endDate || !initialStart || !initialEnd) {
+    return false;
+  }
+  return moment(startDate).isSame(initialStart) && moment(endDate).isSame(initialEnd);
 }

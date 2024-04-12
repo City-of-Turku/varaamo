@@ -8,11 +8,12 @@ import { getPrettifiedPeriodUnits } from '../../utils/timeUtils';
 
 function OvernightEditSummary({
   startDatetime, endDatetime, selected, onCancel, onConfirm, t,
-  duration, minDuration, isDurationBelowMin
+  duration, minDuration, isDurationBelowMin, datesSameAsInitial
 }) {
   const timeRange = startDatetime && endDatetime ? `${startDatetime} - ${endDatetime}` : `${selected[0]} - ${selected[1]}`;
   const durationText = getPrettifiedPeriodUnits(duration, t('common.unit.time.day.short'));
   const minDurationText = getPrettifiedPeriodUnits(minDuration, t('common.unit.time.day.short'));
+  const hasMinDurationError = !datesSameAsInitial && isDurationBelowMin;
 
   return (
     <div className="overnight-edit-summary">
@@ -22,7 +23,7 @@ function OvernightEditSummary({
           {`${t('TimeSlots.selectedDate')} `}
         </strong>
         {`${timeRange} (${durationText})`}
-        {isDurationBelowMin && (
+        {hasMinDurationError && (
           <p className="overnight-error">{`${t('Overnight.belowMinAlert')} (${minDurationText})`}</p>
         )}
       </div>
@@ -34,7 +35,7 @@ function OvernightEditSummary({
         <Button
           bsStyle="primary"
           className="next_Button"
-          disabled={!startDatetime || !endDatetime || isDurationBelowMin}
+          disabled={!startDatetime || !endDatetime || hasMinDurationError}
           onClick={onConfirm}
         >
           {t('common.continue')}

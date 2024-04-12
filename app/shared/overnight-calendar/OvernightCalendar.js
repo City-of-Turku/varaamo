@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { injectT } from 'i18n';
 import {
+  areDatesSameAsInitialDates,
   filterSelectedReservation,
   getNotSelectableNotificationText,
   getNotificationText,
@@ -53,13 +54,16 @@ function OvernightCalendar({
   const [startDate, setStartDate] = React.useState(initialStart);
   const [endDate, setEndDate] = React.useState(initialEnd);
 
+  const datesSameAsInitial = areDatesSameAsInitialDates(
+    startDate, endDate, initialStart, initialEnd);
+
   const {
     reservable, reservableAfter, reservableBefore, openingHours, reservations,
     overnightStartTime, overnightEndTime, maxPeriod, minPeriod
   } = resource;
 
   useEffect(() => {
-    if (startDate && endDate) {
+    if (startDate && endDate && !datesSameAsInitial) {
       const selectedDuration = getSelectedDuration(
         startDate, endDate, overnightStartTime, overnightEndTime);
       const isDurBelowMin = isDurationBelowMin(selectedDuration, minPeriod);
@@ -118,7 +122,15 @@ function OvernightCalendar({
     }
 
     if (!isDateDisabled && !booked && !isNextBlocked) {
-      handleDateSelect(day, startDate, setStartDate, endDate, setEndDate);
+      handleDateSelect({
+        value: day,
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
+        overnightStartTime,
+        overnightEndTime
+      });
       return;
     }
 
@@ -209,6 +221,7 @@ function OvernightCalendar({
       )}
       {showEditSummary && (
         <OvernightEditSummary
+          datesSameAsInitial={datesSameAsInitial}
           duration={selectedDuration}
           endDatetime={getOvernightDatetime(endDate, overnightEndTime)}
           isDurationBelowMin={isDurBelowMin}
