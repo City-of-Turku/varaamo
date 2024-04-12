@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import DayPicker from 'react-day-picker';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import moment from 'moment';
@@ -13,9 +13,11 @@ import {
   getNotificationText,
   getOvernightDatetime,
   getReservationUrl,
+  getSelectedDuration,
   handleDateSelect,
   handleDisableDays,
   handleFormattingSelected,
+  isDurationBelowMin,
   isReservingAllowed,
   nextDayBookedModifier,
   nextDayClosedModifier,
@@ -29,6 +31,7 @@ import { setSelectedDatetimes } from '../../actions/uiActions';
 import OvernightLegends from './OvernightLegends';
 import { addNotification } from 'actions/notificationsActions';
 import OvernightEditSummary from './OvernightEditSummary';
+import { getPrettifiedPeriodUnits } from '../../utils/timeUtils';
 
 function OvernightCalendar({
   currentLanguage, resource, t, selected, actions,
@@ -54,6 +57,22 @@ function OvernightCalendar({
     reservable, reservableAfter, reservableBefore, openingHours, reservations,
     overnightStartTime, overnightEndTime, maxPeriod, minPeriod
   } = resource;
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const selectedDuration = getSelectedDuration(
+        startDate, endDate, overnightStartTime, overnightEndTime);
+      const isDurBelowMin = isDurationBelowMin(selectedDuration, minPeriod);
+      const minDurationText = getPrettifiedPeriodUnits(minPeriod);
+      if (isDurBelowMin) {
+        actions.addNotification({
+          message: `${t('Overnight.belowMinAlert')} (${minDurationText})`,
+          type: 'info',
+          timeOut: 10000,
+        });
+      }
+    }
+  }, [startDate, endDate]);
 
   // TODO: max reservations and other restrictions?
 
@@ -130,6 +149,9 @@ function OvernightCalendar({
   const initialMonth = initialStart || moment(selectedDate).toDate() || new Date();
   const showSummary = !isEditing && startDate && endDate;
   const showEditSummary = isEditing;
+  const selectedDuration = getSelectedDuration(
+    startDate, endDate, overnightStartTime, overnightEndTime);
+  const isDurBelowMin = isDurationBelowMin(selectedDuration, minPeriod);
 
   return (
     <div className="overnight-calendar">
@@ -176,15 +198,21 @@ function OvernightCalendar({
       <OvernightLegends />
       {showSummary && (
         <OvernightSummary
+          duration={selectedDuration}
           endDatetime={getOvernightDatetime(endDate, overnightEndTime)}
           handleSelectDatetimes={handleSelectDatetimes}
+          isDurationBelowMin={isDurBelowMin}
+          minDuration={minPeriod}
           selected={selected}
           startDatetime={getOvernightDatetime(startDate, overnightStartTime)}
         />
       )}
       {showEditSummary && (
         <OvernightEditSummary
+          duration={selectedDuration}
           endDatetime={getOvernightDatetime(endDate, overnightEndTime)}
+          isDurationBelowMin={isDurBelowMin}
+          minDuration={minPeriod}
           onCancel={onEditCancel}
           onConfirm={handleSelectDatetimes}
           selected={selected}

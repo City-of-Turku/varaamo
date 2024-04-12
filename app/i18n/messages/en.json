@@ -255,6 +255,7 @@
   "Notifications.reservationUpdateSuccessMessage": "Your reservation has been updated.",
   "Notifications.selectTimeToReserve.warning": "The reservation overlaps with the existing reservation or is outside the opening hours.",
   "Notifications.selectTimeToReserve": "Select the time for which you wish to make the reservation",
+  "Overnight.belowMinAlert": "The selected time is shorter than the required minimum duration",
   "Overnight.currentMonth": "Current month",
   "Overnight.nextMonth": "Next month",
   "Overnight.prevMonth": "Previous month",

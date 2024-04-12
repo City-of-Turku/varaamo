@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/lib/Button';
 
 import injectT from '../../i18n/injectT';
+import { getPrettifiedPeriodUnits } from '../../utils/timeUtils';
 
 
 function OvernightEditSummary({
-  startDatetime, endDatetime, selected, onCancel, onConfirm, t
+  startDatetime, endDatetime, selected, onCancel, onConfirm, t,
+  duration, minDuration, isDurationBelowMin
 }) {
   const timeRange = startDatetime && endDatetime ? `${startDatetime} - ${endDatetime}` : `${selected[0]} - ${selected[1]}`;
+  const durationText = getPrettifiedPeriodUnits(duration);
+  const minDurationText = getPrettifiedPeriodUnits(minDuration);
 
   return (
     <div className="overnight-edit-summary">
@@ -17,7 +21,10 @@ function OvernightEditSummary({
         <strong>
           {`${t('TimeSlots.selectedDate')} `}
         </strong>
-        {timeRange}
+        {`${timeRange} (${durationText})`}
+        {isDurationBelowMin && (
+          <p className="overnight-error">{`${t('Overnight.belowMinAlert')} (${minDurationText})`}</p>
+        )}
       </div>
       )}
       <div className="app-ReservationTime__controls">
@@ -27,7 +34,7 @@ function OvernightEditSummary({
         <Button
           bsStyle="primary"
           className="next_Button"
-          disabled={!startDatetime || !endDatetime}
+          disabled={!startDatetime || !endDatetime || isDurationBelowMin}
           onClick={onConfirm}
         >
           {t('common.continue')}

@@ -6,6 +6,11 @@
   $highlighted-color: cyan;
   $half-day-angle: 140deg;
 
+  .overnight-error {
+    color: $varaamo-high-contrast-red;
+    margin-bottom: 8px;
+  }
+
   .DayPicker {
     @media (max-width: $screen-sm-min) {
       width: 100%;

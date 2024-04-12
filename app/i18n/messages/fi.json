@@ -255,6 +255,7 @@
   "Notifications.reservationUpdateSuccessMessage": "Varaus päivitetty.",
   "Notifications.selectTimeToReserve.warning": "Varaus menee päällekkäin olemassa olevan varauksen kanssa tai se on aukioloaikojen ulkopuolella.",
   "Notifications.selectTimeToReserve": "Valitse aika, jolle haluat tehdä varauksen.",
+  "Overnight.belowMinAlert": "Valittu aika on alle vaaditun vähimmäispituuden",
   "Overnight.currentMonth": "Nykyinen kuukausi",
   "Overnight.nextMonth": "Seuraava kuukausi",
   "Overnight.prevMonth": "Edellinen kuukausi",

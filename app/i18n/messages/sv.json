@@ -257,6 +257,7 @@
   "Notifications.reservationUpdateSuccessMessage": "Bokningen uppdaterades.",
   "Notifications.selectTimeToReserve.warning": "Bokningen överlappar med befintlig bokning eller ligger utanför öppettiderna.",
   "Notifications.selectTimeToReserve": "Välj en tidpunkt som du vill boka.",
+  "Overnight.belowMinAlert": "Den valda tiden är kortare än det minsta krävda längd",
   "Overnight.currentMonth": "Nuvarande månad",
   "Overnight.nextMonth": "Nästa månad",
   "Overnight.prevMonth": "Föregående månad",

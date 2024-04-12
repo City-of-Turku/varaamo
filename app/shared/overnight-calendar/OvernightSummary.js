@@ -3,11 +3,15 @@ import Button from 'react-bootstrap/lib/Button';
 import PropTypes from 'prop-types';
 
 import injectT from '../../i18n/injectT';
+import { getPrettifiedPeriodUnits } from '../../utils/timeUtils';
 
 function OvernightSummary({
-  t, selected, endDatetime, startDatetime, handleSelectDatetimes
+  t, selected, endDatetime, startDatetime, handleSelectDatetimes,
+  duration, isDurationBelowMin, minDuration
 }) {
   const timeRange = startDatetime && endDatetime ? `${startDatetime} - ${endDatetime}` : `${selected[0]} - ${selected[1]}`;
+  const durationText = getPrettifiedPeriodUnits(duration);
+  const minDurationText = getPrettifiedPeriodUnits(minDuration);
 
   return (
     <div className="reservation-calendar-reserve-info2">
@@ -16,12 +20,16 @@ function OvernightSummary({
         <strong>
           {`${t('TimeSlots.selectedDate')} `}
         </strong>
-        {timeRange}
+        {`${timeRange} (${durationText})`}
+        {isDurationBelowMin && (
+          <p className="overnight-error">{`${t('Overnight.belowMinAlert')} (${minDurationText})`}</p>
+        )}
       </div>
       <div>
         <Button
           bsStyle="primary"
           className="reservation-calendar__reserve-button2"
+          disabled={isDurationBelowMin}
           onClick={handleSelectDatetimes}
         >
           {t('TimeSlots.reserveButton')}

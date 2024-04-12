@@ -382,3 +382,27 @@ export function getNotSelectableNotificationText({
 export function filterSelectedReservation(reservationId, reservations) {
   return reservations.filter(reservation => reservation.id !== reservationId);
 }
+
+/**
+ * Returns overnight selected dates' duration
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @param {string} overnightStartTime
+ * @param {string} overnightEndTime
+ * @returns {Object} moment duration
+ */
+export function getSelectedDuration(startDate, endDate, overnightStartTime, overnightEndTime) {
+  const start = setDatesTime(startDate, overnightStartTime);
+  const end = setDatesTime(endDate, overnightEndTime);
+  return moment.duration(end.diff(start));
+}
+
+/**
+ * Returns true if duration is below minPeriod
+ * @param {Object} duration moment
+ * @param {string} minPeriod
+ * @returns {boolean} true if duration is below minPeriod
+ */
+export function isDurationBelowMin(duration, minPeriod) {
+  return duration < moment.duration(minPeriod);
+}
