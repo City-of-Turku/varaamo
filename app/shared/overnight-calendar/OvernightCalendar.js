@@ -33,9 +33,10 @@ import OvernightLegends from './OvernightLegends';
 import { addNotification } from 'actions/notificationsActions';
 import OvernightEditSummary from './OvernightEditSummary';
 import { getPrettifiedPeriodUnits } from '../../utils/timeUtils';
+import { hasMaxReservations } from '../../utils/resourceUtils';
 
 function OvernightCalendar({
-  currentLanguage, resource, t, selected, actions,
+  currentLanguage, resource, t, selected, actions, isAdmin,
   history, isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn,
   reservationId, onEditCancel, onEditConfirm, handleDateChange, selectedDate
 }) {
@@ -77,8 +78,6 @@ function OvernightCalendar({
       }
     }
   }, [startDate, endDate]);
-
-  // TODO: max reservations and other restrictions?
 
   const filteredReservations = reservationId
     ? filterSelectedReservation(reservationId, reservations) : reservations;
@@ -146,6 +145,14 @@ function OvernightCalendar({
   const isEditing = !!initialStart;
 
   const handleSelectDatetimes = () => {
+    if (!isAdmin && hasMaxReservations(resource) && !isEditing) {
+      actions.addNotification({
+        message: t('TimeSlots.maxReservationsPerUser'),
+        type: 'error',
+        timeOut: 10000,
+      });
+      return;
+    }
     const formattedSelected = handleFormattingSelected(
       startDate, endDate, overnightStartTime, overnightEndTime, resource.id);
     actions.setSelectedDatetimes([formattedSelected, formattedSelected]);
@@ -248,6 +255,7 @@ OvernightCalendar.propTypes = {
   selected: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   isStrongAuthSatisfied: PropTypes.bool.isRequired,
   isMaintenanceModeOn: PropTypes.bool.isRequired,
