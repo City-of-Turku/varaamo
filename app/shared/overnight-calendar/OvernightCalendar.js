@@ -52,8 +52,10 @@ function OvernightCalendar({
 
   const {
     reservable, reservableAfter, reservableBefore, openingHours, reservations,
-    overnightStartTime, overnightEndTime
+    overnightStartTime, overnightEndTime, maxPeriod, minPeriod
   } = resource;
+
+  // TODO: max reservations and other restrictions?
 
   const filteredReservations = reservationId
     ? filterSelectedReservation(reservationId, reservations) : reservations;
@@ -79,6 +81,10 @@ function OvernightCalendar({
       startDate,
       openingHours,
       reservations: filteredReservations,
+      maxPeriod,
+      minPeriod,
+      overnightEndTime,
+      overnightStartTime,
     });
 
     if (!reservingIsAllowed) {
@@ -137,6 +143,10 @@ function OvernightCalendar({
           startDate,
           openingHours,
           reservations: filteredReservations,
+          maxPeriod,
+          minPeriod,
+          overnightEndTime,
+          overnightStartTime,
         })}
         enableOutsideDays
         firstDayOfWeek={1}

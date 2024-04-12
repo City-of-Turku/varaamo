@@ -43,9 +43,9 @@ export function handleDateSelect(value, startDate, setStartDate, endDate, setEnd
  */
 export function handleDisableDays({
   day, now, reservable, reservableAfter, reservableBefore, startDate,
-  openingHours, reservations
+  openingHours, reservations, maxPeriod, overnightEndTime,
+  overnightStartTime
 }) {
-  // TODO: min/max reservation time
   const isAfterToday = now.isAfter(day, 'day');
   const beforeDate = reservableAfter || moment();
   const isBeforeDate = moment(day).isBefore(beforeDate);
@@ -68,12 +68,37 @@ export function handleDisableDays({
   }
 
   if (startDate) {
+    if (maxPeriod && isOverMaxPeriod(
+      startDate, day, maxPeriod, overnightEndTime, overnightStartTime)) {
+      return true;
+    }
+
     const firstBlockedDay = getFirstBlockedDay(startDate, reservations, closedDays);
     if (firstBlockedDay && moment(day).isSameOrAfter(firstBlockedDay, 'day')) {
       return true;
     }
   }
 
+  return false;
+}
+
+/**
+ * Checks if period is over max period.
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @param {string} maxPeriod
+ * @param {string} overnightEndTime
+ * @param {string} overnightStartTime
+ * @returns {boolean} is period over max period
+ */
+export function isOverMaxPeriod(
+  startDate, endDate, maxPeriod, overnightEndTime, overnightStartTime) {
+  const end = setDatesTime(endDate, overnightEndTime);
+  const start = setDatesTime(startDate, overnightStartTime);
+  const duration = moment.duration(end.diff(start));
+  if (duration > moment.duration(maxPeriod)) {
+    return true;
+  }
   return false;
 }
 
@@ -222,6 +247,23 @@ export function getFirstBlockedDay(fromDate, reservations, openingHours) {
 }
 
 /**
+ * Sets date and time to a moment object.
+ * @param {Date} date
+ * @param {string} time
+ * @returns {Object} moment object
+ */
+export function setDatesTime(date, time) {
+  const timeUnits = getHoursMinutesSeconds(time);
+  const momentDate = moment(date);
+  momentDate.set({
+    hour: timeUnits.hours,
+    minute: timeUnits.minutes,
+    second: timeUnits.seconds
+  });
+  return momentDate;
+}
+
+/**
  * Combines date and time into a datetime string and returns it.
  * @param {Date} date
  * @param {string} time e.g. "12:00:00"
@@ -230,13 +272,7 @@ export function getFirstBlockedDay(fromDate, reservations, openingHours) {
  */
 export function getOvernightDatetime(date, time) {
   if (date && time) {
-    const timeUnits = getHoursMinutesSeconds(time);
-    const momentDate = moment(date);
-    momentDate.set({
-      hour: timeUnits.hours,
-      minute: timeUnits.minutes,
-      second: timeUnits.seconds
-    });
+    const momentDate = setDatesTime(date, time);
     return momentDate.format('D.M.YYYY HH:mm');
   }
   return '';
