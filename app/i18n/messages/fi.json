@@ -114,6 +114,7 @@
   "common.total": "yhteensä",
   "common.unit.time.hour": "h",
   "common.unit.time.day": "päivä",
+  "common.unit.time.day.short": "pv",
   "common.unit.time.week": "viikko",
   "common.unitPieces": "{unitPieces, plural, one {kpl} other {kpl}}",
   "common.userNameLabel": "Tilin nimi",

@@ -12,7 +12,7 @@ function ReservationDetails({
   let reservationTime = '';
 
   if (selectedTime) {
-    reservationTime = formatDetailsDatetimes(selectedTime.begin, selectedTime.end);
+    reservationTime = formatDetailsDatetimes(selectedTime.begin, selectedTime.end, t('common.unit.time.day.short'));
   }
 
   return (

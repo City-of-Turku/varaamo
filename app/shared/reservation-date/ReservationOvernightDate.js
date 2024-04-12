@@ -16,7 +16,7 @@ function ReservationOvernightDate({ beginDate, endDate, t }) {
   const reservationEnd = moment(endDate);
   const begin = reservationBegin.format('D.M.YYYY HH:mm');
   const end = reservationEnd.format('D.M.YYYY HH:mm');
-  const duration = getPrettifiedDuration(reservationBegin, reservationEnd);
+  const duration = getPrettifiedDuration(reservationBegin, reservationEnd, t('common.unit.time.day.short'));
 
   return (
     <div className="reservation-date">

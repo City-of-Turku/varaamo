@@ -114,6 +114,7 @@
   "common.total": "totalt",
   "common.unit.time.hour": "h",
   "common.unit.time.day": "dag",
+  "common.unit.time.day.short": "d",
   "common.unit.time.week": "vecka",
   "common.unitPieces": "{unitPieces, plural, one {st} other {st}}",
   "common.userNameLabel": "Konto namn",

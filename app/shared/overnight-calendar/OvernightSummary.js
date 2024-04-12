@@ -10,8 +10,8 @@ function OvernightSummary({
   duration, isDurationBelowMin, minDuration
 }) {
   const timeRange = startDatetime && endDatetime ? `${startDatetime} - ${endDatetime}` : `${selected[0]} - ${selected[1]}`;
-  const durationText = getPrettifiedPeriodUnits(duration);
-  const minDurationText = getPrettifiedPeriodUnits(minDuration);
+  const durationText = getPrettifiedPeriodUnits(duration, t('common.unit.time.day.short'));
+  const minDurationText = getPrettifiedPeriodUnits(minDuration, t('common.unit.time.day.short'));
 
   return (
     <div className="reservation-calendar-reserve-info2">

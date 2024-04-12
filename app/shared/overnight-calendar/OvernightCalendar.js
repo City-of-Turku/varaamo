@@ -63,7 +63,7 @@ function OvernightCalendar({
       const selectedDuration = getSelectedDuration(
         startDate, endDate, overnightStartTime, overnightEndTime);
       const isDurBelowMin = isDurationBelowMin(selectedDuration, minPeriod);
-      const minDurationText = getPrettifiedPeriodUnits(minPeriod);
+      const minDurationText = getPrettifiedPeriodUnits(minPeriod, t('common.unit.time.day.short'));
       if (isDurBelowMin) {
         actions.addNotification({
           message: `${t('Overnight.belowMinAlert')} (${minDurationText})`,

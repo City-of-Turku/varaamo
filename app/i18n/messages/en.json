@@ -114,6 +114,7 @@
   "common.total": "total",
   "common.unit.time.hour": "h",
   "common.unit.time.day": "day",
+  "common.unit.time.day.short": "d",
   "common.unit.time.week": "week",
   "common.unitPieces": "{unitPieces, plural, one {pc} other {pcs}}",
   "common.userNameLabel": "Account name",

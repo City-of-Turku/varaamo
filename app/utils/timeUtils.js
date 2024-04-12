@@ -239,9 +239,9 @@ function isValidDateString(dateString) {
  * @param {string|object} end time parsable by moment
  * @returns {string} e.g. '1h 30min', '2h' or '45min'
  */
-function getPrettifiedDuration(begin, end) {
+function getPrettifiedDuration(begin, end, dayUnit = 'd') {
   const duration = moment.duration(moment(end).diff(moment(begin)));
-  return getPrettifiedPeriodUnits(duration);
+  return getPrettifiedPeriodUnits(duration, dayUnit);
 }
 
 /**
@@ -249,13 +249,13 @@ function getPrettifiedDuration(begin, end) {
  * @param {string} period e.g. 1:30:00
  * @returns {string} e.g. '1h 30min', '2h' or '45min'
  */
-function getPrettifiedPeriodUnits(period) {
+function getPrettifiedPeriodUnits(period, dayUnit = 'd') {
   const duration = moment.duration(period);
   const days = duration.days();
   const hours = duration.hours();
   const minutes = duration.minutes();
 
-  const daysText = days > 0 ? `${days}d` : '';
+  const daysText = days > 0 ? `${days}${dayUnit}` : '';
   const hoursText = hours > 0 ? `${hours}h` : '';
   const minutesText = minutes > 0 ? `${minutes}min` : '';
 
@@ -351,17 +351,17 @@ function formatDateTime(datetime, targetFormat) {
  * @param {string} end datetime
  * @returns {string} formatted datetime string
  */
-function formatDetailsDatetimes(begin, end) {
+function formatDetailsDatetimes(begin, end, dayUnit = 'd') {
   if (isMultiday(begin, end)) {
     const beginText = moment(begin).format('D.M.YYYY HH:mm');
     const endText = moment(end).format('D.M.YYYY HH:mm');
-    const duration = getPrettifiedDuration(begin, end);
+    const duration = getPrettifiedDuration(begin, end, dayUnit);
     return `${beginText} - ${endText} (${duration})`;
   }
 
   const beginText = moment(begin).format('D.M.YYYY HH:mm');
   const endText = moment(end).format('HH:mm');
-  const duration = getPrettifiedDuration(begin, end);
+  const duration = getPrettifiedDuration(begin, end, dayUnit);
   return `${beginText}–${endText} (${duration})`;
 }
 
