@@ -1,30 +1,30 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import injectT from '../../i18n/injectT';
 
 
-function OvernightLegends() {
+function OvernightLegends({ t }) {
   return (
-    <div className="overnight-legends">
+    <div aria-hidden className="overnight-legends">
       <div className="overnight-row">
         <div className="overnight-legend">
           <div className="overnight-legend-box overnight-free">21</div>
-          <span className="overnight-legend-text">Vapaa</span>
+          <span className="overnight-legend-text">{t('Overnight.legend.available')}</span>
         </div>
         <div className="overnight-legend">
           <div className="overnight-legend-box overnight-disabled">21</div>
-          <span className="overnight-legend-text">Ei valittavissa</span>
+          <span className="overnight-legend-text">{t('Overnight.legend.notSelectable')}</span>
         </div>
       </div>
       <div className="overnight-row">
         <div className="overnight-legend">
           <div className="overnight-legend-box overnight-booked">21</div>
-          <span className="overnight-legend-text">Varattu</span>
+          <span className="overnight-legend-text">{t('Overnight.legend.reserved')}</span>
         </div>
         <div className="overnight-legend">
           <div className="overnight-legend-box overnight-selection">21</div>
-          <span className="overnight-legend-text">Oma valinta</span>
+          <span className="overnight-legend-text">{t('Overnight.legend.ownSelection')}</span>
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@ function OvernightLegends() {
 }
 
 OvernightLegends.propTypes = {
-  // t: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 export default injectT(OvernightLegends);
