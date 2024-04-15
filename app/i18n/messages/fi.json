@@ -257,6 +257,7 @@
   "Notifications.selectTimeToReserve.warning": "Varaus menee päällekkäin olemassa olevan varauksen kanssa tai se on aukioloaikojen ulkopuolella.",
   "Notifications.selectTimeToReserve": "Valitse aika, jolle haluat tehdä varauksen.",
   "Overnight.belowMinAlert": "Valittu aika on alle vaaditun vähimmäispituuden",
+  "Overnight.calendar": "Kalenteri",
   "Overnight.currentMonth": "Nykyinen kuukausi",
   "Overnight.legend.available": "Vapaa",
   "Overnight.legend.notSelectable": "Ei valittavissa",

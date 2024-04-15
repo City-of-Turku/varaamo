@@ -34,6 +34,7 @@ import { addNotification } from 'actions/notificationsActions';
 import OvernightEditSummary from './OvernightEditSummary';
 import { getPrettifiedPeriodUnits } from '../../utils/timeUtils';
 import { hasMaxReservations } from '../../utils/resourceUtils';
+import OvernightHiddenHeading from './OvernightHiddenHeading';
 
 function OvernightCalendar({
   currentLanguage, resource, t, selected, actions, isAdmin,
@@ -52,8 +53,12 @@ function OvernightCalendar({
     initialEnd = moment(selected[1].end).toDate();
   }
 
+  // for init month use redux's selected > url date > current date
+  const initialMonth = initialStart || moment(selectedDate).toDate() || new Date();
+
   const [startDate, setStartDate] = React.useState(initialStart);
   const [endDate, setEndDate] = React.useState(initialEnd);
+  const [currentMonth, setCurrentMonth] = React.useState(initialMonth);
 
   const datesSameAsInitial = areDatesSameAsInitialDates(
     startDate, endDate, initialStart, initialEnd);
@@ -164,16 +169,20 @@ function OvernightCalendar({
     }
   };
 
-  // for init month use redux's selected > url date > current date
-  const initialMonth = initialStart || moment(selectedDate).toDate() || new Date();
   const showSummary = !isEditing && startDate && endDate;
   const showEditSummary = isEditing;
   const selectedDuration = getSelectedDuration(
     startDate, endDate, overnightStartTime, overnightEndTime);
   const isDurBelowMin = isDurationBelowMin(selectedDuration, minPeriod);
 
+  // TODO: accessibility, refactoring, tests
   return (
     <div className="overnight-calendar">
+      <OvernightHiddenHeading
+        date={currentMonth}
+        locale={currentLanguage}
+        localeUtils={MomentLocaleUtils}
+      />
       <DayPicker
         disabledDays={(day) => handleDisableDays({
           day,
@@ -209,7 +218,7 @@ function OvernightCalendar({
           prevClosed: (day) => prevDayClosedModifier(day, openingHours),
         }}
         onDayClick={validateAndSelect}
-        onMonthChange={handleDateChange}
+        onMonthChange={(date) => { handleDateChange(date); setCurrentMonth(date); }}
         selectedDays={[startDate, endDate]}
         showOutsideDays
         todayButton={t('Overnight.currentMonth')}

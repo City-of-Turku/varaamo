@@ -259,6 +259,7 @@
   "Notifications.selectTimeToReserve.warning": "Bokningen överlappar med befintlig bokning eller ligger utanför öppettiderna.",
   "Notifications.selectTimeToReserve": "Välj en tidpunkt som du vill boka.",
   "Overnight.belowMinAlert": "Den valda tiden är kortare än det minsta krävda längd",
+  "Overnight.calendar": "Kalender",
   "Overnight.currentMonth": "Nuvarande månad",
   "Overnight.legend.available": "Tillgänglig",
   "Overnight.legend.notSelectable": "Ej valbar",
