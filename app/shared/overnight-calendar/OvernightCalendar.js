@@ -169,10 +169,11 @@ function OvernightCalendar({
     }
   };
 
-  const showSummary = !isEditing && startDate && endDate;
+  const showSummary = !isEditing && startDate && endDate; // use class hidden instead?
   const showEditSummary = isEditing;
   const selectedDuration = getSelectedDuration(
     startDate, endDate, overnightStartTime, overnightEndTime);
+  // TODO: admin bypass?
   const isDurBelowMin = isDurationBelowMin(selectedDuration, minPeriod);
 
   // TODO: accessibility, refactoring, tests
@@ -209,7 +210,8 @@ function OvernightCalendar({
           end,
           highlighted,
           available,
-          booked: (day) => reservationsModifier(day, filteredReservations),
+          booked: (day) => (
+            startDate ? null : reservationsModifier(day, filteredReservations)),
           nextBooked: (day) => nextDayBookedModifier(day, filteredReservations),
           nextBookedStartSelected: (day) => (
             startDate ? nextDayBookedModifier(day, filteredReservations) : null),

@@ -8,7 +8,7 @@ function OvernightHiddenHeading({
 }) {
   const dateText = localeUtils.formatMonthTitle(date, locale);
   return (
-    <div className="hidden">
+    <div className="sr-only">
       <h3>{t('Overnight.calendar')}</h3>
       <p role="status">{dateText}</p>
     </div>

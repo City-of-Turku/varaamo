@@ -27,6 +27,7 @@ export function handleDateSelect({
     setStartDate(null);
     setEndDate(null);
   } else {
+    // TODO: handle this skipping startday validation
     setStartDate(setDatesTime(value, overnightStartTime).toDate());
     setEndDate(null);
   }
@@ -59,6 +60,9 @@ export function handleDisableDays({
     return true;
   }
   if (isAfterToday || isBeforeDate || isAfterDate || isBeforeStartDate) {
+    return true;
+  }
+  if (reservationsModifier(day, reservations)) {
     return true;
   }
 

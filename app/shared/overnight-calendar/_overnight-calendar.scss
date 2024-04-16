@@ -101,7 +101,8 @@
       }
     }
 
-    &--booked:not(.DayPicker-Day--disabled) {
+    &--booked {
+      color: $black;
       background-color: $booked-color;
       text-decoration: line-through;
 
@@ -186,7 +187,7 @@
     background: linear-gradient($half-day-angle, $medium-gray 49%, $booked-color 50%);
   }
 
-  .DayPicker-Day--booked.DayPicker-Day--nextClosed:not(.DayPicker-Day--disabled) {
+  .DayPicker-Day--booked.DayPicker-Day--nextClosed {
     background: linear-gradient($half-day-angle, $booked-color 49%, $medium-gray 50%);
   }
 
