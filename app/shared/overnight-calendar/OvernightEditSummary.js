@@ -14,20 +14,25 @@ function OvernightEditSummary({
   const durationText = getPrettifiedPeriodUnits(duration, t('common.unit.time.day.short'));
   const minDurationText = getPrettifiedPeriodUnits(minDuration, t('common.unit.time.day.short'));
   const hasMinDurationError = !datesSameAsInitial && isDurationBelowMin;
+  const validRange = startDatetime && endDatetime;
 
   return (
     <div className="overnight-edit-summary">
-      {(startDatetime && endDatetime) && (
       <div className="overnight-edit-time-range">
-        <strong>
-          {`${t('TimeSlots.selectedDate')} `}
-        </strong>
-        {`${timeRange} (${durationText})`}
+        <div role="status">
+          {validRange && (
+            <React.Fragment>
+              <strong>
+                {`${t('TimeSlots.selectedDate')} `}
+              </strong>
+              {`${timeRange} (${durationText})`}
+            </React.Fragment>
+          )}
+        </div>
         {hasMinDurationError && (
           <p className="overnight-error">{`${t('Overnight.belowMinAlert')} (${minDurationText})`}</p>
         )}
       </div>
-      )}
       <div className="app-ReservationTime__controls">
         <Button bsStyle="warning" className="cancel_Button" onClick={onCancel}>
           {t('ReservationInformationForm.cancelEdit')}
@@ -52,6 +57,10 @@ OvernightEditSummary.propTypes = {
   startDatetime: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
+  duration: PropTypes.object.isRequired,
+  isDurationBelowMin: PropTypes.bool.isRequired,
+  minDuration: PropTypes.string.isRequired,
+  datesSameAsInitial: PropTypes.bool.isRequired,
 };
 
 export default injectT(OvernightEditSummary);

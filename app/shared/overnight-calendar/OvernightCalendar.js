@@ -169,8 +169,6 @@ function OvernightCalendar({
     }
   };
 
-  const showSummary = !isEditing && startDate && endDate; // use class hidden instead?
-  const showEditSummary = isEditing;
   const selectedDuration = getSelectedDuration(
     startDate, endDate, overnightStartTime, overnightEndTime);
   // TODO: admin bypass?
@@ -226,7 +224,7 @@ function OvernightCalendar({
         todayButton={t('Overnight.currentMonth')}
       />
       <OvernightLegends />
-      {showSummary && (
+      {!isEditing && (
         <OvernightSummary
           duration={selectedDuration}
           endDatetime={getOvernightDatetime(endDate, overnightEndTime)}
@@ -237,7 +235,7 @@ function OvernightCalendar({
           startDatetime={getOvernightDatetime(startDate, overnightStartTime)}
         />
       )}
-      {showEditSummary && (
+      {isEditing && (
         <OvernightEditSummary
           datesSameAsInitial={datesSameAsInitial}
           duration={selectedDuration}
