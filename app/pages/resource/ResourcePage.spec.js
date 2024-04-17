@@ -18,6 +18,9 @@ import { UnconnectedResourcePage as ResourcePage } from './ResourcePage';
 import ResourceHeader from './resource-header';
 import ResourceInfo from './resource-info';
 import ResourceMapInfo from './resource-map-info';
+import NextFreeTimesButton from './next-free-times-button/NextFreeTimesButton';
+import ReservationCalendarContainer from './reservation-calendar';
+import OvernightCalendar from '../../shared/overnight-calendar/OvernightCalendar';
 
 describe('pages/resource/ResourcePage', () => {
   const unit = Unit.build();
@@ -131,13 +134,75 @@ describe('pages/resource/ResourcePage', () => {
       expect(resourceInfo.prop('currentLanguage')).toBe(defaultProps.currentLanguage);
     });
 
-    test('renders ResourceCalendar with correct props', () => {
-      const wrapper = getWrapper();
-      const calendar = wrapper.find(ResourceCalendar);
-      expect(calendar).toHaveLength(1);
-      expect(calendar.prop('onDateChange')).toBe(wrapper.instance().handleDateChange);
-      expect(calendar.prop('resourceId')).toBe(defaultProps.resource.id);
-      expect(calendar.prop('selectedDate')).toBe(defaultProps.date);
+    describe('when resource overnightReservations is false', () => {
+      test('renders ResourceCalendar with correct props', () => {
+        const wrapper = getWrapper();
+        const calendar = wrapper.find(ResourceCalendar);
+        expect(calendar).toHaveLength(1);
+        expect(calendar.prop('onDateChange')).toBe(wrapper.instance().handleDateChange);
+        expect(calendar.prop('resourceId')).toBe(defaultProps.resource.id);
+        expect(calendar.prop('selectedDate')).toBe(defaultProps.date);
+      });
+
+      test('renders NextFreeTimesButton', () => {
+        const wrapper = getWrapper();
+        const instance = wrapper.instance();
+        const btn = wrapper.find(NextFreeTimesButton);
+        expect(btn).toHaveLength(1);
+        expect(btn.prop('addNotification')).toBe(defaultProps.actions.addNotification);
+        expect(btn.prop('handleDateChange')).toBe(instance.handleDateChange);
+        expect(btn.prop('resource')).toBe(defaultProps.resource);
+        expect(btn.prop('selectedDate')).toBe(defaultProps.date);
+      });
+
+      test('renders ReservationCalendar', () => {
+        const wrapper = getWrapper();
+        const calendar = wrapper.find(ReservationCalendarContainer);
+        expect(calendar).toHaveLength(1);
+        expect(calendar.prop('history')).toBe(defaultProps.history);
+        expect(calendar.prop('location')).toBe(defaultProps.location);
+        expect(calendar.prop('params')).toBe(defaultProps.match.params);
+      });
+
+      test('doesnt render OvernightCalendar', () => {
+        const wrapper = getWrapper();
+        const calendar = wrapper.find(OvernightCalendar);
+        expect(calendar).toHaveLength(0);
+      });
+    });
+
+    describe('when resource overnightReservations is true', () => {
+      const resourceA = { ...defaultProps.resource, overnightReservations: true };
+
+      test('renders OvernightCalendar', () => {
+        const wrapper = getWrapper({ resource: resourceA });
+        const instance = wrapper.instance();
+        const calendar = wrapper.find(OvernightCalendar);
+        expect(calendar).toHaveLength(1);
+        expect(calendar.prop('handleDateChange')).toBe(instance.handleDateChange);
+        expect(calendar.prop('history')).toBe(defaultProps.history);
+        expect(calendar.prop('params')).toBe(defaultProps.match.params);
+        expect(calendar.prop('resource')).toBe(resourceA);
+        expect(calendar.prop('selectedDate')).toBe(defaultProps.date);
+      });
+
+      test('doesnt render ResourceCalendar', () => {
+        const wrapper = getWrapper({ resource: resourceA });
+        const calendar = wrapper.find(ResourceCalendar);
+        expect(calendar).toHaveLength(0);
+      });
+
+      test('doesnt render NextFreeTimesButton', () => {
+        const wrapper = getWrapper({ resource: resourceA });
+        const btn = wrapper.find(NextFreeTimesButton);
+        expect(btn).toHaveLength(0);
+      });
+
+      test('doesnt render ReservationCalendar', () => {
+        const wrapper = getWrapper({ resource: resourceA });
+        const calendar = wrapper.find(ReservationCalendarContainer);
+        expect(calendar).toHaveLength(0);
+      });
     });
 
     test('renders resource images with thumbnail urls', () => {

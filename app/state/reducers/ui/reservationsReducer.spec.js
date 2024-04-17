@@ -20,6 +20,7 @@ import {
   selectReservationToEdit,
   selectReservationToShow,
   toggleTimeSlot,
+  setSelectedDatetimes
 } from 'actions/uiActions';
 import Reservation from 'utils/fixtures/Reservation';
 import { getTimeSlots } from 'utils/timeUtils';
@@ -774,6 +775,17 @@ describe('state/reducers/ui/reservationsReducer', () => {
           expect(nextState.selected).toEqual([]);
         });
       });
+    });
+  });
+
+  describe('UI.SET_SELECTED_DATETIMES', () => {
+    test('sets selected datetimes', () => {
+      const action = setSelectedDatetimes(['2019-01-01T00:00:00.000Z', '2019-02-01T00:00:00.000Z']);
+      const initialState = Immutable({
+        selected: [],
+      });
+      const nextState = reservationsReducer(initialState, action);
+      expect(nextState.selected).toStrictEqual(['2019-01-01T00:00:00.000Z', '2019-02-01T00:00:00.000Z']);
     });
   });
 });

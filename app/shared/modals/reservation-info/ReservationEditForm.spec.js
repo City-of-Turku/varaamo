@@ -419,6 +419,14 @@ describe('shared/modals/reservation-info/ReservationEditForm', () => {
             .filter({ names: ['begin', 'end'] });
           expect(timeControls).toHaveLength(1);
         });
+
+        test('doesnt render ReservationTimeControls when reservation is multiday', () => {
+          const reservationA = { ...defaultProps.reservation, begin: '2023-11-20T15:00:00', end: '2023-11-21T15:00:00' };
+          const timeControls = getWrapper({ isEditing: true, reservation: reservationA })
+            .find(Fields)
+            .filter({ names: ['begin', 'end'] });
+          expect(timeControls).toHaveLength(0);
+        });
       });
 
       describe('when not editing', () => {

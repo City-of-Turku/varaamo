@@ -15,6 +15,7 @@ import { shallowWithIntl } from 'utils/testUtils';
 import ReservationConfirmation from './ReservationConfirmation';
 import { checkQualityToolsLink } from '../../../shared/quality-tools-form/qualityToolsUtils';
 import ThankYouAndFeedback from './ThankYouAndFeedback';
+import ReservationOvernightDate from '../../../shared/reservation-date/ReservationOvernightDate';
 
 jest.mock('../../../shared/quality-tools-form/qualityToolsUtils', () => {
   const originalModule = jest.requireActual('../../../shared/quality-tools-form/qualityToolsUtils');
@@ -99,11 +100,45 @@ describe('pages/reservation/reservation-confirmation/ReservationConfirmation', (
     });
   });
 
-  test('renders ReservationDate with correct props', () => {
-    const reservationDate = getWrapper().find(ReservationDate);
-    expect(reservationDate).toHaveLength(1);
-    expect(reservationDate.prop('beginDate')).toBe(defaultProps.reservation.begin);
-    expect(reservationDate.prop('endDate')).toBe(defaultProps.reservation.end);
+  describe('when reservation is single day', () => {
+    const reservation = Reservation.build({
+      begin: '2017-01-01',
+      end: '2017-01-01',
+      user: User.build(),
+    });
+
+    test('renders ReservationDate', () => {
+      const reservationDate = getWrapper({ reservation }).find(ReservationDate);
+      expect(reservationDate).toHaveLength(1);
+      expect(reservationDate.prop('beginDate')).toBe(reservation.begin);
+      expect(reservationDate.prop('endDate')).toBe(reservation.end);
+    });
+
+    test('doesnt render ReservationOvernightDate', () => {
+      const reservationOvernightDate = getWrapper({ reservation }).find(ReservationOvernightDate);
+      expect(reservationOvernightDate).toHaveLength(0);
+    });
+  });
+
+
+  describe('when reservation is multiday', () => {
+    const reservation = Reservation.build({
+      begin: '2017-01-01',
+      end: '2017-01-02',
+      user: User.build(),
+    });
+
+    test('doesnt render ReservationDate', () => {
+      const reservationDate = getWrapper({ reservation }).find(ReservationDate);
+      expect(reservationDate).toHaveLength(0);
+    });
+
+    test('renders ReservationOvernightDate', () => {
+      const reservationOvernightDate = getWrapper({ reservation }).find(ReservationOvernightDate);
+      expect(reservationOvernightDate).toHaveLength(1);
+      expect(reservationOvernightDate.prop('beginDate')).toBe(reservation.begin);
+      expect(reservationOvernightDate.prop('endDate')).toBe(reservation.end);
+    });
   });
 
   test('renders resource name', () => {
