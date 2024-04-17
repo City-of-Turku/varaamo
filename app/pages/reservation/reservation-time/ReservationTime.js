@@ -68,9 +68,9 @@ class ReservationTime extends Component {
               <OvernightCalendar
                 handleDateChange={this.handleDateChange}
                 history={history}
-                isStrongAuthSatisfied
                 onEditCancel={onCancel}
                 onEditConfirm={onConfirm}
+                params={{ ...params, id: resource.id }}
                 reservationId={selectedReservation.id}
                 resource={resource}
               />

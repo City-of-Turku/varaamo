@@ -8,6 +8,8 @@ import moment from 'moment';
  * @param {function} params.setStartDate function to set start date
  * @param {Date|null} params.endDate ending date or null
  * @param {function} params.setEndDate function to set end date
+ * @param {string} params.overnightStartTime time to set start date to
+ * @param {string} params.overnightEndTime time to set end date to
  */
 export function handleDateSelect({
   value, startDate, setStartDate, endDate, setEndDate, overnightStartTime, overnightEndTime
@@ -33,7 +35,7 @@ export function handleDateSelect({
 }
 
 /**
- * Handles disabling days based on reservable, reservableAfter and reservableBefore.
+ * Handles disabling days.
  * @param {Object} params
  * @param {moment} params.day
  * @param {moment} params.now
@@ -42,12 +44,17 @@ export function handleDateSelect({
  * @param {string} params.reservableBefore datetime
  * @param {Date} params.startDate
  * @param {Object[]} params.openingHours
+ * @param {Object[]} params.reservations
+ * @param {string} params.maxPeriod
+ * @param {string} params.overnightEndTime
+ * @param {string} params.overnightStartTime
+ * @param {boolean} params.hasAdminBypass
  * @returns {boolean} is day disabled
  */
 export function handleDisableDays({
   day, now, reservable, reservableAfter, reservableBefore, startDate,
   openingHours, reservations, maxPeriod, overnightEndTime,
-  overnightStartTime
+  overnightStartTime, hasAdminBypass
 }) {
   const isAfterToday = now.isAfter(day, 'day');
   const beforeDate = reservableAfter || moment();
@@ -55,7 +62,7 @@ export function handleDisableDays({
   const afterDate = reservableBefore || moment().add(1, 'year');
   const isAfterDate = moment(day).isAfter(afterDate);
   const isBeforeStartDate = startDate && moment(day).isBefore(startDate);
-  if (!reservable) {
+  if (!hasAdminBypass && !reservable) {
     return true;
   }
   if (isAfterToday || isBeforeDate || isAfterDate || isBeforeStartDate) {
@@ -74,7 +81,7 @@ export function handleDisableDays({
   }
 
   if (startDate) {
-    if (maxPeriod && isOverMaxPeriod(
+    if (!hasAdminBypass && maxPeriod && isOverMaxPeriod(
       startDate, day, maxPeriod, overnightEndTime, overnightStartTime)) {
       return true;
     }
@@ -108,6 +115,11 @@ export function isOverMaxPeriod(
   return false;
 }
 
+/**
+ * Gets closed days in opening hours list
+ * @param {Object[]} openingHours
+ * @returns {Object[]} closed days
+ */
 export function getClosedDays(openingHours) {
   return openingHours.filter(oh => !oh.closes || !oh.opens);
 }
@@ -134,6 +146,12 @@ export function reservationsModifier(day, reservations) {
   return false;
 }
 
+/**
+ * Modifier for DayPicker that checks if the next day is booked.
+ * @param {Date} day
+ * @param {Object[]} reservations
+ * @returns {boolean} is next day booked
+ */
 export function nextDayBookedModifier(day, reservations) {
   if (day && reservations) {
     const firstBooked = findFirstClosestReservation(day, reservations);
@@ -145,6 +163,12 @@ export function nextDayBookedModifier(day, reservations) {
   return false;
 }
 
+/**
+ * Modifier for DayPicker that checks if the previous day is booked.
+ * @param {Date} day
+ * @param {Object[]} reservations
+ * @returns {boolean} is previous day booked
+ */
 export function prevDayBookedModifier(day, reservations) {
   if (day && reservations) {
     const firstBooked = findPrevFirstClosestReservation(day, reservations);
@@ -156,6 +180,12 @@ export function prevDayBookedModifier(day, reservations) {
   return false;
 }
 
+/**
+ * Modifier for DayPicker that checks if the next day is closed.
+ * @param {Date} day
+ * @param {Object[]} openingHours
+ * @returns {boolean} is next day closed
+ */
 export function nextDayClosedModifier(day, openingHours) {
   const closedDays = getClosedDays(openingHours);
   const firstClosed = findFirstClosedDay(day, closedDays);
@@ -165,6 +195,12 @@ export function nextDayClosedModifier(day, openingHours) {
   return false;
 }
 
+/**
+ * Modifier for DayPicker that checks if the previous day is closed.
+ * @param {Date} day
+ * @param {Object[]} openingHours
+ * @returns {boolean} is previous day closed
+ */
 export function prevDayClosedModifier(day, openingHours) {
   const closedDays = getClosedDays(openingHours);
   const firstClosed = findPrevFirstClosedDay(day, closedDays);
@@ -188,6 +224,12 @@ export function findFirstClosedDay(fromDate, closedDays) {
   return sortedDates.length > 0 ? sortedDates[0].date : null;
 }
 
+/**
+ * Finds first closed day before fromDate.
+ * @param {Date} fromDate
+ * @param {Object[]} closedDays
+ * @returns {string|null} first closed day's date string
+ */
 export function findPrevFirstClosedDay(fromDate, closedDays) {
   const fromMoment = moment(fromDate);
   const beforeDates = closedDays.filter(closedDay => moment(closedDay.date).isBefore(fromMoment));
@@ -211,6 +253,12 @@ export function findFirstClosestReservation(fromDate, reservations) {
   return sortedReservations.length > 0 ? sortedReservations[0] : null;
 }
 
+/**
+ * Finds first reservation before fromDate.
+ * @param {Date} fromDate
+ * @param {Object[]} reservations
+ * @returns {Object|null} first reservation before fromDate or null if none found.
+ */
 export function findPrevFirstClosestReservation(fromDate, reservations) {
   const fromMoment = moment(fromDate);
   const futureReservations = reservations.filter(
@@ -284,11 +332,25 @@ export function getOvernightDatetime(date, time) {
   return '';
 }
 
+/**
+ * Gets hours, minutes and seconds from time string.
+ * @param {string} time
+ * @returns {Object} hours, minutes and seconds
+ */
 export function getHoursMinutesSeconds(time) {
   const [hours, minutes, seconds] = time.split(':').map(Number);
   return { hours, minutes, seconds };
 }
 
+/**
+ * Handles formatting selected date and time for reservation redux actions.
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @param {string} startTime
+ * @param {string} endTime
+ * @param {string} resourceId
+ * @returns {Object} begin, end and resource
+ */
 export function handleFormattingSelected(startDate, endDate, startTime, endTime, resourceId) {
   const startTimeUnits = getHoursMinutesSeconds(startTime);
   const endTimeUnits = getHoursMinutesSeconds(endTime);
@@ -305,6 +367,12 @@ export function handleFormattingSelected(startDate, endDate, startTime, endTime,
   return { begin, end, resource: resourceId };
 }
 
+/**
+ * Gets correct URL to reservation page when making a new reservation
+ * @param {Object} reservation
+ * @param {string} resourceId
+ * @returns {string} reservation URL
+ */
 export function getReservationUrl(reservation, resourceId) {
   return `/reservation?id=${reservation ? reservation.id : ''}&resource=${resourceId}`;
 }
@@ -316,13 +384,17 @@ export function getReservationUrl(reservation, resourceId) {
  * @param {boolean} params.isStrongAuthSatisfied
  * @param {boolean} params.isMaintenanceModeOn
  * @param {Object} params.resource
+ * @param {boolean} params.hasAdminBypass
  * @returns {boolean} true if reservation is allowed
  */
 export function isReservingAllowed({
-  isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn, resource
+  isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn, resource, hasAdminBypass
 }) {
   if (isMaintenanceModeOn || !resource) {
     return false;
+  }
+  if (hasAdminBypass) {
+    return true;
   }
   const { authentication, reservable } = resource;
   if (!reservable) {

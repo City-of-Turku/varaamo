@@ -337,7 +337,7 @@ class UnconnectedResourcePage extends Component {
                         <OvernightCalendar
                           handleDateChange={this.handleDateChange}
                           history={history}
-                          isStrongAuthSatisfied={isStrongAuthSatisfied}
+                          params={params}
                           resource={resource}
                           selectedDate={date}
                         />
