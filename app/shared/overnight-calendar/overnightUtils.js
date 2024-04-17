@@ -16,19 +16,18 @@ export function handleDateSelect({
     return;
   }
 
+  const startTimedValue = setDatesTime(value, overnightStartTime).toDate();
+  const endTimedValue = setDatesTime(value, overnightEndTime).toDate();
+
   if (!startDate) {
-    setStartDate(setDatesTime(value, overnightStartTime).toDate());
-  } else if (value.getTime() === startDate.getTime()) {
+    setStartDate(startTimedValue);
+  } else if (startTimedValue.getTime() === startDate.getTime()) {
     setStartDate(null);
     setEndDate(null);
   } else if (!endDate) {
-    setEndDate(setDatesTime(value, overnightEndTime).toDate());
-  } else if (value.getTime() === endDate.getTime()) {
+    setEndDate(endTimedValue);
+  } else if (endTimedValue.getTime() === endDate.getTime()) {
     setStartDate(null);
-    setEndDate(null);
-  } else {
-    // TODO: handle this skipping startday validation
-    setStartDate(setDatesTime(value, overnightStartTime).toDate());
     setEndDate(null);
   }
 }
