@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { injectT } from 'i18n';
 import {
   areDatesSameAsInitialDates,
+  closedDaysModifier,
   filterSelectedReservation,
   getNotSelectableNotificationText,
   getNotificationText,
@@ -177,7 +178,6 @@ function OvernightCalendar({
     startDate, endDate, overnightStartTime, overnightEndTime);
   const isDurBelowMin = hasAdminBypass ? false : isDurationBelowMin(selectedDuration, minPeriod);
 
-  // TODO: accessibility, refactoring, tests
   return (
     <div className="overnight-calendar">
       <OvernightHiddenHeading
@@ -212,13 +212,16 @@ function OvernightCalendar({
           end,
           highlighted,
           available,
+          closed: (day) => closedDaysModifier(day, openingHours),
           booked: (day) => (
             startDate ? null : reservationsModifier(day, filteredReservations)),
-          nextBooked: (day) => nextDayBookedModifier(day, filteredReservations),
+          nextBooked: (day) => (
+            startDate ? null : nextDayBookedModifier(day, filteredReservations)),
           nextBookedStartSelected: (day) => (
             startDate ? nextDayBookedModifier(day, filteredReservations) : null),
           nextClosed: (day) => nextDayClosedModifier(day, openingHours),
-          prevBooked: (day) => prevDayBookedModifier(day, filteredReservations),
+          prevBooked: (day) => (
+            startDate ? null : prevDayBookedModifier(day, filteredReservations)),
           prevClosed: (day) => prevDayClosedModifier(day, openingHours),
         }}
         onDayClick={validateAndSelect}

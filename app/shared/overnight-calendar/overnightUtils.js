@@ -181,6 +181,24 @@ export function prevDayBookedModifier(day, reservations) {
 }
 
 /**
+ * Returns closed days modifier for DayPicker
+ * @param {Date} day
+ * @param {Object[]} openingHours
+ * @returns {boolean} is day closed
+ */
+export function closedDaysModifier(day, openingHours) {
+  const closedDays = getClosedDays(openingHours);
+  const momentDay = moment(day);
+  for (let index = 0; index < closedDays.length; index += 1) {
+    const closedDay = closedDays[index];
+    if (momentDay.isSame(closedDay.date, 'day')) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Modifier for DayPicker that checks if the next day is closed.
  * @param {Date} day
  * @param {Object[]} openingHours

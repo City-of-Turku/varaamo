@@ -86,6 +86,14 @@
       color: $dark-gray;
     }
 
+    &--closed {
+      cursor: pointer;
+      text-decoration: line-through;
+      background: initial !important;
+      background-color: $medium-gray !important;
+      color: $dark-gray !important;
+    }
+
     &--available:not(.DayPicker-Day--disabled) {
       background-color: $available-color-green;
 
@@ -148,7 +156,7 @@
     &--end:not(.DayPicker-Day--disabled) {
       background: linear-gradient($half-day-angle, $highlighted-color 49%, $available-color 50%);
 
-      &.DayPicker-Day--nextBooked {
+      &.DayPicker-Day--nextBookedStartSelected {
         background: linear-gradient($half-day-angle, $highlighted-color 49%, $medium-gray 50%);
       }
 
@@ -180,8 +188,9 @@
     @include add-focus(2px, $black) {}
   }
 
-  .DayPicker-Day--nextClosed.DayPicker-Day--prevBooked:not(.DayPicker-Day--disabled) {
+  .DayPicker-Day--nextClosed.DayPicker-Day--prevBooked {
     background: linear-gradient($half-day-angle, $booked-color 49%, $medium-gray 50%);
+    color: $black;
   }
 
   .DayPicker-Day--nextBooked.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled) {
@@ -192,11 +201,31 @@
     background: linear-gradient($half-day-angle, $booked-color 49%, $medium-gray 50%);
   }
 
-  .DayPicker-Day--booked.DayPicker-Day--prevClosed:not(.DayPicker-Day--disabled) {
+  .DayPicker-Day--nextBooked.DayPicker-Day--disabled:not(.DayPicker-Day--booked) {
+    background: linear-gradient($half-day-angle, $medium-gray 49%, $booked-color 50%);
+    color: $black;
+  }
+
+  .DayPicker-Day--prevBooked.DayPicker-Day--disabled:not(.DayPicker-Day--booked) {
+    background: linear-gradient($half-day-angle, $booked-color 49%, $medium-gray 50%);
+    color: $black;
+  }
+
+  .DayPicker-Day--booked.DayPicker-Day--prevClosed {
     background: linear-gradient($half-day-angle, $medium-gray 49%, $booked-color 50%);
   }
 
-  .DayPicker-Day--nextBooked.DayPicker-Day--prevBooked:not(.DayPicker-Day--disabled) {
+  .DayPicker-Day--nextBooked.DayPicker-Day--prevBooked:not(.DayPicker-Day--closed) {
+    background: initial;
+    background-color: $booked-color;
+    text-decoration: line-through;
+
+    &:hover {
+      background-color: $booked-color !important;
+    }
+  }
+
+  .DayPicker-Day--nextBooked.DayPicker-Day--prevBooked.DayPicker-Day--disabled:not(.DayPicker-Day--closed) {
     background: initial;
     background-color: $booked-color;
     text-decoration: line-through;

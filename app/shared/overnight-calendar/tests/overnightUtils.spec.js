@@ -2,6 +2,7 @@ import moment from 'moment';
 
 import {
   areDatesSameAsInitialDates,
+  closedDaysModifier,
   filterSelectedReservation,
   findFirstClosedDay,
   findFirstClosestReservation,
@@ -323,6 +324,36 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
         moment('2024-04-21').toDate(), reservations)).toBe(false);
       expect(prevDayBookedModifier(
         moment('2024-04-23').toDate(), reservations)).toBe(false);
+    });
+  });
+
+  describe('closedDaysModifier', () => {
+    const openingHours = [
+      { date: '2024-04-19', closes: null, opens: null },
+      { date: '2024-04-20', closes: '2024-04-20T20:00:00+03:00', opens: '2024-04-20T06:00:00+03:00' },
+      { date: '2024-04-21', closes: null, opens: null },
+      { date: '2024-04-22', closes: '2024-04-22T20:00:00+03:00', opens: '2024-04-22T06:00:00+03:00' },
+      { date: '2024-04-23', closes: '2024-04-23T20:00:00+03:00', opens: '2024-04-23T06:00:00+03:00' },
+      { date: '2024-04-24', closes: null, opens: null },
+    ];
+    test('returns true when day is closed', () => {
+      expect(closedDaysModifier(
+        moment('2024-04-19').toDate(), openingHours)).toBe(true);
+      expect(closedDaysModifier(
+        moment('2024-04-21').toDate(), openingHours)).toBe(true);
+      expect(closedDaysModifier(
+        moment('2024-04-24').toDate(), openingHours)).toBe(true);
+    });
+
+    test('returns false when day is not closed', () => {
+      expect(closedDaysModifier(
+        moment('2024-04-20').toDate(), openingHours)).toBe(false);
+      expect(closedDaysModifier(
+        moment('2024-04-22').toDate(), openingHours)).toBe(false);
+      expect(closedDaysModifier(
+        moment('2024-04-23').toDate(), openingHours)).toBe(false);
+      expect(closedDaysModifier(
+        moment('2024-04-25').toDate(), openingHours)).toBe(false);
     });
   });
 
