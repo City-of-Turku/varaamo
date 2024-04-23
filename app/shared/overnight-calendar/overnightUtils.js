@@ -37,7 +37,7 @@ export function handleDateSelect({
 /**
  * Handles disabling days.
  * @param {Object} params
- * @param {moment} params.day
+ * @param {Date} params.day
  * @param {moment} params.now
  * @param {boolean} params.reservable
  * @param {string} params.reservableAfter datetime
@@ -338,8 +338,11 @@ export function getOvernightDatetime(date, time) {
  * @returns {Object} hours, minutes and seconds
  */
 export function getHoursMinutesSeconds(time) {
-  const [hours, minutes, seconds] = time.split(':').map(Number);
-  return { hours, minutes, seconds };
+  if (time) {
+    const [hours, minutes, seconds] = time.split(':').map(Number);
+    return { hours, minutes, seconds };
+  }
+  return { hours: 0, minutes: 0, seconds: 0 };
 }
 
 /**

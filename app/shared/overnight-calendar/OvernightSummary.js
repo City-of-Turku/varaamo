@@ -36,7 +36,6 @@ function OvernightSummary({
       <div>
         <Button
           bsStyle="primary"
-          className="reservation-calendar__reserve-button2"
           disabled={isDurationBelowMin || !validRange}
           onClick={handleSelectDatetimes}
         >
