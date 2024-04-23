@@ -58,10 +58,10 @@ export function handleDisableDays({
 }) {
   const isAfterToday = now.isAfter(day, 'day');
   const beforeDate = reservableAfter || moment();
-  const isBeforeDate = moment(day).isBefore(beforeDate);
+  const isBeforeDate = moment(day).isBefore(beforeDate, 'day');
   const afterDate = reservableBefore || moment().add(1, 'year');
-  const isAfterDate = moment(day).isAfter(afterDate);
-  const isBeforeStartDate = startDate && moment(day).isBefore(startDate);
+  const isAfterDate = moment(day).isAfter(afterDate, 'day');
+  const isBeforeStartDate = startDate && moment(day).isBefore(startDate, 'day');
   if (!hasAdminBypass && !reservable) {
     return true;
   }
