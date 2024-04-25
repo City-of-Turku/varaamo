@@ -32,6 +32,7 @@
   "AdminResourcesPage.favoriteTitle": "Suosikit",
   "AdminResourcesPage.external.toggle": "Ulkoiset tilat",
   "AdminResourcesPage.external.label": "Ulkoinen",
+  "AdminResourcesPage.label.notUsable": "Ei käytettävissä tällä sivulla",
   "AvailabilityViewDateSelector.nextDay": "seuraava päivä",
   "AvailabilityViewDateSelector.previousDay": "edellinen päivä",
   "CommentForm.label": "Kommentit:",

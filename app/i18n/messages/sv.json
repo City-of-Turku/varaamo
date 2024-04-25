@@ -32,6 +32,7 @@
   "AdminResourcesPage.favoriteTitle": "Egna favoriter",
   "AdminResourcesPage.external.toggle": "Externa utrymmen",
   "AdminResourcesPage.external.label": "Extern",
+  "AdminResourcesPage.label.notUsable": "Kan inte användas på denna sida",
   "AvailabilityViewDateSelector.nextDay": "följande dag",
   "AvailabilityViewDateSelector.previousDay": "föregående dag",
   "CommentForm.label": "Kommentarer:",

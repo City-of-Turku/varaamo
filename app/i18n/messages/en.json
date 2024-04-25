@@ -32,6 +32,7 @@
   "AdminResourcesPage.favoriteTitle": "My favorites",
   "AdminResourcesPage.external.toggle": "External resources",
   "AdminResourcesPage.external.label": "External",
+  "AdminResourcesPage.label.notUsable": "Not usable on this page",
   "AvailabilityViewDateSelector.nextDay": "next day",
   "AvailabilityViewDateSelector.previousDay": "previous day",
   "CommentForm.label": "Comments:",

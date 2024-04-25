@@ -15,7 +15,9 @@ function getTimeSlotWidth({ startTime, endTime } = {}) {
 }
 
 function getTimelineItems(date, reservations, resourceId, timeRestrictions, hasStaffRights) {
-  const { cooldown, minPeriod, maxPeriod } = timeRestrictions;
+  const {
+    cooldown, minPeriod, maxPeriod, overnightReservations
+  } = timeRestrictions;
   // skip getting cooldowns if user has perms
   const cooldownRanges = hasStaffRights ? [] : getCooldownRanges(reservations, cooldown);
   const items = [];
@@ -25,7 +27,7 @@ function getTimelineItems(date, reservations, resourceId, timeRestrictions, hasS
   while (timePointer.isBefore(end)) {
     const reservation = reservations && reservations[reservationPointer];
     const isSlotReservation = reservation && timePointer.isSame(reservation.begin);
-    if (isSlotReservation) {
+    if (isSlotReservation && !overnightReservations) {
       items.push({
         key: String(items.length),
         type: 'reservation',
@@ -93,6 +95,11 @@ function markItemsSelectable(items, isSelectable, openingHours, external, after)
 function addSelectionData(selection, resource, items) {
   const canIgnoreOpeningHours = resource.userPermissions.canIgnoreOpeningHours;
   const reservableAfter = resource.reservableAfter;
+
+  if (resource.overnightReservations) {
+    return items;
+  }
+
   if (!selection) {
     return markItemsSelectable(
       items, true, resource.openingHours, canIgnoreOpeningHours, reservableAfter);

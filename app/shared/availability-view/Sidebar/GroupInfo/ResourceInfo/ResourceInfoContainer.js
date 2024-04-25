@@ -20,15 +20,18 @@ ResourceInfo.propTypes = {
   public: PropTypes.bool.isRequired,
   hasStaffRights: PropTypes.bool,
   t: PropTypes.func.isRequired,
+  overnightReservations: PropTypes.bool.isRequired,
 };
 export function ResourceInfo(props) {
+  const { overnightReservations } = props;
   return (
     <div
       className={classNames(
         'resource-info',
         {
           'resource-info-selected': props.isSelected,
-          'is-external': !props.hasStaffRights
+          'is-external': !props.hasStaffRights,
+          'is-overnight': props.overnightReservations,
         })
     }
       title={props.name}
@@ -37,15 +40,24 @@ export function ResourceInfo(props) {
         <Link to={`/resources/${props.id}?date=${props.date}`}>{props.name}</Link>
       </div>
       <div className="details">
-        <Glyphicon glyph="user" />
-        {' '}
-        {props.peopleCapacity}
-        {!props.public && (
-          <UnpublishedLabel />
+        {!overnightReservations && (
+          <React.Fragment>
+            <Glyphicon glyph="user" />
+            {' '}
+            {props.peopleCapacity}
+            {!props.public && (
+            <UnpublishedLabel />
+            )}
+            {!props.hasStaffRights && (
+            <Label bsStyle="default" className="unpublished-label">
+              {props.t('AdminResourcesPage.external.label')}
+            </Label>
+            )}
+          </React.Fragment>
         )}
-        {!props.hasStaffRights && (
-          <Label bsStyle="default" className="unpublished-label">
-            {props.t('AdminResourcesPage.external.label')}
+        {overnightReservations && (
+          <Label bsStyle="default" className="unusable-label" title={props.t('AdminResourcesPage.label.notUsable')}>
+            {props.t('AdminResourcesPage.label.notUsable')}
           </Label>
         )}
       </div>
@@ -70,7 +82,8 @@ export function selector() {
         name: resource.name,
         peopleCapacity: resource.peopleCapacity,
         public: resource.public,
-        hasStaffRights: isAdmin || isManager || isViewer
+        hasStaffRights: isAdmin || isManager || isViewer,
+        overnightReservations: resource.overnightReservations,
       };
     }
   );

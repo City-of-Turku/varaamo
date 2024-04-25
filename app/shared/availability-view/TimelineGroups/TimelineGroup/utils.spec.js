@@ -138,6 +138,17 @@ describe('shared/availability-view/utils', () => {
       expect(actual).toEqual(expected);
     });
 
+    test('returns items as is when resource overnightReservations is true', () => {
+      const expected = getItems(false, false, false, false);
+      const resource = {
+        id: 'r1',
+        userPermissions,
+        overnightReservations: true,
+      };
+      const actual = utils.addSelectionData(null, resource, items);
+      expect(actual).toEqual(expected);
+    });
+
     test('marks not selectable if outside available hours', () => {
       const expected = getItems(false, true, false, true);
       const resource = {
@@ -464,6 +475,25 @@ describe('shared/availability-view/utils', () => {
         },
       ];
       expect(actual).toEqual(expected);
+    });
+
+    test('returns only slots when overnightReservations is true', () => {
+      const reservations = [
+        { id: 11, begin: '2016-01-01T02:00:00', end: '2016-01-01T10:00:00' },
+        { id: 12, begin: '2016-01-01T12:30:00', end: '2016-01-01T20:00:00' },
+        { id: 13, begin: '2016-01-01T20:00:00', end: '2016-01-01T20:30:00' },
+      ];
+      const timeRestrictions2 = {
+        cooldown: '01:00:00',
+        minPeriod: '00:30:00',
+        maxPeriod: '01:00:00',
+        overnightReservations: true,
+      };
+      const items = utils.getTimelineItems(
+        moment('2016-01-01T00:00:00'), reservations, '1', timeRestrictions2, hasStaffRights);
+      items.forEach(item => {
+        expect(item.type).toBe('reservation-slot');
+      });
     });
 
     test.each([true, false])('returns slots and reservations correctly when there is cooldown and hasStaffRights is %p', hasRights => {

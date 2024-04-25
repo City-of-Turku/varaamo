@@ -32,8 +32,12 @@ export function selector() {
   const timeRestrictionsSelector = createSelector(
     resourceSelector,
     resource => {
-      const { minPeriod, maxPeriod, cooldown } = resource;
-      return { minPeriod, maxPeriod, cooldown };
+      const {
+        minPeriod, maxPeriod, cooldown, overnightReservations
+      } = resource;
+      return {
+        minPeriod, maxPeriod, cooldown, overnightReservations
+      };
     }
   );
 

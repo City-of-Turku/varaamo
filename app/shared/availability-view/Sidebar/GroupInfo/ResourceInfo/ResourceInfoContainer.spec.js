@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Glyphicon } from 'react-bootstrap';
 
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedResourceInfo as ResourceInfo, selector } from './ResourceInfoContainer';
@@ -21,7 +22,8 @@ function getState() {
             isAdmin: false,
             isManager: true,
             isViewer: false
-          }
+          },
+          overnightReservations: false,
         },
       },
     },
@@ -39,6 +41,7 @@ describe('shared/availability-view/ResourceInfoContainer', () => {
       peopleCapacity: 19,
       public: true,
       hasStaffRights: true,
+      overnightReservations: false,
     };
     return shallowWithIntl(<ResourceInfo {...defaults} {...props} />);
   }
@@ -51,6 +54,11 @@ describe('shared/availability-view/ResourceInfoContainer', () => {
   test('has selected class if isSelected', () => {
     const wrapper = getWrapper({ isSelected: true });
     expect(wrapper.is('.resource-info-selected')).toBe(true);
+  });
+
+  test('has overnight class if overnightReservations is true', () => {
+    const wrapper = getWrapper({ overnightReservations: true });
+    expect(wrapper.is('.is-overnight')).toBe(true);
   });
 
   test('renders the name and link to resource page', () => {
@@ -87,6 +95,33 @@ describe('shared/availability-view/ResourceInfoContainer', () => {
     expect(label).toHaveLength(0);
   });
 
+  describe('when overnightReservations is true', () => {
+    test('renders unusable label', () => {
+      const label = getWrapper({ overnightReservations: true }).find(Label);
+      expect(label).toHaveLength(1);
+      expect(label.prop('bsStyle')).toBe('default');
+      expect(label.prop('className')).toBe('unusable-label');
+      expect(label.prop('title')).toBe('AdminResourcesPage.label.notUsable');
+      expect(label.prop('children')).toBe('AdminResourcesPage.label.notUsable');
+    });
+
+    test('does not render user icon', () => {
+      const icon = getWrapper({ overnightReservations: true }).find(Glyphicon);
+      expect(icon).toHaveLength(0);
+    });
+
+    test('does not render UnpublishedLabel', () => {
+      const label = getWrapper({ overnightReservations: true }).find(UnpublishedLabel);
+      expect(label).toHaveLength(0);
+    });
+
+    test('does not render external label', () => {
+      const label = getWrapper({ overnightReservations: true, hasStaffRights: false })
+        .find('.unpublished-label');
+      expect(label).toHaveLength(0);
+    });
+  });
+
   describe('selector', () => {
     function getSelected(props) {
       const defaults = { id: '123456' };
@@ -100,6 +135,7 @@ describe('shared/availability-view/ResourceInfoContainer', () => {
         peopleCapacity: 9,
         public: true,
         hasStaffRights: true,
+        overnightReservations: false,
       });
     });
   });
