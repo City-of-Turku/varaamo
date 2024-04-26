@@ -544,7 +544,7 @@
   "TimeSlots.reserveButton": "Reserve",
   "TimeSlots.reserver": "Person making the reservation",
   "TimeSlots.selectedDate": "Selected time:",
-  "TimeSlots.selectedTime": "at {time}",
+  "TimeSlots.selectedTime": "{time}",
   "TimeSlots.time": "Time",
   "UserReservationsPage.preliminaryEmptyMessage": "No preliminary reservations.",
   "UserReservationsPage.preliminaryReservationsHeader": "Preliminary reservations",
