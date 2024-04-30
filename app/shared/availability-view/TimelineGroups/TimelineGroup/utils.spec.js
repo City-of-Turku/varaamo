@@ -2,6 +2,7 @@ import mockDate from 'mockdate';
 import moment from 'moment';
 
 import utils from './utils';
+import constants from '../../../../constants/AppConstants';
 
 describe('shared/availability-view/utils', () => {
   describe('getTimeSlotWidth', () => {
@@ -499,6 +500,9 @@ describe('shared/availability-view/utils', () => {
     test.each([true, false])('returns slots and reservations correctly when there is cooldown and hasStaffRights is %p', hasRights => {
       const timeRestrictions2 = { cooldown: '01:00:00', minPeriod: '00:30:00', maxPeriod: '01:00:00' };
       const reservations = [
+        {
+          id: 10, begin: '2016-01-01T01:30:00', end: '2016-01-01T02:00:00', type: constants.RESERVATION_TYPE.BLOCKED_VALUE
+        },
         { id: 11, begin: '2016-01-01T02:00:00', end: '2016-01-01T10:00:00' },
         { id: 12, begin: '2016-01-01T12:30:00', end: '2016-01-01T20:00:00' },
         { id: 13, begin: '2016-01-01T20:00:00', end: '2016-01-01T20:30:00' },
@@ -549,19 +553,10 @@ describe('shared/availability-view/utils', () => {
         },
         {
           key: '3',
-          type: 'reservation-slot',
-          data: {
-            begin: moment('2016-01-01T01:30:00').format(),
-            end: moment('2016-01-01T02:00:00').format(),
-            resourceId: '1',
-            isSelectable: false,
-            hasStaffRights: hasRights,
-            isWithinCooldown: !hasRights,
-            minPeriod: timeRestrictions2.minPeriod,
-            maxPeriod: timeRestrictions2.maxPeriod,
-          },
+          type: 'reservation',
+          data: reservations[0],
         },
-        { key: '4', type: 'reservation', data: reservations[0] },
+        { key: '4', type: 'reservation', data: reservations[1] },
         {
           key: '5',
           type: 'reservation-slot',
@@ -632,8 +627,8 @@ describe('shared/availability-view/utils', () => {
             maxPeriod: timeRestrictions2.maxPeriod,
           },
         },
-        { key: '10', type: 'reservation', data: reservations[1] },
-        { key: '11', type: 'reservation', data: reservations[2] },
+        { key: '10', type: 'reservation', data: reservations[2] },
+        { key: '11', type: 'reservation', data: reservations[3] },
         {
           key: '12',
           type: 'reservation-slot',

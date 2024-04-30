@@ -651,6 +651,29 @@ describe('Utils: timeUtils', () => {
         expect(slots[3].onCooldown).toBe(false);
         expect(slots[4].onCooldown).toBe(false);
       });
+
+      test('is false when reservation is type blocked', () => {
+        const cooldown = '1:00:00';
+        twoReservations = [
+          {
+            begin: '2015-10-09T08:00:00+03:00',
+            end: '2015-10-09T09:00:00+03:00',
+            isOwn: false,
+          },
+          {
+            begin: '2015-10-09T12:00:00+03:00',
+            end: '2015-10-09T13:00:00+03:00',
+            isOwn: true,
+            type: constants.RESERVATION_TYPE.BLOCKED_VALUE,
+          }
+        ];
+        const slots = getTimeSlots(start, end, period, twoReservations, [], cooldown);
+        expect(slots[0].onCooldown).toBe(false);
+        expect(slots[1].onCooldown).toBe(true);
+        expect(slots[2].onCooldown).toBe(false);
+        expect(slots[3].onCooldown).toBe(false); // would be on cooldown if not blocked
+        expect(slots[4].onCooldown).toBe(false);
+      });
     });
   });
 

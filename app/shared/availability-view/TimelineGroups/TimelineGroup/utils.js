@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
 import { slotSize, slotWidth, slotMargin } from 'constants/SlotConstants';
+import constants from '../../../../constants/AppConstants';
 
 const moment = extendMoment(Moment);
 
@@ -130,7 +131,11 @@ function addSelectionData(selection, resource, items) {
 
 function getCooldownRanges(reservations, cooldown) {
   if (reservations && cooldown && cooldown !== '00:00:00') {
-    return reservations.map(reservation => moment.range(
+    // type blocked reservations don't have cooldown
+    const filteredReservations = reservations.filter(
+      reservation => reservation.type !== constants.RESERVATION_TYPE.BLOCKED_VALUE);
+
+    return filteredReservations.map(reservation => moment.range(
       moment(reservation.begin).subtract(moment.duration(cooldown)),
       moment(reservation.end).add(moment.duration(cooldown))
     ));

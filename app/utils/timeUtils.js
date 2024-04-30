@@ -1,6 +1,7 @@
 
 import forEach from 'lodash/forEach';
 import map from 'lodash/map';
+import filter from 'lodash/filter';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
@@ -111,11 +112,14 @@ function getTimeSlots(
     )
   );
 
+  // type blocked reservations don't have cooldown
+  const filteredReservations = filter(reservations,
+    reservation => reservation.type !== constants.RESERVATION_TYPE.BLOCKED_VALUE);
   /*
     reservation cooldown range is calculated in the following way:
     cooldown range = from (begin time - cooldown) to (end time + cooldown)
   */
-  const cooldownRanges = map(reservations, reservation => moment.range(
+  const cooldownRanges = map(filteredReservations, reservation => moment.range(
     moment(reservation.begin).subtract(moment.duration(cooldown)),
     moment(reservation.end).add(moment.duration(cooldown))
   ));
