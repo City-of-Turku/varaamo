@@ -35,8 +35,12 @@ describe('app/shared/overnight-calendar/OvernightCalendarSelector', () => {
     expect(getSelected().currentLanguage).toBeDefined();
   });
 
-  test('returns isStaff', () => {
-    expect(getSelected().isStaff).toBeDefined();
+  test('returns isResourceAdmin', () => {
+    expect(getSelected().isResourceAdmin).toBeDefined();
+  });
+
+  test('returns isResourceManager', () => {
+    expect(getSelected().isResourceManager).toBeDefined();
   });
 
   test('returns isSuperUserSelector', () => {

@@ -3,7 +3,8 @@ import { createStructuredSelector } from 'reselect';
 import { currentLanguageSelector } from 'state/selectors/translationSelectors';
 import {
   isLoggedInSelector, isSuperUserSelector,
-  createIsAdminForResourceSelector
+  createIsAdminForResourceSelector,
+  createIsManagerForResourceSelector
 } from 'state/selectors/authSelectors';
 import { createResourceSelector, createStrongAuthSatisfiedSelector } from 'state/selectors/dataSelectors';
 
@@ -18,7 +19,8 @@ const OvernightCalendarSelector = createStructuredSelector({
   isStrongAuthSatisfied: createStrongAuthSatisfiedSelector(resourceSelector),
   currentLanguage: currentLanguageSelector,
   isLoggedIn: isLoggedInSelector,
-  isStaff: createIsAdminForResourceSelector(resourceSelector),
+  isResourceAdmin: createIsAdminForResourceSelector(resourceSelector),
+  isResourceManager: createIsManagerForResourceSelector(resourceSelector),
   isSuperuser: isSuperUserSelector,
 });
 

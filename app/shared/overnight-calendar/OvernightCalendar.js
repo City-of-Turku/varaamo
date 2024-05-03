@@ -38,10 +38,10 @@ import { hasMaxReservations } from '../../utils/resourceUtils';
 import OvernightHiddenHeading from './OvernightHiddenHeading';
 
 function OvernightCalendar({
-  currentLanguage, resource, t, selected, actions, isStaff,
+  currentLanguage, resource, t, selected, actions,
   history, isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn,
   reservationId, onEditCancel, onEditConfirm, handleDateChange, selectedDate,
-  isSuperuser,
+  isSuperuser, isResourceAdmin, isResourceManager,
 }) {
   if (!resource || !resource.reservations) {
     return null;
@@ -70,10 +70,11 @@ function OvernightCalendar({
     overnightStartTime, overnightEndTime, maxPeriod, minPeriod
   } = resource;
 
-  const hasAdminBypass = isSuperuser || isStaff;
+  const isUnitAdminOrHigher = isSuperuser || isResourceAdmin;
+  const isUnitManagerOrHigher = isSuperuser || isResourceAdmin || isResourceManager;
 
   useEffect(() => {
-    if (!hasAdminBypass && startDate && endDate && !datesSameAsInitial) {
+    if (!isUnitAdminOrHigher && startDate && endDate && !datesSameAsInitial) {
       const selectedDuration = getSelectedDuration(
         startDate, endDate, overnightStartTime, overnightEndTime);
       const isDurBelowMin = isDurationBelowMin(selectedDuration, minPeriod);
@@ -98,7 +99,11 @@ function OvernightCalendar({
 
   const now = moment();
   const reservingIsAllowed = isReservingAllowed({
-    isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn, resource, hasAdminBypass
+    isLoggedIn,
+    isStrongAuthSatisfied,
+    isMaintenanceModeOn,
+    resource,
+    hasAdminBypass: isUnitManagerOrHigher
   });
 
   const validateAndSelect = (day, { booked, nextBooked, nextClosed }) => {
@@ -116,7 +121,7 @@ function OvernightCalendar({
       minPeriod,
       overnightEndTime,
       overnightStartTime,
-      hasAdminBypass,
+      hasAdminBypass: isUnitManagerOrHigher,
     });
 
     if (!reservingIsAllowed) {
@@ -155,7 +160,7 @@ function OvernightCalendar({
   const isEditing = !!initialStart;
 
   const handleSelectDatetimes = () => {
-    if (!hasAdminBypass && hasMaxReservations(resource) && !isEditing) {
+    if (!isUnitManagerOrHigher && hasMaxReservations(resource) && !isEditing) {
       actions.addNotification({
         message: t('TimeSlots.maxReservationsPerUser'),
         type: 'error',
@@ -176,7 +181,8 @@ function OvernightCalendar({
 
   const selectedDuration = getSelectedDuration(
     startDate, endDate, overnightStartTime, overnightEndTime);
-  const isDurBelowMin = hasAdminBypass ? false : isDurationBelowMin(selectedDuration, minPeriod);
+  const isDurBelowMin = isUnitAdminOrHigher ? false
+    : isDurationBelowMin(selectedDuration, minPeriod);
 
   return (
     <div className="overnight-calendar">
@@ -199,7 +205,7 @@ function OvernightCalendar({
           minPeriod,
           overnightEndTime,
           overnightStartTime,
-          hasAdminBypass,
+          hasAdminBypass: isUnitManagerOrHigher,
         })}
         enableOutsideDays
         firstDayOfWeek={1}
@@ -271,7 +277,8 @@ OvernightCalendar.propTypes = {
   selected: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  isStaff: PropTypes.bool.isRequired,
+  isResourceAdmin: PropTypes.bool.isRequired,
+  isResourceManager: PropTypes.bool.isRequired,
   isSuperuser: PropTypes.bool.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   isStrongAuthSatisfied: PropTypes.bool.isRequired,

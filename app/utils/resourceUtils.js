@@ -324,6 +324,21 @@ function isAdminForResource(resource) {
 }
 
 /**
+ * Check whether current user is manager for given resource.
+ * @param {Object} resource
+ * @returns {boolean} true when user is manager for given resource, false if not.
+ */
+function isManagerForResource(resource) {
+  if (resource.userPermissions) {
+    const perms = resource.userPermissions;
+    if (perms.isManager) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Checks whether strong auth requirement is satisfied with given resource and
  * strong auth status.
  * @param {object} resource
@@ -357,4 +372,5 @@ export {
   isStaffForResource,
   isStrongAuthSatisfied,
   isAdminForResource,
+  isManagerForResource,
 };

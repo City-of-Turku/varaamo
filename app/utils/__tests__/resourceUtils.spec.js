@@ -26,7 +26,8 @@ import {
   getEquipment,
   isStaffForResource,
   isStrongAuthSatisfied,
-  isAdminForResource
+  isAdminForResource,
+  isManagerForResource
 } from 'utils/resourceUtils';
 import { getPrettifiedPeriodUnits } from '../timeUtils';
 import Product from '../fixtures/Product';
@@ -1159,6 +1160,18 @@ describe('Utils: resourceUtils', () => {
     test('returns false when userPermissions is admin is false', () => {
       const resource = Resource.build({ userPermissions: { isAdmin: false } });
       expect(isAdminForResource(resource)).toBe(false);
+    });
+  });
+
+  describe('isManagerForResource', () => {
+    test('returns true when userPermissions is admin is true', () => {
+      const resource = Resource.build({ userPermissions: { isManager: true } });
+      expect(isManagerForResource(resource)).toBe(true);
+    });
+
+    test('returns false when userPermissions is admin is false', () => {
+      const resource = Resource.build({ userPermissions: { isManager: false } });
+      expect(isManagerForResource(resource)).toBe(false);
     });
   });
 
