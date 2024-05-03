@@ -12,7 +12,9 @@ import {
   loginExpiresAtSelector,
   hasStrongAuthSelector,
   authUserAmrSelector,
+  createIsAdminForResourceSelector,
 } from './authSelectors';
+import Resource from '../../utils/fixtures/Resource';
 
 describe('state/selectors/authSelectors', () => {
   describe('authUserSelector', () => {
@@ -283,6 +285,34 @@ describe('state/selectors/authSelectors', () => {
         expect(selected).toEqual([]);
       }
     );
+  });
+
+  describe('createIsAdminForResourceSelector', () => {
+    test('returns true if user has unit admin perm for resource', () => {
+      const resource = Resource.build({
+        userPermissions: {
+          isAdmin: true,
+        },
+      });
+      const resourceSelector = () => resource;
+      const state = getState({
+        'data.resources': { [resource.id]: resource }
+      });
+      expect(createIsAdminForResourceSelector(resourceSelector)(state)).toEqual(true);
+    });
+
+    test('returns false if user doesnt not have unit admin perm for resource', () => {
+      const resource = Resource.build({
+        userPermissions: {
+          isAdmin: false,
+        },
+      });
+      const resourceSelector = () => resource;
+      const state = getState({
+        'data.resources': { [resource.id]: resource }
+      });
+      expect(createIsAdminForResourceSelector(resourceSelector)(state)).toEqual(false);
+    });
   });
 
   describe('authUserAmrSelector', () => {

@@ -309,6 +309,21 @@ function isStaffForResource(resource) {
 }
 
 /**
+ * Check whether current user is admin for given resource.
+ * @param {Object} resource
+ * @returns {boolean} true when user is admin for given resource, false if not.
+ */
+function isAdminForResource(resource) {
+  if (resource.userPermissions) {
+    const perms = resource.userPermissions;
+    if (perms.isAdmin) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Checks whether strong auth requirement is satisfied with given resource and
  * strong auth status.
  * @param {object} resource
@@ -341,4 +356,5 @@ export {
   getMinPeriodText,
   isStaffForResource,
   isStrongAuthSatisfied,
+  isAdminForResource,
 };
