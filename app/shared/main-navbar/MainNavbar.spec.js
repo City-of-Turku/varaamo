@@ -9,7 +9,7 @@ import constants from 'constants/AppConstants';
 import { getSearchPageUrl } from 'utils/searchUtils';
 import { shallowWithIntl } from 'utils/testUtils';
 import MainNavbar from './MainNavbar';
-import FAIcon from 'shared/fontawesome-icon';
+import AdminDropdownLinks from './AdminDropdownLinks';
 
 describe('shared/main-navbar/MainNavbar', () => {
   const pathname = 'somepath';
@@ -113,49 +113,11 @@ describe('shared/main-navbar/MainNavbar', () => {
       expect(myReservationsLink).toHaveLength(1);
     });
 
-    test('renders a link to respa admin UI', () => {
-      const respaAdminLink = getLoggedInAdminWrapper().find(NavItem).filter({ eventKey: 'adminGuide' });
-      expect(respaAdminLink).toHaveLength(1);
-    });
-
-    test('renders a link to respa admin UI, open new tab when clicked', () => {
-      const respaAdminLink = getLoggedInAdminWrapper()
-        .find(NavItem).filter({ eventKey: 'adminGuide' });
-      expect(respaAdminLink.prop('target')).toEqual('_blank');
-    });
-
-    test('renders a link to default(finnish) varaamo gitbook when language is not swedish', () => {
-      const gitbookLink = getLoggedInAdminWrapper()
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.gitbook });
-      expect(gitbookLink).toHaveLength(1);
-    });
-
-    test('renders a link to swedish varaamo gitbook when language is swedish', () => {
-      const gitbookLink = getLoggedInAdminWrapper({ currentLanguage: 'sv' })
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.gitbook_sv });
-      expect(gitbookLink).toHaveLength(1);
-    });
-
-    test('renders a link to varaamo gitbook, open new tab when clicked', () => {
-      const gitbookLink = getLoggedInAdminWrapper()
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.gitbook });
-      expect(gitbookLink.prop('target')).toEqual('_blank');
-    });
-
-    test('renders a external link icon to next to respa admin UI text', () => {
-      const maintenanceLink = getLoggedInAdminWrapper()
-        .find(NavItem).filter({ eventKey: 'adminGuide' });
-      const icon = maintenanceLink.find(FAIcon);
-
-      expect(icon).toHaveLength(1);
-    });
-
-    test('renders an icon next to varaamo gitbook text', () => {
-      const gitbookLink = getLoggedInAdminWrapper()
-        .find(NavItem).filter({ href: constants.NAV_ADMIN_URLS.gitbook });
-
-      const icon = gitbookLink.find(FAIcon);
-      expect(icon).toHaveLength(1);
+    test('renders AdminDropdownLinks', () => {
+      const adminDropdownLinks = getLoggedInAdminWrapper().find(AdminDropdownLinks);
+      expect(adminDropdownLinks).toHaveLength(1);
+      expect(adminDropdownLinks.prop('currentLanguage')).toBe('fi');
+      expect(adminDropdownLinks.prop('gitbookURL')).toBe(constants.NAV_ADMIN_URLS.gitbook);
     });
   });
 
@@ -201,9 +163,9 @@ describe('shared/main-navbar/MainNavbar', () => {
 
   describe('Feedback link', () => {
     describe('when user is admin', () => {
-      test('is visible', () => {
+      test('is not visible', () => {
         const nav = getWrapper({ isAdmin: true }).find(NavItem).filter({ eventKey: 'feedback' });
-        expect(nav).toHaveLength(1);
+        expect(nav).toHaveLength(0);
       });
     });
 
@@ -215,7 +177,7 @@ describe('shared/main-navbar/MainNavbar', () => {
     });
 
     describe('when visible', () => {
-      const wrapper = getWrapper({ authUserAmr: 'turku_adfs', isAdmin: true });
+      const wrapper = getWrapper({ authUserAmr: 'turku_adfs', isAdmin: false });
 
       test('NavItem is rendered correctly', () => {
         const link = wrapper.find(NavItem).filter({ eventKey: 'feedback' });

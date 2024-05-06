@@ -1,6 +1,6 @@
 
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import classNames from 'classnames';
@@ -13,6 +13,7 @@ import constants from 'constants/AppConstants';
 import FAIcon from 'shared/fontawesome-icon';
 import { injectT } from 'i18n';
 import { getSearchPageUrl } from 'utils/searchUtils';
+import AdminDropdownLinks from './AdminDropdownLinks';
 
 class MainNavbar extends React.Component {
   constructor(props) {
@@ -88,27 +89,20 @@ class MainNavbar extends React.Component {
                 </NavItem>
               </LinkContainer>
             )}
-            {isAdmin
-              && (
-                <Fragment>
-                  <LinkContainer to="/manage-reservations">
-                    <NavItem eventKey="manage-reservations" onClick={() => this.collapseItem()}>
-                      {t('Navbar.manageReservations')}
-                    </NavItem>
-                  </LinkContainer>
-                  <NavItem eventKey="adminMaintenance" href={constants.NAV_ADMIN_URLS.respa} target="_blank">
-                    {t('Navbar.adminMaintenance')}
-                    <FAIcon icon={faExternalLinkAlt} />
-                  </NavItem>
 
-                  <NavItem eventKey="adminGuide" href={gitbookURL} target="_blank">
-                    {t('Navbar.adminGuide')}
-                    <FAIcon icon={faExternalLinkAlt} />
-                  </NavItem>
-                </Fragment>
-              )
-            }
-            {(isAdmin || authUserAmr === 'turku_adfs') && (
+            {(isLoggedIn && isAdmin) && (
+              <LinkContainer to="/manage-reservations">
+                <NavItem eventKey="manage-reservations" onClick={() => this.collapseItem()}>
+                  {t('Navbar.manageReservations')}
+                </NavItem>
+              </LinkContainer>
+            )}
+
+            {isAdmin && (
+              <AdminDropdownLinks currentLanguage={currentLanguage} gitbookURL={gitbookURL} />
+            )}
+
+            {(!isAdmin && authUserAmr === 'turku_adfs') && (
               <NavItem
                 eventKey="feedback"
                 href={`https://opaskartta.turku.fi/eFeedback/${currentLanguage}/Feedback/30/1039`}
