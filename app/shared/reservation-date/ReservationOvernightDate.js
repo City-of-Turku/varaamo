@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import iconClock from 'assets/icons/clock-o.svg';
 import iconCalendar from 'assets/icons/calendar.svg';
-import { getPrettifiedDuration } from 'utils/timeUtils';
+import { getPrettifiedDuration, formatDatetimeToString } from 'utils/timeUtils';
 import injectT from '../../i18n/injectT';
 
 function ReservationOvernightDate({ beginDate, endDate, t }) {
@@ -14,8 +14,8 @@ function ReservationOvernightDate({ beginDate, endDate, t }) {
 
   const reservationBegin = moment(beginDate);
   const reservationEnd = moment(endDate);
-  const begin = reservationBegin.format('D.M.YYYY HH:mm');
-  const end = reservationEnd.format('D.M.YYYY HH:mm');
+  const begin = formatDatetimeToString(reservationBegin, t);
+  const end = formatDatetimeToString(reservationEnd, t);
   const duration = getPrettifiedDuration(reservationBegin, reservationEnd, t('common.unit.time.day.short'));
 
   return (

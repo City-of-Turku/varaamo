@@ -130,13 +130,13 @@ describe('app/shared/overnight-calendar/OvernightCalendar', () => {
         expect(editSummary).toHaveLength(1);
         expect(editSummary.prop('datesSameAsInitial')).toBe(true);
         expect(editSummary.prop('duration')).toBeDefined();
-        expect(editSummary.prop('endDatetime')).toBe('19.2.2024 09:00');
+        expect(editSummary.prop('endDatetime')).toBe('19.2.2024 TimeSlots.selectedTime');
         expect(editSummary.prop('isDurationBelowMin')).toBe(false);
         expect(editSummary.prop('minDuration')).toBe(defaultProps.resource.minPeriod);
         expect(editSummary.prop('onCancel')).toBe(defaultProps.onEditCancel);
         expect(editSummary.prop('onConfirm')).toBeDefined();
         expect(editSummary.prop('selected')).toBe(selected);
-        expect(editSummary.prop('startDatetime')).toBe('18.2.2024 11:00');
+        expect(editSummary.prop('startDatetime')).toBe('18.2.2024 TimeSlots.selectedTime');
       });
     });
   });

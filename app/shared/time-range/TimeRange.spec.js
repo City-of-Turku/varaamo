@@ -1,7 +1,7 @@
-import { shallow } from 'enzyme';
 import moment from 'moment';
 import React from 'react';
 
+import { shallowWithIntl } from 'utils/testUtils';
 import TimeRange from './TimeRange';
 
 describe('shared/time-range/TimeRange', () => {
@@ -14,7 +14,7 @@ describe('shared/time-range/TimeRange', () => {
   };
 
   function getWrapper(extraProps) {
-    return shallow(<TimeRange {...defaultProps} {...extraProps} />);
+    return shallowWithIntl(<TimeRange {...defaultProps} {...extraProps} />);
   }
 
   test('renders a time element', () => {
@@ -44,6 +44,14 @@ describe('shared/time-range/TimeRange', () => {
     test('displays the end time in given endFormat', () => {
       const expected = moment(defaultProps.end).format(defaultProps.endFormat);
       expect(rangeString).toContain(expected);
+    });
+
+    describe('when time range is multiday', () => {
+      test('display correct range string', () => {
+        const timeElement = getWrapper({ isMultiday: true, end: '2015-10-12T14:00:00Z' });
+        expect(timeElement).toHaveLength(1);
+        expect(timeElement.text()).toBe('11.10.2015 TimeSlots.selectedTime – 12.10.2015 TimeSlots.selectedTime');
+      });
     });
   });
 });

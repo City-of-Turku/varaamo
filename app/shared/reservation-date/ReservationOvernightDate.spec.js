@@ -28,8 +28,8 @@ describe('shared/reservation-date/ReservationOvernightDate', () => {
   test('renders time texts', () => {
     const texts = wrapper.find('p.reservation-date__time');
     expect(texts.length).toBe(3);
-    expect(texts.at(0).text()).toBe('common.time.begin: 29.1.2018 13:00');
-    expect(texts.at(1).text()).toBe('common.time.end: 31.1.2018 09:00');
+    expect(texts.at(0).text()).toBe('common.time.begin: 29.1.2018 TimeSlots.selectedTime');
+    expect(texts.at(1).text()).toBe('common.time.end: 31.1.2018 TimeSlots.selectedTime');
     expect(texts.at(2).text()).toBe('common.time.duration: 1common.unit.time.day.short 20h');
   });
 

@@ -533,16 +533,17 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
   });
 
   describe('getOvernightDatetime', () => {
+    const t = (str, timeObj) => `${str} ${timeObj.time}`;
     test('returns correct datetime string', () => {
       const date = moment('2024-04-23').toDate();
       const time = '10:30:00';
-      const result = getOvernightDatetime(date, time);
-      expect(result).toBe('23.4.2024 10:30');
+      const result = getOvernightDatetime(date, time, t);
+      expect(result).toBe('23.4.2024 TimeSlots.selectedTime 10:30');
     });
     test('returns empty string when date or time is missing', () => {
-      expect(getOvernightDatetime(null, null)).toBe('');
-      expect(getOvernightDatetime(null, '10:30:00')).toBe('');
-      expect(getOvernightDatetime(moment('2024-04-23').toDate(), null)).toBe('');
+      expect(getOvernightDatetime(null, null, t)).toBe('');
+      expect(getOvernightDatetime(null, '10:30:00', t)).toBe('');
+      expect(getOvernightDatetime(moment('2024-04-23').toDate(), null, t)).toBe('');
     });
   });
 

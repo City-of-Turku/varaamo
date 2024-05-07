@@ -190,6 +190,7 @@ class UnconnectedReservationEditForm extends Component {
         beginFormat={beginFormat}
         end={reservation.end}
         endFormat={endFormat}
+        isMultiday={isReservationMultiday}
       />
     );
     return this.renderInfoRow(t('common.reservationTimeLabel'), staticReservationTime);

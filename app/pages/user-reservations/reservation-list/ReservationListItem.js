@@ -61,6 +61,7 @@ class ReservationListItem extends Component {
               beginFormat={beginFormat}
               end={reservation.end}
               endFormat={endFormat}
+              isMultiday={isReservationMultiday}
             />
           </div>
           <ReservationAccessCode

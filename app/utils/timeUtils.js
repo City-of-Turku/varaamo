@@ -353,12 +353,13 @@ function formatDateTime(datetime, targetFormat) {
  * D.M.YYYY HH:mm–HH:mm (1h 30min) or D.M.YYYY HH:mm - D.M.YYYY HH:mm (2d 5h)
  * @param {string} begin datetime
  * @param {string} end datetime
+ * @param {function} t
  * @returns {string} formatted datetime string
  */
-function formatDetailsDatetimes(begin, end, dayUnit = 'd') {
+function formatDetailsDatetimes(begin, end, t, dayUnit = 'd') {
   if (isMultiday(begin, end)) {
-    const beginText = moment(begin).format('D.M.YYYY HH:mm');
-    const endText = moment(end).format('D.M.YYYY HH:mm');
+    const beginText = formatDatetimeToString(begin, t);
+    const endText = formatDatetimeToString(end, t);
     const duration = getPrettifiedDuration(begin, end, dayUnit);
     return `${beginText} - ${endText} (${duration})`;
   }
@@ -367,6 +368,19 @@ function formatDetailsDatetimes(begin, end, dayUnit = 'd') {
   const endText = moment(end).format('HH:mm');
   const duration = getPrettifiedDuration(begin, end, dayUnit);
   return `${beginText}–${endText} (${duration})`;
+}
+
+/**
+ * Formats datetime to string
+ * @param {object|string} datetime any moment parsable format
+ * @param {function} t
+ * @returns {string} formatted datetime string e.g 20.10.2010 11:00
+ */
+function formatDatetimeToString(datetime, t) {
+  const momentDatetime = moment(datetime);
+  const formattedDate = momentDatetime.format('D.M.YYYY');
+  const formattedTime = t('TimeSlots.selectedTime', { time: momentDatetime.format('HH:mm') });
+  return `${formattedDate} ${formattedTime}`;
 }
 
 /**
@@ -403,4 +417,5 @@ export {
   formatDateTime,
   formatDetailsDatetimes,
   isMultiday,
+  formatDatetimeToString,
 };

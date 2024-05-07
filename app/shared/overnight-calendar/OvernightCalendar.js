@@ -234,25 +234,25 @@ function OvernightCalendar({
       {!isEditing && (
         <OvernightSummary
           duration={selectedDuration}
-          endDatetime={getOvernightDatetime(endDate, overnightEndTime)}
+          endDatetime={getOvernightDatetime(endDate, overnightEndTime, t)}
           handleSelectDatetimes={handleSelectDatetimes}
           isDurationBelowMin={isDurBelowMin}
           minDuration={minPeriod}
           selected={selected}
-          startDatetime={getOvernightDatetime(startDate, overnightStartTime)}
+          startDatetime={getOvernightDatetime(startDate, overnightStartTime, t)}
         />
       )}
       {isEditing && (
         <OvernightEditSummary
           datesSameAsInitial={datesSameAsInitial}
           duration={selectedDuration}
-          endDatetime={getOvernightDatetime(endDate, overnightEndTime)}
+          endDatetime={getOvernightDatetime(endDate, overnightEndTime, t)}
           isDurationBelowMin={isDurBelowMin}
           minDuration={minPeriod}
           onCancel={onEditCancel}
           onConfirm={handleSelectDatetimes}
           selected={selected}
-          startDatetime={getOvernightDatetime(startDate, overnightStartTime)}
+          startDatetime={getOvernightDatetime(startDate, overnightStartTime, t)}
         />
       )}
     </div>

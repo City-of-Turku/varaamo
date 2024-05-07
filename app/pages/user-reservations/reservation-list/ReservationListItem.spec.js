@@ -91,6 +91,7 @@ describe('pages/user-reservations/reservation-list/ReservationListItem', () => {
         expect(timeRange.prop('end')).toBe(props.reservation.end);
         expect(timeRange.prop('beginFormat')).toBe('dddd, LLL');
         expect(timeRange.prop('endFormat')).toBe('LT');
+        expect(timeRange.prop('isMultiday')).toBe(false);
       });
     });
 
@@ -105,6 +106,7 @@ describe('pages/user-reservations/reservation-list/ReservationListItem', () => {
         expect(timeRange.prop('end')).toBe(reservationA.end);
         expect(timeRange.prop('beginFormat')).toBe('D.M.YYYY HH:mm');
         expect(timeRange.prop('endFormat')).toBe('D.M.YYYY HH:mm');
+        expect(timeRange.prop('isMultiday')).toBe(true);
       });
     });
 

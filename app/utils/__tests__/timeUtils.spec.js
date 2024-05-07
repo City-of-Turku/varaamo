@@ -28,7 +28,8 @@ import {
   formatTime,
   formatDateTime,
   formatDetailsDatetimes,
-  isMultiday
+  isMultiday,
+  formatDatetimeToString
 } from 'utils/timeUtils';
 
 const moment = extendMoment(Moment);
@@ -883,9 +884,18 @@ describe('Utils: timeUtils', () => {
   describe('formatDetailsDatetimes', () => {
     test.each([
       ['2023-11-01T15:00:00Z', '2023-11-01T16:00:00Z', '1.11.2023 17:00–18:00 (1h)'],
-      ['2023-11-01T15:00:00Z', '2023-11-03T13:00:00Z', '1.11.2023 17:00 - 3.11.2023 15:00 (1d 22h)'],
+      ['2023-11-01T15:00:00Z', '2023-11-03T13:00:00Z', '1.11.2023 TimeSlots.selectedTime 17:00 - 3.11.2023 TimeSlots.selectedTime 15:00 (1d 22h)'],
     ])('returns correctly formatted datetime string with given params', (begin, end, expected) => {
-      expect(formatDetailsDatetimes(begin, end)).toBe(expected);
+      const t = (str, timeObj) => `${str} ${timeObj.time}`;
+      expect(formatDetailsDatetimes(begin, end, t)).toBe(expected);
+    });
+  });
+
+  describe('formatDatetimeToString', () => {
+    const t = (str, timeObj) => `${str} ${timeObj.time}`;
+    test('returns correct string', () => {
+      expect(formatDatetimeToString('2023-11-01T15:00:00Z', t)).toBe('1.11.2023 TimeSlots.selectedTime 17:00');
+      expect(formatDatetimeToString(moment('2023-11-01T15:00:00Z'), t)).toBe('1.11.2023 TimeSlots.selectedTime 17:00');
     });
   });
 

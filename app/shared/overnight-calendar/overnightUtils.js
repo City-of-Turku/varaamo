@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+import { formatDatetimeToString } from '../../utils/timeUtils';
+
 /**
  * Handles setting the start and end dates when selecting a date range.
  * @param {Object} params
@@ -339,13 +341,14 @@ export function setDatesTime(date, time) {
  * Combines date and time into a datetime string and returns it.
  * @param {Date} date
  * @param {string} time e.g. "12:00:00"
+ * @param {function} t
  * @returns {string} datetime string e.g. "2018-02-01T12:00:00Z"
  * or empty string if date or time is missing
  */
-export function getOvernightDatetime(date, time) {
+export function getOvernightDatetime(date, time, t) {
   if (date && time) {
     const momentDate = setDatesTime(date, time);
-    return momentDate.format('D.M.YYYY HH:mm');
+    return formatDatetimeToString(momentDate, t);
   }
   return '';
 }
