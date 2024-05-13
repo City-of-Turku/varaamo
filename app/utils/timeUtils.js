@@ -170,8 +170,8 @@ function getTimeSlots(
         The cooldown slots get a reservation but are NOT set as reserved.
 
         When editing a reservation,
-        the cooldown slots that ONLY have the users reservation are false.
-        If a cooldown slots reservation is NOT
+        the cooldown slots that ONLY have the users currently selected reservation
+        to edit are false. If a cooldown slots reservation is NOT
         the users or its shared with another reservation it remains true.
       */
       const isEditing = Boolean(reservationsToEdit.length);
@@ -181,7 +181,8 @@ function getTimeSlots(
           reservation.push(reservations[index]);
 
           if (isEditing) {
-            if (reservation.some(res => !res.isOwn)) {
+            const resToEditId = reservationsToEdit[0]?.id;
+            if (reservation.some(res => res.id !== resToEditId)) {
               onCooldown = true;
             } else {
               onCooldown = false;

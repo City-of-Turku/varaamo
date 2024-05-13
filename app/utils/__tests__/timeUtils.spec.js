@@ -554,6 +554,7 @@ describe('Utils: timeUtils', () => {
         {
           begin: '2015-10-09T10:00:00+03:00',
           end: '2015-10-09T11:00:00+03:00',
+          id: 111,
         },
       ];
       let twoReservations = [
@@ -561,17 +562,20 @@ describe('Utils: timeUtils', () => {
           begin: '2015-10-09T09:00:00+03:00',
           end: '2015-10-09T10:00:00+03:00',
           isOwn: false,
+          id: 112
         },
         {
           begin: '2015-10-09T11:00:00+03:00',
           end: '2015-10-09T12:00:00+03:00',
           isOwn: true,
+          id: 113
         }
       ];
       const reservationsToEdit = [
         {
           begin: '2015-10-09T08:30:00+03:00',
           end: '2015-10-09T09:30:00+03:00',
+          id: 123
         },
       ];
       test('is always false when cooldown is not set or it is 0', () => {
@@ -621,10 +625,10 @@ describe('Utils: timeUtils', () => {
         expect(slots[1].onCooldown).toBe(false);
         expect(slots[2].onCooldown).toBe(true);
         expect(slots[3].onCooldown).toBe(false);
-        expect(slots[4].onCooldown).toBe(false);
+        expect(slots[4].onCooldown).toBe(true);
       });
 
-      test('is true when editing with two reservations, !isOwn reservations cooldown remains', () => {
+      test('is true when editing with two reservations', () => {
         const cooldown = '1:00:00';
         twoReservations = [
           {
@@ -649,7 +653,7 @@ describe('Utils: timeUtils', () => {
         expect(slots[0].onCooldown).toBe(false);
         expect(slots[1].onCooldown).toBe(true);
         expect(slots[2].onCooldown).toBe(false);
-        expect(slots[3].onCooldown).toBe(false);
+        expect(slots[3].onCooldown).toBe(true);
         expect(slots[4].onCooldown).toBe(false);
       });
 
