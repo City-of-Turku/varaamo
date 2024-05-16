@@ -28,10 +28,13 @@ export function handleDateSelect({
   } else if (startTimedValue.getTime() === startDate.getTime()) {
     setStartDate(null);
     setEndDate(null);
+  } else if (startTimedValue.getTime() < startDate.getTime()) {
+    setStartDate(startTimedValue);
+    setEndDate(null);
   } else if (!endDate) {
     setEndDate(endTimedValue);
-  } else if (endTimedValue.getTime() === endDate.getTime()) {
-    setStartDate(null);
+  } else {
+    setStartDate(startTimedValue);
     setEndDate(null);
   }
 }
@@ -44,30 +47,24 @@ export function handleDateSelect({
  * @param {boolean} params.reservable
  * @param {string} params.reservableAfter datetime
  * @param {string} params.reservableBefore datetime
- * @param {Date} params.startDate
  * @param {Object[]} params.openingHours
  * @param {Object[]} params.reservations
- * @param {string} params.maxPeriod
- * @param {string} params.overnightEndTime
- * @param {string} params.overnightStartTime
  * @param {boolean} params.hasAdminBypass
  * @returns {boolean} is day disabled
  */
 export function handleDisableDays({
-  day, now, reservable, reservableAfter, reservableBefore, startDate,
-  openingHours, reservations, maxPeriod, overnightEndTime,
-  overnightStartTime, hasAdminBypass
+  day, now, reservable, reservableAfter, reservableBefore,
+  openingHours, reservations, hasAdminBypass
 }) {
   const isAfterToday = now.isAfter(day, 'day');
   const beforeDate = reservableAfter || moment();
   const isBeforeDate = moment(day).isBefore(beforeDate, 'day');
   const afterDate = reservableBefore || moment().add(1, 'year');
   const isAfterDate = moment(day).isAfter(afterDate, 'day');
-  const isBeforeStartDate = startDate && moment(day).isBefore(startDate, 'day');
   if (!hasAdminBypass && !reservable) {
     return true;
   }
-  if (isAfterToday || isBeforeDate || isAfterDate || isBeforeStartDate) {
+  if (isAfterToday || isBeforeDate || isAfterDate) {
     return true;
   }
   if (reservationsModifier(day, reservations)) {
@@ -78,18 +75,6 @@ export function handleDisableDays({
   for (let index = 0; index < closedDays.length; index += 1) {
     const closedDay = closedDays[index];
     if (moment(day).isSame(closedDay.date, 'day')) {
-      return true;
-    }
-  }
-
-  if (startDate) {
-    if (!hasAdminBypass && maxPeriod && isOverMaxPeriod(
-      startDate, day, maxPeriod, overnightEndTime, overnightStartTime)) {
-      return true;
-    }
-
-    const firstBlockedDay = getFirstBlockedDay(startDate, reservations, closedDays);
-    if (firstBlockedDay && moment(day).isSameOrAfter(firstBlockedDay, 'day')) {
       return true;
     }
   }
@@ -134,12 +119,12 @@ export function getClosedDays(openingHours) {
  */
 export function reservationsModifier(day, reservations) {
   if (day && reservations) {
+    const dayMoment = moment(day);
     for (let index = 0; index < reservations.length; index += 1) {
       const reservation = reservations[index];
-      const dayMoment = moment(day);
       const beginMoment = moment(reservation.begin);
       const endMoment = moment(reservation.end);
-      if (dayMoment.isBetween(beginMoment, endMoment, 'day', '[]')) {
+      if (dayMoment.isBetween(beginMoment, endMoment, 'day', '()')) {
         return true;
       }
     }
@@ -157,7 +142,7 @@ export function reservationsModifier(day, reservations) {
 export function nextDayBookedModifier(day, reservations) {
   if (day && reservations) {
     const firstBooked = findFirstClosestReservation(day, reservations);
-    if (firstBooked && moment(day).add(1, 'day').isSame(firstBooked.begin, 'day')) {
+    if (firstBooked && moment(day).isSame(firstBooked.begin, 'day')) {
       return true;
     }
   }
@@ -174,7 +159,7 @@ export function nextDayBookedModifier(day, reservations) {
 export function prevDayBookedModifier(day, reservations) {
   if (day && reservations) {
     const firstBooked = findPrevFirstClosestReservation(day, reservations);
-    if (firstBooked && moment(day).subtract(1, 'day').isSame(firstBooked.end, 'day')) {
+    if (firstBooked && moment(day).isSame(firstBooked.end, 'day')) {
       return true;
     }
   }
@@ -267,7 +252,7 @@ export function findPrevFirstClosedDay(fromDate, closedDays) {
 export function findFirstClosestReservation(fromDate, reservations) {
   const fromMoment = moment(fromDate);
   const futureReservations = reservations.filter(
-    reservation => moment(reservation.begin).isAfter(fromMoment));
+    reservation => moment(reservation.begin).isSameOrAfter(fromMoment, 'day'));
   const sortedReservations = [...futureReservations].sort(
     (a, b) => moment(a.begin).diff(fromMoment) - moment(b.begin).diff(fromMoment));
   return sortedReservations.length > 0 ? sortedReservations[0] : null;
@@ -281,9 +266,9 @@ export function findFirstClosestReservation(fromDate, reservations) {
  */
 export function findPrevFirstClosestReservation(fromDate, reservations) {
   const fromMoment = moment(fromDate);
-  const futureReservations = reservations.filter(
-    reservation => moment(reservation.begin).isBefore(fromMoment));
-  const sortedReservations = [...futureReservations].sort(
+  const pastReservations = reservations.filter(
+    reservation => moment(reservation.end).isSameOrBefore(fromMoment, 'day'));
+  const sortedReservations = [...pastReservations].sort(
     (a, b) => moment(a.begin).diff(fromMoment) - moment(b.begin).diff(fromMoment));
   return sortedReservations.length > 0 ? sortedReservations[sortedReservations.length - 1] : null;
 }
@@ -510,6 +495,19 @@ export function isDurationBelowMin(duration, minPeriod) {
 }
 
 /**
+ * Returns true if duration is over maxPeriod
+ * @param {Object} duration moment
+ * @param {string} maxPeriod
+ * @returns {boolean} true if duration is over maxPeriod
+ */
+export function isDurationOverMax(duration, maxPeriod) {
+  if (!maxPeriod) {
+    return false;
+  }
+  return duration > moment.duration(maxPeriod);
+}
+
+/**
  * Returns true if dates are same as initial dates
  * @param {Date} startDate
  * @param {Date} endDate
@@ -522,4 +520,44 @@ export function areDatesSameAsInitialDates(startDate, endDate, initialStart, ini
     return false;
   }
   return moment(startDate).isSame(initialStart) && moment(endDate).isSame(initialEnd);
+}
+
+/**
+ * Returns true if selection is continous i.e. does not contain disabled days
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @param {Object[]} reservations
+ * @param {Object[]} openingHours
+ * @returns {boolean} true if selection is continous
+ */
+export function isSelectionContinous(startDate, endDate, reservations, openingHours) {
+  const dates = createDateArray(startDate, endDate);
+
+  for (let index = 0; index < dates.length; index += 1) {
+    const date = dates[index];
+    if (reservationsModifier(date, reservations) || closedDaysModifier(date, openingHours)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+/**
+ * Creates array of dates between start and end Date
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @returns {Date[]} array of dates between start and end Date
+ */
+export function createDateArray(startDate, endDate) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const dateArray = [];
+
+  while (start <= end) {
+    dateArray.push(new Date(start));
+    start.setDate(start.getDate() + 1);
+  }
+
+  return dateArray;
 }

@@ -18,6 +18,8 @@ describe('app/shared/overnight-calendar/OvernightCalendar', () => {
     overnightReservations: true,
     overnightEndTime: '09:00:00',
     overnightStartTime: '11:00:00',
+    minPeriod: '1 00:00:00',
+    maxPeriod: '10 00:00:00'
   });
   const defaultProps = {
     currentLanguage: 'fi',
@@ -96,6 +98,8 @@ describe('app/shared/overnight-calendar/OvernightCalendar', () => {
         expect(summary.prop('handleSelectDatetimes')).toBeDefined();
         expect(summary.prop('isDurationBelowMin')).toBe(false);
         expect(summary.prop('minDuration')).toBe(defaultProps.resource.minPeriod);
+        expect(summary.prop('isDurationOverMax')).toBe(false);
+        expect(summary.prop('maxDuration')).toBe(defaultProps.resource.maxPeriod);
         expect(summary.prop('selected')).toBe(defaultProps.selected);
         expect(summary.prop('startDatetime')).toBe('');
       });
@@ -132,8 +136,10 @@ describe('app/shared/overnight-calendar/OvernightCalendar', () => {
         expect(editSummary.prop('datesSameAsInitial')).toBe(true);
         expect(editSummary.prop('duration')).toBeDefined();
         expect(editSummary.prop('endDatetime')).toBe('19.2.2024 TimeSlots.selectedTime');
-        expect(editSummary.prop('isDurationBelowMin')).toBe(false);
+        expect(editSummary.prop('isDurationBelowMin')).toBe(true);
         expect(editSummary.prop('minDuration')).toBe(defaultProps.resource.minPeriod);
+        expect(editSummary.prop('isDurationOverMax')).toBe(false);
+        expect(editSummary.prop('maxDuration')).toBe(defaultProps.resource.maxPeriod);
         expect(editSummary.prop('onCancel')).toBe(defaultProps.onEditCancel);
         expect(editSummary.prop('onConfirm')).toBeDefined();
         expect(editSummary.prop('selected')).toBe(selected);

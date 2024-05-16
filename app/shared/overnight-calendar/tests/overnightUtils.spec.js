@@ -3,6 +3,7 @@ import moment from 'moment';
 import {
   areDatesSameAsInitialDates,
   closedDaysModifier,
+  createDateArray,
   filterSelectedReservation,
   findFirstClosedDay,
   findFirstClosestReservation,
@@ -20,8 +21,10 @@ import {
   handleDisableDays,
   handleFormattingSelected,
   isDurationBelowMin,
+  isDurationOverMax,
   isOverMaxPeriod,
   isReservingAllowed,
+  isSelectionContinous,
   nextDayBookedModifier,
   nextDayClosedModifier,
   prevDayBookedModifier,
@@ -34,7 +37,7 @@ import Resource from '../../../utils/fixtures/Resource';
 
 describe('app/shared/overnight-calendar/overnightUtils', () => {
   describe('handleDateSelect', () => {
-    test('returns undefined when value if falsy', () => {
+    test('returns undefined when value is falsy', () => {
       expect(handleDateSelect({ value: null })).toBeUndefined();
     });
 
@@ -64,6 +67,22 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       expect(setEndDate).toHaveBeenCalledWith(null);
     });
 
+    test('sets startDate and endDate correctly if given value is before startDate', () => {
+      const setStartDate = jest.fn();
+      const setEndDate = jest.fn();
+      const overnightStartTime = '11:00:00';
+      const startDate = new Date('2024-02-21');
+      const value = new Date('2024-02-11');
+      const expectedStart = setDatesTime(value, overnightStartTime).toDate();
+      handleDateSelect({
+        value, startDate, setStartDate, setEndDate, overnightStartTime
+      });
+      expect(setStartDate).toHaveBeenCalled();
+      expect(setStartDate).toHaveBeenCalledWith(expectedStart);
+      expect(setEndDate).toHaveBeenCalled();
+      expect(setEndDate).toHaveBeenCalledWith(null);
+    });
+
     test('sets endDate if startDate already set, value is not same as start and endDate not set', () => {
       const setStartDate = jest.fn();
       const setEndDate = jest.fn();
@@ -84,14 +103,15 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       expect(setEndDate).toHaveBeenCalledWith(expectedCall);
     });
 
-    test('sets startDate and endDate to null if start and end are selected and end is same as value', () => {
+    test('sets start to given value when both start and end were already selected', () => {
       const setStartDate = jest.fn();
       const setEndDate = jest.fn();
       const overnightStartTime = '11:00:00';
       const overnightEndTime = '13:00:00';
-      const val = new Date();
+      const val = new Date('2024-02-22');
       const start = new Date('2024-02-21');
-      const end = setDatesTime(val, overnightEndTime).toDate();
+      const end = new Date('2024-02-25');
+      const expectedCall = setDatesTime(val, overnightStartTime).toDate();
       handleDateSelect({
         value: val,
         startDate: start,
@@ -102,7 +122,7 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
         overnightEndTime
       });
       expect(setStartDate).toHaveBeenCalled();
-      expect(setStartDate).toHaveBeenCalledWith(null);
+      expect(setStartDate).toHaveBeenCalledWith(expectedCall);
       expect(setEndDate).toHaveBeenCalled();
       expect(setEndDate).toHaveBeenCalledWith(null);
     });
@@ -114,7 +134,6 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
     const reservable = true;
     const reservableAfter = '2024-04-19T00:00:00+03:00';
     const reservableBefore = '2024-04-29T00:00:00+03:00';
-    const startDate = null;
     const openingHours = [
       { date: '2024-04-19', closes: null, opens: null },
       { date: '2024-04-20', closes: '2024-04-20T20:00:00+03:00', opens: '2024-04-20T06:00:00+03:00' },
@@ -130,11 +149,9 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       { date: '2024-04-30', closes: null, opens: null },
     ];
     const reservations = [
-      Reservation.build({ begin: '2024-04-23T13:00:00+03:00', end: '2024-04-24T09:00:00+03:00' })
+      Reservation.build({ begin: '2024-04-22T13:00:00+03:00', end: '2024-04-24T09:00:00+03:00' })
     ];
-    const maxPeriod = '3 00:00:00';
-    const overnightEndTime = '09:00:00';
-    const overnightStartTime = '13:00:00';
+
     const hasAdminBypass = false;
     const params = {
       now,
@@ -142,12 +159,8 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       reservable,
       reservableAfter,
       reservableBefore,
-      startDate,
       openingHours,
       reservations,
-      maxPeriod,
-      overnightEndTime,
-      overnightStartTime,
       hasAdminBypass
     };
 
@@ -190,16 +203,6 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
         )).toBe(true);
       });
 
-      test('day is before selected start date', () => {
-        expect(handleDisableDays(
-          {
-            ...params,
-            day: moment('2024-04-24').toDate(),
-            startDate: moment('2024-04-26').toDate(),
-          }
-        )).toBe(true);
-      });
-
       test('day has reservation', () => {
         expect(handleDisableDays(
           {
@@ -214,27 +217,6 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
           {
             ...params,
             day: moment('2024-04-19').toDate(),
-          }
-        )).toBe(true);
-      });
-
-      test('day is over max reservation time', () => {
-        expect(handleDisableDays(
-          {
-            ...params,
-            day: moment('2024-04-29').toDate(),
-            startDate: moment('2024-04-25').toDate(),
-          }
-        )).toBe(true);
-      });
-
-      test('day is after a reservation or closed day when startDate is selected', () => {
-        expect(handleDisableDays(
-          {
-            ...params,
-            maxPeriod: '10 00:00:00',
-            day: moment('2024-04-25').toDate(),
-            startDate: moment('2024-04-22').toDate(),
           }
         )).toBe(true);
       });
@@ -276,7 +258,7 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
 
   describe('reservationsModifier', () => {
     const reservations = [
-      Reservation.build({ begin: '2024-04-23T13:00:00+03:00', end: '2024-04-24T09:00:00+03:00' })
+      Reservation.build({ begin: '2024-04-22T13:00:00+03:00', end: '2024-04-25T09:00:00+03:00' })
     ];
     test('returns true when day has reservation', () => {
       expect(reservationsModifier(
@@ -287,9 +269,13 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
 
     test('returns false when day has no reservation', () => {
       expect(reservationsModifier(
+        moment('2024-04-21').toDate(), reservations)).toBe(false);
+      expect(reservationsModifier(
         moment('2024-04-22').toDate(), reservations)).toBe(false);
       expect(reservationsModifier(
         moment('2024-04-25').toDate(), reservations)).toBe(false);
+      expect(reservationsModifier(
+        moment('2024-04-26').toDate(), reservations)).toBe(false);
     });
   });
 
@@ -299,7 +285,7 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
     ];
     test('returns true when next day has reservation', () => {
       expect(nextDayBookedModifier(
-        moment('2024-04-22').toDate(), reservations)).toBe(true);
+        moment('2024-04-23').toDate(), reservations)).toBe(true);
     });
 
     test('returns false when next day has no reservation', () => {
@@ -316,7 +302,7 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
     ];
     test('returns true when previous day has reservation', () => {
       expect(prevDayBookedModifier(
-        moment('2024-04-25').toDate(), reservations)).toBe(true);
+        moment('2024-04-24').toDate(), reservations)).toBe(true);
     });
 
     test('returns false when previous day has no reservation', () => {
@@ -715,6 +701,16 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
     });
   });
 
+  describe('isDurationOverMax', () => {
+    test('returns correct result', () => {
+      expect(isDurationOverMax(moment.duration(2, 'days'), '')).toBe(false);
+      expect(isDurationOverMax(moment.duration(2, 'days'), '10:00:00')).toBe(true);
+      expect(isDurationOverMax(moment.duration(2, 'days'), '3 10:00:00')).toBe(false);
+      expect(isDurationOverMax(moment.duration(3, 'days'), '3 10:00:00')).toBe(false);
+      expect(isDurationOverMax(moment.duration(4, 'days'), '3 10:00:00')).toBe(true);
+    });
+  });
+
   describe('areDatesSameAsInitialDates', () => {
     const startDate = moment('2024-04-23').toDate();
     const endDate = moment('2024-04-26').toDate();
@@ -745,6 +741,68 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       expect(areDatesSameAsInitialDates(
         startDate, endDate, initialStart, moment('2024-04-25').toDate()))
         .toBe(false);
+    });
+  });
+
+  describe('isSelectionContinous', () => {
+    const reservations = [
+      Reservation.build({
+        begin: '2024-04-27T13:00:00+03:00',
+        end: '2024-04-29T09:00:00+03:00'
+      })
+    ];
+    const openingHours = [
+      { date: '2024-04-19', closes: null, opens: null },
+      { date: '2024-04-20', closes: '2024-04-20T20:00:00+03:00', opens: '2024-04-20T06:00:00+03:00' },
+      { date: '2024-04-21', closes: '2024-04-21T20:00:00+03:00', opens: '2024-04-21T06:00:00+03:00' },
+      { date: '2024-04-22', closes: '2024-04-22T20:00:00+03:00', opens: '2024-04-22T06:00:00+03:00' },
+      { date: '2024-04-23', closes: '2024-04-23T20:00:00+03:00', opens: '2024-04-23T06:00:00+03:00' },
+      { date: '2024-04-24', closes: '2024-04-24T20:00:00+03:00', opens: '2024-04-24T06:00:00+03:00' },
+      { date: '2024-04-25', closes: '2024-04-25T20:00:00+03:00', opens: '2024-04-25T06:00:00+03:00' },
+      { date: '2024-04-26', closes: '2024-04-26T20:00:00+03:00', opens: '2024-04-26T06:00:00+03:00' },
+      { date: '2024-04-27', closes: '2024-04-27T20:00:00+03:00', opens: '2024-04-27T06:00:00+03:00' },
+      { date: '2024-04-28', closes: '2024-04-28T20:00:00+03:00', opens: '2024-04-28T06:00:00+03:00' },
+      { date: '2024-04-29', closes: '2024-04-29T20:00:00+03:00', opens: '2024-04-29T06:00:00+03:00' },
+      { date: '2024-04-30', closes: null, opens: null },
+    ];
+    test('returns true when no reservations or closed days in selection', () => {
+      const startDate = moment('2024-04-23').toDate();
+      const endDate = moment('2024-04-27').toDate();
+      expect(isSelectionContinous(startDate, endDate, [], openingHours))
+        .toBe(true);
+      expect(isSelectionContinous(startDate, endDate, reservations, openingHours))
+        .toBe(true);
+    });
+    test('returns false when reservations or closed days in selection', () => {
+      const startDate1 = moment('2024-04-23').toDate();
+      const endDate1 = moment('2024-04-29').toDate();
+      const startDate2 = moment('2024-04-25').toDate();
+      const endDate2 = moment('2024-04-30').toDate();
+      const startDate3 = moment('2024-04-19').toDate();
+      const endDate3 = moment('2024-04-20').toDate();
+      expect(isSelectionContinous(startDate1, endDate1, reservations, openingHours))
+        .toBe(false);
+      expect(isSelectionContinous(startDate2, endDate2, reservations, openingHours))
+        .toBe(false);
+      expect(isSelectionContinous(startDate3, endDate3, reservations, openingHours))
+        .toBe(false);
+    });
+  });
+
+  describe('createDateArray', () => {
+    test('returns correct array', () => {
+      const startDate = moment('2024-04-23').toDate();
+      const endDate = moment('2024-04-27').toDate();
+      expect(createDateArray(startDate, endDate))
+        .toStrictEqual([
+          moment('2024-04-23').toDate(),
+          moment('2024-04-24').toDate(),
+          moment('2024-04-25').toDate(),
+          moment('2024-04-26').toDate(),
+          moment('2024-04-27').toDate()
+        ]);
+      expect(createDateArray(moment('2024-04-23').toDate(), moment('2024-04-23').toDate()))
+        .toStrictEqual([moment('2024-04-23').toDate()]);
     });
   });
 });

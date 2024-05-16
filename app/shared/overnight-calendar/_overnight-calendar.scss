@@ -141,11 +141,11 @@
       border: 2px solid $black;
     }
 
-    &--start:not(.DayPicker-Day--disabled) {
-      background: linear-gradient($half-day-angle, $medium-gray 49%, $highlighted-color 50%);
+    &--start {
+      background: linear-gradient($half-day-angle, $available-color 49%, $highlighted-color 50%);
 
       &.DayPicker-Day--prevBooked {
-        background: linear-gradient($half-day-angle, $medium-gray 49%, $highlighted-color 50%);
+        background: linear-gradient($half-day-angle, $busy-color 49%, $highlighted-color 50%);
       }
 
       &.DayPicker-Day--prevClosed {
@@ -153,12 +153,8 @@
       }
     }
 
-    &--end:not(.DayPicker-Day--disabled) {
+    &--end {
       background: linear-gradient($half-day-angle, $highlighted-color 49%, $available-color 50%);
-
-      &.DayPicker-Day--nextBookedStartSelected {
-        background: linear-gradient($half-day-angle, $highlighted-color 49%, $medium-gray 50%);
-      }
 
       &.DayPicker-Day--nextClosed {
         background: linear-gradient($half-day-angle, $highlighted-color 49%, $medium-gray 50%);
@@ -167,21 +163,29 @@
 
     &--nextBooked:not(.DayPicker-Day--disabled) {
       background: linear-gradient($half-day-angle, $available-color 49%, $booked-color 50%);
-    }
 
-    &--nextBookedStartSelected:not(.DayPicker-Day--disabled) {
-      background: linear-gradient($half-day-angle, $available-color 49%, $medium-gray 50%);
+      &.DayPicker-Day--selected {
+        background: linear-gradient($half-day-angle, $highlighted-color 49%, $booked-color 50%);
+      }
     }
 
     &--prevBooked:not(.DayPicker-Day--disabled) {
       background: linear-gradient($half-day-angle, $booked-color 49%, $available-color 50%);
+
+      &.DayPicker-Day--selected {
+        background: linear-gradient($half-day-angle, $booked-color 49%, $highlighted-color 50%);
+      }
     }
 
     &--nextClosed:not(.DayPicker-Day--disabled) {
       background: linear-gradient($half-day-angle, $available-color 49%, $medium-gray 50%);
+
+      &.DayPicker-Day--selected {
+        background: linear-gradient($half-day-angle, $highlighted-color 49%, $medium-gray 50%);
+      }
     }
 
-    &--prevClosed:not(.DayPicker-Day--disabled) {
+    &--prevClosed:not(.DayPicker-Day--disabled):not(.DayPicker-Day--start) {
       background: linear-gradient($half-day-angle, $medium-gray 49%, $available-color 50%);
     }
 

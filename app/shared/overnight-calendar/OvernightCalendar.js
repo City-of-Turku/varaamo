@@ -20,7 +20,9 @@ import {
   handleDisableDays,
   handleFormattingSelected,
   isDurationBelowMin,
+  isDurationOverMax,
   isReservingAllowed,
+  isSelectionContinous,
   nextDayBookedModifier,
   nextDayClosedModifier,
   prevDayBookedModifier,
@@ -78,10 +80,19 @@ function OvernightCalendar({
       const selectedDuration = getSelectedDuration(
         startDate, endDate, overnightStartTime, overnightEndTime);
       const isDurBelowMin = isDurationBelowMin(selectedDuration, minPeriod);
-      const minDurationText = getPrettifiedPeriodUnits(minPeriod, t('common.unit.time.day.short'));
       if (isDurBelowMin) {
+        const minDurationText = getPrettifiedPeriodUnits(minPeriod, t('common.unit.time.day.short'));
         actions.addNotification({
           message: `${t('Overnight.belowMinAlert')} (${minDurationText})`,
+          type: 'info',
+          timeOut: 10000,
+        });
+      }
+      const isDurOverMax = isDurationOverMax(selectedDuration, maxPeriod);
+      if (isDurOverMax) {
+        const maxDurationText = getPrettifiedPeriodUnits(maxPeriod, t('common.unit.time.day.short'));
+        actions.addNotification({
+          message: `${t('Overnight.overMaxAlert')} (${maxDurationText})`,
           type: 'info',
           timeOut: 10000,
         });
@@ -107,20 +118,16 @@ function OvernightCalendar({
   });
 
   const validateAndSelect = (day, { booked, nextBooked, nextClosed }) => {
-    const isNextBlocked = !startDate && (nextBooked || nextClosed);
+    const isNextBlocked = (!startDate || (startDate && endDate)) && (nextBooked || nextClosed);
     const isDateDisabled = handleDisableDays({
       day,
       now,
       reservable,
       reservableAfter,
       reservableBefore,
-      startDate,
       openingHours,
       reservations: filteredReservations,
-      maxPeriod,
       minPeriod,
-      overnightEndTime,
-      overnightStartTime,
       hasAdminBypass: isUnitManagerOrHigher,
     });
 
@@ -129,6 +136,16 @@ function OvernightCalendar({
         message: getNotificationText({
           isLoggedIn, isStrongAuthSatisfied, isMaintenanceModeOn, resource, t
         }),
+        type: 'info',
+        timeOut: 10000,
+      });
+      return;
+    }
+
+    if ((startDate && !endDate)
+       && !isSelectionContinous(startDate, day, filteredReservations, openingHours)) {
+      actions.addNotification({
+        message: t('Notifications.continousFreeDaysError'),
         type: 'info',
         timeOut: 10000,
       });
@@ -184,6 +201,9 @@ function OvernightCalendar({
   const isDurBelowMin = isUnitAdminOrHigher ? false
     : isDurationBelowMin(selectedDuration, minPeriod);
 
+  const isDurOverMax = isUnitAdminOrHigher ? false
+    : isDurationOverMax(selectedDuration, maxPeriod);
+
   return (
     <div className="overnight-calendar">
       <OvernightHiddenHeading
@@ -198,13 +218,9 @@ function OvernightCalendar({
           reservable,
           reservableAfter,
           reservableBefore,
-          startDate,
           openingHours,
           reservations: filteredReservations,
-          maxPeriod,
           minPeriod,
-          overnightEndTime,
-          overnightStartTime,
           hasAdminBypass: isUnitManagerOrHigher,
         })}
         enableOutsideDays
@@ -219,15 +235,10 @@ function OvernightCalendar({
           highlighted,
           available,
           closed: (day) => closedDaysModifier(day, openingHours),
-          booked: (day) => (
-            startDate ? null : reservationsModifier(day, filteredReservations)),
-          nextBooked: (day) => (
-            startDate ? null : nextDayBookedModifier(day, filteredReservations)),
-          nextBookedStartSelected: (day) => (
-            startDate ? nextDayBookedModifier(day, filteredReservations) : null),
+          booked: (day) => reservationsModifier(day, filteredReservations),
+          nextBooked: (day) => nextDayBookedModifier(day, filteredReservations),
           nextClosed: (day) => nextDayClosedModifier(day, openingHours),
-          prevBooked: (day) => (
-            startDate ? null : prevDayBookedModifier(day, filteredReservations)),
+          prevBooked: (day) => prevDayBookedModifier(day, filteredReservations),
           prevClosed: (day) => prevDayClosedModifier(day, openingHours),
         }}
         onDayClick={validateAndSelect}
@@ -243,6 +254,8 @@ function OvernightCalendar({
           endDatetime={getOvernightDatetime(endDate, overnightEndTime, t)}
           handleSelectDatetimes={handleSelectDatetimes}
           isDurationBelowMin={isDurBelowMin}
+          isDurationOverMax={isDurOverMax}
+          maxDuration={maxPeriod || ''}
           minDuration={minPeriod}
           selected={selected}
           startDatetime={getOvernightDatetime(startDate, overnightStartTime, t)}
@@ -254,6 +267,8 @@ function OvernightCalendar({
           duration={selectedDuration}
           endDatetime={getOvernightDatetime(endDate, overnightEndTime, t)}
           isDurationBelowMin={isDurBelowMin}
+          isDurationOverMax={isDurOverMax}
+          maxDuration={maxPeriod || ''}
           minDuration={minPeriod}
           onCancel={onEditCancel}
           onConfirm={handleSelectDatetimes}

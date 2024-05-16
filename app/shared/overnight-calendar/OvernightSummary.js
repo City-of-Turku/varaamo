@@ -8,11 +8,12 @@ import { getPrettifiedPeriodUnits } from '../../utils/timeUtils';
 
 function OvernightSummary({
   t, selected, endDatetime, startDatetime, handleSelectDatetimes,
-  duration, isDurationBelowMin, minDuration
+  duration, isDurationBelowMin, minDuration, isDurationOverMax, maxDuration
 }) {
   const timeRange = startDatetime && endDatetime ? `${startDatetime} - ${endDatetime}` : `${selected[0]} - ${selected[1]}`;
   const durationText = getPrettifiedPeriodUnits(duration, t('common.unit.time.day.short'));
   const minDurationText = getPrettifiedPeriodUnits(minDuration, t('common.unit.time.day.short'));
+  const maxDurationText = getPrettifiedPeriodUnits(maxDuration, t('common.unit.time.day.short'));
   const validRange = startDatetime && endDatetime;
 
   return (
@@ -32,11 +33,14 @@ function OvernightSummary({
         {isDurationBelowMin && (
           <p className="overnight-error">{`${t('Overnight.belowMinAlert')} (${minDurationText})`}</p>
         )}
+        {isDurationOverMax && (
+        <p className="overnight-error">{`${t('Overnight.overMaxAlert')} (${maxDurationText})`}</p>
+        )}
       </div>
       <div>
         <Button
           bsStyle="primary"
-          disabled={isDurationBelowMin || !validRange}
+          disabled={isDurationBelowMin || isDurationOverMax || !validRange}
           onClick={handleSelectDatetimes}
         >
           {t('TimeSlots.reserveButton')}
@@ -55,6 +59,8 @@ OvernightSummary.propTypes = {
   duration: PropTypes.object.isRequired,
   isDurationBelowMin: PropTypes.bool.isRequired,
   minDuration: PropTypes.string.isRequired,
+  isDurationOverMax: PropTypes.bool.isRequired,
+  maxDuration: PropTypes.string.isRequired,
 };
 
 export default injectT(OvernightSummary);

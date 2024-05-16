@@ -8,12 +8,15 @@ import { getPrettifiedPeriodUnits } from '../../utils/timeUtils';
 
 function OvernightEditSummary({
   startDatetime, endDatetime, selected, onCancel, onConfirm, t,
-  duration, minDuration, isDurationBelowMin, datesSameAsInitial
+  duration, minDuration, isDurationBelowMin, datesSameAsInitial,
+  maxDuration, isDurationOverMax
 }) {
   const timeRange = startDatetime && endDatetime ? `${startDatetime} - ${endDatetime}` : `${selected[0]} - ${selected[1]}`;
   const durationText = getPrettifiedPeriodUnits(duration, t('common.unit.time.day.short'));
   const minDurationText = getPrettifiedPeriodUnits(minDuration, t('common.unit.time.day.short'));
+  const maxDurationText = getPrettifiedPeriodUnits(maxDuration, t('common.unit.time.day.short'));
   const hasMinDurationError = !datesSameAsInitial && isDurationBelowMin;
+  const hasMaxDurationError = !datesSameAsInitial && isDurationOverMax;
   const validRange = startDatetime && endDatetime;
 
   return (
@@ -32,6 +35,9 @@ function OvernightEditSummary({
         {hasMinDurationError && (
           <p className="overnight-error">{`${t('Overnight.belowMinAlert')} (${minDurationText})`}</p>
         )}
+        {hasMaxDurationError && (
+          <p className="overnight-error">{`${t('Overnight.overMaxAlert')} (${maxDurationText})`}</p>
+        )}
       </div>
       <div className="app-ReservationTime__controls">
         <Button bsStyle="warning" className="cancel_Button" onClick={onCancel}>
@@ -40,7 +46,7 @@ function OvernightEditSummary({
         <Button
           bsStyle="primary"
           className="next_Button"
-          disabled={!startDatetime || !endDatetime || hasMinDurationError}
+          disabled={!startDatetime || !endDatetime || hasMinDurationError || hasMaxDurationError}
           onClick={onConfirm}
         >
           {t('common.continue')}
@@ -61,6 +67,8 @@ OvernightEditSummary.propTypes = {
   isDurationBelowMin: PropTypes.bool.isRequired,
   minDuration: PropTypes.string.isRequired,
   datesSameAsInitial: PropTypes.bool.isRequired,
+  maxDuration: PropTypes.string.isRequired,
+  isDurationOverMax: PropTypes.bool.isRequired,
 };
 
 export default injectT(OvernightEditSummary);

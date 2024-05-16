@@ -17,6 +17,8 @@ describe('app/shared/overnight-calendar/OvernightSummary', () => {
     startDatetime: '23.2.2024 11:00',
     isDurationBelowMin: false,
     minDuration: '1 00:00:00',
+    maxDuration: '10 00:00:00',
+    isDurationOverMax: false,
     handleSelectDatetimes: () => {},
   };
 
@@ -80,6 +82,22 @@ describe('app/shared/overnight-calendar/OvernightSummary', () => {
     describe('when there isnt min duration error', () => {
       test('doesnt render error text', () => {
         const paragraph = getWrapper({ datesSameAsInitial: false, isDurationBelowMin: false }).find('p.overnight-error');
+        expect(paragraph).toHaveLength(0);
+      });
+    });
+
+    describe('when there is max duration error', () => {
+      test('error text', () => {
+        const paragraph = getWrapper({ datesSameAsInitial: false, isDurationOverMax: true }).find('p.overnight-error');
+        const maxDurationText = getPrettifiedPeriodUnits(defaultProps.maxDuration, 'common.unit.time.day.short');
+        expect(paragraph).toHaveLength(1);
+        expect(paragraph.text()).toEqual(`Overnight.overMaxAlert (${maxDurationText})`);
+      });
+    });
+
+    describe('when there isnt max duration error', () => {
+      test('doesnt render error text', () => {
+        const paragraph = getWrapper({ datesSameAsInitial: false, isDurationOverMax: false }).find('p.overnight-error');
         expect(paragraph).toHaveLength(0);
       });
     });
