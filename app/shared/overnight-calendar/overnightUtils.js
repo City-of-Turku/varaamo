@@ -50,13 +50,15 @@ export function handleDateSelect({
  * @param {Object[]} params.openingHours
  * @param {Object[]} params.reservations
  * @param {boolean} params.hasAdminBypass
+ * @param {string} params.overnightStartTime
  * @returns {boolean} is day disabled
  */
 export function handleDisableDays({
   day, now, reservable, reservableAfter, reservableBefore,
-  openingHours, reservations, hasAdminBypass
+  openingHours, reservations, hasAdminBypass, overnightStartTime
 }) {
-  const isAfterToday = now.isAfter(day, 'day');
+  const startTimedDay = setDatesTime(day, overnightStartTime).toDate();
+  const isAfterToday = hasAdminBypass ? now.isAfter(day, 'day') : now.isAfter(startTimedDay);
   const beforeDate = reservableAfter || moment();
   const isBeforeDate = moment(day).isBefore(beforeDate, 'day');
   const afterDate = reservableBefore || moment().add(1, 'year');

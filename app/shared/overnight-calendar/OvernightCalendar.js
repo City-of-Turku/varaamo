@@ -129,6 +129,7 @@ function OvernightCalendar({
       reservations: filteredReservations,
       minPeriod,
       hasAdminBypass: isUnitManagerOrHigher,
+      overnightStartTime,
     });
 
     if (!reservingIsAllowed) {
@@ -222,6 +223,7 @@ function OvernightCalendar({
           reservations: filteredReservations,
           minPeriod,
           hasAdminBypass: isUnitManagerOrHigher,
+          overnightStartTime,
         })}
         enableOutsideDays
         firstDayOfWeek={1}

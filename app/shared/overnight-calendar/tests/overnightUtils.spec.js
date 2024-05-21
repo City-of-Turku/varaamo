@@ -129,7 +129,7 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
   });
 
   describe('handleDisableDays', () => {
-    const now = moment('2024-04-20');
+    const now = moment('2024-04-20T05:00:00+03:00');
     const day = now.toDate();
     const reservable = true;
     const reservableAfter = '2024-04-19T00:00:00+03:00';
@@ -151,6 +151,7 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
     const reservations = [
       Reservation.build({ begin: '2024-04-22T13:00:00+03:00', end: '2024-04-24T09:00:00+03:00' })
     ];
+    const overnightStartTime = '09:00:00';
 
     const hasAdminBypass = false;
     const params = {
@@ -161,11 +162,34 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       reservableBefore,
       openingHours,
       reservations,
-      hasAdminBypass
+      hasAdminBypass,
+      overnightStartTime
     };
 
-    test('returns false with correct params', () => {
-      expect(handleDisableDays(params)).toBe(false);
+    describe('returns false when', () => {
+      test('using with correct params', () => {
+        expect(handleDisableDays(params)).toBe(false);
+      });
+
+      test('non admin tries to reserve same day before overnight start time', () => {
+        expect(handleDisableDays(
+          {
+            ...params,
+            hasAdminBypass: false,
+            overnightStartTime: '10:00:00'
+          }
+        )).toBe(false);
+      });
+
+      test('admin tries to reserve same day after overnight start time', () => {
+        expect(handleDisableDays(
+          {
+            ...params,
+            hasAdminBypass: true,
+            overnightStartTime: '01:00:00'
+          }
+        )).toBe(false);
+      });
     });
 
     describe('returns true when', () => {
@@ -180,6 +204,16 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
           {
             ...params,
             now: moment('2024-04-21')
+          }
+        )).toBe(true);
+      });
+
+      test('non admin tries to reserve same day after overnight start time', () => {
+        expect(handleDisableDays(
+          {
+            ...params,
+            hasAdminBypass: false,
+            overnightStartTime: '01:00:00'
           }
         )).toBe(true);
       });
