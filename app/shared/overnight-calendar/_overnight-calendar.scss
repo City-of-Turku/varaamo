@@ -124,7 +124,7 @@
       }
     }
 
-    &--highlighted:not(.DayPicker-Day--disabled) {
+    &--highlighted {
       background-color: $highlighted-color;
 
       &.DayPicker-Day--selected {
@@ -192,6 +192,10 @@
     @include add-focus(2px, $black) {}
   }
 
+  .DayPicker-Day--start.DayPicker-Day--disabled:not(.DayPicker-Day--booked):not(.DayPicker-Day--prevBooked) {
+    background: linear-gradient($half-day-angle, $medium-gray 49%, $highlighted-color 50%);
+  }
+
   .DayPicker-Day--nextClosed.DayPicker-Day--prevBooked {
     background: linear-gradient($half-day-angle, $booked-color 49%, $medium-gray 50%);
     color: $black;
@@ -210,8 +214,13 @@
     color: $black;
   }
 
-  .DayPicker-Day--prevBooked.DayPicker-Day--disabled:not(.DayPicker-Day--booked) {
+  .DayPicker-Day--prevBooked.DayPicker-Day--disabled:not(.DayPicker-Day--booked):not(.DayPicker-Day--start) {
     background: linear-gradient($half-day-angle, $booked-color 49%, $medium-gray 50%);
+    color: $black;
+  }
+
+  .DayPicker-Day--prevBooked.DayPicker-Day--disabled.DayPicker-Day--start:not(.DayPicker-Day--booked) {
+    background: linear-gradient($half-day-angle, $booked-color 49%, $highlighted-color 50%);
     color: $black;
   }
 
