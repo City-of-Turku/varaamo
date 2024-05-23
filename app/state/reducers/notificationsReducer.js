@@ -52,6 +52,13 @@ function getErrorNotification(error) {
     };
   }
 
+  if (error.response && error.response.period) {
+    return {
+      ...defaults,
+      messageId: 'Notifications.error.period',
+    };
+  }
+
   if (error.response && error.response.detail) {
     return {
       ...defaults,

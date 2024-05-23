@@ -247,6 +247,7 @@
   "Notifications.cannotReserveDuringMaintenance": "Det går inte att göra reservationer under underhåll.",
   "Notifications.continousFreeDaysError": "Du kan bara välja en sammanhängande period av lediga dagar",
   "Notifications.errorMessage": "Ett fel uppstod. Försök på nytt om en liten stund.",
+  "Notifications.error.period": "Resursen är inte bokningsbar vid den valda tiden. Vänligen välj en ny tid från kalendern.",
   "Notifications.loginErrorMessage": "Inloggning misslyckades. Försök igen om en liten stund.",
   "Notifications.userFetchErrorMessage": "Användarinformations hämtning misslyckades. Försök igen om en liten stund.",
   "Notifications.loginMessage": "Logga in för att fortsätta.",

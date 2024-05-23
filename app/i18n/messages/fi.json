@@ -245,6 +245,7 @@
   "Notifications.cannotReserveDuringMaintenance": "Huoltotyön aikana ei voi tehdä varauksia.",
   "Notifications.continousFreeDaysError": "Voit valita vain yhtenäisen jakson vapaita päiviä",
   "Notifications.errorMessage": "Jotain meni vikaan. Yritä hetken päästä uudelleen.",
+  "Notifications.error.period": "Kohde ei ole varattavissa valitsemallasi ajalle. Valitse kalenterista uusi aika.",
   "Notifications.loginErrorMessage": "Kirjautuminen epäonnistui. Yritä hetken päästä uudelleen.",
   "Notifications.userFetchErrorMessage": "Käyttäjätietojen hakeminen epäonnistui. Yritä hetken päästä uudelleen.",
   "Notifications.loginMessage": "Kirjaudu sisään jatkaaksesi.",

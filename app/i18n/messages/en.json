@@ -245,6 +245,7 @@
   "Notifications.cannotReserveDuringMaintenance": "Cannot make reservations during maintenance.",
   "Notifications.continousFreeDaysError": "You can only select a continuous period of available days",
   "Notifications.errorMessage": "Something went wrong. Please try again in a moment.",
+  "Notifications.error.period": "The resource is not reservable at your selected time. Please choose a new time from the calendar.",
   "Notifications.loginErrorMessage": "Failed to login. Please try again in a moment.",
   "Notifications.userFetchErrorMessage": "Failed to retrieve user info. Please try again in a moment.",
   "Notifications.loginMessage": "Sign in to continue.",
