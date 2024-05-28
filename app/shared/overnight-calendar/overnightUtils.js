@@ -117,16 +117,20 @@ export function getClosedDays(openingHours) {
  * Returns reservations modifier for DayPicker
  * @param {Date} day
  * @param {Object[]} reservations
+ * @param {string} granularity e.g. 'day' or 'hour' for checking
+ * is day between reservation start and end. Default is 'day'.
+ * @param {string} inclusivity e.g. '()' or '[]' for checking
+ * is day between reservation start and end. Default is '()'.
  * @returns {boolean} is day booked
  */
-export function reservationsModifier(day, reservations) {
+export function reservationsModifier(day, reservations, granularity = 'day', inclusivity = '()') {
   if (day && reservations) {
     const dayMoment = moment(day);
     for (let index = 0; index < reservations.length; index += 1) {
       const reservation = reservations[index];
       const beginMoment = moment(reservation.begin);
       const endMoment = moment(reservation.end);
-      if (dayMoment.isBetween(beginMoment, endMoment, 'day', '()')) {
+      if (dayMoment.isBetween(beginMoment, endMoment, granularity, inclusivity)) {
         return true;
       }
     }
@@ -526,18 +530,33 @@ export function areDatesSameAsInitialDates(startDate, endDate, initialStart, ini
 
 /**
  * Returns true if selection is continous i.e. does not contain disabled days
- * @param {Date} startDate
- * @param {Date} endDate
- * @param {Object[]} reservations
- * @param {Object[]} openingHours
+ * @param {Object} params
+ * @param {Date} params.startDate
+ * @param {Date} params.endDate
+ * @param {Object[]} params.reservations
+ * @param {Object[]} params.openingHours
+ * @param {string} params.overnightStartTime
+ * @param {string} params.overnightEndTime
  * @returns {boolean} true if selection is continous
  */
-export function isSelectionContinous(startDate, endDate, reservations, openingHours) {
+export function isSelectionContinous({
+  startDate, endDate, reservations, openingHours,
+  overnightStartTime, overnightEndTime
+}) {
   const dates = createDateArray(startDate, endDate);
+  if (dates.length < 2) {
+    return true;
+  }
+
+  dates[0] = setDatesTime(dates[0], overnightStartTime).toDate();
+  dates[dates.length - 1] = setDatesTime(dates[dates.length - 1], overnightEndTime).toDate();
 
   for (let index = 0; index < dates.length; index += 1) {
     const date = dates[index];
-    if (reservationsModifier(date, reservations) || closedDaysModifier(date, openingHours)) {
+    const isFirstOrLast = index === 0 || index === dates.length - 1;
+    const granularity = isFirstOrLast ? 'seconds' : 'days';
+    if (reservationsModifier(date, reservations, granularity, '[]')
+     || closedDaysModifier(date, openingHours)) {
       return false;
     }
   }

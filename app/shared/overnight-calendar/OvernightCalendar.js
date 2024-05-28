@@ -144,7 +144,14 @@ function OvernightCalendar({
     }
 
     if ((startDate && !endDate)
-       && !isSelectionContinous(startDate, day, filteredReservations, openingHours)) {
+       && !isSelectionContinous({
+         startDate,
+         endDate: day,
+         reservations: filteredReservations,
+         openingHours,
+         overnightStartTime,
+         overnightEndTime
+       })) {
       actions.addNotification({
         message: t('Notifications.continousFreeDaysError'),
         type: 'info',
