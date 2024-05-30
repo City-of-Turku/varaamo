@@ -550,6 +550,10 @@ export function isSelectionContinous({
 
   dates[0] = setDatesTime(dates[0], overnightStartTime).toDate();
   dates[dates.length - 1] = setDatesTime(dates[dates.length - 1], overnightEndTime).toDate();
+  if (overnightStartTime === overnightEndTime) {
+    dates[0].setMinutes(dates[0].getMinutes() + 1);
+    dates[dates.length - 1].setMinutes(dates[dates.length - 1].getMinutes() - 1);
+  }
 
   for (let index = 0; index < dates.length; index += 1) {
     const date = dates[index];
