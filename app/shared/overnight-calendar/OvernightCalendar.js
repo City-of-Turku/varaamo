@@ -118,7 +118,9 @@ function OvernightCalendar({
   });
 
   const validateAndSelect = (day, { booked, nextBooked, nextClosed }) => {
-    const isNextBlocked = (!startDate || (startDate && endDate)) && (nextBooked || nextClosed);
+    const isNextBlocked = (
+      !startDate || (startDate && endDate) || moment(day).isBefore(startDate)
+    ) && (nextBooked || nextClosed);
     const isDateDisabled = handleDisableDays({
       day,
       now,
