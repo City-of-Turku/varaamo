@@ -1019,6 +1019,15 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
         overnightEndTime: overnightEndTime2
       }))
         .toBe(false);
+      expect(isSelectionContinous({
+        startDate: moment('2024-04-26').hours(13).toDate(),
+        endDate: moment('2024-04-28').toDate(),
+        reservations: reservations2,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime
+      }))
+        .toBe(false);
     });
   });
 
