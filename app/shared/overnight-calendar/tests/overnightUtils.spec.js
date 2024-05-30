@@ -785,10 +785,22 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
         end: '2024-04-29T09:00:00+03:00'
       })
     ];
+    const reservationsB = [
+      Reservation.build({
+        begin: '2024-04-27T13:00:00+03:00',
+        end: '2024-04-29T13:00:00+03:00'
+      })
+    ];
     const reservations2 = [
       Reservation.build({
         begin: '2024-04-27T13:00:00+03:00',
         end: '2024-04-28T09:00:00+03:00'
+      })
+    ];
+    const reservations2B = [
+      Reservation.build({
+        begin: '2024-04-27T13:00:00+03:00',
+        end: '2024-04-28T13:00:00+03:00'
       })
     ];
     const openingHours = [
@@ -807,6 +819,7 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
     ];
     const overnightStartTime = '13:00:00';
     const overnightEndTime = '09:00:00';
+    const overnightEndTime2 = '13:00:00';
 
     test('returns true when no reservations or closed days in selection', () => {
       const startDate = moment('2024-04-23').toDate();
@@ -824,6 +837,15 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       }))
         .toBe(true);
       expect(isSelectionContinous({
+        startDate,
+        endDate,
+        reservations: reservationsB,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
+      }))
+        .toBe(true);
+      expect(isSelectionContinous({
         startDate: startDate2,
         endDate: endDate2,
         reservations: reservations2,
@@ -833,12 +855,30 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       }))
         .toBe(true);
       expect(isSelectionContinous({
+        startDate: startDate2,
+        endDate: endDate2,
+        reservations: reservations2B,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
+      }))
+        .toBe(true);
+      expect(isSelectionContinous({
         startDate: startDate3,
         endDate: endDate3,
         reservations: reservations2,
         openingHours,
         overnightStartTime,
         overnightEndTime
+      }))
+        .toBe(true);
+      expect(isSelectionContinous({
+        startDate: startDate3,
+        endDate: endDate3,
+        reservations: reservations2B,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
       }))
         .toBe(true);
     });
@@ -865,10 +905,28 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       expect(isSelectionContinous({
         startDate: startDate1,
         endDate: endDate1,
+        reservations: reservationsB,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
+      }))
+        .toBe(false);
+      expect(isSelectionContinous({
+        startDate: startDate1,
+        endDate: endDate1,
         reservations: reservations2,
         openingHours,
         overnightStartTime,
         overnightEndTime
+      }))
+        .toBe(false);
+      expect(isSelectionContinous({
+        startDate: startDate1,
+        endDate: endDate1,
+        reservations: reservations2B,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
       }))
         .toBe(false);
       expect(isSelectionContinous({
@@ -883,10 +941,28 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       expect(isSelectionContinous({
         startDate: startDate2,
         endDate: endDate2,
+        reservations: reservationsB,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
+      }))
+        .toBe(false);
+      expect(isSelectionContinous({
+        startDate: startDate2,
+        endDate: endDate2,
         reservations: reservations2,
         openingHours,
         overnightStartTime,
         overnightEndTime
+      }))
+        .toBe(false);
+      expect(isSelectionContinous({
+        startDate: startDate2,
+        endDate: endDate2,
+        reservations: reservations2B,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
       }))
         .toBe(false);
       expect(isSelectionContinous({
@@ -899,6 +975,15 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       }))
         .toBe(false);
       expect(isSelectionContinous({
+        startDate: startDate3,
+        endDate: endDate3,
+        reservations: reservationsB,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
+      }))
+        .toBe(false);
+      expect(isSelectionContinous({
         startDate: startDate4,
         endDate: endDate4,
         reservations: reservations2,
@@ -908,12 +993,30 @@ describe('app/shared/overnight-calendar/overnightUtils', () => {
       }))
         .toBe(false);
       expect(isSelectionContinous({
+        startDate: startDate4,
+        endDate: endDate4,
+        reservations: reservations2B,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
+      }))
+        .toBe(false);
+      expect(isSelectionContinous({
         startDate: startDate5,
         endDate: endDate5,
         reservations: reservations2,
         openingHours,
         overnightStartTime,
         overnightEndTime
+      }))
+        .toBe(false);
+      expect(isSelectionContinous({
+        startDate: startDate5,
+        endDate: endDate5,
+        reservations: reservations2B,
+        openingHours,
+        overnightStartTime,
+        overnightEndTime: overnightEndTime2
       }))
         .toBe(false);
     });
