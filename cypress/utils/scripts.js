@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 function formatDate(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -42,6 +44,41 @@ export function getTomorrowDate() {
   const yyyy = tomorrow.getFullYear();
 
   return `${dd}.${mm}.${yyyy}`;
+}
+
+/**
+ * Gets reservation begin and end datetimes
+ * @param {string} beginDayTime DTHH:mm:ssZ
+ * @param {string} endDayTime DTHH:mm:ssZ
+ * @returns {Object} object with begin and end datetime
+ */
+export function getReservationBeginEnd(beginDayTime, endDayTime) {
+  const currentYear = moment().year();
+  const currentMonth = moment().month();
+
+  let beginDate = moment(`${currentYear}-${currentMonth + 1}-${beginDayTime}`, 'YYYY-M-DTHH:mm:ssZ');
+  let endDate = moment(`${currentYear}-${currentMonth + 1}-${endDayTime}`, 'YYYY-M-DTHH:mm:ssZ');
+
+  beginDate = beginDate.add(1, 'months');
+  endDate = endDate.add(1, 'months');
+
+  const begin = beginDate.format();
+  const end = endDate.format();
+  return { begin, end };
+}
+
+/**
+ * Gets closed date with null opens and closes
+ * @param {string} day e.g. '15'
+ * @returns {Object} object with date, opens: null and closes: null
+ */
+export function getClosedDate(day) {
+  const currentYear = moment().year();
+  const currentMonth = moment().month();
+
+  const date = moment(`${currentYear}-${currentMonth + 1}-${day}`, 'YYYY-M-D');
+  date.add(1, 'months');
+  return { date: date.format(), opens: null, closes: null };
 }
 
 /**
