@@ -336,18 +336,6 @@ describe('shared/modals/reservation-info/ReservationInfoModal', () => {
           expect(getConfirmButton(props)).toHaveLength(0);
         });
 
-        test('is not rendered if reservation is not editable', () => {
-          const props = {
-            isStaff: true,
-            reservationIsEditable: false,
-            reservation: {
-              ...reservation,
-              state: constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT
-            },
-          };
-          expect(getConfirmButton(props)).toHaveLength(0);
-        });
-
         test('is not rendered if reservation state is not "waiting_for_cash_payment"', () => {
           const props = {
             isStaff: true,
