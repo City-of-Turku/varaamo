@@ -13,6 +13,13 @@ describe('manage-reservations/list/listUtils', () => {
       const expectedResult = `${begin.format('ddd L HH:mm')} - ${end.format('HH:mm')}`;
       expect(getDateAndTime(reservation)).toBe(expectedResult);
     });
+    test('returns correct string with given multiday reservation', () => {
+      const begin = moment('2021-02-08 09:30');
+      const end = moment('2021-02-09 10:30');
+      const reservation = Reservation.build({ begin, end });
+      const expectedResult = `${begin.format('D.M.YYYY')} - ${end.format('D.M.YYYY')}`;
+      expect(getDateAndTime(reservation)).toBe(expectedResult);
+    });
   });
 
   describe('getNormalizedReservation', () => {

@@ -2,7 +2,7 @@ import forIn from 'lodash/forIn';
 import includes from 'lodash/includes';
 import { createSelector } from 'reselect';
 
-import { isStaffForResource } from 'utils/resourceUtils';
+import { isStaffForResource, isAdminForResource, isManagerForResource } from 'utils/resourceUtils';
 
 const authUserSelector = state => state.auth.user;
 const usersSelector = state => state.data.users;
@@ -83,6 +83,20 @@ function createIsStaffSelector(resourceSelector) {
   );
 }
 
+function createIsAdminForResourceSelector(resourceSelector) {
+  return createSelector(
+    resourceSelector,
+    (resource) => isAdminForResource(resource)
+  );
+}
+
+function createIsManagerForResourceSelector(resourceSelector) {
+  return createSelector(
+    resourceSelector,
+    (resource) => isManagerForResource(resource)
+  );
+}
+
 const authUserAmrSelector = createSelector(
   authUserSelector,
   (user) => {
@@ -106,4 +120,6 @@ export {
   staffUnitsSelector,
   isManagerForSelector,
   hasStrongAuthSelector,
+  createIsAdminForResourceSelector,
+  createIsManagerForResourceSelector,
 };

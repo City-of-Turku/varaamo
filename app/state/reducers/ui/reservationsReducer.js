@@ -180,6 +180,10 @@ function reservationsReducer(state = initialState, action) {
       });
     }
 
+    case types.UI.SET_SELECTED_DATETIMES: {
+      return state.merge({ selected: action.payload });
+    }
+
     default: {
       return state;
     }

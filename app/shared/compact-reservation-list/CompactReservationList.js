@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 import TimeRange from 'shared/time-range';
+import { isMultiday } from '../../utils/timeUtils';
 
 class CompactReservationList extends Component {
   renderFixedReservation = reservation => this.renderReservation(reservation);
@@ -15,10 +16,20 @@ class CompactReservationList extends Component {
       const resource = this.props.resources[reservation.resource] || {};
       resourceName = resource.name;
     }
+
+    const isReservationMultiday = isMultiday(reservation.begin, reservation.end);
+    const beginFormat = isReservationMultiday ? 'D.M.YYYY HH:mm' : 'dddd, LLL';
+    const endFormat = isReservationMultiday ? 'D.M.YYYY HH:mm' : 'LT';
+
     return (
       <li key={reservation.begin}>
         {resourceName ? `${resourceName}: ` : ''}
-        <TimeRange begin={reservation.begin} end={reservation.end} />
+        <TimeRange
+          begin={reservation.begin}
+          beginFormat={beginFormat}
+          end={reservation.end}
+          endFormat={endFormat}
+        />
         {removable
           && (
           <Glyphicon

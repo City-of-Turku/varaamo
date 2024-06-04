@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
 import { slotSize, slotWidth, slotMargin } from 'constants/SlotConstants';
+import constants from '../../../../constants/AppConstants';
 
 const moment = extendMoment(Moment);
 
@@ -15,7 +16,9 @@ function getTimeSlotWidth({ startTime, endTime } = {}) {
 }
 
 function getTimelineItems(date, reservations, resourceId, timeRestrictions, hasStaffRights) {
-  const { cooldown, minPeriod, maxPeriod } = timeRestrictions;
+  const {
+    cooldown, minPeriod, maxPeriod, overnightReservations
+  } = timeRestrictions;
   // skip getting cooldowns if user has perms
   const cooldownRanges = hasStaffRights ? [] : getCooldownRanges(reservations, cooldown);
   const items = [];
@@ -25,7 +28,7 @@ function getTimelineItems(date, reservations, resourceId, timeRestrictions, hasS
   while (timePointer.isBefore(end)) {
     const reservation = reservations && reservations[reservationPointer];
     const isSlotReservation = reservation && timePointer.isSame(reservation.begin);
-    if (isSlotReservation) {
+    if (isSlotReservation && !overnightReservations) {
       items.push({
         key: String(items.length),
         type: 'reservation',
@@ -93,6 +96,11 @@ function markItemsSelectable(items, isSelectable, openingHours, external, after)
 function addSelectionData(selection, resource, items) {
   const canIgnoreOpeningHours = resource.userPermissions.canIgnoreOpeningHours;
   const reservableAfter = resource.reservableAfter;
+
+  if (resource.overnightReservations) {
+    return items;
+  }
+
   if (!selection) {
     return markItemsSelectable(
       items, true, resource.openingHours, canIgnoreOpeningHours, reservableAfter);
@@ -123,7 +131,11 @@ function addSelectionData(selection, resource, items) {
 
 function getCooldownRanges(reservations, cooldown) {
   if (reservations && cooldown && cooldown !== '00:00:00') {
-    return reservations.map(reservation => moment.range(
+    // type blocked reservations don't have cooldown
+    const filteredReservations = reservations.filter(
+      reservation => reservation.type !== constants.RESERVATION_TYPE.BLOCKED_VALUE);
+
+    return filteredReservations.map(reservation => moment.range(
       moment(reservation.begin).subtract(moment.duration(cooldown)),
       moment(reservation.end).add(moment.duration(cooldown))
     ));

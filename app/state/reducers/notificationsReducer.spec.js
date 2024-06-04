@@ -199,6 +199,17 @@ describe('state/reducers/notificationReducer', () => {
         expect(actualNotifications[0].message).toEqual('some recurring error');
       });
 
+      test('show period error when period is specified', () => {
+        const action = errorAction({
+          response: {
+            period: 'some period error'
+          },
+        });
+
+        const actualNotifications = notificationsReducer(initialState, action);
+        expect(actualNotifications[0].messageId).toEqual('Notifications.error.period');
+      });
+
       test('show detail message when response is specified', () => {
         const action = errorAction({
           response: {

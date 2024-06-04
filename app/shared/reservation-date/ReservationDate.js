@@ -4,8 +4,9 @@ import moment from 'moment';
 
 import iconClock from 'assets/icons/clock-o.svg';
 import { getPrettifiedDuration } from 'utils/timeUtils';
+import injectT from '../../i18n/injectT';
 
-function ReservationDate({ beginDate, endDate }) {
+function ReservationDate({ beginDate, endDate, t }) {
   if (!beginDate || !endDate) {
     return <span />;
   }
@@ -16,7 +17,7 @@ function ReservationDate({ beginDate, endDate }) {
   const month = reservationBegin.format('MMMM');
   const beginTime = reservationBegin.format('HH:mm');
   const endTime = reservationEnd.format('HH:mm');
-  const duration = getPrettifiedDuration(reservationBegin, reservationEnd);
+  const duration = getPrettifiedDuration(reservationBegin, reservationEnd, t('common.unit.time.day.short'));
 
   return (
     <div className="reservation-date">
@@ -36,6 +37,7 @@ function ReservationDate({ beginDate, endDate }) {
 ReservationDate.propTypes = {
   beginDate: PropTypes.string,
   endDate: PropTypes.string,
+  t: PropTypes.func.isRequired,
 };
 
-export default ReservationDate;
+export default injectT(ReservationDate);

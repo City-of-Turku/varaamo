@@ -1,0 +1,69 @@
+{
+  "url": "https://respa.fi/v1/reservation/123/",
+  "id": 123,
+  "resource": "axwhvvq4er3a",
+  "begin": "2023-06-20T13:00:00+03:00",
+  "end": "2023-06-21T07:00:00+03:00",
+  "is_own": false,
+  "state": "confirmed",
+  "need_manual_confirmation": false,
+  "require_assistance": false,
+  "require_workstation": false,
+  "staff_event": false,
+  "user_permissions": {
+    "can_modify": true,
+    "can_delete": true
+  },
+  "preferred_language": "fi",
+  "type": "normal",
+  "has_arrived": false,
+  "takes_place_virtually": false,
+  "virtual_address": "",
+  "universal_data": {
+    "type": "select",
+    "selected_option": "1",
+    "field": {
+      "id": 1,
+      "description": "Valitse mihin järjestykseen toivot tilan pöytien asetettavan",
+      "label": "Pöytien järjestys",
+      "options": [
+        {
+          "id": 1,
+          "text": "Kolme riviä"
+        },
+        {
+          "id": 2,
+          "text": "Pöydät U-muotoisesti"
+        },
+        {
+          "id": 3,
+          "text": "Kahtena neliösaarekkeena"
+        }
+      ]
+    }
+  },
+  "reserver_name": "Test Tester",
+  "reserver_phone_number": "0401234567",
+  "reserver_address_street": "",
+  "reserver_address_zip": "",
+  "reserver_address_city": "",
+  "company": "",
+  "event_description": "",
+  "event_subject": "",
+  "reserver_id": "",
+  "number_of_participants": 1,
+  "participants": "",
+  "reserver_email_address": "test@example.fi",
+  "host_name": "",
+  "reservation_extra_questions": "This is a test reservation",
+  "home_municipality": null,
+  "billing_first_name": "",
+  "billing_last_name": "",
+  "billing_phone_number": "",
+  "billing_email_address": "",
+  "billing_address_street": "",
+  "billing_address_zip": "",
+  "billing_address_city": "",
+  "order": null,
+  "has_catering_order": false
+}

@@ -12,6 +12,7 @@ function getState() {
         'resource-1': {
           id: 'resource-1',
           userPermissions: {},
+          overnightReservations: false,
           reservations: [
             {
               id: 111,
@@ -47,7 +48,11 @@ function getState() {
             },
           ],
         },
-        'resource-2': { id: 'resource-2', userPermissions: {}, },
+        'resource-2': {
+          id: 'resource-2',
+          userPermissions: {},
+          overnightReservations: false,
+        },
       },
     },
   };

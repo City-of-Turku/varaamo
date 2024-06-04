@@ -21,7 +21,7 @@ import MassCancelModal from '../../../shared/modals/reservation-mass-cancel/Mass
 import ConfirmCashModal from '../../../shared/modals/reservation-confirm-cash/ConfirmCashModal';
 
 
-describe('ManageReservationsFilters', () => {
+describe('ManageReservationsPage', () => {
   const defaultProps = {
     actions: {
       clearReservations: jest.fn(),
@@ -40,6 +40,8 @@ describe('ManageReservationsFilters', () => {
     locale: 'fi',
     units: [],
     reservations: [],
+    resources: {},
+    isFetchingResource: false,
     reservationsTotalCount: 0,
     isFetchingReservations: false,
     isFetchingUnits: false,
@@ -242,6 +244,12 @@ describe('ManageReservationsFilters', () => {
     });
 
     describe('componentDidUpdate', () => {
+      const resource = { id: 'test-id' };
+      const reservation = Reservation.build({ resource });
+      const normalizedReservation = Object.assign(
+        {}, reservation, { resource: reservation.resource.id }
+      );
+
       test('calls handleFetchReservations when location changes', () => {
         const instance = getWrapper({ location: { search: '' } }).instance();
         const spy = jest.spyOn(instance, 'handleFetchReservations');
@@ -254,6 +262,24 @@ describe('ManageReservationsFilters', () => {
         const instance = getWrapper({ location }).instance();
         const spy = jest.spyOn(instance, 'handleFetchReservations');
         instance.componentDidUpdate({ location });
+        expect(spy).toHaveBeenCalledTimes(0);
+      });
+
+      test('calls handleOpenEditPage when resource fetch completes and opening edit page', () => {
+        const instance = getWrapper({ isFetchingResource: false }).instance();
+        instance.state.openingEditPage = true;
+        instance.state.editPayload = { reservation: normalizedReservation };
+        const spy = jest.spyOn(instance, 'handleOpenEditPage');
+        instance.componentDidUpdate({ isFetchingResource: true });
+        expect(spy).toHaveBeenCalledTimes(1);
+      });
+
+      test('does not call handleOpenEditPage when not opening edit page', () => {
+        const instance = getWrapper({ isFetchingResource: false }).instance();
+        instance.state.openingEditPage = false;
+        instance.state.editPayload = { reservation: normalizedReservation };
+        const spy = jest.spyOn(instance, 'handleOpenEditPage');
+        instance.componentDidUpdate({ isFetchingResource: true });
         expect(spy).toHaveBeenCalledTimes(0);
       });
     });
@@ -343,11 +369,6 @@ describe('ManageReservationsFilters', () => {
       const normalizedReservation = Object.assign(
         {}, reservation, { resource: reservation.resource.id }
       );
-      test('calls clearReservations', () => {
-        const instance = getWrapper().instance();
-        instance.handleEditClick(reservation);
-        expect(defaultProps.actions.clearReservations.mock.calls.length).toBe(1);
-      });
 
       test('calls handleFetchResource with correct params', () => {
         const instance = getWrapper().instance();
@@ -357,9 +378,48 @@ describe('ManageReservationsFilters', () => {
         expect(spy).toHaveBeenCalledWith(resource.id, reservation.begin);
       });
 
+      test('calls setState with correct params', () => {
+        const instance = getWrapper().instance();
+        const spy = jest.spyOn(instance, 'setState');
+        instance.handleEditClick(reservation);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy.mock.calls[0][0]).toStrictEqual({
+          openingEditPage: true,
+          editPayload: { reservation: normalizedReservation }
+        });
+      });
+    });
+
+    describe('handleOpenEditPage', () => {
+      const resource = { id: 'test-id' };
+      const reservation = Reservation.build({ resource });
+      const normalizedReservation = Object.assign(
+        {}, reservation, { resource: reservation.resource.id }
+      );
+
+      test('calls setState with correct params', () => {
+        const instance = getWrapper().instance();
+        instance.state.editPayload = { reservation: normalizedReservation };
+        const spy = jest.spyOn(instance, 'setState');
+        instance.handleOpenEditPage();
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy.mock.calls[0][0]).toStrictEqual(
+          { openingEditPage: false }
+        );
+      });
+
+      test('calls clearReservations', () => {
+        const instance = getWrapper().instance();
+        instance.state.editPayload = { reservation: normalizedReservation };
+        instance.handleOpenEditPage();
+        expect(defaultProps.actions.clearReservations.mock.calls.length).toBe(1);
+      });
+
       test('calls editReservation with correct params', () => {
         const instance = getWrapper().instance();
-        instance.handleEditClick(reservation);
+        instance.state.editPayload = { reservation: normalizedReservation };
+        instance.handleOpenEditPage();
+        instance.state.editPayload = { reservation: normalizedReservation };
         expect(defaultProps.actions.editReservation.mock.calls.length).toBe(1);
         expect(defaultProps.actions.editReservation.mock.calls[0][0])
           .toStrictEqual({ reservation: normalizedReservation });
@@ -368,7 +428,8 @@ describe('ManageReservationsFilters', () => {
       test('calls history push with correct params', () => {
         const history = { push: jest.fn() };
         const instance = getWrapper({ history }).instance();
-        instance.handleEditClick(reservation);
+        instance.state.editPayload = { reservation: normalizedReservation };
+        instance.handleOpenEditPage();
         const expectedParam = `${getEditReservationUrl(normalizedReservation)}&path=manage-reservations`;
         expect(history.push.mock.calls.length).toBe(1);
         expect(history.push.mock.calls[0][0]).toBe(expectedParam);

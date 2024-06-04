@@ -1,14 +1,20 @@
 import moment from 'moment';
 
+import { isMultiday } from '../../../utils/timeUtils';
+
 /**
  * Returns formatted reservation begin datetime to end time string.
  * @param {object} reservation
  * @returns {string} formatted reservation time range "datetime - time"
  */
 export function getDateAndTime(reservation) {
+  const isReservationMultiday = isMultiday(reservation.begin, reservation.end);
   const begin = moment(reservation.begin);
   const end = moment(reservation.end);
 
+  if (isReservationMultiday) {
+    return `${begin.format('D.M.YYYY')} - ${end.format('D.M.YYYY')}`;
+  }
   return `${begin.format('ddd L HH:mm')} - ${end.format('HH:mm')}`;
 }
 

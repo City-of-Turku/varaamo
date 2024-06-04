@@ -11,6 +11,7 @@ import Resource from 'utils/fixtures/Resource';
 import Unit from 'utils/fixtures/Unit';
 import ReservationTime from './ReservationTime';
 import ReservationDetails from '../reservation-details/ReservationDetails';
+import OvernightCalendar from '../../../shared/overnight-calendar/OvernightCalendar';
 
 describe('pages/reservation/reservation-time/ReservationTime', () => {
   const history = {
@@ -39,44 +40,82 @@ describe('pages/reservation/reservation-time/ReservationTime', () => {
     expect(header.text()).toBe('ReservationPhase.timeTitle');
   });
 
-  test('renders ResourceCalendar', () => {
-    const wrapper = getWrapper();
-    const instance = wrapper.instance();
-    const resourceCalendar = wrapper.find(ResourceCalendar);
-    const date = moment(defaultProps.selectedReservation.begin).format('YYYY-MM-DD');
+  describe('when reservation is single day', () => {
+    test('doesnt render OvernightCalendar', () => {
+      const overnightCalendar = getWrapper().find(OvernightCalendar);
+      expect(overnightCalendar).toHaveLength(0);
+    });
 
-    expect(resourceCalendar).toHaveLength(1);
-    expect(resourceCalendar.prop('onDateChange')).toBe(instance.handleDateChange);
-    expect(resourceCalendar.prop('selectedDate')).toBe(date);
+    test('renders ResourceCalendar', () => {
+      const wrapper = getWrapper();
+      const instance = wrapper.instance();
+      const resourceCalendar = wrapper.find(ResourceCalendar);
+      const date = moment(defaultProps.selectedReservation.begin).format('YYYY-MM-DD');
+
+      expect(resourceCalendar).toHaveLength(1);
+      expect(resourceCalendar.prop('onDateChange')).toBe(instance.handleDateChange);
+      expect(resourceCalendar.prop('selectedDate')).toBe(date);
+    });
+
+    test('renders ReservationCalendar', () => {
+      const location = { query: { q: 1 } };
+      const reservationCalendar = getWrapper({ location }).find(ReservationCalendar);
+
+      expect(reservationCalendar).toHaveLength(1);
+      expect(reservationCalendar.prop('location')).toEqual(location);
+      expect(reservationCalendar.prop('params')).toEqual({ id: defaultProps.resource.id });
+    });
+
+    test('renders cancel button', () => {
+      const onCancel = () => undefined;
+      const wrapper = getWrapper({ onCancel });
+      const button = wrapper.find('.cancel_Button');
+      expect(button).toHaveLength(1);
+      expect(button.prop('bsStyle')).toBe('warning');
+      expect(button.prop('onClick')).toBe(onCancel);
+      expect(button.prop('children')).toBe('ReservationInformationForm.cancelEdit');
+    });
+
+    test('renders next button', () => {
+      const onConfirm = () => undefined;
+      const wrapper = getWrapper({ onConfirm });
+      const button = wrapper.find('.next_Button');
+      expect(button).toHaveLength(1);
+      expect(button.prop('bsStyle')).toBe('primary');
+      expect(button.prop('onClick')).toBe(onConfirm);
+      expect(button.prop('children')).toBe('common.continue');
+    });
   });
 
-  test('renders ReservationCalendar', () => {
-    const location = { query: { q: 1 } };
-    const reservationCalendar = getWrapper({ location }).find(ReservationCalendar);
+  describe('when reservation is overnight', () => {
+    const resource = Resource.build({ overnightReservations: true });
+    const selectedReservation = Reservation.build({ begin: '2018-01-01', end: '2018-01-02' });
 
-    expect(reservationCalendar).toHaveLength(1);
-    expect(reservationCalendar.prop('location')).toEqual(location);
-    expect(reservationCalendar.prop('params')).toEqual({ id: defaultProps.resource.id });
-  });
+    test('renders OvernightCalendar', () => {
+      const wrapper = getWrapper({ selectedReservation, resource });
+      const instance = wrapper.instance();
+      const overnightCalendar = wrapper.find(OvernightCalendar);
 
-  test('renders cancel button', () => {
-    const onCancel = () => undefined;
-    const wrapper = getWrapper({ onCancel });
-    const button = wrapper.find('.cancel_Button');
-    expect(button).toHaveLength(1);
-    expect(button.prop('bsStyle')).toBe('warning');
-    expect(button.prop('onClick')).toBe(onCancel);
-    expect(button.prop('children')).toBe('ReservationInformationForm.cancelEdit');
-  });
+      expect(overnightCalendar).toHaveLength(1);
+      expect(overnightCalendar.prop('handleDateChange')).toBe(instance.handleDateChange);
+      expect(overnightCalendar.prop('history')).toBe(history);
+      expect(overnightCalendar.prop('onEditCancel')).toBe(defaultProps.onCancel);
+      expect(overnightCalendar.prop('onEditConfirm')).toBe(defaultProps.onConfirm);
+      expect(overnightCalendar.prop('params')).toStrictEqual({ id: resource.id });
+      expect(overnightCalendar.prop('reservationId')).toBe(selectedReservation.id);
+      expect(overnightCalendar.prop('resource')).toBe(resource);
+    });
 
-  test('renders next button', () => {
-    const onConfirm = () => undefined;
-    const wrapper = getWrapper({ onConfirm });
-    const button = wrapper.find('.next_Button');
-    expect(button).toHaveLength(1);
-    expect(button.prop('bsStyle')).toBe('primary');
-    expect(button.prop('onClick')).toBe(onConfirm);
-    expect(button.prop('children')).toBe('common.continue');
+    test('doesnt render ResourceCalendar', () => {
+      const resourceCalendar = getWrapper({ selectedReservation, resource }).find(ResourceCalendar);
+      expect(resourceCalendar).toHaveLength(0);
+    });
+
+    test('doesnt render ReservationCalendar', () => {
+      const reservationCalendar = getWrapper({ selectedReservation, resource })
+        .find(ResourceCalendar);
+      expect(reservationCalendar).toHaveLength(0);
+    });
   });
 
   test('renders reservation details', () => {

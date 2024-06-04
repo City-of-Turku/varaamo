@@ -1,6 +1,7 @@
 
 import forEach from 'lodash/forEach';
 import map from 'lodash/map';
+import filter from 'lodash/filter';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
@@ -111,11 +112,14 @@ function getTimeSlots(
     )
   );
 
+  // type blocked reservations don't have cooldown
+  const filteredReservations = filter(reservations,
+    reservation => reservation.type !== constants.RESERVATION_TYPE.BLOCKED_VALUE);
   /*
     reservation cooldown range is calculated in the following way:
     cooldown range = from (begin time - cooldown) to (end time + cooldown)
   */
-  const cooldownRanges = map(reservations, reservation => moment.range(
+  const cooldownRanges = map(filteredReservations, reservation => moment.range(
     moment(reservation.begin).subtract(moment.duration(cooldown)),
     moment(reservation.end).add(moment.duration(cooldown))
   ));
@@ -166,8 +170,8 @@ function getTimeSlots(
         The cooldown slots get a reservation but are NOT set as reserved.
 
         When editing a reservation,
-        the cooldown slots that ONLY have the users reservation are false.
-        If a cooldown slots reservation is NOT
+        the cooldown slots that ONLY have the users currently selected reservation
+        to edit are false. If a cooldown slots reservation is NOT
         the users or its shared with another reservation it remains true.
       */
       const isEditing = Boolean(reservationsToEdit.length);
@@ -177,7 +181,8 @@ function getTimeSlots(
           reservation.push(reservations[index]);
 
           if (isEditing) {
-            if (reservation.some(res => !res.isOwn)) {
+            const resToEditId = reservationsToEdit[0]?.id;
+            if (reservation.some(res => res.id !== resToEditId)) {
               onCooldown = true;
             } else {
               onCooldown = false;
@@ -239,9 +244,9 @@ function isValidDateString(dateString) {
  * @param {string|object} end time parsable by moment
  * @returns {string} e.g. '1h 30min', '2h' or '45min'
  */
-function getPrettifiedDuration(begin, end) {
+function getPrettifiedDuration(begin, end, dayUnit = 'd') {
   const duration = moment.duration(moment(end).diff(moment(begin)));
-  return getPrettifiedPeriodUnits(duration);
+  return getPrettifiedPeriodUnits(duration, dayUnit);
 }
 
 /**
@@ -249,16 +254,21 @@ function getPrettifiedDuration(begin, end) {
  * @param {string} period e.g. 1:30:00
  * @returns {string} e.g. '1h 30min', '2h' or '45min'
  */
-function getPrettifiedPeriodUnits(period) {
+function getPrettifiedPeriodUnits(period, dayUnit = 'd') {
   const duration = moment.duration(period);
+  const days = duration.days();
   const hours = duration.hours();
   const minutes = duration.minutes();
 
+  const daysText = days > 0 ? `${days}${dayUnit}` : '';
   const hoursText = hours > 0 ? `${hours}h` : '';
   const minutesText = minutes > 0 ? `${minutes}min` : '';
-  const spacer = hoursText && minutesText ? ' ' : '';
 
-  return `${hoursText}${spacer}${minutesText}`;
+  // Spacer between days, hours, and minutes
+  const spacer1 = daysText && (hoursText || minutesText) ? ' ' : '';
+  const spacer2 = hoursText && minutesText ? ' ' : '';
+
+  return `${daysText}${spacer1}${hoursText}${spacer2}${minutesText}`;
 }
 
 function prettifyHours(hours, showMinutes = false) {
@@ -339,6 +349,51 @@ function formatDateTime(datetime, targetFormat) {
   return datetimeMoment.isValid() ? datetimeMoment.format(targetFormat) : datetime;
 }
 
+/**
+ * Parses and formats given datetime into target format e.g.
+ * D.M.YYYY HH:mm–HH:mm (1h 30min) or D.M.YYYY HH:mm - D.M.YYYY HH:mm (2d 5h)
+ * @param {string} begin datetime
+ * @param {string} end datetime
+ * @param {function} t
+ * @returns {string} formatted datetime string
+ */
+function formatDetailsDatetimes(begin, end, t, dayUnit = 'd') {
+  if (isMultiday(begin, end)) {
+    const beginText = formatDatetimeToString(begin, t);
+    const endText = formatDatetimeToString(end, t);
+    const duration = getPrettifiedDuration(begin, end, dayUnit);
+    return `${beginText} - ${endText} (${duration})`;
+  }
+
+  const beginText = moment(begin).format('D.M.YYYY HH:mm');
+  const endText = moment(end).format('HH:mm');
+  const duration = getPrettifiedDuration(begin, end, dayUnit);
+  return `${beginText}–${endText} (${duration})`;
+}
+
+/**
+ * Formats datetime to string
+ * @param {object|string} datetime any moment parsable format
+ * @param {function} t
+ * @returns {string} formatted datetime string e.g 20.10.2010 11:00
+ */
+function formatDatetimeToString(datetime, t) {
+  const momentDatetime = moment(datetime);
+  const formattedDate = momentDatetime.format('D.M.YYYY');
+  const formattedTime = t('TimeSlots.selectedTime', { time: momentDatetime.format('HH:mm') });
+  return `${formattedDate} ${formattedTime}`;
+}
+
+/**
+ * Check whether begin and end are on different days
+ * @param {string} begin datetime
+ * @param {string} end datetime
+ * @returns {boolean} true if begin and end are on different days
+ */
+function isMultiday(begin, end) {
+  return !moment(begin).isSame(moment(end), 'day');
+}
+
 export {
   addToDate,
   calculateDuration,
@@ -361,4 +416,7 @@ export {
   getTimeDiff,
   formatTime,
   formatDateTime,
+  formatDetailsDatetimes,
+  isMultiday,
+  formatDatetimeToString,
 };

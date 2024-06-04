@@ -5,7 +5,7 @@ $externalIconMarginLeft: 5px;
   margin-bottom: 0;
 
   .navbar-nav li,
-  .navbar-nav > .active {
+  .navbar-nav>.active {
 
     a {
       color: $white;
@@ -33,17 +33,18 @@ $externalIconMarginLeft: 5px;
   .navbar-toggle .icon-bar {
     color: $white;
   }
+
   .navbar-toggle .icon-bar {
     background-color: $white;
   }
 
-  .navbar-brand, .navbar-toggle {
+  .navbar-brand,
+  .navbar-toggle {
     font-size: inherit;
 
-    @include add-focus(){
+    @include add-focus() {
       color: $white;
-    };
-
+    }
   }
 
 
@@ -58,6 +59,30 @@ $externalIconMarginLeft: 5px;
 
         @include add-focus;
       }
+
+      #nav-admin-dropdown {
+        color: $white;
+      }
+
+      .dropdown-menu {
+        a {
+          color: black;
+        }
+
+        .nav-dropdown-link {
+          a {
+            @media (max-width: $screen-md-min) {
+              color: $white;
+
+              &:hover {
+                color: $white;
+              }
+            }
+
+            @include add-focus;
+          }
+        }
+      }
     }
   }
 
@@ -70,11 +95,11 @@ $externalIconMarginLeft: 5px;
 
 .app-MainNavbar {
 
-  @include high-contrast{
+  @include high-contrast {
     border-bottom: 1px solid $black;
 
     .navbar-nav li,
-    .navbar-nav > .active {
+    .navbar-nav>.active {
 
       a {
         color: $black;
@@ -99,11 +124,17 @@ $externalIconMarginLeft: 5px;
     .navbar-toggle .icon-bar {
       color: $black;
     }
+
     .navbar-toggle .icon-bar {
       background-color: $black;
     }
+
+    .navbar-nav li #nav-admin-dropdown {
+      color: $black;
+    }
+
+    .navbar-nav li .dropdown-menu .nav-dropdown-link a {
+      color: $black;
+    }
   }
-
-
 }
-// ----------

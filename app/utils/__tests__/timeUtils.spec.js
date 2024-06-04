@@ -27,6 +27,9 @@ import {
   getEndTimeSlotWithMinPeriod,
   formatTime,
   formatDateTime,
+  formatDetailsDatetimes,
+  isMultiday,
+  formatDatetimeToString
 } from 'utils/timeUtils';
 
 const moment = extendMoment(Moment);
@@ -551,6 +554,7 @@ describe('Utils: timeUtils', () => {
         {
           begin: '2015-10-09T10:00:00+03:00',
           end: '2015-10-09T11:00:00+03:00',
+          id: 111,
         },
       ];
       let twoReservations = [
@@ -558,17 +562,20 @@ describe('Utils: timeUtils', () => {
           begin: '2015-10-09T09:00:00+03:00',
           end: '2015-10-09T10:00:00+03:00',
           isOwn: false,
+          id: 112
         },
         {
           begin: '2015-10-09T11:00:00+03:00',
           end: '2015-10-09T12:00:00+03:00',
           isOwn: true,
+          id: 113
         }
       ];
       const reservationsToEdit = [
         {
           begin: '2015-10-09T08:30:00+03:00',
           end: '2015-10-09T09:30:00+03:00',
+          id: 123
         },
       ];
       test('is always false when cooldown is not set or it is 0', () => {
@@ -618,10 +625,10 @@ describe('Utils: timeUtils', () => {
         expect(slots[1].onCooldown).toBe(false);
         expect(slots[2].onCooldown).toBe(true);
         expect(slots[3].onCooldown).toBe(false);
-        expect(slots[4].onCooldown).toBe(false);
+        expect(slots[4].onCooldown).toBe(true);
       });
 
-      test('is true when editing with two reservations, !isOwn reservations cooldown remains', () => {
+      test('is true when editing with two reservations', () => {
         const cooldown = '1:00:00';
         twoReservations = [
           {
@@ -646,7 +653,30 @@ describe('Utils: timeUtils', () => {
         expect(slots[0].onCooldown).toBe(false);
         expect(slots[1].onCooldown).toBe(true);
         expect(slots[2].onCooldown).toBe(false);
-        expect(slots[3].onCooldown).toBe(false);
+        expect(slots[3].onCooldown).toBe(true);
+        expect(slots[4].onCooldown).toBe(false);
+      });
+
+      test('is false when reservation is type blocked', () => {
+        const cooldown = '1:00:00';
+        twoReservations = [
+          {
+            begin: '2015-10-09T08:00:00+03:00',
+            end: '2015-10-09T09:00:00+03:00',
+            isOwn: false,
+          },
+          {
+            begin: '2015-10-09T12:00:00+03:00',
+            end: '2015-10-09T13:00:00+03:00',
+            isOwn: true,
+            type: constants.RESERVATION_TYPE.BLOCKED_VALUE,
+          }
+        ];
+        const slots = getTimeSlots(start, end, period, twoReservations, [], cooldown);
+        expect(slots[0].onCooldown).toBe(false);
+        expect(slots[1].onCooldown).toBe(true);
+        expect(slots[2].onCooldown).toBe(false);
+        expect(slots[3].onCooldown).toBe(false); // would be on cooldown if not blocked
         expect(slots[4].onCooldown).toBe(false);
       });
     });
@@ -703,6 +733,7 @@ describe('Utils: timeUtils', () => {
     test('returns correct string', () => {
       const beginString = '2021-11-20T08:30:00.000Z';
       const endString = '2021-11-20T09:40:00.000Z';
+      const endString2 = '2021-11-23T09:40:00.000Z';
       const beginMoment = moment('2021-11-20 09:30Z');
       const endMoment = moment('2021-11-20 09:35Z');
 
@@ -710,6 +741,8 @@ describe('Utils: timeUtils', () => {
       expect(getPrettifiedDuration(beginString, endMoment)).toBe('1h 5min');
       expect(getPrettifiedDuration(beginMoment, endString)).toBe('10min');
       expect(getPrettifiedDuration(beginMoment, endMoment)).toBe('5min');
+      expect(getPrettifiedDuration(beginString, endString2)).toBe('3d 1h 10min');
+      expect(getPrettifiedDuration(beginString, endString2, 'day')).toBe('3day 1h 10min');
     });
   });
 
@@ -719,6 +752,8 @@ describe('Utils: timeUtils', () => {
       expect(getPrettifiedPeriodUnits('2:00:00')).toBe('2h');
       expect(getPrettifiedPeriodUnits('0:25:00')).toBe('25min');
       expect(getPrettifiedPeriodUnits('0:00:00')).toBe('');
+      expect(getPrettifiedPeriodUnits('2 1:00:00')).toBe('2d 1h');
+      expect(getPrettifiedPeriodUnits('2 1:00:00', 'day')).toBe('2day 1h');
     });
   });
 
@@ -847,6 +882,35 @@ describe('Utils: timeUtils', () => {
       ['2023-11-01T34:00:00', 'L', '2023-11-01T34:00:00'],
     ])('returns correctly formatted datetime string with given params', (datetime, targetFormat, expected) => {
       expect(formatDateTime(datetime, targetFormat)).toBe(expected);
+    });
+  });
+
+  describe('formatDetailsDatetimes', () => {
+    test.each([
+      ['2023-11-01T15:00:00Z', '2023-11-01T16:00:00Z', '1.11.2023 17:00–18:00 (1h)'],
+      ['2023-11-01T15:00:00Z', '2023-11-03T13:00:00Z', '1.11.2023 TimeSlots.selectedTime 17:00 - 3.11.2023 TimeSlots.selectedTime 15:00 (1d 22h)'],
+    ])('returns correctly formatted datetime string with given params', (begin, end, expected) => {
+      const t = (str, timeObj) => `${str} ${timeObj.time}`;
+      expect(formatDetailsDatetimes(begin, end, t)).toBe(expected);
+    });
+  });
+
+  describe('formatDatetimeToString', () => {
+    const t = (str, timeObj) => `${str} ${timeObj.time}`;
+    test('returns correct string', () => {
+      expect(formatDatetimeToString('2023-11-01T15:00:00Z', t)).toBe('1.11.2023 TimeSlots.selectedTime 17:00');
+      expect(formatDatetimeToString(moment('2023-11-01T15:00:00Z'), t)).toBe('1.11.2023 TimeSlots.selectedTime 17:00');
+    });
+  });
+
+  describe('isMultiday', () => {
+    test('returns true if begin and end are in different days', () => {
+      const begin = '2023-11-01T15:00:00Z';
+      const end = '2023-11-03T13:00:00Z';
+      const end2 = '2023-11-01T01:00:00Z';
+
+      expect(isMultiday(begin, end)).toBe(true);
+      expect(isMultiday(begin, end2)).toBe(false);
     });
   });
 });

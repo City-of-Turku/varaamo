@@ -215,6 +215,17 @@ describe('shared/reservation-confirmation/ConfirmReservationModal', () => {
         expect(instance.getRequiredFormFields(
           resource, null, reservationType)).toStrictEqual(['field1', 'field2']);
       });
+
+      test('returns correct array when reservation type is not blocked and resource has universalField', () => {
+        const reservationType = constants.RESERVATION_TYPE.NORMAL_VALUE;
+        const resource = Resource.build({
+          requiredReservationExtraFields: ['field1', 'field2'],
+          universalField: [UniversalField.build()],
+        });
+        const instance = getWrapper({ resource, reservationType }).instance();
+        expect(instance.getRequiredFormFields(
+          resource, null, reservationType)).toStrictEqual(['field1', 'field2', 'universalData']);
+      });
     });
 
     /* Field hidden until it is needed again

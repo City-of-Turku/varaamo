@@ -14,6 +14,8 @@ import { getReservationCustomerGroupName } from 'utils/reservationUtils';
 import constants from '../../../constants/AppConstants';
 import { checkQualityToolsLink } from '../../../shared/quality-tools-form/qualityToolsUtils';
 import ThankYouAndFeedback from './ThankYouAndFeedback';
+import { isMultiday } from '../../../utils/timeUtils';
+import ReservationOvernightDate from '../../../shared/reservation-date/ReservationOvernightDate';
 
 class ReservationConfirmation extends Component {
   static propTypes = {
@@ -132,6 +134,8 @@ class ReservationConfirmation extends Component {
       email = user.email;
     }
 
+    const reservationIsMultiday = isMultiday(reservation.begin, reservation.end);
+
     return (
       <Row className="app-ReservationConfirmation">
         <Col lg={6} md={12} xs={12}>
@@ -139,7 +143,10 @@ class ReservationConfirmation extends Component {
             <h2 className="app-ReservationPage__header">
               {t(`ReservationConfirmation.reservation${isEdited ? 'Edited' : 'Created'}Title`)}
             </h2>
-            <ReservationDate beginDate={reservation.begin} endDate={reservation.end} />
+            {reservationIsMultiday
+              ? <ReservationOvernightDate beginDate={reservation.begin} endDate={reservation.end} />
+              : <ReservationDate beginDate={reservation.begin} endDate={reservation.end} />
+            }
             <p className="app-ReservationConfirmation__resource-name">
               <img
                 alt=""

@@ -83,11 +83,31 @@ describe('pages/user-reservations/reservation-list/ReservationListItem', () => {
       expect(timeslotIcon.prop('src')).toBeDefined();
     });
 
-    test('contains TimeRange component with correct props', () => {
-      const timeRange = component.find(TimeRange);
-      expect(timeRange).toHaveLength(1);
-      expect(timeRange.prop('begin')).toBe(props.reservation.begin);
-      expect(timeRange.prop('end')).toBe(props.reservation.end);
+    describe('when reservation is not multiday', () => {
+      test('contains TimeRange component with correct props', () => {
+        const timeRange = component.find(TimeRange);
+        expect(timeRange).toHaveLength(1);
+        expect(timeRange.prop('begin')).toBe(props.reservation.begin);
+        expect(timeRange.prop('end')).toBe(props.reservation.end);
+        expect(timeRange.prop('beginFormat')).toBe('dddd, LLL');
+        expect(timeRange.prop('endFormat')).toBe('LT');
+        expect(timeRange.prop('isMultiday')).toBe(false);
+      });
+    });
+
+    describe('when reservation is multiday', () => {
+      test('contains TimeRange component with correct props', () => {
+        const reservationA = { ...props.reservation, begin: '2017-01-01T10:00:00+02:00', end: '2017-01-02T12:00:00+02:00' };
+        const newProps = { ...props, reservation: reservationA };
+        const componentA = shallowWithIntl(<ReservationListItem {...newProps} />);
+        const timeRange = componentA.find(TimeRange);
+        expect(timeRange).toHaveLength(1);
+        expect(timeRange.prop('begin')).toBe(reservationA.begin);
+        expect(timeRange.prop('end')).toBe(reservationA.end);
+        expect(timeRange.prop('beginFormat')).toBe('D.M.YYYY HH:mm');
+        expect(timeRange.prop('endFormat')).toBe('D.M.YYYY HH:mm');
+        expect(timeRange.prop('isMultiday')).toBe(true);
+      });
     });
 
     test('renders ReservationStateLabel component', () => {

@@ -10,6 +10,7 @@ import { injectT } from 'i18n';
 import ReservationCalendar from 'pages/resource/reservation-calendar';
 import ResourceCalendar from 'shared/resource-calendar';
 import ReservationDetails from '../reservation-details/ReservationDetails';
+import OvernightCalendar from '../../../shared/overnight-calendar/OvernightCalendar';
 
 class ReservationTime extends Component {
   static propTypes = {
@@ -63,29 +64,43 @@ class ReservationTime extends Component {
         <h2 className="visually-hidden reservationTime__Header">{t('ReservationPhase.timeTitle')}</h2>
         <Row>
           <Col lg={8} sm={12}>
-            <ResourceCalendar
-              onDateChange={this.handleDateChange}
-              resourceId={resource.id}
-              selectedDate={date}
-            />
-            <ReservationCalendar
-              history={history}
-              location={location}
-              params={{ ...params, id: resource.id }}
-            />
-            <div className="app-ReservationTime__controls">
-              <Button bsStyle="warning" className="cancel_Button" onClick={onCancel}>
-                {t('ReservationInformationForm.cancelEdit')}
-              </Button>
-              <Button
-                bsStyle="primary"
-                className="next_Button"
-                disabled={isEmpty(selectedReservation) || isEmpty(selectedTime)}
-                onClick={onConfirm}
-              >
-                {t('common.continue')}
-              </Button>
-            </div>
+            {resource.overnightReservations ? (
+              <OvernightCalendar
+                handleDateChange={this.handleDateChange}
+                history={history}
+                onEditCancel={onCancel}
+                onEditConfirm={onConfirm}
+                params={{ ...params, id: resource.id }}
+                reservationId={selectedReservation.id}
+                resource={resource}
+              />
+            ) : (
+              <React.Fragment>
+                <ResourceCalendar
+                  onDateChange={this.handleDateChange}
+                  resourceId={resource.id}
+                  selectedDate={date}
+                />
+                <ReservationCalendar
+                  history={history}
+                  location={location}
+                  params={{ ...params, id: resource.id }}
+                />
+                <div className="app-ReservationTime__controls">
+                  <Button bsStyle="warning" className="cancel_Button" onClick={onCancel}>
+                    {t('ReservationInformationForm.cancelEdit')}
+                  </Button>
+                  <Button
+                    bsStyle="primary"
+                    className="next_Button"
+                    disabled={isEmpty(selectedReservation) || isEmpty(selectedTime)}
+                    onClick={onConfirm}
+                  >
+                    {t('common.continue')}
+                  </Button>
+                </div>
+              </React.Fragment>
+            )}
           </Col>
           <Col lg={4} sm={12}>
             <ReservationDetails

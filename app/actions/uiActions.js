@@ -124,6 +124,8 @@ const changeContrast = createAction(types.UI.CHANGE_CONTRAST);
 
 const changeFontSize = createAction(types.UI.CHANGE_FONTSIZE, fontsize => fontsize);
 
+const setSelectedDatetimes = createAction(types.UI.SET_SELECTED_DATETIMES);
+
 export {
   cancelReservationEdit,
   cancelReservationEditInInfoModal,
@@ -163,4 +165,5 @@ export {
   unselectAdminResourceType,
   changeContrast,
   changeFontSize,
+  setSelectedDatetimes,
 };
