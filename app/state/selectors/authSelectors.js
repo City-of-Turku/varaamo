@@ -45,6 +45,16 @@ const hasStrongAuthSelector = createSelector(
   currentUser => Boolean(currentUser.isStrongAuth)
 );
 
+const userExtraPrefsSelector = createSelector(
+  currentUserSelector,
+  currentUser => currentUser.extraPrefs || {}
+);
+
+const userAdminResourceOrderSelector = createSelector(
+  userExtraPrefsSelector,
+  userExtraPrefs => userExtraPrefs.adminResourceOrder || []
+);
+
 function isLoggedInSelector(state) {
   return Boolean(state.auth.user);
 }
@@ -122,4 +132,5 @@ export {
   hasStrongAuthSelector,
   createIsAdminForResourceSelector,
   createIsManagerForResourceSelector,
+  userAdminResourceOrderSelector,
 };

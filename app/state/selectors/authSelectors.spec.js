@@ -14,6 +14,7 @@ import {
   authUserAmrSelector,
   createIsAdminForResourceSelector,
   createIsManagerForResourceSelector,
+  userAdminResourceOrderSelector,
 } from './authSelectors';
 import Resource from '../../utils/fixtures/Resource';
 
@@ -358,4 +359,34 @@ describe('state/selectors/authSelectors', () => {
       expect(authUserAmrSelector(state)).toEqual('');
     });
   });
+
+  describe('userAdminResourceOrderSelector', () => {
+    function getSelected(user) {
+      return getState({
+        auth: {
+          user: {
+            profile: {
+              sub: user.id
+            },
+          },
+        },
+        'data.users': { [user.id]: user },
+      });
+    }
+
+    test('returns user admin resource order value if it exists', () => {
+      const order = ['1', '2', '3'];
+      const user = User.build({ extraPrefs: { adminResourceOrder: order } });
+      const user2 = User.build({ extraPrefs: null });
+      const user3 = User.build({ extraPrefs: { adminResourceOrder: [] } });
+      const user4 = User.build();
+      const user5 = User.build({ extraPrefs: {} });
+      expect(userAdminResourceOrderSelector(getSelected(user))).toEqual(order);
+      expect(userAdminResourceOrderSelector(getSelected(user2))).toEqual([]);
+      expect(userAdminResourceOrderSelector(getSelected(user3))).toEqual([]);
+      expect(userAdminResourceOrderSelector(getSelected(user4))).toEqual([]);
+      expect(userAdminResourceOrderSelector(getSelected(user5))).toEqual([]);
+    });
+  });
 });
+

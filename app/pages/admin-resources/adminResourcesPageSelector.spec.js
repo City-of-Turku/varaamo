@@ -304,4 +304,8 @@ describe('pages/admin-resources/adminResourcesPageSelector', () => {
     const selected = getSelected(extraState);
     expect(selected.externalResources).toEqual(expected);
   });
+
+  test('returns fontSize', () => {
+    expect(getSelected().fontSize).toBeDefined();
+  });
 });

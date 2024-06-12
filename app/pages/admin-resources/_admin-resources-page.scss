@@ -1,6 +1,24 @@
 .admin-resources-page {
   min-height: 600px;
 
+  #order-btn-container {
+    text-align: right;
+
+
+    @media(max-width:$screen-sm-min) {
+      text-align: initial;
+    }
+
+    #resource-order-btn {
+      margin-top: 24px;
+
+      @media(max-width:$screen-sm-min) {
+        margin-top: 0px;
+        margin-bottom: 12px;
+      }
+    }
+  }
+
   .loadedContent {
 
     .availability-view .date-selector {

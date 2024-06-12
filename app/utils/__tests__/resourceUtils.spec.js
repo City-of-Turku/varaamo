@@ -27,7 +27,8 @@ import {
   isStaffForResource,
   isStrongAuthSatisfied,
   isAdminForResource,
-  isManagerForResource
+  isManagerForResource,
+  rearrangeResources
 } from 'utils/resourceUtils';
 import { getPrettifiedPeriodUnits } from '../timeUtils';
 import Product from '../fixtures/Product';
@@ -1200,6 +1201,25 @@ describe('Utils: resourceUtils', () => {
         const hasStrongAuth = false;
         expect(isStrongAuthSatisfied(resource, hasStrongAuth)).toBe(true);
       });
+    });
+  });
+
+  describe('rearrangeResources', () => {
+    test('returns correct order', () => {
+      const resources = ['id1', 'id2', 'id3'];
+      const resourceOrder = ['id3', 'id2', 'id1'];
+      expect(rearrangeResources(resources, resourceOrder))
+        .toEqual(resourceOrder);
+      expect(rearrangeResources(resources, ['id3', 'id2']))
+        .toEqual(resourceOrder);
+      expect(rearrangeResources(resources, ['id3',]))
+        .toEqual(['id3', 'id1', 'id2']);
+      expect(rearrangeResources(resources, ['id5',]))
+        .toEqual(['id1', 'id2', 'id3']);
+      expect(rearrangeResources(resources, ['id5', 'id2']))
+        .toEqual(['id2', 'id1', 'id3']);
+      expect(rearrangeResources(resources, []))
+        .toEqual(['id1', 'id2', 'id3']);
     });
   });
 });

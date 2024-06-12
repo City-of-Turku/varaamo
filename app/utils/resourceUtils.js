@@ -351,6 +351,30 @@ function isStrongAuthSatisfied(resource, hasStrongAuth) {
   return !strongAuthRequired || (strongAuthRequired && hasStrongAuth);
 }
 
+/**
+ * Rearranges resources in the given order.
+ * @param {string[]} resources e.g. ["id1", "id2", "id3"]
+ * @param {string[]} resourceOrder e.g. ["id3", "id2", "id1"]
+ * @returns {string[]} rearranged resources e.g. ["id3", "id2", "id1"]
+ */
+function rearrangeResources(resources, resourceOrder) {
+  const orgResources = [...resources];
+  const rearranged = [];
+
+  for (let index = 0; index < resourceOrder.length; index += 1) {
+    const resource = resourceOrder[index];
+    const sourceIndex = orgResources.indexOf(resource);
+
+    if (sourceIndex !== -1) {
+      rearranged.push(orgResources[sourceIndex]);
+      orgResources.splice(sourceIndex, 1);
+    }
+  }
+
+  rearranged.push(...orgResources);
+  return rearranged;
+}
+
 export {
   hasMaxReservations,
   isOpenNow,
@@ -373,4 +397,5 @@ export {
   isStrongAuthSatisfied,
   isAdminForResource,
   isManagerForResource,
+  rearrangeResources,
 };
