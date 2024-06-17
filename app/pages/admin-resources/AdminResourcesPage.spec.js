@@ -183,7 +183,6 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
           expect(resourceOrderModal).toHaveLength(1);
           expect(resourceOrderModal.prop('show')).toBe(true);
           expect(resourceOrderModal.prop('onClose')).toBe(instance.closeAdminResourceOrder);
-          expect(resourceOrderModal.prop('resourceOrder')).toEqual(defaultProps.resources);
         });
         test('does not render when showResourceOrder is false', () => {
           const wrapper = getIsAdminWrapper();

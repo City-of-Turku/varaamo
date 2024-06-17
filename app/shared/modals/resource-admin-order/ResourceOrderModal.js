@@ -10,22 +10,22 @@ import classNames from 'classnames';
 import injectT from '../../../i18n/injectT';
 import { addNotification } from 'actions/notificationsActions';
 import { fontSizeSelector } from '../../../state/selectors/accessibilitySelectors';
-import { resourcesSelector } from '../../../state/selectors/dataSelectors';
 import {
   getItemStyle, getListStyle, getResourceIDs, sendResourceOrder, sortResources
 } from './resourceOrderUtils';
 import { fetchUser } from 'actions/userActions';
-import { currentUserSelector } from '../../../state/selectors/authSelectors';
+import { currentUserSelector, userAdminResourceOrderSelector } from '../../../state/selectors/authSelectors';
+import { filteredWithoutTypeSelector } from '../../../pages/admin-resources/adminResourcesPageSelector';
 
 
 function ResourceOrderModal({
   show, onClose, t, actions, resources, fontSize, state, resourceOrder, user
 }) {
-  const initialResources = sortResources(Object.values(resources), resourceOrder);
+  const initialResources = sortResources(resources, resourceOrder);
   const [items, setItems] = React.useState(initialResources);
 
   React.useEffect(() => {
-    setItems(sortResources(Object.values(resources), resourceOrder));
+    setItems(sortResources(resources, resourceOrder));
   },
   [resources]);
 
@@ -145,7 +145,7 @@ ResourceOrderModal.propTypes = {
     addNotification: PropTypes.func.isRequired,
     fetchUser: PropTypes.func.isRequired,
   }),
-  resources: PropTypes.object,
+  resources: PropTypes.arrayOf(PropTypes.object),
   fontSize: PropTypes.string.isRequired,
   state: PropTypes.object,
   resourceOrder: PropTypes.arrayOf(PropTypes.string),
@@ -155,7 +155,8 @@ ResourceOrderModal.propTypes = {
 function mapStateToProps(state) {
   return {
     fontSize: fontSizeSelector(state),
-    resources: resourcesSelector(state),
+    resources: filteredWithoutTypeSelector(state),
+    resourceOrder: userAdminResourceOrderSelector(state),
     state,
     user: currentUserSelector(state),
   };

@@ -160,7 +160,6 @@ class UnconnectedAdminResourcesPage extends Component {
         {showResourceOrder && (
           <ResourceOrderModal
             onClose={this.closeAdminResourceOrder}
-            resourceOrder={resources}
             show={showResourceOrder}
           />
         )}

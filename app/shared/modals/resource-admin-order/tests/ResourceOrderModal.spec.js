@@ -10,7 +10,7 @@ import { UnconnectedResourceOrderModal as ResourceOrderModal } from '../Resource
 describe('ResourceOrderModal', () => {
   const resourceA = Resource.build();
   const resourceB = Resource.build();
-  const resources = { [resourceA.id]: resourceA, [resourceB.id]: resourceB };
+  const resources = [resourceA, resourceB];
   const defaultProps = {
     resources,
     show: true,

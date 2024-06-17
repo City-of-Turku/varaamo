@@ -75,6 +75,14 @@ const adminResourceTypesSelector = createSelector(
   resources => uniq(resources.map(resource => resource.type.name))
 );
 
+export const filteredWithoutTypeSelector = createSelector(
+  adminResourcesSelector,
+  currentUserPermissionsSelector,
+  (resources, currentUserPermissions) => resources.filter(
+    resource => includes(currentUserPermissions, resource.unit)
+  )
+);
+
 const filteredAdminResourceSelector = createSelector(
   adminResourcesSelector,
   selectedResourceTypesSelector,
