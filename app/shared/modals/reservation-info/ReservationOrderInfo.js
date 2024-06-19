@@ -6,7 +6,7 @@ import { decamelizeKeys } from 'humps';
 import injectT from '../../../i18n/injectT';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
 import {
-  getOrderTaxTotals, getRoundedVat, getSortedTaxPercentages, roundPriceToTwoDecimals
+  getOrderTaxTotals, getParsedVat, getSortedTaxPercentages, roundPriceToTwoDecimals
 } from '../../../pages/reservation/reservation-products/ReservationProductsUtils';
 import constants from '../../../constants/AppConstants';
 
@@ -16,7 +16,7 @@ function ReservationOrderInfo({
   const orderLines = order.orderLines.map((orderLine) => {
     const name = getLocalizedFieldValue(orderLine.product.name, currentLanguage, true);
     const quantity = `${orderLine.quantity} ${t('common.unitPieces', { unitPieces: orderLine.quantity })}`;
-    const vat = getRoundedVat(orderLine.product.price.taxPercentage);
+    const vat = getParsedVat(orderLine.product.price.taxPercentage);
     const totalPrice = `${t('common.total')} ${t('common.priceWithVAT', { price: orderLine.roundedPrice, vat })}`;
     return (
       <React.Fragment key={orderLine.product.id}>

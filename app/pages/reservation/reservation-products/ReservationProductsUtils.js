@@ -12,6 +12,10 @@ export function getRoundedVat(vat) {
   return Math.round(parseInt(vat, 10));
 }
 
+export function getParsedVat(vat) {
+  return parseFloat(vat);
+}
+
 export function roundPriceToTwoDecimals(price) {
   return Number(price).toFixed(2);
 }
