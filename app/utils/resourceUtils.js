@@ -375,6 +375,36 @@ function rearrangeResources(resources, resourceOrder) {
   return rearranged;
 }
 
+/**
+ * Checks whether given time string is below 24 hours
+ * @param {string} timeString e.g. "01:00:00" or "1 10:00:00"
+ * @returns {boolean} true if time string is below 24 hours
+ */
+function isBelow24Hours(timeString) {
+  if (!timeString) {
+    return false;
+  }
+  const duration = moment.duration(timeString);
+  const twentyFourHours = moment.duration(24, 'hours');
+  return duration.asMilliseconds() < twentyFourHours.asMilliseconds();
+}
+
+/**
+ * Checks whether to show min period or not.
+ * @param {string} minPeriod e.g. "01:00:00" or "1 10:00:00"
+ * @param {boolean} overnightReservations is resource overnight or normal
+ * @returns {boolean} show min period or not
+ */
+function showMinPeriod(minPeriod, overnightReservations) {
+  if (minPeriod && !overnightReservations) {
+    return true;
+  }
+  if (minPeriod && overnightReservations) {
+    return !isBelow24Hours(minPeriod);
+  }
+  return false;
+}
+
 export {
   hasMaxReservations,
   isOpenNow,
@@ -398,4 +428,6 @@ export {
   isAdminForResource,
   isManagerForResource,
   rearrangeResources,
+  isBelow24Hours,
+  showMinPeriod,
 };
