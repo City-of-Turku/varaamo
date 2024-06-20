@@ -63,6 +63,8 @@ describe('reservation-products/ReservationProductsUtils', () => {
       expect(calculateTax(10, 5)).toBe(10 - (10 / 1.05));
       expect(calculateTax(20, 5)).toBe(20 - (20 / 1.05));
       expect(calculateTax(8, 24)).toBe(8 - (8 / 1.24));
+      expect(calculateTax(10, 25.5)).toBe(10 - (10 / 1.255));
+      expect(calculateTax(8, 25.5)).toBe(8 - (8 / 1.255));
     });
   });
 
