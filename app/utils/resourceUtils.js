@@ -288,7 +288,7 @@ function reservingIsRestricted(resource, date) {
     return false;
   }
   const isAdmin = resource.userPermissions && resource.userPermissions.isAdmin;
-  const isLimited = resource.reservableBefore && moment(resource.reservableBefore).isBefore(moment(date), 'day');
+  const isLimited = resource.reservableBefore && moment(resource.reservableBefore).isSameOrBefore(moment(date), 'day');
   return Boolean(isLimited && !isAdmin);
 }
 

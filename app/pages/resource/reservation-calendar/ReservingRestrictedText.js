@@ -7,7 +7,7 @@ import { injectT } from 'i18n';
 function ReservingRestrictedText({ reservableBefore, reservableDaysInAdvance, t }) {
   const dateFormat = 'D.M.YYYY';
   const today = moment().format(dateFormat);
-  const until = moment(reservableBefore).format(dateFormat);
+  const until = moment(reservableBefore).subtract(1, 'day').format(dateFormat);
 
   return (
     <p className="info-text">

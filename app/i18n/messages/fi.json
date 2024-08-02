@@ -256,6 +256,7 @@
   "Notifications.noRightToReserve": "Sinulla ei ole oikeutta tehdä tätä varausta.",
   "Notifications.overnight.notSelectable": "Kyseinen päivä ei ole valittavissa",
   "Notifications.overnight.notSelectableStart": "Kyseistä päivää ei voi valita aloituspäiväksi",
+  "Notifications.reservableLastDay": "Tällä hetkellä viimeinen päivä on {date}.",
   "Notifications.reservationDeleteSuccessMessage": "Varauksen peruminen onnistui.",
   "Notifications.reservationUpdateSuccessMessage": "Varaus päivitetty.",
   "Notifications.resourceOrderPostSuccessful": "Järjestyksen muuttaminen onnistui.",

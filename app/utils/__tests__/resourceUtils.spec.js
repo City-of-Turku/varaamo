@@ -1099,7 +1099,7 @@ describe('Utils: resourceUtils', () => {
       });
     });
 
-    describe('when resource has reservableBefore limit and its before given date', () => {
+    describe('when resource has reservableBefore limit and its same or before given date', () => {
       const reservableBefore = '2016-09-09';
       const date = '2016-10-10';
 
@@ -1107,12 +1107,14 @@ describe('Utils: resourceUtils', () => {
         const resource = { userPermissions: { isAdmin: true }, reservableBefore };
         const isLimited = reservingIsRestricted(resource, date);
         expect(isLimited).toBe(false);
+        expect(reservingIsRestricted(resource, reservableBefore)).toBe(false);
       });
 
       test('returns true if user is a regular user', () => {
         const resource = { userPermissions: { isAdmin: false }, reservableBefore };
         const isLimited = reservingIsRestricted(resource, date);
         expect(isLimited).toBe(true);
+        expect(reservingIsRestricted(resource, reservableBefore)).toBe(true);
       });
     });
   });

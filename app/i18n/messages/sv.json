@@ -258,6 +258,7 @@
   "Notifications.noRightToReserve": "Du har inte rätt att göra denna bokning.",
   "Notifications.overnight.notSelectable": "Den angivna dagen går inte att välja.",
   "Notifications.overnight.notSelectableStart": "Den angivna dagen kan inte väljas som startdatum.",
+  "Notifications.reservableLastDay": "För närvarande är den sista dagen {date}.",
   "Notifications.reservationDeleteSuccessMessage": "Bokningen avbokades.",
   "Notifications.reservationUpdateSuccessMessage": "Bokningen uppdaterades.",
   "Notifications.resourceOrderPostSuccessful": "Ordningändringen lyckades.",
