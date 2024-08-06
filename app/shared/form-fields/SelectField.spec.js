@@ -157,6 +157,7 @@ describe('shared/form-fields/SelectField', () => {
       const wrapper = getWrapper({ universalFieldData });
       const element = wrapper.find('p');
       expect(element).toHaveLength(1);
+      expect(element.prop('className')).toBe('preserve-rows');
       expect(element.text()).toBe(universalFieldData.description);
     });
     test('an img element is rendered if data & data.url exists', () => {
