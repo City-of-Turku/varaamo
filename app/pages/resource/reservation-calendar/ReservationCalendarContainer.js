@@ -204,6 +204,7 @@ export class UnconnectedReservationCalendarContainer extends Component {
         {!isOpen && <p className="info-text closed-text">{t('TimeSlots.closedMessage')}</p>}
         {isOpen && reservingIsRestricted(resource, date) && (
           <ReservingRestrictedText
+            reservableAfter={resource.reservableAfter}
             reservableBefore={resource.reservableBefore}
             reservableDaysInAdvance={resource.reservableDaysInAdvance}
           />

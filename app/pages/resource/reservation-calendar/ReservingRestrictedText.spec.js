@@ -27,4 +27,10 @@ describe('pages/resource/reservation-calendar/ReservingRestrictedText', () => {
     const text = getWrapper().find('p').text();
     expect(text).toContain('ReservingRestrictedText.reservationAvailableBetween');
   });
+
+  test('display the date range when reservableAfter limit is given', () => {
+    const reservableAfter = '2015-10-01';
+    const text = getWrapper({ reservableAfter }).find('p').text();
+    expect(text).toContain('ReservingRestrictedText.reservationAvailableBetween');
+  });
 });
