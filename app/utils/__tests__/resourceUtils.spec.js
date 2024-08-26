@@ -27,7 +27,10 @@ import {
   isStaffForResource,
   isStrongAuthSatisfied,
   isAdminForResource,
-  isManagerForResource
+  isManagerForResource,
+  rearrangeResources,
+  isBelow24Hours,
+  showMinPeriod
 } from 'utils/resourceUtils';
 import { getPrettifiedPeriodUnits } from '../timeUtils';
 import Product from '../fixtures/Product';
@@ -1200,6 +1203,51 @@ describe('Utils: resourceUtils', () => {
         const hasStrongAuth = false;
         expect(isStrongAuthSatisfied(resource, hasStrongAuth)).toBe(true);
       });
+    });
+  });
+
+  describe('rearrangeResources', () => {
+    test('returns correct order', () => {
+      const resources = ['id1', 'id2', 'id3'];
+      const resourceOrder = ['id3', 'id2', 'id1'];
+      expect(rearrangeResources(resources, resourceOrder))
+        .toEqual(resourceOrder);
+      expect(rearrangeResources(resources, ['id3', 'id2']))
+        .toEqual(resourceOrder);
+      expect(rearrangeResources(resources, ['id3',]))
+        .toEqual(['id3', 'id1', 'id2']);
+      expect(rearrangeResources(resources, ['id5',]))
+        .toEqual(['id1', 'id2', 'id3']);
+      expect(rearrangeResources(resources, ['id5', 'id2']))
+        .toEqual(['id2', 'id1', 'id3']);
+      expect(rearrangeResources(resources, []))
+        .toEqual(['id1', 'id2', 'id3']);
+    });
+  });
+
+  describe('isBelow24Hours', () => {
+    test('returns true when given date is below 24 hours', () => {
+      expect(isBelow24Hours('01:00:00')).toBe(true);
+      expect(isBelow24Hours('00:00:00')).toBe(true);
+      expect(isBelow24Hours('00:30:00')).toBe(true);
+      expect(isBelow24Hours('23:00:00')).toBe(true);
+      expect(isBelow24Hours('1 00:00:00')).toBe(false);
+      expect(isBelow24Hours('1 01:00:00')).toBe(false);
+      expect(isBelow24Hours(undefined)).toBe(false);
+    });
+  });
+
+  describe('showMinPeriod', () => {
+    test('returns correct result', () => {
+      expect(showMinPeriod('01:00:00', false)).toBe(true);
+      expect(showMinPeriod('00:30:00', false)).toBe(true);
+      expect(showMinPeriod('1 00:30:00', false)).toBe(true);
+      expect(showMinPeriod(undefined, false)).toBe(false);
+      expect(showMinPeriod('01:00:00', true)).toBe(false);
+      expect(showMinPeriod('00:30:00', true)).toBe(false);
+      expect(showMinPeriod('1 00:30:00', true)).toBe(true);
+      expect(showMinPeriod(undefined, true)).toBe(false);
+      expect(showMinPeriod(undefined, undefined)).toBe(false);
     });
   });
 });

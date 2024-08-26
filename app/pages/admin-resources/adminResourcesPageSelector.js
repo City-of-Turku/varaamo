@@ -11,9 +11,12 @@ import {
   isAdminSelector,
   isLoggedInSelector,
   isManagerForSelector,
+  userAdminResourceOrderSelector
 } from 'state/selectors/authSelectors';
 import { resourcesSelector, unitsSelector } from 'state/selectors/dataSelectors';
 import requestIsActiveSelectorFactory from 'state/selectors/factories/requestIsActiveSelectorFactory';
+import { rearrangeResources } from '../../utils/resourceUtils';
+import { fontSizeSelector } from '../../state/selectors/accessibilitySelectors';
 
 const dateSelector = state => state.ui.pages.adminResources.date || moment().format('YYYY-MM-DD');
 const resourceIdsSelector = state => state.ui.pages.adminResources.resourceIds;
@@ -72,6 +75,14 @@ const adminResourceTypesSelector = createSelector(
   resources => uniq(resources.map(resource => resource.type.name))
 );
 
+export const filteredWithoutTypeSelector = createSelector(
+  adminResourcesSelector,
+  currentUserPermissionsSelector,
+  (resources, currentUserPermissions) => resources.filter(
+    resource => includes(currentUserPermissions, resource.unit)
+  )
+);
+
 const filteredAdminResourceSelector = createSelector(
   adminResourcesSelector,
   selectedResourceTypesSelector,
@@ -100,7 +111,8 @@ const filteredExternalResourcesSelector = createSelector(
 );
 const filteredAdminResourcesIdsSelector = createSelector(
   filteredAdminResourceSelector,
-  resources => sortBy(resources, 'name').map(res => res.id),
+  userAdminResourceOrderSelector,
+  (resources, order) => rearrangeResources(sortBy(resources, 'name').map(res => res.id), order),
 );
 
 const adminResourcesPageSelector = createStructuredSelector({
@@ -114,6 +126,7 @@ const adminResourcesPageSelector = createStructuredSelector({
   resources: filteredAdminResourcesIdsSelector,
   resourceTypes: adminResourceTypesSelector,
   externalResources: filteredExternalResourcesSelector,
+  fontSize: fontSizeSelector,
 });
 
 export default adminResourcesPageSelector;

@@ -23,7 +23,8 @@ import ResourceCalendar from 'shared/resource-calendar';
 import { injectT } from 'i18n';
 import userManager from 'utils/userManager';
 import {
-  getMaxPeriodText, getResourcePageUrl, getMinPeriodText, getEquipment
+  getMaxPeriodText, getResourcePageUrl, getMinPeriodText, getEquipment,
+  showMinPeriod
 } from 'utils/resourceUtils';
 import ReservationCalendar from './reservation-calendar';
 import ResourceHeader from './resource-header';
@@ -321,10 +322,10 @@ class UnconnectedResourcePage extends Component {
                     {!resource.externalReservationUrl && (
                     <div>
                       {/* Show reservation min period text */}
-                      {resource.minPeriod && (
-                      <div className="app-ResourcePage__content-min-period">
-                        <p>{`${t('ReservationInfo.reservationMinLength')} ${minPeriodText}`}</p>
-                      </div>
+                      {showMinPeriod(resource.minPeriod, resource.overnightReservations) && (
+                        <div className="app-ResourcePage__content-min-period">
+                          <p>{`${t('ReservationInfo.reservationMinLength')} ${minPeriodText}`}</p>
+                        </div>
                       )}
                       {/* Show reservation max period text */}
                       {resource.maxPeriod && (

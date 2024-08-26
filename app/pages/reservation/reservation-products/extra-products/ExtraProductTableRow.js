@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import injectT from '../../../../i18n/injectT';
 import QuantityInput from './QuantityInput';
-import { getRoundedVat, getTimeSlotsForCustomerGroup } from '../ReservationProductsUtils';
+import { getParsedVat, getTimeSlotsForCustomerGroup } from '../ReservationProductsUtils';
 import { getPrettifiedPeriodUnits } from 'utils/timeUtils';
 import { getLocalizedFieldValue } from 'utils/languageUtils';
 import ProductTimeSlotPrices from '../product-time-slots/ProductTimeSlotPrices';
@@ -20,8 +20,8 @@ function ExtraProductTableRow({
   const type = orderLine.product.price.type;
   const vat = orderLine.product.price.tax_percentage;
 
-  const roundedVat = getRoundedVat(vat);
-  const vatText = t('ReservationProducts.price.includesVat', { vat: roundedVat });
+  const parsedVat = getParsedVat(vat);
+  const vatText = t('ReservationProducts.price.includesVat', { vat: parsedVat });
 
   const filteredtimeSlotPrices = getTimeSlotsForCustomerGroup(
     currentCustomerGroup, orderLine.product.product_customer_groups,

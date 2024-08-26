@@ -7,6 +7,7 @@ import AvailabilityView from 'shared/availability-view';
 import ResourceTypeFilter from 'shared/resource-type-filter';
 import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedAdminResourcesPage as AdminResourcesPage } from './AdminResourcesPage';
+import ResourceOrderModal from '../../shared/modals/resource-admin-order/ResourceOrderModal';
 
 describe('pages/admin-resources/AdminResourcesPage', () => {
   const changeAdminResourcesPageDate = simple.stub();
@@ -37,6 +38,7 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
     resources: [],
     resourceTypes: ['a', 'b', 'c'],
     externalResources: [],
+    fontSize: '__font-size-small',
   };
 
   function getWrapper(extraProps = {}) {
@@ -71,6 +73,16 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
       test('displays correct title inside h1 tags', () => {
         const h1 = getIsAdminWrapper().find('h1');
         expect(h1.text()).toBe('AdminResourcesPage.adminTitle');
+      });
+
+      test('resource order button', () => {
+        const wrapper = getIsAdminWrapper();
+        const instance = wrapper.instance();
+        const orderBtn = wrapper.find('#resource-order-btn');
+        expect(orderBtn).toHaveLength(1);
+        expect(orderBtn.prop('children')).toBe('ResourceOrder.label');
+        expect(orderBtn.prop('onClick')).toBe(instance.openAdminResourceOrder);
+        expect(orderBtn.prop('className')).toBe(defaultProps.fontSize);
       });
 
       describe('Loader', () => {
@@ -160,6 +172,22 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
           expect(resourceTypeFilter.prop('toggleShowExternalResources')).toBe(instance.toggleShowExternalResources);
           expect(resourceTypeFilter.prop('externalResources')).toBe(externalResources);
           expect(resourceTypeFilter.prop('showExternalResources')).toBe(true);
+        });
+      });
+      describe('ResourceOrderModal', () => {
+        test('renders when showResourceOrder is true', () => {
+          const wrapper = getIsAdminWrapper();
+          const instance = wrapper.instance();
+          instance.openAdminResourceOrder();
+          const resourceOrderModal = wrapper.find(ResourceOrderModal);
+          expect(resourceOrderModal).toHaveLength(1);
+          expect(resourceOrderModal.prop('show')).toBe(true);
+          expect(resourceOrderModal.prop('onClose')).toBe(instance.closeAdminResourceOrder);
+        });
+        test('does not render when showResourceOrder is false', () => {
+          const wrapper = getIsAdminWrapper();
+          const resourceOrderModal = wrapper.find(ResourceOrderModal);
+          expect(resourceOrderModal).toHaveLength(0);
         });
       });
     });
@@ -365,6 +393,24 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
       const wrapper = getWrapper();
       wrapper.instance().handleSelect({});
       expect(openConfirmReservationModal.callCount).toBe(1);
+    });
+  });
+
+  describe('openAdminResourceOrder', () => {
+    test('sets showResourceOrder to true', () => {
+      const wrapper = getWrapper();
+      wrapper.setState({ showResourceOrder: false });
+      wrapper.instance().openAdminResourceOrder();
+      expect(wrapper.state('showResourceOrder')).toBe(true);
+    });
+  });
+
+  describe('closeAdminResourceOrder', () => {
+    test('sets showResourceOrder to false', () => {
+      const wrapper = getWrapper();
+      wrapper.setState({ showResourceOrder: true });
+      wrapper.instance().closeAdminResourceOrder();
+      expect(wrapper.state('showResourceOrder')).toBe(false);
     });
   });
 });

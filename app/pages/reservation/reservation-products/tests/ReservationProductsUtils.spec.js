@@ -6,6 +6,7 @@ import Resource from 'utils/fixtures/Resource';
 import TimeSlotPriceFixture from 'utils/fixtures/TimeSlotPriceFixture';
 import {
   calculateTax, compareTaxPercentages, getAllowedCustomerGroups, getOrderTaxTotals,
+  getParsedVat,
   getProductsOfType, getRoundedVat, getSortedTaxPercentages, getTimeSlotMinMaxPrices,
   getTimeSlotsForCustomerGroup, getUniqueCustomerGroups,
   isCustomerGroupInProductCustomerGroups, roundPriceToTwoDecimals
@@ -17,6 +18,18 @@ describe('reservation-products/ReservationProductsUtils', () => {
       expect(getRoundedVat('10.00')).toBe(10);
       expect(getRoundedVat(12.00)).toBe(12);
       expect(getRoundedVat('0.00')).toBe(0);
+    });
+  });
+
+  describe('getParsedVat', () => {
+    test('returns parsed vat number', () => {
+      expect(getParsedVat('10.00')).toBe(10);
+      expect(getParsedVat(12.00)).toBe(12);
+      expect(getParsedVat(12.10)).toBe(12.1);
+      expect(getParsedVat(12.13)).toBe(12.13);
+      expect(getParsedVat('25.50')).toBe(25.5);
+      expect(getParsedVat(25.50)).toBe(25.5);
+      expect(getParsedVat('0.00')).toBe(0);
     });
   });
 
@@ -50,6 +63,8 @@ describe('reservation-products/ReservationProductsUtils', () => {
       expect(calculateTax(10, 5)).toBe(10 - (10 / 1.05));
       expect(calculateTax(20, 5)).toBe(20 - (20 / 1.05));
       expect(calculateTax(8, 24)).toBe(8 - (8 / 1.24));
+      expect(calculateTax(10, 25.5)).toBe(10 - (10 / 1.255));
+      expect(calculateTax(8, 25.5)).toBe(8 - (8 / 1.255));
     });
   });
 

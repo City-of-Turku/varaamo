@@ -12,6 +12,10 @@ export function getRoundedVat(vat) {
   return Math.round(parseInt(vat, 10));
 }
 
+export function getParsedVat(vat) {
+  return parseFloat(vat);
+}
+
 export function roundPriceToTwoDecimals(price) {
   return Number(price).toFixed(2);
 }
@@ -34,7 +38,7 @@ export function getProductsOfType(orderLines, type) {
  */
 export function calculateTax(price, taxPercentage) {
   const numPrice = Number(price);
-  const numTaxPercentage = parseInt(taxPercentage, 10);
+  const numTaxPercentage = parseFloat(taxPercentage);
   return numPrice - (numPrice / ((100 + numTaxPercentage) / 100));
 }
 

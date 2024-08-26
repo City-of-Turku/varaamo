@@ -164,16 +164,16 @@ class ReservationInfoModal extends Component {
               {t('ReservationInfoModal.confirmButton')}
             </Button>
           )}
-          {isStaff && reservationIsEditable
-           && reservation.state === constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT && (
-           <Button
-             bsStyle="success"
-             className={fontSize}
-             disabled={disabled}
-             onClick={onConfirmClick}
-           >
-             {t('common.confirmCashPayment')}
-           </Button>
+          {isStaff
+            && reservation.state === constants.RESERVATION_STATE.WAITING_FOR_CASH_PAYMENT && (
+            <Button
+              bsStyle="success"
+              className={fontSize}
+              disabled={disabled}
+              onClick={onConfirmClick}
+            >
+              {t('common.confirmCashPayment')}
+            </Button>
           )}
           {showCancelButton && (
             <Button

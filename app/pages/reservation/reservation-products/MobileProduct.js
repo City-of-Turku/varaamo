@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import injectT from '../../../i18n/injectT';
 import QuantityInput from './extra-products/QuantityInput';
 import { getPrettifiedPeriodUnits } from '../../../utils/timeUtils';
-import { getRoundedVat, getTimeSlotsForCustomerGroup, PRODUCT_TYPES } from './ReservationProductsUtils';
+import {
+  getParsedVat, getTimeSlotsForCustomerGroup, PRODUCT_TYPES
+} from './ReservationProductsUtils';
 import { getLocalizedFieldValue } from '../../../utils/languageUtils';
 import ProductTimeSlotPrices from './product-time-slots/ProductTimeSlotPrices';
 
@@ -42,7 +44,7 @@ function MandatoryProduct({ filteredtimeSlotPrices, order, t }) {
     type, period, amount: basePrice, tax_percentage: vat
   } = order.product.price;
 
-  const vatText = t('ReservationProducts.price.includesVat', { vat: getRoundedVat(vat) });
+  const vatText = t('ReservationProducts.price.includesVat', { vat: getParsedVat(vat) });
 
   return (
     <React.Fragment>
@@ -82,7 +84,7 @@ function ExtraProduct({
   const { amount: unitPrice, tax_percentage: vat } = order.product.price;
   const { quantity, rounded_price: totalPrice } = order;
   const maxQuantity = order.product.max_quantity;
-  const vatText = t('ReservationProducts.price.includesVat', { vat: getRoundedVat(vat) });
+  const vatText = t('ReservationProducts.price.includesVat', { vat: getParsedVat(vat) });
 
   return (
     <React.Fragment>
