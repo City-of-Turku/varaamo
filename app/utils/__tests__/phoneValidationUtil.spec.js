@@ -16,6 +16,13 @@ describe('Utils: phoneValidationUtil', () => {
           expect(isValidPhoneNumber('+123-123123')).toBe(false);
         });
       });
+      describe('returns true', () => {
+        test('when valid number has spaces', () => {
+          expect(isValidPhoneNumber('55 555555')).toBe(true);
+          expect(isValidPhoneNumber('32 123123')).toBe(true);
+          expect(isValidPhoneNumber('32 123 123')).toBe(true);
+        });
+      });
     });
 
     describe('when number does not contains non numbers excluding first + char', () => {

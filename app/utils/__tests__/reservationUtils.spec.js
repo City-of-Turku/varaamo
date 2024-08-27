@@ -31,6 +31,7 @@ import {
   isManuallyConfirmedWithOrderAllowed,
   normalizeUniversalFieldOptions,
   mapReservationErrors,
+  formatPhone
 } from 'utils/reservationUtils';
 import { buildAPIUrl, getHeadersCreator } from '../apiUtils';
 import Product from '../fixtures/Product';
@@ -795,6 +796,13 @@ describe('Utils: reservationUtils', () => {
           },
         ]);
       });
+    });
+  });
+
+  describe('formatPhone', () => {
+    test('removes all whitespace characters from phone number', () => {
+      const phone = '  040 1234567  ';
+      expect(formatPhone(phone)).toBe('0401234567');
     });
   });
 });

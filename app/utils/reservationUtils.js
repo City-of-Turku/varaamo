@@ -418,6 +418,16 @@ function mapReservationErrors(errors, universalFields) {
   return mappedErrors.sort((a, b) => a.order - b.order);
 }
 
+/**
+ * Formats given phone number by removing all whitespace characters
+ * @param {string} phoneNum
+ * @returns {string} formatted phone number
+ */
+function formatPhone(phoneNum) {
+  if (!phoneNum) return phoneNum;
+  return phoneNum.replace(/\s/g, '');
+}
+
 export {
   combine,
   isStaffEvent,
@@ -443,4 +453,5 @@ export {
   isManuallyConfirmedWithOrderAllowed,
   normalizeUniversalFieldOptions,
   mapReservationErrors,
+  formatPhone,
 };

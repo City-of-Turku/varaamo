@@ -1,8 +1,8 @@
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
 export function isValidPhoneNumber(number) {
-  // only allow numbers and + if its the first char
-  const regex = /^([+]\d*|\d*)$/;
+  // only allow numbers, spaces and + if it's the first char
+  const regex = /^(\+?\d[\d\s]*)$/;
   if (regex.test(number) === false) {
     return false;
   }
