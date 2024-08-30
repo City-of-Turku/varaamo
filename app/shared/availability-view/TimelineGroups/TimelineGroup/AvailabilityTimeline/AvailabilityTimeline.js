@@ -32,6 +32,14 @@ export default class AvailabilityTimeline extends React.Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.openingHours?.opens !== this.props.openingHours?.opens) {
+      this.setState({
+        possibleTimes: calcPossibleTimes(this.props.slotSize, this.props.openingHours?.opens)
+      });
+    }
+  }
+
   shouldComponentUpdate(nextProps) {
     const isSelected = nextProps.selection && nextProps.selection.resourceId === this.props.id;
     const wasSelected = this.props.selection && this.props.selection.resourceId === this.props.id;

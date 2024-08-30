@@ -21,11 +21,24 @@ function getWrapper(props) {
 }
 
 describe('shared/availability-view/AvailabilityTimeline', () => {
-  test('has correct possibleTimes state', () => {
+  test('has correct initial possibleTimes state', () => {
     const wrapper = getWrapper();
     const instance = wrapper.instance();
     const expected = calcPossibleTimes(instance.props.slotSize, instance.props.openingHours.opens);
     expect(instance.state.possibleTimes).toStrictEqual(expected);
+  });
+
+  test('possibleTimes is updated via componentDidUpdate on openingHours change', () => {
+    const wrapper = getWrapper();
+    const prevProps = wrapper.props();
+    const instance = wrapper.instance();
+    const spy = jest.spyOn(instance, 'setState');
+    const newOpeningHours = { opens: '2024-06-21T08:30:00+03:00' };
+    const expected = calcPossibleTimes(instance.props.slotSize, newOpeningHours.opens);
+    wrapper.setProps({ openingHours: newOpeningHours });
+    instance.componentDidUpdate(prevProps);
+    expect(spy).toHaveBeenCalledWith({ possibleTimes: expected });
+    expect(instance.state.possibleTimes).toEqual(expected);
   });
 
   test('renders a div.availability-timeline', () => {
