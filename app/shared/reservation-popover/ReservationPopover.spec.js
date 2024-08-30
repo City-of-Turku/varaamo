@@ -13,6 +13,7 @@ function getWrapper(props) {
     onCancel: simple.stub(),
     begin: '2016-01-01T10:00:00Z',
     end: '2016-01-01T12:00:00Z',
+    notValidTime: false,
   };
   return shallowWithIntl(<ReservationPopover {...defaultProps} {...props} />);
 }
@@ -74,6 +75,17 @@ describe('shared/reservation-popover/ReservationPopover', () => {
       const span = getInternalPopover().find('.reservation-popover__limits');
       expect(span.length).toBe(0);
     });
+  });
+
+  test('renders warning when notValidTime is true', () => {
+    const span = getInternalPopover({ notValidTime: true }).find('.reservation-popover__length.limit-alert');
+    expect(span.length).toBe(1);
+    expect(span.text()).toBe('ReservationPopover.slotAlignWarning');
+  });
+
+  test('does not render slot align warning when notValidTime is false', () => {
+    const span = getInternalPopover({ notValidTime: false }).find('.reservation-popover__length.limit-alert');
+    expect(span.length).toBe(0);
   });
 
   test('renders cancel icon', () => {

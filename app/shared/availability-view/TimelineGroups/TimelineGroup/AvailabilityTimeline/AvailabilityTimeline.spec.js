@@ -5,16 +5,29 @@ import React from 'react';
 import AvailabilityTimeline from './AvailabilityTimeline';
 import Reservation from './Reservation';
 import ReservationSlot from './ReservationSlot';
+import { calcPossibleTimes } from './availabilityTimelineUtils';
 
 function getWrapper(props) {
   const defaults = {
     id: 'resource-id',
     items: [],
+    slotSize: '00:30:00',
+    openingHours: {
+      closes: '2024-06-20T20:00:00+03:00',
+      opens: '2024-06-20T07:00:00+03:00',
+    },
   };
   return shallow(<AvailabilityTimeline {...defaults} {...props} />);
 }
 
 describe('shared/availability-view/AvailabilityTimeline', () => {
+  test('has correct possibleTimes state', () => {
+    const wrapper = getWrapper();
+    const instance = wrapper.instance();
+    const expected = calcPossibleTimes(instance.props.slotSize, instance.props.openingHours.opens);
+    expect(instance.state.possibleTimes).toStrictEqual(expected);
+  });
+
   test('renders a div.availability-timeline', () => {
     const wrapper = getWrapper();
     expect(wrapper.is('div.availability-timeline')).toBe(true);
@@ -36,12 +49,14 @@ describe('shared/availability-view/AvailabilityTimeline', () => {
       onReservationSlotMouseEnter,
       onReservationSlotMouseLeave,
     });
+    const instance = wrapper.instance();
     const slot = wrapper.find(ReservationSlot);
     expect(slot).toHaveLength(1);
     expect(slot.prop('resourceId')).toBe(id);
     expect(slot.prop('onClick')).toBe(onReservationSlotClick);
     expect(slot.prop('onMouseEnter')).toBe(onReservationSlotMouseEnter);
     expect(slot.prop('onMouseLeave')).toBe(onReservationSlotMouseLeave);
+    expect(slot.prop('possibleTimes')).toBe(instance.state.possibleTimes);
   });
 
   test('renders given reservation', () => {

@@ -389,6 +389,7 @@
   "ReservationPhase.confirmationTitle": "Valmis",
   "ReservationPhase.paymentTitle": "Maksu",
   "ReservationPopover.selectionInfoHeader": "Valitse varauksen päättymisajankohta",
+  "ReservationPopover.slotAlignWarning": "Valittu aikaväli ei toimi resurssin aikaslottien kanssa! Tarkista resurssin tiedot tai katso asiakaskalenterista mallia.",
   "ReservationPopover.minPeriod": "Varauksen kesto vähintään:",
   "ReservationPopover.maxPeriod": "Varauksen kesto korkeintaan:",
   "ReservationProducts.button.addOne": "Lisää yksi",

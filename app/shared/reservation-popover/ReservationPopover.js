@@ -11,7 +11,7 @@ import { isDurationWithinLimits } from './reservationPopoverUtils';
 class ReservationPopover extends PureComponent {
   render() {
     const {
-      begin, children, end, onCancel, t, minPeriod, maxPeriod
+      begin, children, end, onCancel, t, minPeriod, maxPeriod, notValidTime
     } = this.props;
     const reservationLength = end ? moment.duration(moment(end).diff(moment(begin))) : null;
     const minPeriodMoment = minPeriod ? moment(minPeriod, 'hh:mm:ss') : null;
@@ -61,6 +61,11 @@ class ReservationPopover extends PureComponent {
           </span>
         )}
 
+        {notValidTime && (
+          <span className="reservation-popover__length limit-alert">
+            {t('ReservationPopover.slotAlignWarning')}
+          </span>
+        )}
 
         <Glyphicon className="reservation-popover__cancel" glyph="trash" onClick={onCancel} />
       </Popover>
@@ -81,6 +86,7 @@ ReservationPopover.propTypes = {
   t: PropTypes.func.isRequired,
   minPeriod: PropTypes.string,
   maxPeriod: PropTypes.string,
+  notValidTime: PropTypes.bool.isRequired,
 };
 
 ReservationPopover.defaultProps = {

@@ -3,6 +3,7 @@ import React from 'react';
 
 import Reservation from './Reservation';
 import ReservationSlot from './ReservationSlot';
+import { calcPossibleTimes } from './availabilityTimelineUtils';
 
 export default class AvailabilityTimeline extends React.Component {
   static propTypes = {
@@ -20,7 +21,16 @@ export default class AvailabilityTimeline extends React.Component {
     onReservationSlotMouseLeave: PropTypes.func,
     onSelectionCancel: PropTypes.func,
     selection: PropTypes.object,
+    slotSize: PropTypes.string,
+    openingHours: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      possibleTimes: calcPossibleTimes(props.slotSize, props.openingHours?.opens)
+    };
+  }
 
   shouldComponentUpdate(nextProps) {
     const isSelected = nextProps.selection && nextProps.selection.resourceId === this.props.id;
@@ -49,6 +59,7 @@ export default class AvailabilityTimeline extends React.Component {
                 onMouseEnter={onReservationSlotMouseEnter}
                 onMouseLeave={onReservationSlotMouseLeave}
                 onSelectionCancel={onSelectionCancel}
+                possibleTimes={this.state.possibleTimes}
                 resourceId={this.props.id}
                 selection={selection}
               />
