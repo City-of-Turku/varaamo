@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { injectT } from 'i18n';
 import ReservationPopover from 'shared/reservation-popover';
 import utils from '../utils';
+import { isValidSelection } from './availabilityTimelineUtils';
 
 export class UninjectedReservationSlot extends React.Component {
   static propTypes = {
@@ -25,6 +26,7 @@ export class UninjectedReservationSlot extends React.Component {
     maxPeriod: PropTypes.string,
     minPeriod: PropTypes.string,
     hasStaffRights: PropTypes.bool,
+    possibleTimes: PropTypes.arrayOf(PropTypes.string)
   };
 
   constructor(props) {
@@ -112,6 +114,7 @@ export class UninjectedReservationSlot extends React.Component {
           end={this.props.selection.end}
           maxPeriod={this.props.hasStaffRights ? null : this.props.maxPeriod}
           minPeriod={this.props.hasStaffRights ? null : this.props.minPeriod}
+          notValidTime={!isValidSelection(this.props.selection, this.props.possibleTimes)}
           onCancel={this.props.onSelectionCancel}
         >
           {slot}

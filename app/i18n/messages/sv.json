@@ -392,6 +392,7 @@
   "ReservationPhase.confirmationTitle": "Färdig",
   "ReservationPhase.paymentTitle": "Betalning",
   "ReservationPopover.selectionInfoHeader": "Välj evenemangets sluttid",
+  "ReservationPopover.slotAlignWarning": "Det valda tidsintervallet stämmer inte överens med resursens tidsluckor! Kontrollera resursens detaljer eller titta på kundkalendern för ett exempel.",
   "ReservationPopover.minPeriod": "Bokningens minimitid:",
   "ReservationPopover.maxPeriod": "Bokningens maximitid:",
   "ReservationProducts.button.addOne": "Lägg till ett",

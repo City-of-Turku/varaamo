@@ -390,6 +390,7 @@
   "ReservationPhase.confirmationTitle": "Ready",
   "ReservationPhase.paymentTitle": "Payment",
   "ReservationPopover.selectionInfoHeader": "Select the reservation's end time",
+  "ReservationPopover.slotAlignWarning": "The selected time slot does not align with the resource's time slots! Please check the resource details or refer to the customer calendar for an example.",
   "ReservationPopover.minPeriod": "Reservation minimum length",
   "ReservationPopover.maxPeriod": "Reservation maximum length",
   "ReservationProducts.button.addOne": "Add one",
