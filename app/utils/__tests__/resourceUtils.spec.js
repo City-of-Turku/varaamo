@@ -30,7 +30,8 @@ import {
   isManagerForResource,
   rearrangeResources,
   isBelow24Hours,
-  showMinPeriod
+  showMinPeriod,
+  getNaiveDate
 } from 'utils/resourceUtils';
 import { getPrettifiedPeriodUnits } from '../timeUtils';
 import Product from '../fixtures/Product';
@@ -1116,6 +1117,30 @@ describe('Utils: resourceUtils', () => {
         expect(isLimited).toBe(true);
         expect(reservingIsRestricted(resource, reservableBefore)).toBe(true);
       });
+    });
+  });
+
+  describe('getNaiveDate', () => {
+    test('returns the date part of a valid datetime string', () => {
+      expect(getNaiveDate('2024-11-03T00:00:00+03:00')).toBe('2024-11-03');
+    });
+
+    test('returns an empty string for falsy values', () => {
+      expect(getNaiveDate('')).toBe('');
+      expect(getNaiveDate(null)).toBe('');
+      expect(getNaiveDate(undefined)).toBe('');
+    });
+
+    test('handles datetime strings without timezone information', () => {
+      expect(getNaiveDate('2024-11-03T00:00:00')).toBe('2024-11-03');
+    });
+
+    test('handles datetime strings with milliseconds', () => {
+      expect(getNaiveDate('2024-11-03T00:00:00.123Z')).toBe('2024-11-03');
+    });
+
+    test('returns the entire string if it does not contain a "T" separator', () => {
+      expect(getNaiveDate('2024-11-03')).toBe('2024-11-03');
     });
   });
 

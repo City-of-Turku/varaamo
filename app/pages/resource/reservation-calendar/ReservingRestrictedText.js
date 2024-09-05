@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { injectT } from 'i18n';
+import { getNaiveDate } from '../../../utils/resourceUtils';
 
 function ReservingRestrictedText({
   reservableAfter, reservableBefore, reservableDaysInAdvance, t
@@ -10,7 +11,8 @@ function ReservingRestrictedText({
   const dateFormat = 'D.M.YYYY';
   const today = moment().format(dateFormat);
   const from = reservableAfter ? moment(reservableAfter).format(dateFormat) : today;
-  const until = moment(reservableBefore).subtract(1, 'day').format(dateFormat);
+  const reservableDate = moment(getNaiveDate(reservableBefore), 'YYYY-MM-DD');
+  const until = reservableDate.subtract(1, 'days').format(dateFormat);
 
   return (
     <p className="info-text">

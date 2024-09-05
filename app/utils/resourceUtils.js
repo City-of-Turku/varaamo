@@ -288,8 +288,19 @@ function reservingIsRestricted(resource, date) {
     return false;
   }
   const isAdmin = resource.userPermissions && resource.userPermissions.isAdmin;
-  const isLimited = resource.reservableBefore && moment(resource.reservableBefore).isSameOrBefore(moment(date), 'day');
+  const isLimited = resource.reservableBefore
+    && moment(getNaiveDate(resource.reservableBefore), 'YYYY-MM-DD').isSameOrBefore(moment(date), 'day');
   return Boolean(isLimited && !isAdmin);
+}
+
+/**
+ * Returns naive date part of the datetime string.
+ * @param {string} datetime e.g. 2024-11-03T00:00:00+03:00
+ * @returns {string} e.g. 2024-11-03 or empty string if datetime is falsy
+ */
+function getNaiveDate(datetime) {
+  if (datetime) return datetime.split('T')[0];
+  return '';
 }
 
 /**
@@ -430,4 +441,5 @@ export {
   rearrangeResources,
   isBelow24Hours,
   showMinPeriod,
+  getNaiveDate,
 };
