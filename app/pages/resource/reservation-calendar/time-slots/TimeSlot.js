@@ -7,6 +7,7 @@ import { injectT } from 'i18n';
 import { scrollTo } from 'utils/domUtils';
 import { padLeft } from 'utils/timeUtils';
 import { isSlotReservable } from '../utils';
+import { getNaiveDate } from '../../../../utils/resourceUtils';
 
 class TimeSlot extends PureComponent {
   static propTypes = {
@@ -163,7 +164,7 @@ class TimeSlot extends PureComponent {
     }
     if (resource.reservableBefore && moment(slot.start).isAfter(resource.reservableBefore)) {
       const dateFormat = 'D.M.YYYY';
-      const lastDate = moment(resource.reservableBefore).subtract(1, 'day').format(dateFormat);
+      const lastDate = moment(getNaiveDate(resource.reservableBefore), 'YYYY-MM-DD').subtract(1, 'day').format(dateFormat);
       const msg = `${t('ReservingRestrictedText.reservationRestricted', { days: resource.reservableDaysInAdvance })} ${t('Notifications.reservableLastDay', { date: lastDate })}`;
       return {
         message: msg,
