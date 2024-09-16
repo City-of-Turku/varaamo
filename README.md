@@ -3,16 +3,14 @@ Varaamo
 
 [![GitHub Actions](https://github.com/city-of-turku/varaamo/actions/workflows/varaamo.yml/badge.svg?branch=develop)](https://github.com/city-of-turku/varaamo/actions/workflows/varaamo.yml)
 [![CodeQL](https://github.com/City-of-Turku/varaamo/actions/workflows/codeql-analysis.yml/badge.svg?branch=develop)](https://github.com/City-of-Turku/varaamo/actions/workflows/codeql-analysis.yml)
-[![codecov](https://codecov.io/gh/city-of-turku/varaamo/branch/develop/graph/badge.svg)](https://codecov.io/gh/city-of-turku/varaamo)
 
-User interface for the City of Turku [varaamo.turku.fi](https://varaamo.turku.fi/) resource reservation service. Uses the [respa API](https://varaamo.turku.fi:5010/v1/).
+User interface for the City of Turku [varaamo.turku.fi](https://varaamo.turku.fi/) resource reservation service. Uses the [Respa API](https://respa.turku.fi/v1/).
 
-Recommended requirements
+Requirements
 ------------
 
-- [node](http://nodejs.org/) `>=18.14.2` | Suggestion: `18.14.2`
-- [npm](https://www.npmjs.com/) `>=6.14` | Suggestion: `6.14.16`
-- [yarn](https://yarnpkg.com/) Optional, if `yarn` is not included as part of your current node version. `npm` can be used.
+- [Node](http://nodejs.org/) v18 LTS
+- [npm](https://www.npmjs.com/) at minimum the version that comes with Node
 
 Architecture
 ------------
