@@ -1,9 +1,9 @@
 .about-page {
   max-width: 600px;
 
-}
-p.lead {
-  font-size: 1.125em;
+  p {
+    margin: 0 0 12px;
+  }
 }
 
 @media(max-width:$screen-400-min - 50) {
