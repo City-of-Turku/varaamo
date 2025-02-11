@@ -89,7 +89,7 @@
     "resolve-url-loader": "5.0.0",
     "sass-loader": "13.2.0",
     "seamless-immutable": "7.1.4",
-    "serialize-javascript": "4.0.0",
+    "serialize-javascript": "6.0.2",
     "validator": "13.7.0",
     "webpack": "5.94.0",
     "webpack-cli": "5.0.1",
