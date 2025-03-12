@@ -48,6 +48,4 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 8080
 
-# set user to not be root
-USER node
 CMD ["node", "server/index.js"]
