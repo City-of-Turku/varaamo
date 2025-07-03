@@ -76,7 +76,7 @@ module.exports = merge(common, {
         API_URL: JSON.stringify('https://testirespa.turku.fi/v1'),
         SHOW_TEST_SITE_MESSAGE: Boolean(true),
         TRACKING: Boolean(process.env.MATOMO_SITE_ID),
-        TRACKING_ID: JSON.stringify(process.env.MATOMO_SITE_ID),
+        TRACKING_ID: JSON.stringify(process.env.MATOMO_SITE_ID || "3"),
         CUSTOM_MUNICIPALITY_OPTIONS: process.env.CUSTOM_MUNICIPALITY_OPTIONS,
         CLIENT_ID: JSON.stringify('7f80c6cd-d10c-4345-850b-c86aec3a0e98'),
         OPENID_AUDIENCE: JSON.stringify('https://auth.turku.fi/respa'),
