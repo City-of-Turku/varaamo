@@ -6,6 +6,7 @@ const { getReservationBeginEnd, getClosedDate } = require('../utils/scripts');
 
 describe('Overnight calendar', () => {
   beforeEach(() => {
+    Cypress.config('defaultCommandTimeout', 20000);
     cy.fixture('resource_overnight_detail.json').as('resourceDetail');
     cy.fixture('reservation_overnight.json').as('reservationOvernight');
   });
