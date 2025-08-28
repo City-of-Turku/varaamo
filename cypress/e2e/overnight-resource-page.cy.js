@@ -7,6 +7,8 @@ const { getReservationBeginEnd, getClosedDate } = require('../utils/scripts');
 describe('Overnight calendar', () => {
   beforeEach(() => {
     Cypress.config('defaultCommandTimeout', 40000);
+    Cypress.config('viewportWidth', 1280);
+    Cypress.config('viewportHeight', 720);
     cy.fixture('resource_overnight_detail.json').as('resourceDetail');
     cy.fixture('reservation_overnight.json').as('reservationOvernight');
   });
@@ -131,8 +133,8 @@ describe('Overnight calendar', () => {
 
       cy.get('.DayPicker-Day').contains('14').click();
       cy.get('.DayPicker-Day--selected').should('have.length', 1).contains('14');
-      // cy.get('.DayPicker-Day').contains('17').click();
-      // cy.get('.DayPicker-Day--selected').should('have.length', 2);
+      cy.get('.DayPicker-Day').contains('17').click();
+      cy.get('.DayPicker-Day--selected').should('have.length', 2);
 
       cy.get('.DayPicker-Day').contains('19').click();
       cy.get('.DayPicker-Day--selected').should('have.length', 1).contains('19');
