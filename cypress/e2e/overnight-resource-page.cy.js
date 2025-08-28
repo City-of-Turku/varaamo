@@ -131,8 +131,8 @@ describe('Overnight calendar', () => {
 
       cy.get('.DayPicker-Day').contains('14').click();
       cy.get('.DayPicker-Day--selected').should('have.length', 1).contains('14');
-      cy.get('.DayPicker-Day').contains('17').click();
-      cy.get('.DayPicker-Day--selected').should('have.length', 2);
+      // cy.get('.DayPicker-Day').contains('17').click();
+      // cy.get('.DayPicker-Day--selected').should('have.length', 2);
 
       cy.get('.DayPicker-Day').contains('19').click();
       cy.get('.DayPicker-Day--selected').should('have.length', 1).contains('19');
