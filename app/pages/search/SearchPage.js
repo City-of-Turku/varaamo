@@ -48,7 +48,7 @@ class UnconnectedSearchPage extends Component {
     }
   }
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     const { filters: currentFilters, actions } = this.props;
     const { filters: nextFilters } = nextProps;
     if (nextProps.isLoggedIn !== this.props.isLoggedIn) {

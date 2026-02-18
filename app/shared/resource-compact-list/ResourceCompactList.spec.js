@@ -165,13 +165,13 @@ describe('shared/resource-list/ResourceCompactList', () => {
     });
   });
 
-  describe('componentWillReceiveProps', () => {
+  describe('UNSAFE_componentWillReceiveProps', () => {
     test('sets resourcePosition to 0', () => {
       const instance = getWrapper().instance();
       instance.setState({
         resourcePosition: 1,
       });
-      instance.componentWillReceiveProps();
+      instance.UNSAFE_componentWillReceiveProps();
       expect(instance.state.resourcePosition).toBe(0);
     });
   });

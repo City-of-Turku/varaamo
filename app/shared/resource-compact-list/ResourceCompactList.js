@@ -22,7 +22,7 @@ export class UnconnectedResourceCompactList extends React.Component {
     resourcePosition: 0,
   };
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.setState({
       resourcePosition: 0,
     });
