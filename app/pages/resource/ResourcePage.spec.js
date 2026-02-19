@@ -303,7 +303,7 @@ describe('pages/resource/ResourcePage', () => {
     });
   });
 
-  describe('componentWillUpdate', () => {
+  describe('UNSAFE_componentWillUpdate', () => {
     describe('if date changed', () => {
       const nextProps = { date: '2016-12-12', isLoggedIn: defaultProps.isLoggedIn };
       const fetchResource = simple.mock();
@@ -311,7 +311,7 @@ describe('pages/resource/ResourcePage', () => {
       beforeAll(() => {
         const instance = getWrapper().instance();
         instance.fetchResource = fetchResource;
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       test('fetches resource data with new date', () => {
@@ -329,7 +329,7 @@ describe('pages/resource/ResourcePage', () => {
       beforeAll(() => {
         const instance = getWrapper().instance();
         instance.fetchResource = fetchResource;
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       test('does not fetch resource data', () => {
@@ -344,7 +344,7 @@ describe('pages/resource/ResourcePage', () => {
       beforeAll(() => {
         const instance = getWrapper().instance();
         instance.fetchResource = fetchResource;
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       test('fetches resource data correct date', () => {
@@ -361,7 +361,7 @@ describe('pages/resource/ResourcePage', () => {
 
       beforeAll(() => {
         const instance = getWrapper({ actions: { fetchResource } }).instance();
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       test('does not fetch resource data', () => {

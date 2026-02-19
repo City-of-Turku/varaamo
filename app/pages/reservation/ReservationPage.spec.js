@@ -499,7 +499,7 @@ describe('pages/reservation/ReservationPage', () => {
     });
   });
 
-  describe('componentWillUpdate', () => {
+  describe('UNSAFE_componentWillUpdate', () => {
     const realLocation = window.location;
     afterAll(() => {
       window.location = realLocation;
@@ -512,7 +512,7 @@ describe('pages/reservation/ReservationPage', () => {
         const nextProps = {
           reservationCreated: Reservation.build(),
         };
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
         expect(instance.state.view).toBe('confirmation');
       }
     );
@@ -524,7 +524,7 @@ describe('pages/reservation/ReservationPage', () => {
         const nextProps = {
           reservationCreated: Reservation.build(),
         };
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
         expect(instance.state.view).toBe('confirmation');
       }
     );
@@ -541,7 +541,7 @@ describe('pages/reservation/ReservationPage', () => {
         const reservationCreated = Reservation.build();
         reservationCreated.order = { paymentUrl };
         const nextProps = { reservationCreated };
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
 
         expect(window.location).toBe(paymentUrl);
       });
@@ -557,7 +557,7 @@ describe('pages/reservation/ReservationPage', () => {
           reservationCreated.needManualConfirmation = true;
           reservationCreated.order = { paymentUrl };
           const nextProps = { reservationCreated };
-          instance.componentWillUpdate(nextProps);
+          instance.UNSAFE_componentWillUpdate(nextProps);
 
           expect(window.location).toBe(currentUrl);
         });
@@ -574,7 +574,7 @@ describe('pages/reservation/ReservationPage', () => {
           reservationCreated.needManualConfirmation = true;
           reservationCreated.order = { paymentUrl };
           const nextProps = { reservationCreated };
-          instance.componentWillUpdate(nextProps);
+          instance.UNSAFE_componentWillUpdate(nextProps);
 
           expect(window.location).toBe(paymentUrl);
         });
@@ -588,7 +588,7 @@ describe('pages/reservation/ReservationPage', () => {
           reservationCreated.needManualConfirmation = true;
           reservationCreated.order = { paymentUrl, paymentMethod: constants.PAYMENT_METHODS.CASH };
           const nextProps = { reservationCreated };
-          instance.componentWillUpdate(nextProps);
+          instance.UNSAFE_componentWillUpdate(nextProps);
 
           expect(window.location).toBe(currentUrl);
         });

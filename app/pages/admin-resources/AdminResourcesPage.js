@@ -46,7 +46,7 @@ class UnconnectedAdminResourcesPage extends Component {
     this.updateResourcesTimer = window.setInterval(this.fetchResources, interval);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.date !== this.props.date || nextProps.location !== this.props.location) {
       this.fetchResources(nextProps.date);
     }

@@ -67,7 +67,7 @@ class UnconnectedResourcePage extends Component {
     window.scrollTo(0, 0);
   }
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     if (nextProps.date !== this.props.date || nextProps.isLoggedIn !== this.props.isLoggedIn) {
       this.fetchResource(nextProps.date);
     }

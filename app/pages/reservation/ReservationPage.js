@@ -125,7 +125,7 @@ class UnconnectedReservationPage extends Component {
     this.handleSigninRefresh(isLoggedIn, loginExpiresAt, 20);
   }
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     // changes to confirm page if receives correct reservation props from backend
     // if requires payment, redirect to given url
     const { reservationCreated: nextCreated, reservationEdited: nextEdited } = nextProps;

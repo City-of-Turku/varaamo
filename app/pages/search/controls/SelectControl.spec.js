@@ -151,8 +151,9 @@ describe('pages/search/controls/SelectControl', () => {
   describe('displays noOptions-text when no options available', () => {
     test('no options at all', () => {
       const wrapper = getWrapper({ menuIsOpen: true, options: [] });
-      const text = wrapper.render().text();
-      expect(text).toContain('SelectControl.noOptions');
+      // Avoid wrapper.render() which depends on cheerio; assert on the placeholder option instead
+      const placeholderOptionText = wrapper.find('option').first().text();
+      expect(placeholderOptionText).toContain('SelectControl.noOptions');
     });
   });
 });

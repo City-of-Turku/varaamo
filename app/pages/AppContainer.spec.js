@@ -178,7 +178,7 @@ describe('pages/AppContainer', () => {
     });
   });
 
-  describe('componentWillUpdate', () => {
+  describe('UNSAFE_componentWillUpdate', () => {
     describe('when user does not change', () => {
       test('does not fetch user data', () => {
         const fetchUser = simple.mock();
@@ -188,7 +188,7 @@ describe('pages/AppContainer', () => {
           }
         };
         const instance = getWrapper({ fetchUser, user }).instance();
-        instance.componentWillUpdate({ user });
+        instance.UNSAFE_componentWillUpdate({ user });
         expect(fetchUser.callCount).toBe(0);
       });
     });
@@ -204,7 +204,7 @@ describe('pages/AppContainer', () => {
           }
         };
         const instance = getWrapper({ fetchUser, user }).instance();
-        instance.componentWillUpdate({ user: newUser });
+        instance.UNSAFE_componentWillUpdate({ user: newUser });
         expect(fetchUser.callCount).toBe(1);
         expect(fetchUser.lastCall.arg).toBe(newUserId);
       });
@@ -214,7 +214,7 @@ describe('pages/AppContainer', () => {
         const user = { profile: { sub: 'u-1' } };
         const newUser = null;
         const instance = getWrapper({ fetchUser, user }).instance();
-        instance.componentWillUpdate({ user: newUser });
+        instance.UNSAFE_componentWillUpdate({ user: newUser });
         expect(fetchUser.callCount).toBe(0);
       });
     });

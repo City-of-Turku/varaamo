@@ -36,7 +36,7 @@ export class UnconnectedAppContainer extends Component {
     cookieBotAddListener();
   }
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     if (nextProps.user && nextProps.user !== this.props.user) {
       this.props.fetchUser(nextProps.user.profile.sub);
     }
