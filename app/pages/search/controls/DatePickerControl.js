@@ -37,7 +37,7 @@ class DatePickerControl extends React.Component {
     this.handleDateButtonClick = this.handleDateButtonClick.bind(this);
   }
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     const { date } = nextProps;
     if (date !== this.props.date) {
       // TODO: fix this lint

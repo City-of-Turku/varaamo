@@ -146,6 +146,22 @@ function isUnderMinPeriod(slot, lastSlot, minPeriod) {
   return false;
 }
 
+/**
+ * Check if slot is reservable based on resource reservable time settings
+ * @param {Object} resource
+ * @param {Object} slot
+ * @returns {boolean} true if slot is reservable
+ */
+export function isSlotReservable(resource, slot) {
+  let isNotReservable = (resource.reservableAfter
+    && moment(slot.start).isBefore(resource.reservableAfter));
+
+  if (!isNotReservable && resource.reservableBefore) {
+    isNotReservable = moment(slot.start).isAfter(resource.reservableBefore);
+  }
+  return !isNotReservable;
+}
+
 export default {
   getNextDayFromDate,
   getNextWeeksDays,

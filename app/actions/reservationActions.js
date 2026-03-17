@@ -13,7 +13,7 @@ import {
   getRequestTypeDescriptor,
   getSuccessTypeDescriptor,
 } from 'utils/apiUtils';
-import { getMissingValues, isStaffEvent } from 'utils/reservationUtils';
+import { getMissingValues, isStaffEvent, formatPhone } from 'utils/reservationUtils';
 
 function commentReservation(reservation, resource, comments) {
   const missingValues = getMissingValues(reservation);
@@ -97,6 +97,8 @@ function parseReservationData(reservation) {
     }
     return value;
   });
+
+  trimmedValues.reserverPhoneNumber = formatPhone(trimmedValues.reserverPhoneNumber);
 
   const parsed = pickBy(trimmedValues, value => value || value === 0 || typeof (value) === 'boolean');
   return JSON.stringify(decamelizeKeys(parsed));

@@ -206,7 +206,7 @@ describe('pages/search/SearchPage', () => {
     });
   });
 
-  describe('componentWillUpdate', () => {
+  describe('UNSAFE_componentWillUpdate', () => {
     describe('if isLoggedIn changed', () => {
       let nextProps;
 
@@ -221,7 +221,7 @@ describe('pages/search/SearchPage', () => {
           position: null,
           url: '/?search=some-search',
         };
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       test('refetches search results', () => {
@@ -264,7 +264,7 @@ describe('pages/search/SearchPage', () => {
           position: null,
           url: '/?purpose=new-purpose',
         };
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       test('updates search filters in state with the new filters', () => {
@@ -296,7 +296,7 @@ describe('pages/search/SearchPage', () => {
           position: null,
           url: '/?search=some-search',
         };
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       test('does not update search filters in state', () => {
@@ -324,7 +324,7 @@ describe('pages/search/SearchPage', () => {
             lon: 11,
           },
         };
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       test('refetches search results', () => {
@@ -349,7 +349,7 @@ describe('pages/search/SearchPage', () => {
           },
           position: defaultProps.position,
         };
-        instance.componentWillUpdate(nextProps);
+        instance.UNSAFE_componentWillUpdate(nextProps);
       });
 
       afterAll(() => {

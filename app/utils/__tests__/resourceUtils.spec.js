@@ -30,7 +30,8 @@ import {
   isManagerForResource,
   rearrangeResources,
   isBelow24Hours,
-  showMinPeriod
+  showMinPeriod,
+  getNaiveDate
 } from 'utils/resourceUtils';
 import { getPrettifiedPeriodUnits } from '../timeUtils';
 import Product from '../fixtures/Product';
@@ -1099,7 +1100,7 @@ describe('Utils: resourceUtils', () => {
       });
     });
 
-    describe('when resource has reservableBefore limit and its before given date', () => {
+    describe('when resource has reservableBefore limit and its same or before given date', () => {
       const reservableBefore = '2016-09-09';
       const date = '2016-10-10';
 
@@ -1107,13 +1108,39 @@ describe('Utils: resourceUtils', () => {
         const resource = { userPermissions: { isAdmin: true }, reservableBefore };
         const isLimited = reservingIsRestricted(resource, date);
         expect(isLimited).toBe(false);
+        expect(reservingIsRestricted(resource, reservableBefore)).toBe(false);
       });
 
       test('returns true if user is a regular user', () => {
         const resource = { userPermissions: { isAdmin: false }, reservableBefore };
         const isLimited = reservingIsRestricted(resource, date);
         expect(isLimited).toBe(true);
+        expect(reservingIsRestricted(resource, reservableBefore)).toBe(true);
       });
+    });
+  });
+
+  describe('getNaiveDate', () => {
+    test('returns the date part of a valid datetime string', () => {
+      expect(getNaiveDate('2024-11-03T00:00:00+03:00')).toBe('2024-11-03');
+    });
+
+    test('returns an empty string for falsy values', () => {
+      expect(getNaiveDate('')).toBe('');
+      expect(getNaiveDate(null)).toBe('');
+      expect(getNaiveDate(undefined)).toBe('');
+    });
+
+    test('handles datetime strings without timezone information', () => {
+      expect(getNaiveDate('2024-11-03T00:00:00')).toBe('2024-11-03');
+    });
+
+    test('handles datetime strings with milliseconds', () => {
+      expect(getNaiveDate('2024-11-03T00:00:00.123Z')).toBe('2024-11-03');
+    });
+
+    test('returns the entire string if it does not contain a "T" separator', () => {
+      expect(getNaiveDate('2024-11-03')).toBe('2024-11-03');
     });
   });
 

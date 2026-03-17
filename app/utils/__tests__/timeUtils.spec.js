@@ -1,6 +1,7 @@
 
 import MockDate from 'mockdate';
 import Moment from 'moment';
+import momentTimezone from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 
 import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
@@ -98,7 +99,7 @@ describe('Utils: timeUtils', () => {
 
     test('default timezone is your local timezone', () => {
       const timeZoneFromDate = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const timeZoneFromMoment = moment.tz.guess(true);
+      const timeZoneFromMoment = momentTimezone.tz.guess(true);
 
       expect(timeZoneFromMoment).toEqual(timeZoneFromDate);
     });

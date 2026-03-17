@@ -37,7 +37,7 @@ jobs:
           cat .env
 
       - name: Cypress run
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           install-command: npm ci --silent
           build: npm run build

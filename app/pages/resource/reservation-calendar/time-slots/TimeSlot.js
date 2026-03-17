@@ -6,6 +6,8 @@ import moment from 'moment';
 import { injectT } from 'i18n';
 import { scrollTo } from 'utils/domUtils';
 import { padLeft } from 'utils/timeUtils';
+import { isSlotReservable } from '../utils';
+import { getNaiveDate } from '../../../../utils/resourceUtils';
 
 class TimeSlot extends PureComponent {
   static propTypes = {
@@ -42,8 +44,7 @@ class TimeSlot extends PureComponent {
       slot, resource, isAdmin, isDisabled, isSelectable, selected, isLoggedIn, isStrongAuthSatisfied
     } = prop;
     const isPast = new Date(slot.end) < new Date();
-    const isReservable = (resource.reservableAfter
-      && moment(slot.start).isBefore(resource.reservableAfter));
+    const isReservable = isSlotReservable(resource, slot);
 
     // if user is not logged in via strong method to resource requiring strong auth
     // slot should always be disabled. Otherwise proceed to make other disable checks.
@@ -53,7 +54,7 @@ class TimeSlot extends PureComponent {
       || !isLoggedIn
       || (!isSelectable && !selected)
       || !resource.userPermissions.canMakeReservations
-      || isReservable
+      || !isReservable
       || (!slot.editing && (slot.reserved || isPast))
       || (slot.onCooldown && !isAdmin);
     }
@@ -157,6 +158,16 @@ class TimeSlot extends PureComponent {
     if (!isLoggedIn && resource.reservable) {
       return {
         message: t('Notifications.loginToReserve'),
+        type: 'info',
+        timeOut: 10000,
+      };
+    }
+    if (resource.reservableBefore && moment(slot.start).isAfter(resource.reservableBefore)) {
+      const dateFormat = 'D.M.YYYY';
+      const lastDate = moment(getNaiveDate(resource.reservableBefore), 'YYYY-MM-DD').subtract(1, 'day').format(dateFormat);
+      const msg = `${t('ReservingRestrictedText.reservationRestricted', { days: resource.reservableDaysInAdvance })} ${t('Notifications.reservableLastDay', { date: lastDate })}`;
+      return {
+        message: msg,
         type: 'info',
         timeOut: 10000,
       };

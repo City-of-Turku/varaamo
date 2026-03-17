@@ -247,7 +247,7 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
     });
   });
 
-  describe('componentWillReceiveProps', () => {
+  describe('UNSAFE_componentWillReceiveProps', () => {
     let instance;
 
     beforeAll(() => {
@@ -264,18 +264,18 @@ describe('pages/admin-resources/AdminResourcesPage', () => {
     });
 
     test('does not call fetchResources if props have not changed', () => {
-      instance.componentWillReceiveProps(defaultProps);
+      instance.UNSAFE_componentWillReceiveProps(defaultProps);
       expect(instance.fetchResources.callCount).toBe(0);
     });
 
     test('calls fetchResources if props have changed date', () => {
-      instance.componentWillReceiveProps({ ...defaultProps, date: '2017-01-12' });
+      instance.UNSAFE_componentWillReceiveProps({ ...defaultProps, date: '2017-01-12' });
       expect(instance.fetchResources.callCount).toBe(1);
       expect(instance.fetchResources.lastCall.args).toEqual(['2017-01-12']);
     });
 
     test('calls fetchResources if props have changed location', () => {
-      instance.componentWillReceiveProps({ ...defaultProps, location: { id: '321' } });
+      instance.UNSAFE_componentWillReceiveProps({ ...defaultProps, location: { id: '321' } });
       expect(instance.fetchResources.callCount).toBe(1);
       expect(instance.fetchResources.lastCall.args).toEqual([defaultProps.date]);
     });

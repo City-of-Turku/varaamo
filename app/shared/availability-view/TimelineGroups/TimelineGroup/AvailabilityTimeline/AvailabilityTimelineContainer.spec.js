@@ -3,7 +3,7 @@ import mockDate from 'mockdate';
 import moment from 'moment';
 
 import { slotSize } from 'constants/SlotConstants';
-import { selector } from './AvailabilityTimelineContainer';
+import { availabilityTimelineSelector } from './AvailabilityTimelineContainer';
 
 function getState() {
   return {
@@ -13,6 +13,19 @@ function getState() {
           id: 'resource-1',
           userPermissions: {},
           overnightReservations: false,
+          slotSize: '00:30:00',
+          openingHours: [
+            {
+              date: '2016-31-12',
+              opens: null,
+              closes: null
+            },
+            {
+              date: '2016-01-01',
+              opens: '2016-01-01T08:00:00+03:00',
+              closes: '2016-01-01T16:00:00+03:00'
+            }
+          ],
           reservations: [
             {
               id: 111,
@@ -62,7 +75,7 @@ describe('shared/availability-view/AvailabilityTimelineContainer', () => {
   describe('selector', () => {
     function getSelected(props) {
       const defaults = { id: 'resource-1', date: '2016-01-01T00:00:00' };
-      return selector()(getState(), { ...defaults, ...props });
+      return availabilityTimelineSelector(getState(), { ...defaults, ...props });
     }
 
     describe('items', () => {
@@ -90,7 +103,7 @@ describe('shared/availability-view/AvailabilityTimelineContainer', () => {
         const state = getState();
         const reservations = state.data.resources['resource-1'].reservations;
         const props = { id: 'resource-1', date: '2016-01-01' };
-        const actual = selector()(state, props).items;
+        const actual = availabilityTimelineSelector(state, props).items;
         expect(actual[0].type).toBe('reservation-slot');
         expect(actual[1].type).toBe('reservation-slot');
         expect(actual[2].type).toBe('reservation-slot');
@@ -113,7 +126,7 @@ describe('shared/availability-view/AvailabilityTimelineContainer', () => {
           resourceId: 'resource-1',
         };
         const props = { id: 'resource-1', date: '2016-01-01', selection };
-        const actual = selector()(state, props).items;
+        const actual = availabilityTimelineSelector(state, props).items;
         expect(actual[0].data.isSelectable).toBe(false);
         expect(actual[1].data.isSelectable).toBe(false);
         expect(actual[2].data.isSelectable).toBe(false);
@@ -135,9 +148,26 @@ describe('shared/availability-view/AvailabilityTimelineContainer', () => {
           resourceId: 'resource-1',
         };
         const props = { id: 'resource-1', date: '2016-01-01', selection };
-        const actual = selector()(state, props).items;
+        const actual = availabilityTimelineSelector(state, props).items;
         expect(actual[0].data.hasStaffRights).toBeDefined();
         expect(actual[0].data.isWithinCooldown).toBeDefined();
+      });
+    });
+
+    test('contains correct slotSize', () => {
+      const state = getState();
+      const props = { id: 'resource-1', date: '2016-01-01' };
+      const actual = availabilityTimelineSelector(state, props).slotSize;
+      expect(actual).toBe('00:30:00');
+    });
+
+    test('contains correct openingHours', () => {
+      const state = getState();
+      const props = { id: 'resource-1', date: '2016-01-01' };
+      const actual = availabilityTimelineSelector(state, props).openingHours;
+      expect(actual).toStrictEqual({
+        opens: '2016-01-01T08:00:00+03:00',
+        closes: '2016-01-01T16:00:00+03:00'
       });
     });
   });

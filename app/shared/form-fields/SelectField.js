@@ -55,7 +55,7 @@ function getAdditionalUniversalFields(t, label, universalFieldData) {
   const { description, data } = universalFieldData;
   return (
     <React.Fragment>
-      {description && wrapper(<p>{description}</p>)}
+      {description && wrapper(<p className="preserve-rows">{description}</p>)}
       {data && data.url && wrapper(
         <img
           alt={t('ReservationForm.universalField.pictureAlt', { label })}

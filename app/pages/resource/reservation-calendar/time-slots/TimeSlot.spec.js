@@ -1,6 +1,7 @@
 import React from 'react';
 import Immutable from 'seamless-immutable';
 import simple from 'simple-mock';
+import moment from 'moment';
 
 import Resource from 'utils/fixtures/Resource';
 import TimeSlotFixture from 'utils/fixtures/TimeSlot';
@@ -278,6 +279,23 @@ describe('pages/resource/reservation-calendar/time-slots/TimeSlot', () => {
 
       expect(t.callCount).toBe(1);
       expect(result.message).toBe(message);
+      expect(result.type).toBe('info');
+      expect(result.timeOut).toBe(10000);
+    });
+
+    test('returns correct msg when reservable before condition not met', () => {
+      const t = message => message;
+      const resource = Resource.build({
+        reservable: true,
+        reservableBefore: moment(defaultProps.slot.start).subtract(1, 'day').toISOString()
+      });
+      const instance = getWrapper().instance();
+      const isStrongAuthSatisfied = true;
+      const result = instance.getReservationInfoNotification(
+        true, isStrongAuthSatisfied, resource, defaultProps.slot, t
+      );
+
+      expect(result.message).toBe(t('ReservingRestrictedText.reservationRestricted Notifications.reservableLastDay'));
       expect(result.type).toBe('info');
       expect(result.timeOut).toBe(10000);
     });

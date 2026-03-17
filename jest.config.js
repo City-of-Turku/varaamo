@@ -25,6 +25,10 @@ module.exports = {
     '\\.(gif|ttf|eot|svg|png|ico)$': '<rootDir>/config/jest/fileMock.js',
     '^@city-assets/(.*)$': '<rootDir>/app/assets/whitelabel/$1',
     '^@city-i18n/(.*)$': '<rootDir>/app/assets/whitelabel/i18n/$1',
+    // Resolve node: protocol (Node 16+ built-ins) for cheerio/parse5
+    '^node:stream$': 'readable-stream',
+    // Mock undici (uses node: built-ins Jest can't resolve); enzyme tests don't need it
+    '^undici$': '<rootDir>/config/jest/undiciMock.js',
   },
 
   // Same with webpack module resolver

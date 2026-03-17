@@ -1,10 +1,9 @@
 import { openingHoursMonth } from 'constants/ResourceConstants';
 import { DEFAULT_SLOT_SIZE } from 'constants/SlotConstants';
 // import moment from 'moment';
-
 import Resource from 'utils/fixtures/Resource';
 import TimeSlot from 'utils/fixtures/TimeSlot';
-import utils from './utils';
+import utils, { isSlotReservable } from './utils';
 
 describe('pages/resource/reservation-calendar/utils', () => {
   const slot = {
@@ -249,6 +248,47 @@ describe('pages/resource/reservation-calendar/utils', () => {
 
       const actual = utils.isUnderMinPeriod(validSlot, lastSlot, minPeriod);
       expect(actual).toBe(false);
+    });
+  });
+
+  describe('isSlotReservable', () => {
+    test('should return false if slot is before reservableAfter', () => {
+      const resource = { reservableAfter: '2024-08-15T00:00:00Z' };
+      const slotA = { start: '2024-08-14T12:00:00Z' };
+      expect(isSlotReservable(resource, slotA)).toBe(false);
+    });
+
+    test('should return true if slot is after reservableAfter', () => {
+      const resource = { reservableAfter: '2024-08-15T00:00:00Z' };
+      const slotA = { start: '2024-08-16T12:00:00Z' };
+      expect(isSlotReservable(resource, slotA)).toBe(true);
+    });
+
+    test('should return false if slot is after reservableBefore', () => {
+      const resource = { reservableBefore: '2024-08-14T00:00:00Z' };
+      const slotA = { start: '2024-08-15T12:00:00Z' };
+      expect(isSlotReservable(resource, slotA)).toBe(false);
+    });
+
+    test('should return true if slot is before reservableBefore', () => {
+      const resource = { reservableBefore: '2024-08-14T00:00:00Z' };
+      const slotA = { start: '2024-08-13T12:00:00Z' };
+      expect(isSlotReservable(resource, slotA)).toBe(true);
+    });
+
+    test('should return true if slot is after reservableAfter and before reservableBefore', () => {
+      const resource = {
+        reservableAfter: '2024-08-14T00:00:00Z',
+        reservableBefore: '2024-08-16T00:00:00Z'
+      };
+      const slotA = { start: '2024-08-15T12:00:00Z' };
+      expect(isSlotReservable(resource, slotA)).toBe(true);
+    });
+
+    test('should return true if neither reservableAfter nor reservableBefore is set', () => {
+      const resource = {};
+      const slotA = { start: '2024-08-15T12:00:00Z' };
+      expect(isSlotReservable(resource, slotA)).toBe(true);
     });
   });
 });
