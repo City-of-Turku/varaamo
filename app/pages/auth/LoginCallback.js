@@ -15,11 +15,9 @@ class UnconnectedLoginCallback extends React.Component {
   }
 
   loginSuccessful(user) {
-    if (user.state) {
-      this.props.history.push(user.state.redirectUrl);
-    } else {
-      this.props.history.push('/');
-    }
+    const redirectUrl = user.state && (user.state.data?.redirectUrl ?? user.state.redirectUrl);
+    const isValidPath = typeof redirectUrl === 'string' && redirectUrl.startsWith('/') && !redirectUrl.includes('[object');
+    this.props.history.push(isValidPath ? redirectUrl : '/');
   }
 
   loginUnsuccessful() {

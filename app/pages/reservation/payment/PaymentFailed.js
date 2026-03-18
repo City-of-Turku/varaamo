@@ -13,7 +13,7 @@ function PaymentFailed({
       <h2>{t('payment.title')}</h2>
       <p>{t('payment.text')}</p>
       {resourceId && (
-        <Link className="reservation-payment-failed-link" id="payment-failed-return-link" to={`/resources/${resourceId}`}>
+        <Link className="reservation-payment-failed-link" id="payment-failed-return-link" to={`/resources/${String(resourceId)}`}>
           {t('payment.link.return')}
         </Link>
       )}

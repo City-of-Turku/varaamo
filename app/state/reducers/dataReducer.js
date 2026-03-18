@@ -14,6 +14,9 @@ const initialState = Immutable({
 });
 
 function handleData(state, data) {
+  if (data == null || typeof data !== 'object') {
+    return state;
+  }
   return state.merge(data, { deep: true });
 }
 
@@ -50,7 +53,7 @@ function dataReducer(state = initialState, action) {
     }
 
     case types.API.SEARCH_RESULTS_GET_SUCCESS: {
-      return state.merge(action.payload.entities);
+      return handleData(state, action.payload.entities);
     }
 
     case types.API.RESOURCES_GET_SUCCESS: {

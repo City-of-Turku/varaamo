@@ -88,7 +88,7 @@ class UnconnectedReservationPage extends Component {
       const query = queryString.parse(location.search);
 
       if (!query.id && query.resource) {
-        history.replace(`/resources/${query.resource}`);
+        history.replace(`/resources/${String(query.resource)}`);
       } else if ('path' in query && query.path === 'manage-reservations') {
         history.replace('/manage-reservations');
       } else {
@@ -284,7 +284,7 @@ class UnconnectedReservationPage extends Component {
         history.replace('/my-reservations');
       }
     } else {
-      history.replace(`/resources/${resource.id}`);
+      history.replace(`/resources/${String(resource.id)}`);
     }
   }
 
@@ -401,7 +401,7 @@ class UnconnectedReservationPage extends Component {
  */
   handleRedirect() {
     const query = queryString.parse(this.props.location.search);
-    this.props.history.push(`/resources/${query.resource}/reservation`);
+    this.props.history.push(`/resources/${String(query.resource)}/reservation`);
   }
 
   fetchResource() {

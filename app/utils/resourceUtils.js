@@ -261,7 +261,7 @@ function getResourcePageUrlComponents(resource, date, time) {
   if (!resource || !resource.id) {
     return { pathname: '', query: '' };
   }
-  const pathname = `/resources/${resource.id}`;
+  const pathname = `/resources/${String(resource.id)}`;
   const query = queryString.stringify({
     date: date ? date.split('T')[0] : undefined,
     time,
