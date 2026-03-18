@@ -5,6 +5,10 @@ import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
 
 class Html extends Component {
+  getSettingsHtml(settings) {
+    return `window.__SETTINGS__ = ${JSON.stringify(settings)};`;
+  }
+
   getInitialStateHtml(initialState) {
     return `window.INITIAL_STATE = ${serialize(initialState)};`;
   }
@@ -100,6 +104,9 @@ class Html extends Component {
         </head>
         <body>
           <div id="root" />
+          <script
+            dangerouslySetInnerHTML={{ __html: this.getSettingsHtml(this.props.clientSettings) }}
+          />
           <script dangerouslySetInnerHTML={{ __html: initialStateHtml }} />
           <script src={appScriptSrc} />
         </body>
@@ -114,6 +121,7 @@ Html.propTypes = {
   initialState: PropTypes.object.isRequired,
   isProduction: PropTypes.bool.isRequired,
   matomoSiteId: PropTypes.string,
+  clientSettings: PropTypes.object.isRequired,
 };
 
 export default Html;

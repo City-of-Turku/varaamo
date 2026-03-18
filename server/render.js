@@ -6,11 +6,13 @@ import Html from './Html';
 
 function render(req, res) {
   const initialState = {};
+  const clientSettings = config.getClientSettings();
 
   const htmlContent = ReactDOMServer.renderToStaticMarkup(
     <Html
       appCssSrc={config.assetsSources.appCss}
       appScriptSrc={config.assetsSources.appJs}
+      clientSettings={clientSettings}
       initialState={initialState}
       isProduction={config.isProduction}
       matomoSiteId={config.matomoSiteId}
