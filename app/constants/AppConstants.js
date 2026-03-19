@@ -1,8 +1,18 @@
 import themeConstants from '@city-assets/constants';
 
+// Ensure values from SETTINGS are always strings (never objects) so they are safe to use in URLs.
+// Prefer window.__SETTINGS__ (server-injected);
+// fall back to SETTINGS (DefinePlugin) only when type is string.
+function safeString(key, fallback = '') {
+  // eslint-disable-next-line no-underscore-dangle
+  const fromWindow = typeof window !== 'undefined' && window.__SETTINGS__ && window.__SETTINGS__[key];
+  if (typeof fromWindow === 'string') return fromWindow;
+  const fromSettings = typeof SETTINGS !== 'undefined' && SETTINGS && SETTINGS[key];
+  return typeof fromSettings === 'string' ? fromSettings : fallback;
+}
 
 const constants = {
-  API_URL: SETTINGS.API_URL,
+  API_URL: safeString('API_URL'),
   CUSTOMIZATIONS: {
     'varaamo.espoo.fi': 'ESPOO',
     'varaamotest-espoo.hel.ninja': 'ESPOO',
@@ -32,7 +42,7 @@ const constants = {
   NAV_ADMIN_URLS: {
     gitbook: 'https://city-of-turku.gitbook.io/varaamo-turku/',
     gitbook_sv: 'https://city-of-turku.gitbook.io/varaamo-turku/v/v.1.0.0-swedish/',
-    respa: SETTINGS.ADMIN_URL,
+    respa: safeString('ADMIN_URL'),
   },
   NOTIFICATION_DEFAULTS: {
     message: '',
