@@ -36,8 +36,15 @@ if (window.Cypress) {
 
 const isIEBrowser = browserName === 'IE';
 
-if (SETTINGS.APP_TIMEZONE) {
-  moment.tz.setDefault(SETTINGS.APP_TIMEZONE);
+// eslint-disable-next-line no-underscore-dangle
+const appTimezone = (typeof window !== 'undefined' && window.__SETTINGS__ && typeof window.__SETTINGS__.APP_TIMEZONE === 'string')
+  // eslint-disable-next-line no-underscore-dangle
+  ? window.__SETTINGS__.APP_TIMEZONE
+  : 'Europe/Helsinki';
+try {
+  moment.tz.setDefault(appTimezone);
+} catch (e) {
+  // console.warn('moment timezone default zone set failed', e);
 }
 
 if (window.location.pathname === '/silent-renew') {

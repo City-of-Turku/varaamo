@@ -37,7 +37,7 @@ export function ResourceInfo(props) {
       title={props.name}
     >
       <div className="name">
-        <Link to={`/resources/${props.id}?date=${props.date}`}>{props.name}</Link>
+        <Link to={`/resources/${String(props.id)}?date=${props.date}`}>{props.name}</Link>
       </div>
       <div className="details">
         {!overnightReservations && (

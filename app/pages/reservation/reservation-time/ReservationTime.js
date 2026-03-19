@@ -37,7 +37,7 @@ class ReservationTime extends Component {
   handleDateChange = (newDate) => {
     const { resource, history } = this.props;
     const day = newDate.toISOString().substring(0, 10);
-    history.replace(`/reservation?date=${day}&resource=${resource.id}`);
+    history.replace(`/reservation?date=${day}&resource=${String(resource.id)}`);
 
     this.setState({
       selectedDate: day

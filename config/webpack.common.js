@@ -46,7 +46,7 @@ module.exports = {
     new MomentTimezoneDataPlugin({
       startYear: currentYear - 2,
       endYear: currentYear + 10,
-      matchZones: JSON.stringify(process.env.APP_TIMEZONE)
+      matchZones: process.env.APP_TIMEZONE || 'Europe/Helsinki',
     }),
   ],
 };
