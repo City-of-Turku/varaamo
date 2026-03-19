@@ -53,7 +53,9 @@ function dataReducer(state = initialState, action) {
     }
 
     case types.API.SEARCH_RESULTS_GET_SUCCESS: {
-      return handleData(state, action.payload.entities);
+      const entities = action.payload.entities;
+      if (entities == null || typeof entities !== 'object') return state;
+      return state.merge(entities);
     }
 
     case types.API.RESOURCES_GET_SUCCESS: {
