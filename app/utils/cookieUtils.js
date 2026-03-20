@@ -1,8 +1,10 @@
+import constants from 'constants/AppConstants';
+
 /**
  * Add event listener that overrides the image served by cookiebot.
  */
 export function cookieBotAddListener() {
-  if (SETTINGS.TRACKING) {
+  if (constants.TRACKING) {
     window.addEventListener('CookiebotOnDialogDisplay', cookieBotImageOverride);
   }
 }
@@ -11,7 +13,7 @@ export function cookieBotAddListener() {
  * Remove event listener that overrides the image served by cookiebot.
  */
 export function cookieBotRemoveListener() {
-  if (SETTINGS.TRACKING) {
+  if (constants.TRACKING) {
     window.removeEventListener('CookiebotOnDialogDisplay', cookieBotImageOverride);
   }
 }
