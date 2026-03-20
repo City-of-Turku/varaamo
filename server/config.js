@@ -29,7 +29,7 @@ function getClientSettings() {
     CLIENT_ID: process.env.CLIENT_ID || '',
     SHOW_TEST_SITE_MESSAGE: Boolean(process.env.SHOW_TEST_SITE_MESSAGE === '1' || process.env.SHOW_TEST_SITE_MESSAGE === 'true'),
     BLOCK_SEARCH_ENGINE_INDEXING: Boolean(process.env.BLOCK_SEARCH_ENGINE_INDEXING === '1' || process.env.BLOCK_SEARCH_ENGINE_INDEXING === 'true'),
-    TRACKING: Boolean(process.env.MATOMO_SITE_ID),
+    TRACKING: !!(process.env.MATOMO_SITE_ID && process.env.MATOMO_SITE_ID !== '0' && process.env.MATOMO_SITE_ID !== 'false'),
     TRACKING_ID: process.env.MATOMO_SITE_ID || '3',
     CUSTOM_MUNICIPALITY_OPTIONS: process.env.CUSTOM_MUNICIPALITY_OPTIONS || '',
     OG_IMG_URL: process.env.OG_IMG_URL || '',

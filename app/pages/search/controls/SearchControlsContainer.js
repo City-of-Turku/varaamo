@@ -60,13 +60,12 @@ class UnconnectedSearchControlsContainer extends Component {
     return options;
   }
 
+  // Municipality options for search filter. Not currently rendered in the UI (no municipality
+  // dropdown in search controls);.
   getMunicipalityOptions = () => {
-    let municipalities = constants.DEFAULT_MUNICIPALITY_OPTIONS;
-
-    if (Array.isArray(SETTINGS.CUSTOM_MUNICIPALITY_OPTIONS)
-    && SETTINGS.CUSTOM_MUNICIPALITY_OPTIONS.length) {
-      municipalities = SETTINGS.CUSTOM_MUNICIPALITY_OPTIONS;
-    }
+    const municipalities = constants.CUSTOM_MUNICIPALITY_OPTIONS.length
+      ? constants.CUSTOM_MUNICIPALITY_OPTIONS
+      : constants.DEFAULT_MUNICIPALITY_OPTIONS;
 
     return municipalities.map((municipality) => {
       const municipalityStr = typeof municipality === 'string' ? municipality : municipality.toString();

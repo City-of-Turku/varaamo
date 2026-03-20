@@ -1,14 +1,42 @@
 import themeConstants from '@city-assets/constants';
 
-// Ensure values from SETTINGS are always strings (never objects) so they are safe to use in URLs.
-// Prefer window.__SETTINGS__ (server-injected);
-// fall back to SETTINGS (DefinePlugin) only when type is string.
-function safeString(key, fallback = '') {
+// Read from window.__SETTINGS__ (server-injected) or SETTINGS (DefinePlugin).
+// Coerce so env vars work regardless of string/boolean from vars (e.g. "false" must be falsy).
+function getSetting(key) {
   // eslint-disable-next-line no-underscore-dangle
   const fromWindow = typeof window !== 'undefined' && window.__SETTINGS__ && window.__SETTINGS__[key];
-  if (typeof fromWindow === 'string') return fromWindow;
-  const fromSettings = typeof SETTINGS !== 'undefined' && SETTINGS && SETTINGS[key];
-  return typeof fromSettings === 'string' ? fromSettings : fallback;
+  if (fromWindow !== undefined && fromWindow !== null) return fromWindow;
+  const fromPlugin = typeof SETTINGS !== 'undefined' && SETTINGS && SETTINGS[key];
+  return fromPlugin !== undefined && fromPlugin !== null ? fromPlugin : undefined;
+}
+
+function safeString(key, fallback = '') {
+  const v = getSetting(key);
+  if (typeof v === 'string') return v;
+  if (v != null) return String(v);
+  return fallback;
+}
+
+// Only true, '1', 'true' are truthy; string "false" / "0" / empty are falsy.
+function safeBoolean(key) {
+  const v = getSetting(key);
+  return v === true || v === '1' || v === 'true';
+}
+
+// Already array, or JSON string, or single string -> [string].
+// Empty/undefined -> [].
+function safeMunicipalityOptions() {
+  const v = getSetting('CUSTOM_MUNICIPALITY_OPTIONS');
+  if (Array.isArray(v)) return v.length ? v : [];
+  if (typeof v === 'string' && v.trim()) {
+    try {
+      const p = JSON.parse(v);
+      return Array.isArray(p) ? p : [];
+    } catch (_) {
+      return [];
+    }
+  }
+  return [];
 }
 
 const constants = {
@@ -126,7 +154,7 @@ const constants = {
   },
   SEARCH_PAGE_SIZE: 30,
   DEFAULT_MUNICIPALITY_OPTIONS: ['Helsinki', 'Espoo', 'Vantaa'],
-  SHOW_TEST_SITE_MESSAGE: SETTINGS.SHOW_TEST_SITE_MESSAGE,
+  SHOW_TEST_SITE_MESSAGE: safeBoolean('SHOW_TEST_SITE_MESSAGE'),
   SUPPORTED_LANGUAGES: ['en', 'fi', 'sv'],
   SUPPORTED_SEARCH_FILTERS: {
     freeOfCharge: '',
@@ -148,7 +176,8 @@ const constants = {
   },
   TIME_FORMAT: 'H:mm',
   TIME_SLOT_DEFAULT_LENGTH: 30,
-  TRACKING: SETTINGS.TRACKING,
+  TRACKING: safeBoolean('TRACKING'),
+  TRACKING_ID: safeString('TRACKING_ID', '3'),
   SORT_BY_OPTIONS: {
     NAME: 'resource_name_lang',
     TYPE: 'type_name_lang',
@@ -173,6 +202,12 @@ const constants = {
     BLOCKED_HINT_TEXT_ID: 'ReservationType.blockedHint',
   }
 };
+
+// Getter so CUSTOM_MUNICIPALITY_OPTIONS is read at access time (supports tests that set SETTINGS).
+Object.defineProperty(constants, 'CUSTOM_MUNICIPALITY_OPTIONS', {
+  get: safeMunicipalityOptions,
+  enumerable: true,
+});
 
 // These values might be city specific so they can be overridden if a theme is installed
 constants.FEEDBACK_URL = { ...constants.FEEDBACK_URL, ...themeConstants.FEEDBACK_URL };
