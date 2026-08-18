@@ -6,16 +6,18 @@ export default (`
     <title>Tillgänglighetsutlåtande</title>
   </head>
   <body>
-    <h1>Välkommen, det här är tillgänglighetsutlåtandet för Åbo Stads bokningstjänst Varaamo</h1>
+    <h1>Tillgänglighetsutlåtande</h1>
     <p>
-      Denna tillgänglighetsutlåtande berör Varaamo-tjänsten (<a href="https://varaamo.turku.fi" target="_blank" rel="noopener noreferrer">https://varaamo.turku.fi</a>) och har utarbetats 6.11.2019.
-      Tillgängligheten i denna digitjänst har bedömts av Eficode / Tuukka Muroke.
+      Åbo stad strävar efter att garantera tillgängligheten på sina webbplatser i enlighet med lagen om tillhandahållande av digitala tjänster (306/2019).
+    </p>
+    <p>
+      Detta tillgänglighetsutlåtande gäller Åbo stads bokningstjänst Varaamo (<a href="https://varaamo.turku.fi" target="_blank" rel="noopener noreferrer">https://varaamo.turku.fi</a>).
     </p>
 
     <h2>Digitjänstens tillgänglighet just nu</h2>
     <p>Tjänsten uppfyller tillgänglighetskraven</p>
 
-    <h2>Digitjänstens icke-tillgängliga innehåll (enligt WCAG-kriterierna)</h2>
+    <h2>Digitjänstens icke-tillgängliga innehåll</h2>
     <h3>Omfattas inte av lagstiftningen</h3>
     <p>
       <span class="value">
@@ -28,80 +30,67 @@ export default (`
       Suomi.fi -identifikationstjänsten, som används för stark autentisering, produceras av en tredje part och Åbo stad kan således inte påverka tjänstens tillgänglighet.
     </p>
 
-    <h2>Upptäckte du tillgänglighetsbrister i vår digitjänst?<br />Tala om det för oss! Vi gör vårt bästa för att fixa bristerna.</h2>
+    <h2>Uppfyllande av tjänstespecifika tilläggskrav och annan information om tjänsten</h2>
+    <h3>Tjänstespecifika tilläggskrav</h3>
     <p>
-      <strong>
-        Webbformulär
-      </strong>
+      Vi publicerar information om produkters och tjänsters tillgänglighet alltid när tjänsteleverantören,
+      producenten eller importören har lämnat informationen till oss. Informationen presenteras på produktsidan
+      under Tillgänglighet. Om tjänsteleverantören, producenten eller importören inte har lämnat denna information
+      kan motsvarande information ännu inte presenteras i webbshoppen.
+    </p>
+    <h3>Allmän beskrivning av den digitala tjänsten</h3>
+    <p>
+      Varaamo är Åbo stads bokningssystem, genom vilket användare kan boka uthyrningsbara lokaler, utrustning
+      och experttjänster. I tjänsten kan man bläddra bland produkter utan identifiering, men bokning och betalning
+      kräver i regel identifiering.
+    </p>
+    <h3>Information om den digitala tjänstens funktion</h3>
+    <p>
+      Användningen av tjänsten kräver inget särskilt fysiskt produkt för att fungera.
+    </p>
+
+    <h2>Utarbetande av detta tillgänglighetsutlåtande</h2>
+    <p>Detta utlåtande har utarbetats 6.11.2019.</p>
+    <p>
+      Utlåtandet baserar sig på en utvärdering som utförts av en tredje part om huruvida tjänsten uppfyller
+      kraven i lagen om tillhandahållande av digitala tjänster (306/2019).
+    </p>
+    <p>Utlåtandet har uppdaterats senast 17.8.2026.</p>
+
+    <h2>Upptäckte du tillgänglighetsbrister i vår digitjänst?</h2>
+    <p>
+      Meddela oss om det, så gör vi vårt bästa för att tillhandahålla information och innehåll i tillgängligt
+      format så snart som möjligt.
     </p>
     <p>
       <span class="value">
-        <a href="https://opaskartta.turku.fi/eFeedback/sv/Feedback/30/1039" target="_blank" rel="noopener noreferrer">Ge feedback om tillgängligheten med detta webbformulär</a>
+        <a href="https://turku.asiointi.fi/eFeedback/sv/Feedback/48/1118" target="_blank" rel="noopener noreferrer">Tillgänglighetsfeedback</a>
       </span>
     </p>
+
+    <h2>Stöd till användare för vilka digitala tjänster inte är tillgängliga</h2>
     <p>
-      <strong>
-        E-post
-      </strong>
+      Digitalt stöd kan du få på flera av Åbo stads verksamhetsställen, till exempel Monitor på Salutorget och
+      huvudbiblioteket vid Åbo stadsbibliotek
+      <a href="https://www.turku.fi/asiointi-ja-yhteystiedot/digituki" target="_blank" rel="noopener noreferrer">Digituki</a>
     </p>
-    <p>
-      <span class="value">
-        <a href="mailto:varaamo@turku.fi">varaamo@turku.fi</a>
-      </span>
-    </p>
+
     <h2>Tillsynsmyndigheten</h2>
     <p>
-    Om du upptäcker ett tillgänglighetsproblem på webbplatsen, ge feedback i första hand till oss d.v.s. vi som upprätthåller webbplatsen.
-    Det kan dröja upp till 14 dagar innan du får svar. Om du är missnöjd med svaret eller inte får något svar alls efter två veckor,
-    <a href="https://www.tillgänglighetskrav.fi/dina-rattigheter/" target="_blank" rel="noopener noreferrer">kan du göra en anmälan till Regionförvaltningsverket i Södra Finland</a>.
-    På webbplatsen för Regionförvaltningsverket i Södra Finland finns noggranna instruktioner för hur man gör en anmälan och hur ärendet hanteras.
+      Om du upptäcker tillgänglighetsproblem på webbplatsen, ge feedback i första hand till webbplatsens
+      upprätthållare. Det kan dröja upp till 14 dagar innan du får svar. Om du inte är nöjd med svaret du fått
+      eller inte får något svar alls inom två veckor kan du lämna feedback till tillsynsmyndigheten.
+      På webbplatsen <a href="https://www.tillganglighetskrav.fi" target="_blank" rel="noopener noreferrer">Tillgänglighetskrav.fi</a> berättas hur du kan göra en anmälan och hur ärendet hanteras.
     </p>
 
     <h3>Tillsynsmyndighetens kontaktuppgifter</h3>
 
     <p>
-      Regionförvaltningsverket i Södra Finland<br />
-      Enheten för tillgänglighetstillsyn<br />
-      <a href="https://www.tillgänglighetskrav.fi" target="_blank" rel="noopener noreferrer">www.tillgänglighetskrav.fi</a><br />
-      <a href="mailto:webbtillganglighet@rfv.fi">webbtillganglighet(at)rfv.fi</a><br />
-      telefonnummer växel 0295 016 000
-    </p>
-
-    <h2>Vi jobbar kontinuerligt för bättre tillgänglighet</h2>
-    <p>
-      <strong>
-        Det har gjorts en tillgänglighetsbedömning av våra digitjänster
-      </strong>
-    </p>
-    <p>
-      <span class="value">
-        20.10.2019
-      </span>
-    </p>
-    <p>
-      <strong>
-        Vi har bundit oss till att förbättra tillgängligheten i digitjänsterna
-      </strong>
-    </p>
-    <p>
-      <span class="value">
-      Åbo stads tillgänglighetskompetens utvecklas systematiskt och målmedvetet.
-      Stadens avtalsleverantörer för tillgänglighet kommer att göra en bedömning av stadens nuvarande webbtjänster.
-      På basen av bedömingen kommer tillgängligheten i tjänsterna utvecklas att motsvara de lagenliga kraven för vardera tjänst inom utsatt tid.
-      Vid utveckling och anskaffning av nya webbtjänster tas tillgängligheten i beaktande från början.
-      Alla parter som deltar i utvecklingen och innehållsproduktinen av webbtjänsterna blir utbildade i tillgänglighetsfrågor.
-      Staden har ett pågående projekt för att uppfylla Tillgänglighetslagens krav.
-      </span>
-    </p>
-    <p>
-      <strong>
-        Denna webbplats/plattform har publicerats
-      </strong>
-    </p>
-    <p>
-      <span class="value">
-        25.11.2019
-      </span>
+      Transport- och kommunikationsverket Traficom<br />
+      Enheten för tillsyn över digital tillgänglighet<br />
+      <a href="https://www.tillganglighetskrav.fi" target="_blank" rel="noopener noreferrer">www.tillganglighetskrav.fi</a><br />
+      <a href="mailto:tillganglighet@traficom.fi">tillganglighet(at)traficom.fi</a><br />
+      telefonnummer växeln 029 534 5000
     </p>
   </body>
 </html>
