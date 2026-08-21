@@ -1,8 +1,8 @@
-import { shallow } from 'enzyme';
 import React from 'react';
 import { Map, TileLayer } from 'react-leaflet';
 import simple from 'simple-mock';
 
+import { shallowWithIntl } from 'utils/testUtils';
 import { UnconnectedResourceMapContainer as MapContainer } from './MapContainer';
 import Marker from './Marker';
 import UserMarker from './UserMarker';
@@ -25,7 +25,7 @@ describe('shared/resource-map/MapContainer', () => {
       shouldMapFitBoundaries: true,
       showMap: true,
     };
-    return shallow(<MapContainer {...defaults} {...props} />);
+    return shallowWithIntl(<MapContainer {...defaults} {...props} />);
   }
 
   test('renders a Leaflet Map', () => {
@@ -62,14 +62,14 @@ describe('shared/resource-map/MapContainer', () => {
     test('is rendered with correct props when high contrast is in use', () => {
       const tileLayer = getWrapper({ useHighContrast: true }).find(TileLayer);
       expect(tileLayer.length).toBe(1);
-      expect(tileLayer.prop('attribution')).toEqual('© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors');
+      expect(tileLayer.prop('attribution')).toEqual('ResourceMap.attribution');
       expect(tileLayer.prop('url')).toEqual('https://maptiles.turku.fi/styles/high-contrast-map-layer/{z}/{x}/{y}@fi.png');
     });
 
     test('is rendered with correct props when high contrast is not in use', () => {
       const tileLayer = getWrapper({ useHighContrast: false }).find(TileLayer);
       expect(tileLayer.length).toBe(1);
-      expect(tileLayer.prop('attribution')).toEqual('© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors');
+      expect(tileLayer.prop('attribution')).toEqual('ResourceMap.attribution');
       expect(tileLayer.prop('url')).toEqual('https://maptiles.turku.fi/styles/hel-osm-bright/{z}/{x}/{y}@fi.png');
     });
 

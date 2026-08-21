@@ -449,6 +449,7 @@
   "ResourceCard.infoTitle.distance": "Distance",
   "ResourceCard.infoTitle.addFavorite": "Add to favorites",
   "ResourceCard.infoTitle.removeFavorite": "Remove from favorites",
+  "ResourceMap.attribution": "Base map &copy; Turun kaupunki, license CC BY 4.0 | &copy; <a href=\"http://osm.org/copyright\">OpenStreetMap contributors</a>",
   "ResourceCompactList.button.label.next": "Next premise",
   "ResourceCompactList.button.label.previous": "Previous premise",
   "ResourceFreeTime.buttonLabel": "Find next available time",
