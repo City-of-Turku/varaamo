@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import constants from 'constants/AppConstants';
 import { searchMapClick, selectUnit } from 'actions/searchActions';
 import { getCurrentCustomization } from 'utils/customizationUtils';
+import injectT from '../../i18n/injectT';
 import selector from './mapSelector';
 import Marker from './Marker';
 import UserMarker from './UserMarker';
@@ -23,7 +24,7 @@ const defaultZoom = 12;
 const defaultTilesUrl = constants.MAP_TILE_URLS.DEFAULT_TILES;
 const highContrastTilesUrl = constants.MAP_TILE_URLS.HIGH_CONTRAST_TILES;
 
-export class UnconnectedResourceMapContainer extends React.Component {
+export class ResourceMapContainer extends React.Component {
   static propTypes = {
     boundaries: PropTypes.shape({
       maxLatitude: PropTypes.number,
@@ -40,6 +41,7 @@ export class UnconnectedResourceMapContainer extends React.Component {
     selectUnit: PropTypes.func.isRequired,
     shouldMapFitBoundaries: PropTypes.bool.isRequired,
     showMap: PropTypes.bool.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   componentDidUpdate(prevProps) {
@@ -92,7 +94,7 @@ export class UnconnectedResourceMapContainer extends React.Component {
   }
 
   render() {
-    const { useHighContrast, currentLanguage } = this.props;
+    const { useHighContrast, currentLanguage, t } = this.props;
     const mapLanguage = currentLanguage === 'sv' ? 'sv' : 'fi';
     const mapUrl = `${useHighContrast ? highContrastTilesUrl : defaultTilesUrl}@${mapLanguage}.png`;
 
@@ -107,7 +109,7 @@ export class UnconnectedResourceMapContainer extends React.Component {
           zoomControl={false}
         >
           <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            attribution={t('ResourceMap.attribution')}
             url={mapUrl}
           />
           <ZoomControl position="bottomright" />
@@ -134,6 +136,8 @@ export class UnconnectedResourceMapContainer extends React.Component {
     );
   }
 }
+
+export const UnconnectedResourceMapContainer = injectT(ResourceMapContainer);
 
 const actions = {
   selectUnit,
