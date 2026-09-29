@@ -451,6 +451,7 @@
   "ResourceCard.infoTitle.removeFavorite": "Poista suosikeista",
   "ResourceCompactList.button.label.next": "Seuraava tila",
   "ResourceCompactList.button.label.previous": "Edellinen tila",
+  "ResourceMap.attribution": "Pohjakartta &copy; Turun kaupunki, käyttölupa CC BY 4.0 | &copy; <a href=\"http://osm.org/copyright\">OpenStreetMapin tekijät</a>",
   "ResourceFreeTime.buttonLabel": "Hae seuraavaa vapaata aikaa",
   "ResourceFreeTime.notificationFound": "Vapaata aikaa löytyi päivältä",
   "ResourceFreeTime.notificationNotFound": "Vapaata aikaa ei löytynyt",

@@ -451,6 +451,7 @@
   "ResourceCard.infoTitle.distance": "Avstånd",
   "ResourceCard.infoTitle.addFavorite": "Lägg till favoriter",
   "ResourceCard.infoTitle.removeFavorite": "Ta bort från favoriter",
+  "ResourceMap.attribution": "Baskarta &copy; Åbo stad, användningstillstånd CC BY 4.0 | &copy; <a href=\"http://osm.org/copyright\">Upphovsmännen bakom OpenStreetMaps</a>",
   "ResourceCompactList.button.label.next": "Nästa utrymme",
   "ResourceCompactList.button.label.previous": "Förra utrymme",
   "ResourceFreeTime.buttonLabel": "Sök efter nästa lediga tid",
