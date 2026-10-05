@@ -39,4 +39,6 @@ jobs:
         npm ci
         npm test
     - name: Codecov
-      uses: codecov/codecov-action@v3.1.1
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
