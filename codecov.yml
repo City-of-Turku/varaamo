@@ -1,0 +1,14 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 90%
+        threshold: 1%
+    patch:
+      default:
+        # Don't block PRs on per-patch coverage; informational only.
+        informational: true
+
+comment:
+  layout: "reach,diff,flags,files"
+  require_changes: false
